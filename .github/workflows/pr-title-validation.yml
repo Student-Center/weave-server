@@ -1,0 +1,40 @@
+name: PR title validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  pr-title-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: check pr title format
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const pull_number = context.issue.number
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+            
+            const { data: pull } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number,
+            })
+            
+            const titlePattern = /^\[WEAV-\d+\]/
+
+            if (!titlePattern.test(pull.title)) {
+              core.setFailed('PR 제목이 `[WEAV-번호]` 형식을 따르지 않습니다.')
+              return 
+            }
+
+            // PR 제목이 형식을 따르면 아무 조치도 취하지 않음
