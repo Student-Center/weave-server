@@ -19,5 +19,5 @@ ex) [WEAV-15] github 설정 수정
 
 **githook 설정 방법**
 ```bash
-sh ./githooks/install.sh
+sh ./.githooks/install.sh
 ```
