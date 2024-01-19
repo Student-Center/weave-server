@@ -6,6 +6,7 @@ object Version {
     const val SPRING_BOOT = "3.2.1"
     const val SPRING_BOOT_DEPENDENCY_MANAGEMENT = "1.1.4"
     const val KOTLIN = "1.9.21"
+    const val SONAR_CLOUD = "4.4.1.3373"
 
     // dependencies
     const val MOCKK = "1.13.7"
