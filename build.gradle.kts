@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-test-fixtures`
+    id("org.sonarqube") version Version.SONAR_CLOUD
     id("org.springframework.boot") version Version.SPRING_BOOT
     id("io.spring.dependency-management") version Version.SPRING_BOOT_DEPENDENCY_MANAGEMENT
     kotlin("jvm") version Version.KOTLIN
@@ -20,6 +21,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "java-test-fixtures")
+    apply(plugin = "org.sonarqube")
     apply(plugin = "idea")
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-spring")
@@ -70,4 +72,12 @@ subprojects {
         useJUnitPlatform()
     }
 
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "Student-Center_weave-server")
+        property("sonar.organization", "student-center")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
