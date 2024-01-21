@@ -9,6 +9,7 @@ object Version {
     const val SONAR_CLOUD = "4.4.1.3373"
 
     // dependencies
+    const val UUID_CREATOR = "5.3.3"
     const val MOCKK = "1.13.7"
     const val SPRING_MOCKK = "4.0.2"
     const val KOTEST = "5.6.0"
