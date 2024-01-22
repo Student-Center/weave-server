@@ -8,11 +8,11 @@ package com.studentcenter.weave.support.common.vo
 value class Email(val value: String) {
 
     companion object {
-        const val VALIDATION_REGEX = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+        const val VALIDATION_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$"
         const val VALIDATION_MESSAGE = "잘못된 Email 형식 입니다."
     }
 
     init {
-        require(value.matches(Regex(VALIDATION_REGEX))) { VALIDATION_MESSAGE }
+        require(value.matches(VALIDATION_REGEX.toRegex())) { VALIDATION_MESSAGE }
     }
 }

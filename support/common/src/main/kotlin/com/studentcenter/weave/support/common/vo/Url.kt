@@ -13,6 +13,6 @@ value class Url(val value: String) {
     }
 
     init {
-        require(value.matches(Regex(VALIDATION_REGEX))) { VALIDATION_MESSAGE }
+        require(value.matches(VALIDATION_REGEX.toRegex())) { VALIDATION_MESSAGE }
     }
 }
