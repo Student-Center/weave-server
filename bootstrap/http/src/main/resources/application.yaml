@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  shutdown: graceful
+spring:
+  profiles:
+    active: local
+    include:
+      - client
+      - application
+      - persistence
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  docker:
+    compose:
+      file: ./bootstrap/http/compose-dev.yaml
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  docker:
+    compose:
+      file: ./bootstrap/http/compose-dev.yaml
+springdoc:
+  swagger-ui:
+    enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  docker:
+    compose:
+      enabled: false
+springdoc:
+  swagger-ui:
+    enabled: false
