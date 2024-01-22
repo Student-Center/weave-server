@@ -16,4 +16,5 @@ object Version {
     const val KOTEST_EXTENSIONS_SPRING = "1.1.3"
 
     const val JACKSON = "2.16.1"
+    const val SPRINGDOC_OPENAPI = "2.3.0"
 }
