@@ -13,15 +13,15 @@ class AuthRestController: AuthApi {
         code: String,
     ): SocialLoginResponse {
         return SocialLoginResponse.Success(
-            accessToken =  "test_token",
-            refreshToken = "test_token",
+            accessToken =  "test_access_token",
+            refreshToken = "test_refresh_token",
         )
     }
 
     override fun refreshLoginToken(refreshToken: String): RefreshLoginTokenResponse {
         return RefreshLoginTokenResponse(
-            accessToken =  "test_token",
-            refreshToken = "test_token",
+            accessToken =  "test_access_token",
+            refreshToken = "test_refresh_token",
         )
     }
 
