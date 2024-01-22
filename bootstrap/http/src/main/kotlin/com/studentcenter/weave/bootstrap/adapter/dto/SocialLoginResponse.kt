@@ -2,7 +2,6 @@ package com.studentcenter.weave.bootstrap.adapter.dto
 
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.common.vo.Url
 import io.swagger.v3.oas.annotations.media.Schema
 
 
@@ -32,7 +31,6 @@ sealed class SocialLoginResponse {
         val name: String,
         val email: Email,
         val provider: SocialLoginProvider,
-        val picture: Url?,
     ) : SocialLoginResponse()
 
 }
