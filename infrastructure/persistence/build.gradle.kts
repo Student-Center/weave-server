@@ -9,4 +9,8 @@ jar.enabled = true
 dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${Version.SPRING_BOOT}")
+    runtimeOnly("mysql:mysql-connector-java:${Version.MYSQL}")
+    testRuntimeOnly("com.h2database:h2:${Version.H2}")
 }
