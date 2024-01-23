@@ -9,6 +9,8 @@ services:
       DB_PASSWORD: secret
     depends_on:
       - mysql
+    ports:
+      - "80:80"
   mysql:
     image: mysql:8.0.33
     environment:

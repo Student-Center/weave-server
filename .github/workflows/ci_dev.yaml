@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build_and_push:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repository
@@ -30,10 +30,60 @@ jobs:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: h3l4i6v1
           REPOSITORY: weave_server_dev_cr
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
       - name: Logout of Amazon ECR
         run: docker logout ${{ env.ECR_REGISTRY }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Copy Docker Compose file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_INSTANCE_HOST }}
+          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
+          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          source: "./bootstrap/http/compose-dev.yaml"
+          target: "~"
+          overwrite: true
+
+      - name: Install Docker if not present
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_INSTANCE_HOST }}
+          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
+          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          script: |
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "Installing Docker..."
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+            else
+              echo "Docker already installed."
+            fi
+
+            if ! command -v docker-compose >/dev/null 2>&1; then
+              echo "Installing Docker Compose..."
+              sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            else
+              echo "Docker Compose already installed."
+            fi
+
+      - name: Run Docker Compose up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_INSTANCE_HOST }}
+          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
+          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker-compose -f ~/bootstrap/http/compose-dev.yaml up -d
