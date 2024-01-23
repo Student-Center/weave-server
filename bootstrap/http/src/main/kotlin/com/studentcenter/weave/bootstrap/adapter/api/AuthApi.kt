@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
-@Tag(name = "인증", description = "회원 인증 API")
+@Tag(name = "Auth", description = "Auth API")
 @RequestMapping("/api/auth", produces = ["application/json;charset=utf-8"])
 interface AuthApi {
 
-    @Operation(summary = "소셜 로그인 API - 로그인 토큰 발급")
+    @Operation(summary = "Social Login")
     @GetMapping("/login/oauth2/code/{provider}")
     @ResponseStatus(HttpStatus.OK)
     fun socialLogin(
@@ -20,7 +20,7 @@ interface AuthApi {
         @RequestParam code: String
     ): SocialLoginResponse
 
-    @Operation(summary = "로그인 토큰 갱신 API")
+    @Operation(summary = "Refresh Login Token")
     @GetMapping("/login/refresh")
     @ResponseStatus(HttpStatus.OK)
     fun refreshLoginToken(
