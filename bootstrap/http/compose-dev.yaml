@@ -1,9 +1,18 @@
 version: '3.8'
 services:
+  spring:
+    image: public.ecr.aws/h3l4i6v1/weave_server_dev_cr
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:mysql://mysql/weave?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+    depends_on:
+      - mysql
   mysql:
     image: mysql:8.0.33
     environment:
-      - "MYSQL_DATABASE=user"
-      - "MYSQL_ROOT_PASSWORD=secret"
+      MYSQL_DATABASE: weave
+      MYSQL_ROOT_PASSWORD: secret
     ports:
       - "3306:3306"

@@ -17,4 +17,7 @@ object Version {
 
     const val JACKSON = "2.16.1"
     const val SPRINGDOC_OPENAPI = "2.3.0"
+
+    const val MYSQL = "8.0.33"
+    const val H2 = "2.2.224"
 }
