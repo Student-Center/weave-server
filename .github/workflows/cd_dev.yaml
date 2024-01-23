@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.DEV_INSTANCE_USERNAME }}
           key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
           source: "./bootstrap/http/compose-dev.yaml"
-          target: "~"
+          target: "~/app"
           overwrite: true
 
       - name: Install Docker if not present
@@ -50,4 +50,4 @@ jobs:
           key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker-compose -f ~/bootstrap/http/compose-dev.yaml up -d
+            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d
