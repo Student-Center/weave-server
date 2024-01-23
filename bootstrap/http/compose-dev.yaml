@@ -10,7 +10,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "80:80"
+      - "8080:8080"
   mysql:
     image: mysql:8.0.33
     environment:
