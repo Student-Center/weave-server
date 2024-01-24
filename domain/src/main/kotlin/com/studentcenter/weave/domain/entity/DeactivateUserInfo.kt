@@ -17,12 +17,11 @@ data class DeactivateUserInfo(
 
     companion object {
         fun create(
-            user: User,
             userAuthInfo: UserAuthInfo,
-            reason: String?,
+            reason: String? = null,
         ): DeactivateUserInfo {
             return DeactivateUserInfo(
-                email = user.email,
+                email = userAuthInfo.email,
                 socialLoginProvider = userAuthInfo.socialLoginProvider,
                 reason = reason,
                 registeredAt = userAuthInfo.registeredAt,
