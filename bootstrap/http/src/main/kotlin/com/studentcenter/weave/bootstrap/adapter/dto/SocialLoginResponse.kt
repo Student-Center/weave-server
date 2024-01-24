@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 
 @Schema(
-    name = "소셜 로그인 응답",
+    name = "Social Login Response",
     oneOf = [
         SocialLoginResponse.Success::class,
         SocialLoginResponse.UserNotRegistered::class,
@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 sealed class SocialLoginResponse {
 
     @Schema(
-        name = "소셜 로그인 성공 응답",
+        name = "Social Login Response - Success",
         description = "소셜 로그인 성공시 access token, refresh token 을 반환합니다",
     )
     data class Success(
@@ -22,7 +22,7 @@ sealed class SocialLoginResponse {
     ) : SocialLoginResponse()
 
     @Schema(
-        name = "소셜 로그인 실패 응답 - 회원 가입 필요",
+        name = "Social Login Response - User Not Registered",
         description = """
             회원 가입이 필요한 경우, 회원가입을 위한 사용자 정보가 담긴 register token을 반환합니다.
             추후 회원가입 API 호출시 해당 토큰을 header에 담아 전송해야 합니다.
