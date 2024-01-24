@@ -50,4 +50,5 @@ jobs:
           key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d
+            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
+            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
