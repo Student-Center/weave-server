@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*
 interface AuthApi {
 
     @Operation(summary = "Social Login")
-    @GetMapping("/login/oauth2/code/{provider}")
+    @GetMapping("/login/oauth2/{provider}")
     @ResponseStatus(HttpStatus.OK)
     fun socialLogin(
         @PathVariable provider: SocialLoginProvider,
-        @RequestParam code: String
+        @RequestParam idToken: String
     ): SocialLoginResponse
 
     @Operation(summary = "Refresh Login Token")

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthRestController: AuthApi {
     override fun socialLogin(
         provider: SocialLoginProvider,
-        code: String,
+        idToken: String,
     ): SocialLoginResponse {
         return SocialLoginResponse.Success(
             accessToken =  "test_access_token",
