@@ -23,14 +23,14 @@ interface AuthApi {
     @ResponseStatus(HttpStatus.OK)
     fun socialLogin(
         @PathVariable provider: SocialLoginProvider,
-        @RequestBody idToken: SocialLoginRequest,
+        @RequestBody request: SocialLoginRequest,
     ): SocialLoginResponse
 
     @Operation(summary = "Refresh Login Token")
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
     fun refreshLoginToken(
-        @RequestBody refreshToken: RefreshTokenRequest,
+        @RequestBody request: RefreshTokenRequest,
     ): RefreshLoginTokenResponse
 
 }

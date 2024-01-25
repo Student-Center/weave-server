@@ -13,7 +13,7 @@ class AuthRestController : AuthApi {
 
     override fun socialLogin(
         provider: SocialLoginProvider,
-        idToken: SocialLoginRequest,
+        request: SocialLoginRequest,
     ): SocialLoginResponse {
         return SocialLoginResponse.Success(
             accessToken = "test_access_token",
@@ -22,7 +22,7 @@ class AuthRestController : AuthApi {
     }
 
     override fun refreshLoginToken(
-        refreshToken: RefreshTokenRequest,
+        request: RefreshTokenRequest,
     ): RefreshLoginTokenResponse {
         return RefreshLoginTokenResponse(
             accessToken = "test_access_token",
