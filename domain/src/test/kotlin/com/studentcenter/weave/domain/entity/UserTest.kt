@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Major
 import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.vo.University
 import com.studentcenter.weave.support.common.vo.Email
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -19,6 +20,7 @@ class UserTest : FunSpec({
         val email = Email("test@test.com")
         val gender = Gender.MAN
         val birthYear = BirthYear(1999)
+        val university = University("서울대학교")
         val major = Major("컴퓨터 공학과")
         val mbti = Mbti.ENFJ
 
@@ -29,6 +31,7 @@ class UserTest : FunSpec({
             gender = gender,
             mbti = mbti,
             birthYear = birthYear,
+            university = university,
             major = major,
         )
 
