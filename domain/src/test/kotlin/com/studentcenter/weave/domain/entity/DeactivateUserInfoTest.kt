@@ -14,7 +14,6 @@ class DeactivateUserInfoTest : FunSpec({
 
         // act
         val deactivateUserInfo = DeactivateUserInfo.create(
-            user = user,
             userAuthInfo = userAuthInfo,
             reason = reason,
         )
