@@ -28,59 +28,54 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
         context("소셜 로그인 성공시") {
 
             every {
-                authInfoDomainServiceMock.findByEmailAndSocialLoginProvider(
-                    userAuthInfoFixture.email,
-                    userAuthInfoFixture.socialLoginProvider
-                )
+                authInfoDomainServiceMock.findByEmail(userAuthInfoFixture.email)
             } returns UserAuthInfoFixtureFactory.create()
 
-            it("Access Token과 Refresh Token을 응답한다") {
-                // arrange
-                val socialLoginProvider = SocialLoginProvider.KAKAO
-                val idToken = "idToken"
-                val command = UserSocialLoginUseCase.Command(
-                    socialLoginProvider = socialLoginProvider,
-                    idToken = idToken,
-                )
+            enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
 
-                // act
-                val result: UserSocialLoginUseCase.Result = sut.invoke(command)
+                it("Access Token과 Refresh Token을 응답한다 : ${socialLoginProvider.name}") {
+                    // arrange
+                    val idToken = "idToken"
+                    val command = UserSocialLoginUseCase.Command(
+                        socialLoginProvider = socialLoginProvider,
+                        idToken = idToken,
+                    )
 
-                // assert
-                result.shouldBeTypeOf<UserSocialLoginUseCase.Result.Success>()
-                result.accessToken.shouldBeTypeOf<String>()
-                result.refreshToken.shouldBeTypeOf<String>()
+                    // act
+                    val result: UserSocialLoginUseCase.Result = sut.invoke(command)
+
+                    // assert
+                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.Success>()
+                    result.accessToken.shouldBeTypeOf<String>()
+                    result.refreshToken.shouldBeTypeOf<String>()
+                }
             }
         }
 
         context("회원이 존재하지 않는 경우") {
 
-            every {
-                authInfoDomainServiceMock.findByEmailAndSocialLoginProvider(
-                    userAuthInfoFixture.email,
-                    userAuthInfoFixture.socialLoginProvider
-                )
-            } returns null
+            every { authInfoDomainServiceMock.findByEmail(userAuthInfoFixture.email) } returns null
 
-            it("회원 가입 토큰을 응답한다") {
-                // arrange
-                val socialLoginProvider = SocialLoginProvider.KAKAO
-                val idToken = "idToken"
-                val command = UserSocialLoginUseCase.Command(
-                    socialLoginProvider = socialLoginProvider,
-                    idToken = idToken,
-                )
+            enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
 
-                // act
-                val result: UserSocialLoginUseCase.Result = sut.invoke(command)
+                it("회원 가입 토큰을 응답한다 : ${socialLoginProvider.name}") {
+                    // arrange
+                    val idToken = "idToken"
+                    val command = UserSocialLoginUseCase.Command(
+                        socialLoginProvider = socialLoginProvider,
+                        idToken = idToken,
+                    )
 
-                // assert
-                result.shouldBeTypeOf<UserSocialLoginUseCase.Result.NotRegistered>()
-                result.registerToken.shouldBeTypeOf<String>()
+                    // act
+                    val result: UserSocialLoginUseCase.Result = sut.invoke(command)
+
+                    // assert
+                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.NotRegistered>()
+                    result.registerToken.shouldBeTypeOf<String>()
+                }
             }
 
         }
-
 
     }
 

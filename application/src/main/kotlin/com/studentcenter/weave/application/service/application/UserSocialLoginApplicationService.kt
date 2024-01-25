@@ -22,20 +22,13 @@ class UserSocialLoginApplicationService(
             provider = command.socialLoginProvider,
         )
 
-        val userAuthInfo: UserAuthInfo? =
-            userAuthInfoDomainService.findByEmailAndSocialLoginProvider(
-                email = idTokenClaims.email,
-                socialLoginProvider = command.socialLoginProvider,
-            )
-
-        if (userAuthInfo == null) {
-            return UserSocialLoginUseCase.Result.NotRegistered(
+        val userAuthInfo: UserAuthInfo = userAuthInfoDomainService.findByEmail(email = idTokenClaims.email)
+            ?: return UserSocialLoginUseCase.Result.NotRegistered(
                 registerToken = userTokenService.generateRegisterToken(
                     email = idTokenClaims.email,
                     provider = command.socialLoginProvider,
                 ),
             )
-        }
 
         val user: User = userDomainService.getById(userAuthInfo.userId)
         return UserSocialLoginUseCase.Result.Success(
