@@ -99,7 +99,6 @@ val allProjects = project.allprojects
     .toList()
 
 project(":support:jacoco") {
-    apply(plugin = "jacoco")
     apply(plugin = "jacoco-report-aggregation")
 
     dependencies {
