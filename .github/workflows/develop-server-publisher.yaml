@@ -1,4 +1,4 @@
-name: CI - Dev
+name: Docker Develop Server Publisher (CI)
 
 on:
   push:
