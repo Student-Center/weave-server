@@ -13,6 +13,9 @@ project(":support:logger").projectDir = file("support/logger")
 include(":support:mail")
 project(":support:mail").projectDir = file("support/mail")
 
+include(":support:security")
+project(":support:security").projectDir = file("support/security")
+
 // domain
 include(":domain")
 project(":domain").projectDir = file("domain")
