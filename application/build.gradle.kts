@@ -8,6 +8,7 @@ jar.enabled = true
 
 dependencies {
     implementation(project(":support:common"))
+    implementation(project(":support:security"))
     implementation(project(":domain"))
 
     implementation("org.springframework.boot:spring-boot:${Version.SPRING_BOOT}")

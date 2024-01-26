@@ -1,12 +1,13 @@
 package com.studentcenter.weave.application.service
 
+import com.studentcenter.weave.application.port.outbound.UserTokenHandler
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.support.common.vo.Email
 
-class UserTokenServiceStub : UserTokenService {
+class UserTokenHandlerStub : UserTokenHandler {
 
     private val user = UserFixtureFactory.create()
 

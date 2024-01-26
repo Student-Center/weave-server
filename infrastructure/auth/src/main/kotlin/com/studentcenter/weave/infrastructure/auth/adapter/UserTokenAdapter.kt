@@ -1,0 +1,124 @@
+package com.studentcenter.weave.infrastructure.auth.adapter
+
+import com.studentcenter.weave.application.port.outbound.UserTokenHandler
+import com.studentcenter.weave.application.vo.UserTokenClaims
+import com.studentcenter.weave.domain.entity.User
+import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.infrastructure.auth.adapter.strategy.OpenIdTokenResolveStrategy
+import com.studentcenter.weave.infrastructure.auth.adapter.strategy.OpenIdTokenResolveStrategyFactory
+import com.studentcenter.weave.infrastructure.auth.common.properties.JwtTokenProperties
+import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.support.common.vo.Url
+import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
+import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
+import org.springframework.stereotype.Component
+import java.time.Instant
+import java.util.*
+
+@Component
+class UserTokenAdapter(
+    private val jwtTokenProperties: JwtTokenProperties,
+    private val openIdTokenResolveStrategyFactory: OpenIdTokenResolveStrategyFactory
+) : UserTokenHandler {
+
+    override fun resolveIdToken(
+        idToken: String,
+        provider: SocialLoginProvider
+    ): UserTokenClaims.IdToken {
+        val openIdTokenResolveStrategy: OpenIdTokenResolveStrategy =
+            openIdTokenResolveStrategyFactory.getStrategy(provider)
+        return openIdTokenResolveStrategy.resolveIdToken(idToken)
+    }
+
+    override fun generateRegisterToken(
+        email: Email,
+        nickname: Nickname,
+        provider: SocialLoginProvider
+    ): String {
+        val jwtClaims = JwtClaims {
+            registeredClaims {
+                iss = jwtTokenProperties.issuer
+                exp =
+                    Date.from(Instant.now().plusSeconds(jwtTokenProperties.register.expireSeconds))
+            }
+            customClaims {
+                this["type"] = "register"
+                this["email"] = email.value
+                this["nickname"] = nickname.value
+                this["provider"] = provider.name
+            }
+        }
+
+        return JwtTokenProvider.createToken(jwtClaims, jwtTokenProperties.register.secret)
+    }
+
+    override fun resolveRegisterToken(registerToken: String): UserTokenClaims.RegisterToken {
+        val jwtClaims: JwtClaims = JwtTokenProvider
+            .verifyToken(registerToken, jwtTokenProperties.register.secret)
+            .getOrThrow()
+
+        return UserTokenClaims.RegisterToken(
+            email = Email(jwtClaims.customClaims["email"] as String),
+            nickname = Nickname(jwtClaims.customClaims["nickname"] as String),
+            socialLoginProvider = SocialLoginProvider.valueOf(jwtClaims.customClaims["provider"] as String),
+        )
+    }
+
+    override fun generateAccessToken(user: User): String {
+        val jwtClaims = JwtClaims {
+            registeredClaims {
+                iss = jwtTokenProperties.issuer
+                exp = Date.from(Instant.now().plusSeconds(jwtTokenProperties.access.expireSeconds))
+            }
+            customClaims {
+                this["type"] = "access"
+                this["userId"] = user.id
+                this["nickname"] = user.nickname.value
+                this["email"] = user.email.value
+                this["avatar"] = user.avatar.toString()
+            }
+        }
+
+        return JwtTokenProvider.createToken(jwtClaims, jwtTokenProperties.access.secret)
+    }
+
+    override fun resolveAccessToken(accessToken: String): UserTokenClaims.AccessToken {
+        val jwtClaims: JwtClaims = JwtTokenProvider
+            .verifyToken(accessToken, jwtTokenProperties.access.secret)
+            .getOrThrow()
+
+        return UserTokenClaims.AccessToken(
+            userId = UUID.fromString(jwtClaims.customClaims["userId"] as String),
+            nickname = Nickname(jwtClaims.customClaims["nickname"] as String),
+            email = Email(jwtClaims.customClaims["email"] as String),
+            avatar = Url(jwtClaims.customClaims["avatar"] as String),
+        )
+    }
+
+    override fun generateRefreshToken(user: User): String {
+        val jwtClaims = JwtClaims {
+            registeredClaims {
+                iss = jwtTokenProperties.issuer
+                exp = Date.from(Instant.now().plusSeconds(jwtTokenProperties.refresh.expireSeconds))
+            }
+            customClaims {
+                this["type"] = "refresh"
+                this["userId"] = user.id
+            }
+        }
+
+        return JwtTokenProvider.createToken(jwtClaims, jwtTokenProperties.refresh.secret)
+    }
+
+    override fun resolveRefreshToken(refreshToken: String): UserTokenClaims.RefreshToken {
+        val jwtClaims: JwtClaims = JwtTokenProvider
+            .verifyToken(refreshToken, jwtTokenProperties.refresh.secret)
+            .getOrThrow()
+
+        return UserTokenClaims.RefreshToken(
+            userId = UUID.fromString(jwtClaims.customClaims["userId"] as String),
+        )
+    }
+
+}

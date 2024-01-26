@@ -1,8 +1,8 @@
 package com.studentcenter.weave.application.common.properties
 
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.net.URL
 
 @ConfigurationProperties(value = "user.jwt")
 data class JwtTokenProperties(
@@ -17,7 +17,7 @@ data class JwtTokenProperties(
     )
 
     data class Provider(
-        val jwksUri: Url,
+        val jwksUri: URL,
     )
 
 }

@@ -31,6 +31,9 @@ project(":infrastructure:persistence").projectDir = file("infrastructure/persist
 include(":infrastructure:client")
 project(":infrastructure:client").projectDir = file("infrastructure/client")
 
+include(":infrastructure:auth")
+project(":infrastructure:auth").projectDir = file("infrastructure/auth")
+
 // bootstrap
 include(":bootstrap:http")
 project(":bootstrap:http").projectDir = file("bootstrap/http")
