@@ -7,4 +7,5 @@ import java.util.UUID
 interface UserDomainService {
 
     fun getById(id: UUID): User
+
 }
