@@ -7,5 +7,10 @@ bootJar.enabled = false
 jar.enabled = true
 
 dependencies {
+    implementation(project(":support:common"))
     implementation(project(":domain"))
+
+    implementation("org.springframework.boot:spring-boot:${Version.SPRING_BOOT}")
+    testImplementation(testFixtures(project(":domain")))
+    testFixturesImplementation(testFixtures(project(":domain")))
 }
