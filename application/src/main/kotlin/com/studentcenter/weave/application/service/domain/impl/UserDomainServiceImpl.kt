@@ -1,4 +1,4 @@
-package com.studentcenter.weave.application.service.domain.Impl
+package com.studentcenter.weave.application.service.domain.impl
 
 import com.studentcenter.weave.application.service.domain.UserDomainService
 import com.studentcenter.weave.domain.entity.User
