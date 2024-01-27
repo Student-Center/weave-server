@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.auth.common.properties
+package com.studentcenter.weave.application.common.properties
 
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import org.springframework.boot.context.properties.ConfigurationProperties

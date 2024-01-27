@@ -1,13 +1,13 @@
-package com.studentcenter.weave.infrastructure.auth.adapter
+package com.studentcenter.weave.application.service.util.impl
 
-import com.studentcenter.weave.application.port.outbound.UserTokenHandler
+import com.studentcenter.weave.application.common.properties.JwtTokenProperties
+import com.studentcenter.weave.application.service.util.UserTokenService
+import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategy
+import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.infrastructure.auth.adapter.strategy.OpenIdTokenResolveStrategy
-import com.studentcenter.weave.infrastructure.auth.adapter.strategy.OpenIdTokenResolveStrategyFactory
-import com.studentcenter.weave.infrastructure.auth.common.properties.JwtTokenProperties
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
@@ -17,10 +17,10 @@ import java.time.Instant
 import java.util.*
 
 @Component
-class UserTokenAdapter(
+class UserTokenServiceImpl(
     private val jwtTokenProperties: JwtTokenProperties,
     private val openIdTokenResolveStrategyFactory: OpenIdTokenResolveStrategyFactory
-) : UserTokenHandler {
+) : UserTokenService {
 
     override fun resolveIdToken(
         idToken: String,
@@ -120,5 +120,4 @@ class UserTokenAdapter(
             userId = UUID.fromString(jwtClaims.customClaims["userId"] as String),
         )
     }
-
 }

@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.auth.adapter.strategy
+package com.studentcenter.weave.application.service.util.impl.strategy
 
 import com.studentcenter.weave.application.vo.UserTokenClaims
 

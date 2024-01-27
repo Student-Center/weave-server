@@ -1,4 +1,4 @@
-package com.studentcenter.weave.application.port.outbound
+package com.studentcenter.weave.application.service.util
 
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
@@ -6,7 +6,7 @@ import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 
-interface UserTokenHandler {
+interface UserTokenService {
 
     fun resolveIdToken(
         idToken: String,

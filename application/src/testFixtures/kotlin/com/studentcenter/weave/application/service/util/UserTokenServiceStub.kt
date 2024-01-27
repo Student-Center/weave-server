@@ -1,13 +1,13 @@
-package com.studentcenter.weave.application.service
+package com.studentcenter.weave.application.service.util
 
-import com.studentcenter.weave.application.port.outbound.UserTokenHandler
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 
-class UserTokenHandlerStub : UserTokenHandler {
+class UserTokenServiceStub : UserTokenService {
 
     private val user = UserFixtureFactory.create()
 
@@ -23,6 +23,7 @@ class UserTokenHandlerStub : UserTokenHandler {
 
     override fun generateRegisterToken(
         email: Email,
+        nickname: Nickname,
         provider: SocialLoginProvider
     ): String {
         return "registerToken"
