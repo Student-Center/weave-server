@@ -6,7 +6,7 @@ value class Nickname(
 ) {
 
     init {
-        require(value.length in 3..10) { "닉네임은 3글자 이상 10자 이하여야 합니다." }
+        require(value.length in 1..10) { "닉네임은 1글자 이상 10자 이하여야 합니다." }
     }
 
 }
