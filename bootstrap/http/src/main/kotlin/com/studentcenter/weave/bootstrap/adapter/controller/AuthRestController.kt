@@ -7,6 +7,7 @@ import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
@@ -40,7 +41,7 @@ class AuthRestController(
                     registerToken = result.registerToken,
                 )
                 ResponseEntity
-                    .status(401)
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(body)
             }
         }
