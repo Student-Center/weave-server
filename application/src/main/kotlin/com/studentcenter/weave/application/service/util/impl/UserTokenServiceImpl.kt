@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.service.util.UserTokenService
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategy
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
 import com.studentcenter.weave.application.vo.UserTokenClaims
+import com.studentcenter.weave.application.service.util.UserTokenType
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.domain.vo.Nickname
@@ -46,7 +47,7 @@ class UserTokenServiceImpl(
                 exp = Date.from(expirationTime)
             }
             customClaims {
-                this["type"] = "register"
+                this["type"] = UserTokenType.REGISTER_TOKEN.name
                 this["email"] = email.value
                 this["nickname"] = nickname.value
                 this["provider"] = provider.name
@@ -75,7 +76,7 @@ class UserTokenServiceImpl(
                 exp = Date.from(Instant.now().plusSeconds(jwtTokenProperties.access.expireSeconds))
             }
             customClaims {
-                this["type"] = "access"
+                this["type"] = UserTokenType.ACCESS_TOKEN.name
                 this["userId"] = user.id
                 this["nickname"] = user.nickname.value
                 this["email"] = user.email.value
@@ -106,7 +107,7 @@ class UserTokenServiceImpl(
                 exp = Date.from(Instant.now().plusSeconds(jwtTokenProperties.refresh.expireSeconds))
             }
             customClaims {
-                this["type"] = "refresh"
+                this["type"] = UserTokenType.REFRESH_TOKEN.name
                 this["userId"] = user.id
             }
         }
