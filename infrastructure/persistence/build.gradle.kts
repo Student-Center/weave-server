@@ -13,6 +13,9 @@ dependencies {
     implementation(project(":application"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:${Version.SPRING_BOOT}")
+    implementation("org.flywaydb:flyway-core:${Version.FLYWAY}")
+    implementation("org.flywaydb:flyway-mysql:${Version.FLYWAY}")
+
     runtimeOnly("mysql:mysql-connector-java:${Version.MYSQL}")
     testRuntimeOnly("com.h2database:h2:${Version.H2}")
 }

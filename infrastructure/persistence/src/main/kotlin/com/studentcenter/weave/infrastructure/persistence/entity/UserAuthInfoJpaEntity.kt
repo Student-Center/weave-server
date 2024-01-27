@@ -33,8 +33,8 @@ class UserAuthInfoJpaEntity(
     var email: Email = email
         private set
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(255)")
+    @Enumerated(value = EnumType.STRING)
     var socialLoginProvider: SocialLoginProvider = socialLoginProvider
         private set
 
