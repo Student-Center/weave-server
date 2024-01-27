@@ -36,11 +36,14 @@ class UserTokenServiceImpl(
         nickname: Nickname,
         provider: SocialLoginProvider
     ): String {
+        val expirationTime: Instant = Instant
+            .now()
+            .plusSeconds(jwtTokenProperties.register.expireSeconds)
+
         val jwtClaims = JwtClaims {
             registeredClaims {
                 iss = jwtTokenProperties.issuer
-                exp =
-                    Date.from(Instant.now().plusSeconds(jwtTokenProperties.register.expireSeconds))
+                exp = Date.from(expirationTime)
             }
             customClaims {
                 this["type"] = "register"

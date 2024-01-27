@@ -19,10 +19,17 @@ class KakaoOpenIdTokenResolveStrategy(
         val jwksUri = URL(this.openIdProperties.providers.getValue(SocialLoginProvider.KAKAO).jwksUri)
         val result: JwtClaims = JwtTokenProvider.verifyJwksBasedToken(idToken, jwksUri).getOrThrow()
 
+        val nickname = (result.customClaims["nickname"] as String)
+        val email = result.customClaims["email"] as String
+
         return UserTokenClaims.IdToken(
-            nickname = Nickname(result.customClaims["nickname"] as String),
-            email = Email(result.customClaims["email"] as String),
+            nickname = Nickname(adjustNickname(nickname)),
+            email = Email(email),
         )
+    }
+
+    private fun adjustNickname(nickname: String): String {
+        return if (nickname.length > 10) nickname.substring(0, 10) else nickname
     }
 
 }
