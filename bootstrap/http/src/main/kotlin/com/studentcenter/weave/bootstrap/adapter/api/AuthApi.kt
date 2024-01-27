@@ -6,8 +6,13 @@ import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,11 +25,38 @@ interface AuthApi {
 
     @Operation(summary = "Social Login")
     @PostMapping("/login/{provider}")
-    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "로그인 성공",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = SocialLoginResponse.Success::class
+                        )
+                    ),
+                ]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "회원가입 필요",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = SocialLoginResponse.UserNotRegistered::class
+                        )
+                    ),
+                ]
+            ),
+        ]
+    )
     fun socialLogin(
         @PathVariable provider: SocialLoginProvider,
         @RequestBody request: SocialLoginRequest,
-    ): SocialLoginResponse
+    ): ResponseEntity<SocialLoginResponse>
 
     @Operation(summary = "Refresh Login Token")
     @PostMapping("/refresh")
