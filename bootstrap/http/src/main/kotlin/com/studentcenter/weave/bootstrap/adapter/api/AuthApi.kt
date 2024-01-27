@@ -40,8 +40,8 @@ interface AuthApi {
                 ]
             ),
             ApiResponse(
-                responseCode = "202",
-                description = "로그인 성공(회원가입 필요)",
+                responseCode = "401",
+                description = "회원가입 필요",
                 content = [
                     Content(
                         mediaType = "application/json",
