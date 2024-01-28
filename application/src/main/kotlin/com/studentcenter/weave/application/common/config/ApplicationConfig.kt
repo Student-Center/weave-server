@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-@ComponentScan(basePackages = ["com.studentcenter.weave.application"])
+@ComponentScan(basePackages = ["com.studentcenter.weave.application"], lazyInit = true)
 @EnableConfigurationProperties
 @ConfigurationPropertiesScan(basePackages = ["com.studentcenter.weave.application"])
 class ApplicationConfig
