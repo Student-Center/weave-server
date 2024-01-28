@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UnivRestController : UnivApi {
+
     override fun findAll(): UniversitiesResponse {
         return UniversitiesResponse(listOf(
             University(KU),
