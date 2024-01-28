@@ -29,7 +29,7 @@ class KakaoOpenIdTokenResolveStrategy(
     }
 
     private fun adjustNickname(nickname: String): String {
-        return if (nickname.length > 10) nickname.substring(0, 10) else nickname
+        return if (nickname.length > Nickname.MAX_LENGTH) nickname.substring(0, Nickname.MAX_LENGTH) else nickname
     }
 
 }
