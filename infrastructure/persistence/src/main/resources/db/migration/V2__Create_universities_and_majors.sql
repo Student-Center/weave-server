@@ -20,6 +20,6 @@ create table major
     name        varchar(255) not null,
     created_at  datetime(6)  not null,
     primary key (id),
-    unique key major_univ_id_name (univ_id, name),
+    unique key major_univ_id_and_name_uindex (univ_id, name),
     ) engine = InnoDB
     default charset = utf8mb4;
