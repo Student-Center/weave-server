@@ -4,10 +4,11 @@ import com.auth0.jwk.Jwk
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.studentcenter.weave.support.security.jwt.error.JwtExpiredException
-import com.studentcenter.weave.support.security.jwt.error.JwtVerificationException
+import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
 import java.net.URL
 import java.security.interfaces.ECPublicKey
@@ -20,17 +21,10 @@ object JwtTokenProvider {
         jwtClaims: JwtClaims,
         secret: String,
     ): String {
-        return JWT
-            .create()
-            .withJWTId(jwtClaims.jti)
-            .withSubject(jwtClaims.sub)
-            .withIssuer(jwtClaims.iss)
-            .withAudience(*jwtClaims.aud?.toTypedArray() ?: arrayOf())
-            .withIssuedAt(jwtClaims.iat)
-            .withNotBefore(jwtClaims.nbf)
-            .withExpiresAt(jwtClaims.exp)
-            .withPayload(jwtClaims.customClaims)
-            .sign(Algorithm.HMAC256(secret))
+        return JWT.create().withJWTId(jwtClaims.jti).withSubject(jwtClaims.sub)
+            .withIssuer(jwtClaims.iss).withAudience(*jwtClaims.aud?.toTypedArray() ?: arrayOf())
+            .withIssuedAt(jwtClaims.iat).withNotBefore(jwtClaims.nbf).withExpiresAt(jwtClaims.exp)
+            .withPayload(jwtClaims.customClaims).sign(Algorithm.HMAC256(secret))
     }
 
     fun verifyToken(
@@ -45,11 +39,9 @@ object JwtTokenProvider {
         token: String,
         jwksUri: URL,
     ): Result<JwtClaims> {
-        val provider = JwkProviderBuilder(jwksUri)
-            .cached(10, 60 * 24, TimeUnit.HOURS)
-            .rateLimited(10, 1, TimeUnit.MINUTES)
-            .build()
-        val jwt: DecodedJWT = JWT.decode(token)
+        val provider = JwkProviderBuilder(jwksUri).cached(10, 60 * 24, TimeUnit.HOURS)
+            .rateLimited(10, 1, TimeUnit.MINUTES).build()
+        val jwt: DecodedJWT = decodeToken(token)
         val jwk: Jwk = provider[jwt.keyId]
         val algorithm: Algorithm = extractAlgorithm(jwk)
         return verifyToken(token, algorithm)
@@ -72,13 +64,18 @@ object JwtTokenProvider {
         algorithm: Algorithm,
     ): Result<JwtClaims> {
         return runCatching {
-            JWT
-                .require(algorithm)
-                .build()
-                .verify(token)
+            JWT.require(algorithm).build().verify(token)
         }.mapCatching { claims ->
             JwtClaims.from(claims)
         }.onFailure { exception ->
+            handleException(exception)
+        }
+    }
+
+    private fun decodeToken(token: String): DecodedJWT {
+        return runCatching {
+            JWT.decode(token)
+        }.getOrElse { exception ->
             handleException(exception)
         }
     }
@@ -88,8 +85,21 @@ object JwtTokenProvider {
     }
 
     private val exceptionHandlerList = listOf<Pair<Class<out Throwable>, (Throwable) -> Nothing>>(
-        TokenExpiredException::class.java to { throw JwtExpiredException("토큰이 만료되었습니다.") },
-        Throwable::class.java to { e -> throw JwtVerificationException("토큰 유효성 검사에 실패했습니다. message=${e.message}") }
+        JWTDecodeException::class.java to {
+            throw CustomException(
+                JwtExceptionType.JWT_DECODE_EXCEPTION, "잘못된 토큰 형식입니다."
+            )
+        },
+        TokenExpiredException::class.java to {
+            throw CustomException(
+                JwtExceptionType.JWT_EXPIRED_EXCEPTION, "만료된 토큰입니다."
+            )
+        },
+        Throwable::class.java to { e ->
+            throw CustomException(
+                JwtExceptionType.JWT_VERIFICATION_EXCEPTION, e.message ?: "토큰 검증에 실패했습니다."
+            )
+        },
     )
 
 }

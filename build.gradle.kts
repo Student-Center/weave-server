@@ -33,6 +33,8 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
 
     dependencies {
+        implementation("io.github.oshai:kotlin-logging-jvm:${Version.KOTLIN_LOGGING}")
+
         implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.KOTLIN}")
         implementation("org.jetbrains.kotlin:kotlin-reflect:${Version.KOTLIN}")
 

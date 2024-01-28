@@ -1,8 +1,8 @@
 package com.studentcenter.weave.support.security.jwt.util
 
 import com.auth0.jwt.JWT
-import com.studentcenter.weave.support.security.jwt.error.JwtExpiredException
-import com.studentcenter.weave.support.security.jwt.error.JwtVerificationException
+import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -87,7 +87,7 @@ class JwtTokenProviderTest : DescribeSpec({
             val secret = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc"
             val anotherKey = "testtestetesttestetesttestetesttestetesttestetesttestetestteste"
 
-            it("JwtVerificationException을 발생시킨다.") {
+            it("BadRequestException 을 발생시킨다.") {
                 // arrange
                 val token: String = JwtTokenProvider.createToken(
                     jwtClaims = JwtClaims {
@@ -108,7 +108,8 @@ class JwtTokenProviderTest : DescribeSpec({
                 }.exceptionOrNull()
 
                 // assert
-                result.shouldBeInstanceOf<JwtVerificationException>()
+                result.shouldBeInstanceOf<CustomException>()
+                result.type shouldBe JwtExceptionType.JWT_DECODE_EXCEPTION
             }
         }
 
@@ -116,7 +117,7 @@ class JwtTokenProviderTest : DescribeSpec({
 
             val secret = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc"
 
-            it("JwtExpiredException 예외를 발생시킨다") {
+            it("CustomException 예외를 발생시킨다") {
                 // arrange
                 val token: String = JwtTokenProvider.createToken(
                     jwtClaims = JwtClaims {
@@ -138,7 +139,8 @@ class JwtTokenProviderTest : DescribeSpec({
                 }.exceptionOrNull()
 
                 // assert
-                result.shouldBeInstanceOf<JwtExpiredException>()
+                result.shouldBeInstanceOf<CustomException>()
+                result.type shouldBe JwtExceptionType.JWT_EXPIRED_EXCEPTION
             }
         }
     }
