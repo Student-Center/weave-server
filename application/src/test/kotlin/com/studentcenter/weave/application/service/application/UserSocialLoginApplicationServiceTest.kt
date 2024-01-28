@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.service.application
 
 import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
-import com.studentcenter.weave.application.service.UserTokenServiceStub
+import com.studentcenter.weave.application.service.util.UserTokenServiceStub
 import com.studentcenter.weave.application.service.domain.UserAuthInfoDomainService
 import com.studentcenter.weave.application.service.domain.UserDomainServiceStub
 import com.studentcenter.weave.domain.entity.UserAuthInfo

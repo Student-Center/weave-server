@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.service.application
 
 import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
-import com.studentcenter.weave.application.service.UserTokenService
+import com.studentcenter.weave.application.service.util.UserTokenService
 import com.studentcenter.weave.application.service.domain.UserAuthInfoDomainService
 import com.studentcenter.weave.application.service.domain.UserDomainService
 import com.studentcenter.weave.application.vo.UserTokenClaims
@@ -26,6 +26,7 @@ class UserSocialLoginApplicationService(
             ?: return UserSocialLoginUseCase.Result.NotRegistered(
                 registerToken = userTokenService.generateRegisterToken(
                     email = idTokenClaims.email,
+                    nickname = idTokenClaims.nickname,
                     provider = command.socialLoginProvider,
                 ),
             )

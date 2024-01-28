@@ -1,0 +1,18 @@
+auth:
+  jwt:
+    issuer: ${JWT_ISSUER:weave}
+    access:
+      expire-seconds: ${JWT_ACCESS_EXPIRE_SECONDS:3600}
+      secret: ${JWT_ACCESS_SECRET:secret}
+    refresh:
+      expire-seconds: ${JWT_REFRESH_EXPIRE_SECONDS:604800}
+      secret: ${JWT_REFRESH_SECRET:secret}
+    register:
+      expire-seconds: ${JWT_REGISTER_EXPIRE_SECONDS:300}
+      secret: ${JWT_REGISTER_SECRET:secret}
+  open-id:
+    providers:
+      apple:
+        jwks-uri: ${APPLE_JWKS_URI:https://appleid.apple.com/auth/keys}
+      kakao:
+        jwks-uri: ${KAKAO_JWKS_URI:https://kauth.kakao.com/.well-known/jwks.json}
