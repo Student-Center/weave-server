@@ -1,10 +1,8 @@
 package com.studentcenter.weave.bootstrap.common.exception
 
 import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.common.exception.SystemExceptionType
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.Hidden
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -63,7 +61,10 @@ class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleRequestValidException(exception: MethodArgumentNotValidException): ErrorResponse {
         val builder = StringBuilder()
-        for (fieldError in exception.bindingResult.fieldErrors) {
+        exception
+            .bindingResult
+            .fieldErrors
+            .forEach { fieldError ->
             builder
                 .append("[${fieldError.field}](은)는 ${fieldError.defaultMessage}")
                 .append("입력된 값: ${fieldError.rejectedValue}")
@@ -73,19 +74,6 @@ class CustomExceptionHandler {
         return ErrorResponse(
             exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
             message = message.substring(0, message.lastIndexOf("|")),
-        )
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RuntimeException::class)
-    fun handleApiException(
-        exception: RuntimeException,
-        request: HttpServletRequest
-    ): ErrorResponse {
-        logger.error { exception.stackTraceToString() }
-        return ErrorResponse(
-            exceptionCode = SystemExceptionType.RUNTIME_EXCEPTION.code,
-            message = "Internal Server Error",
         )
     }
 
