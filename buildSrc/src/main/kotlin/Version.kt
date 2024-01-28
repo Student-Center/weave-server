@@ -25,4 +25,6 @@ object Version {
     const val AUTH0_JWKS_RSA = "0.22.1"
 
     const val FLYWAY = "10.6.0"
+
+    const val KOTLIN_LOGGING = "5.1.0"
 }
