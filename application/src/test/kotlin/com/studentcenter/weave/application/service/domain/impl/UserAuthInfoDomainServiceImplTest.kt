@@ -4,7 +4,6 @@ import com.studentcenter.weave.application.port.outbound.UserAuthInfoRepositoryS
 import com.studentcenter.weave.domain.entity.UserAuthInfoFixtureFactory
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
 @DisplayName("UserAuthInfoDomainServiceImpl")

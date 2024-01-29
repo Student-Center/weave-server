@@ -77,10 +77,10 @@ class UserTokenServiceImpl(
             }
             customClaims {
                 this["type"] = UserTokenType.ACCESS_TOKEN.name
-                this["userId"] = user.id
+                this["userId"] = user.id.toString()
                 this["nickname"] = user.nickname.value
                 this["email"] = user.email.value
-                this["avatar"] = user.avatar.toString()
+                user.avatar?.let { this["avatar"] = it.value }
             }
         }
 
@@ -96,7 +96,7 @@ class UserTokenServiceImpl(
             userId = UUID.fromString(jwtClaims.customClaims["userId"] as String),
             nickname = Nickname(jwtClaims.customClaims["nickname"] as String),
             email = Email(jwtClaims.customClaims["email"] as String),
-            avatar = Url(jwtClaims.customClaims["avatar"] as String),
+            avatar = (jwtClaims.customClaims["avatar"] as String?)?.let { Url(it) },
         )
     }
 
@@ -108,7 +108,7 @@ class UserTokenServiceImpl(
             }
             customClaims {
                 this["type"] = UserTokenType.REFRESH_TOKEN.name
-                this["userId"] = user.id
+                this["userId"] = user.id.toString()
             }
         }
 
