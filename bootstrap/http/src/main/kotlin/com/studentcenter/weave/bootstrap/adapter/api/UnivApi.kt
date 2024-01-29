@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.adapter.api
 
-import com.studentcenter.weave.bootstrap.adapter.dto.DomainResponse
+import com.studentcenter.weave.bootstrap.adapter.dto.UniversityResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -25,6 +25,6 @@ interface UnivApi {
 
     @Operation(summary = "Get university by id")
     @GetMapping("/{id}")
-    fun get(@PathVariable id: UUID): DomainResponse
+    fun get(@PathVariable id: UUID): UniversityResponse
 
 }
