@@ -1,5 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.entity
 
+import com.studentcenter.weave.domain.vo.MajorName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -12,7 +13,7 @@ import java.util.*
 class MajorJpaEntity(
     id: UUID,
     univId: UUID,
-    name: String,
+    name: MajorName,
     createdAt: LocalDateTime,
 ) {
     @Id
@@ -24,7 +25,7 @@ class MajorJpaEntity(
         private set
 
     @Column(nullable = false)
-    var name: String = name
+    var name: MajorName = name
         private set
 
     @Column(nullable = false)

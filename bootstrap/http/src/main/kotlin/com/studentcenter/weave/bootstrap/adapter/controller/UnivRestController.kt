@@ -5,7 +5,7 @@ import com.studentcenter.weave.bootstrap.adapter.dto.DomainAddressResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
-import com.studentcenter.weave.domain.vo.University
+import com.studentcenter.weave.domain.vo.UniversityName
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.web.bind.annotation.RestController
 
@@ -14,35 +14,35 @@ class UnivRestController : UnivApi {
 
     override fun findAll(): UniversitiesResponse {
         return UniversitiesResponse(listOf(
-            University(KU),
-            University(DKU),
-            University(MJU),
+            UniversityName(KU),
+            UniversityName(DKU),
+            UniversityName(MJU),
         ))
     }
 
-    override fun getAllMajorByUniv(univName: String): MajorsResponse {
+    override fun getAllMajorByUniv(univName: UniversityName): MajorsResponse {
         validUnivName(univName)
 
         return MajorsResponse(
-            if (KU == univName) KU_MAJORS
-            else if (DKU == univName) DKU_MAJORS
+            if (KU == univName.value) KU_MAJORS
+            else if (DKU == univName.value) DKU_MAJORS
             else MJU_MAJORS
         )
     }
 
-    override fun getDomainAddressByUniv(univName: String): DomainAddressResponse {
+    override fun getDomainAddressByUniv(univName: UniversityName): DomainAddressResponse {
         validUnivName(univName)
 
         return DomainAddressResponse(
-            if (KU == univName) "konkuk.ac.kr"
-            else if (DKU == univName) "dankook.ac.kr"
+            if (KU == univName.value) "konkuk.ac.kr"
+            else if (DKU == univName.value) "dankook.ac.kr"
             else "mju.ac.kr"
         )
 
     }
 
-    private fun validUnivName(univName: String) {
-        if (setOf(KU, DKU, MJU).contains(univName)) {
+    private fun validUnivName(univName: UniversityName) {
+        if (setOf(KU, DKU, MJU).contains(univName.value)) {
             return
         }
 
