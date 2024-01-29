@@ -1,4 +1,4 @@
-name: Pull request validator
+name: Pull Request Validator
 
 on:
   pull_request:

@@ -84,6 +84,8 @@ sonar {
         property("sonar.projectKey", "Student-Center_weave-server")
         property("sonar.organization", "student-center")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.coverage.jacoco.xmlReportPaths", layout.projectDirectory.file("support/jacoco/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"))
     }
 }
 
