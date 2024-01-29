@@ -1,4 +1,4 @@
-name: CD - Dev
+name: Develop Server Deployer (CD)
 
 on: workflow_dispatch
 

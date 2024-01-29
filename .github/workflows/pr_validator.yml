@@ -1,4 +1,4 @@
-name: PR title validation
+name: Pull Request Validator
 
 on:
   pull_request:
@@ -9,13 +9,13 @@ permissions:
   pull-requests: write
 
 jobs:
-  pr-title-validation:
+  pr-validation:
     runs-on: ubuntu-latest
-
+    name: Validate PR format
     steps:
       - uses: actions/checkout@v3
 
-      - name: check pr title format
+      - name: Check PR title format
         uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -36,5 +36,3 @@ jobs:
               core.setFailed('PR 제목이 `[WEAV-번호]` 형식을 따르지 않습니다.')
               return 
             }
-
-            // PR 제목이 형식을 따르면 아무 조치도 취하지 않음

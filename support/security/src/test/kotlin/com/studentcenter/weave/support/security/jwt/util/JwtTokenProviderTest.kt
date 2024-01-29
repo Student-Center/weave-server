@@ -87,7 +87,7 @@ class JwtTokenProviderTest : DescribeSpec({
             val secret = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc"
             val anotherKey = "testtestetesttestetesttestetesttestetesttestetesttestetestteste"
 
-            it("BadRequestException 을 발생시킨다.") {
+            it("JWT_VERIFICATION_EXCEPTION 을 발생시킨다.") {
                 // arrange
                 val token: String = JwtTokenProvider.createToken(
                     jwtClaims = JwtClaims {
@@ -109,7 +109,7 @@ class JwtTokenProviderTest : DescribeSpec({
 
                 // assert
                 result.shouldBeInstanceOf<CustomException>()
-                result.type shouldBe JwtExceptionType.JWT_DECODE_EXCEPTION
+                result.type shouldBe JwtExceptionType.JWT_VERIFICATION_EXCEPTION
             }
         }
 

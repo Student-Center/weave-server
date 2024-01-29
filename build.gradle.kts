@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `java-test-fixtures`
+    id("jacoco")
+    id("jacoco-report-aggregation")
+    id("java-test-fixtures")
     id("org.sonarqube") version Version.SONAR_CLOUD
     id("org.springframework.boot") version Version.SPRING_BOOT
     id("io.spring.dependency-management") version Version.SPRING_BOOT_DEPENDENCY_MANAGEMENT
@@ -20,6 +22,7 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "jacoco")
     apply(plugin = "java-test-fixtures")
     apply(plugin = "org.sonarqube")
     apply(plugin = "idea")
@@ -81,5 +84,28 @@ sonar {
         property("sonar.projectKey", "Student-Center_weave-server")
         property("sonar.organization", "student-center")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.coverage.jacoco.xmlReportPaths", layout.projectDirectory.file("support/jacoco/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"))
+    }
+}
+
+
+val allProjects = project.allprojects
+    .asSequence()
+    .filter { it.name != "weave-server" }
+    .filter { it.name != "support" }
+    .filter { it.name != "domain" }
+    .filter { it.name != "application" }
+    .filter { it.name != "infrastructure" }
+    .filter { it.name != "bootstrap" }
+    .toList()
+
+project(":support:jacoco") {
+    apply(plugin = "jacoco-report-aggregation")
+
+    dependencies {
+        allProjects.forEach {
+            add("jacocoAggregation", project(it.path))
+        }
     }
 }
