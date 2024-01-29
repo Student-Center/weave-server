@@ -3,6 +3,7 @@ package com.studentcenter.weave.bootstrap.adapter.api
 import com.studentcenter.weave.bootstrap.adapter.dto.DomainAddressResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
+import com.studentcenter.weave.domain.vo.UniversityName
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,10 +21,10 @@ interface UnivApi {
 
     @Operation(summary = "Get all major by university")
     @GetMapping("/{univName}/majors")
-    fun getAllMajorByUniv(@PathVariable univName: String): MajorsResponse
+    fun getAllMajorByUniv(@PathVariable univName: UniversityName): MajorsResponse
 
     @Operation(summary = "Get domain address by university")
     @GetMapping("/{univName}/domain-address")
-    fun getDomainAddressByUniv(@PathVariable univName: String): DomainAddressResponse
+    fun getDomainAddressByUniv(@PathVariable univName: UniversityName): DomainAddressResponse
 
 }

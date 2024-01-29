@@ -1,8 +1,6 @@
 package com.studentcenter.weave.domain.entity
 
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.support.common.vo.Email
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 

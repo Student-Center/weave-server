@@ -1,5 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.entity
 
+import com.studentcenter.weave.domain.vo.UniversityName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -11,7 +12,7 @@ import java.util.*
 @Table(name = "university")
 class UniversityJpaEntity(
     id: UUID,
-    name: String,
+    name: UniversityName,
     domainAddress: String,
     logoAddress: String,
     createdAt: LocalDateTime,
@@ -22,7 +23,7 @@ class UniversityJpaEntity(
         private set
 
     @Column(unique = true, nullable = false)
-    var name: String = name
+    var name: UniversityName = name
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
