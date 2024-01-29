@@ -1,61 +1,58 @@
 package com.studentcenter.weave.bootstrap.adapter.controller
 
 import com.studentcenter.weave.bootstrap.adapter.api.UnivApi
-import com.studentcenter.weave.bootstrap.adapter.dto.DomainAddressResponse
+import com.studentcenter.weave.bootstrap.adapter.dto.DomainResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
+import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.UniversityName
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.common.uuid.UuidCreator
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 class UnivRestController : UnivApi {
 
     override fun findAll(): UniversitiesResponse {
         return UniversitiesResponse(listOf(
-            UniversityName(KU),
-            UniversityName(DKU),
-            UniversityName(MJU),
+            UniversitiesResponse.UniversityDto(KU.id, KU.name, KU.domainAddress, KU.logoAddress),
+            UniversitiesResponse.UniversityDto(DKU.id, DKU.name, DKU.domainAddress, DKU.logoAddress),
+            UniversitiesResponse.UniversityDto(MJU.id, MJU.name, MJU.domainAddress, MJU.logoAddress),
         ))
     }
 
-    override fun getAllMajorByUniv(univName: UniversityName): MajorsResponse {
-        validUnivName(univName)
-
-        return MajorsResponse(
-            if (KU == univName.value) KU_MAJORS
-            else if (DKU == univName.value) DKU_MAJORS
-            else MJU_MAJORS
-        )
-    }
-
-    override fun getDomainAddressByUniv(univName: UniversityName): DomainAddressResponse {
-        validUnivName(univName)
-
-        return DomainAddressResponse(
-            if (KU == univName.value) "konkuk.ac.kr"
-            else if (DKU == univName.value) "dankook.ac.kr"
-            else "mju.ac.kr"
-        )
-
-    }
-
-    private fun validUnivName(univName: UniversityName) {
-        if (setOf(KU, DKU, MJU).contains(univName.value)) {
-            return
-        }
-
-        throw CustomException(
+    override fun getAllMajorByUniv(@PathVariable univId: UUID): MajorsResponse {
+        val majorDtos = if (KU_ID == univId) KU_MAJORS
+        else if (DKU_ID == univId) DKU_MAJORS
+        else if (MJU_ID == univId) MJU_MAJORS
+        else throw CustomException(
             type = ApiExceptionType.INVALID_PARAMETER,
-            message = "찾을 수 없는 대학교명입니다.",
+            message = "대학교를 찾을 수 없습니다",
         )
+        return MajorsResponse(majorDtos)
+    }
+
+    override fun get(id: UUID): DomainResponse {
+        return if (KU_ID == id) KU
+        else if (DKU_ID == id) DKU
+        else if (MJU_ID == id) MJU
+        else throw CustomException(
+            type = ApiExceptionType.INVALID_PARAMETER,
+            message = "대학교를 찾을 수 없습니다",
+        )
+
     }
 
     companion object {
-        private const val KU = "건국대학교"
-        private const val DKU = "단국대학교"
-        private const val MJU = "명지대학교"
+        private val KU_ID = UuidCreator.create()
+        private val KU = DomainResponse(KU_ID, UniversityName("건국대학교"), "konkuk.ac.kr", "public/university/${KU_ID}/logo")
+        private val DKU_ID = UuidCreator.create()
+        private val DKU = DomainResponse(DKU_ID, UniversityName("단국대학교"), "dankook.ac.kr", "public/university/${DKU_ID}/logo")
+        private val MJU_ID = UuidCreator.create()
+        private val MJU = DomainResponse(MJU_ID, UniversityName("명지대학교"), "mju.ac.kr", "public/university/${MJU_ID}/logo")
         private val KU_MAJORS = listOf(
             "화장품공학과",
             "국제무역학과",
@@ -119,7 +116,7 @@ class UnivRestController : UnivApi {
             "건축학부",
             "미디어커뮤니케이션학과",
             "체육교육과",
-        )
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
         private val DKU_MAJORS = listOf(
             "국제스포츠학부 태권도전공",
             "생명자원학부 식량생명공학전공",
@@ -276,7 +273,7 @@ class UnivRestController : UnivApi {
             "의과대학",
             "무역학과",
             "치의학과",
-        )
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
         private val MJU_MAJORS = listOf(
             "융합전공학부(인문)",
             "전공자유학부",
@@ -382,6 +379,6 @@ class UnivRestController : UnivApi {
             "인문대학",
             "교양학과",
             "만화애니콘텐츠학과",
-        )
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
     }
 }
