@@ -4,25 +4,27 @@ class JwtTokenPropertiesFixtureFactory {
 
     companion object {
 
-        fun create(): JwtTokenProperties {
-            val accessToken = JwtTokenProperties.TokenProperties(
-                secret = "secret",
-                expireSeconds = 1000L,
-            )
-            val refreshToken = JwtTokenProperties.TokenProperties(
-                secret = "secret",
-                expireSeconds = 1000L,
-            )
-            val registerToken = JwtTokenProperties.TokenProperties(
-                secret = "secret",
-                expireSeconds = 1000L,
-            )
-
+        fun create(
+            issuer: String = "issuer",
+            accessToken: JwtTokenProperties.TokenProperties = createTokenProperties(),
+            refreshToken: JwtTokenProperties.TokenProperties = createTokenProperties(),
+            registerToken: JwtTokenProperties.TokenProperties = createTokenProperties(),
+        ): JwtTokenProperties {
             return JwtTokenProperties(
-                issuer = "issuer",
+                issuer = issuer,
                 access = accessToken,
                 refresh = refreshToken,
                 register = registerToken,
+            )
+        }
+
+        fun createTokenProperties(
+            secret: String = "secret",
+            expireSeconds: Long = 1000L,
+        ): JwtTokenProperties.TokenProperties {
+            return JwtTokenProperties.TokenProperties(
+                secret = secret,
+                expireSeconds = expireSeconds,
             )
         }
     }
