@@ -4,9 +4,9 @@ import com.studentcenter.weave.domain.enum.Gender
 import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.Major
+import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.domain.vo.University
+import com.studentcenter.weave.domain.vo.UniversityName
 import com.studentcenter.weave.support.common.vo.Email
 
 fun interface UserRegisterUseCase {
@@ -20,8 +20,8 @@ fun interface UserRegisterUseCase {
         val gender: Gender,
         val mbti: Mbti,
         val birthYear: BirthYear,
-        val university: University,
-        val major: Major
+        val university: UniversityName,
+        val major: MajorName
     )
 
     sealed class Result {
