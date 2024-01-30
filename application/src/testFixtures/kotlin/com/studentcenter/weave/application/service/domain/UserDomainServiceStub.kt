@@ -10,4 +10,8 @@ class UserDomainServiceStub: UserDomainService {
         return UserFixtureFactory.create()
     }
 
+    override fun save(user: User) {
+        TODO("Not yet implemented")
+    }
+
 }
