@@ -24,8 +24,8 @@ class UserRestController(
             gender = request.gender,
             mbti = request.mbti,
             birthYear = request.birthYear,
-            university = request.university,
-            major = request.major,
+            universityId = request.universityId,
+            majorId = request.majorId,
         )
 
         return when (val result: UserRegisterUseCase.Result = userRegisterUseCase.invoke(command)) {

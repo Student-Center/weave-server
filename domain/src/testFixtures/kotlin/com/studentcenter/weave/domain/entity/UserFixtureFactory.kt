@@ -3,11 +3,11 @@ package com.studentcenter.weave.domain.entity
 import com.studentcenter.weave.domain.enum.Gender
 import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
+import java.util.*
 
 object UserFixtureFactory {
 
@@ -17,8 +17,8 @@ object UserFixtureFactory {
         gender: Gender = Gender.MAN,
         mbti: Mbti = Mbti.ENFJ,
         birthYear: BirthYear = BirthYear(1999),
-        university: UniversityName = UniversityName("서울대학교"),
-        major: MajorName = MajorName("컴퓨터 공학과"),
+        universityId: UUID = UuidCreator.create(),
+        majorId: UUID = UuidCreator.create(),
         avatar: Url? = null,
     ): User {
         return User(
@@ -27,8 +27,8 @@ object UserFixtureFactory {
             gender = gender,
             mbti = mbti,
             birthYear = birthYear,
-            university = university,
-            major = major,
+            universityId = universityId,
+            majorId = majorId,
             avatar = avatar,
         )
     }
