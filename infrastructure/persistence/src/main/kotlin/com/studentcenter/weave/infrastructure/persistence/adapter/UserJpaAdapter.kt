@@ -6,6 +6,7 @@ import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.repository.UserJpaRepository
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class UserJpaAdapter (
@@ -15,6 +16,10 @@ class UserJpaAdapter (
     override fun save(user: User) {
         val userJpaEntity: UserJpaEntity = user.toJpaEntity()
         userJpaRepository.save(userJpaEntity)
+    }
+
+    override fun getById(id: UUID): User {
+        TODO("Not yet implemented")
     }
 
 }

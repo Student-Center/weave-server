@@ -13,7 +13,7 @@ class UserAuthInfoRepositorySpy : UserAuthInfoRepository {
         return bucket.values.find { it.email == email }
     }
 
-    fun save(userAuthInfo: UserAuthInfo) {
+    override fun save(userAuthInfo: UserAuthInfo) {
         bucket[userAuthInfo.id] = userAuthInfo
     }
 
