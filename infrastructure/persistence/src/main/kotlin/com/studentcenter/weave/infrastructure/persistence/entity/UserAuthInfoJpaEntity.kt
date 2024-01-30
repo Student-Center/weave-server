@@ -21,6 +21,7 @@ class UserAuthInfoJpaEntity(
     socialLoginProvider: SocialLoginProvider,
     registeredAt: LocalDateTime,
 ) {
+
     @Id
     var id: UUID = id
         private set
@@ -43,20 +44,17 @@ class UserAuthInfoJpaEntity(
         private set
 
     companion object {
-        fun create(
-            userId: UUID,
-            email: Email,
-            socialLoginProvider: SocialLoginProvider,
-            registeredAt: LocalDateTime,
-        ): UserAuthInfoJpaEntity {
+
+        fun UserAuthInfo.toJpaEntity(): UserAuthInfoJpaEntity {
             return UserAuthInfoJpaEntity(
-                id = UUID.randomUUID(),
+                id = id,
                 userId = userId,
                 email = email,
                 socialLoginProvider = socialLoginProvider,
                 registeredAt = registeredAt,
             )
         }
+
     }
 
     fun toDomain(): UserAuthInfo {

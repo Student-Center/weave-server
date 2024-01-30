@@ -3,9 +3,8 @@ package com.studentcenter.weave.domain.entity
 import com.studentcenter.weave.domain.enum.Gender
 import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -18,8 +17,8 @@ class UserTest : FunSpec({
         val email = Email("test@test.com")
         val gender = Gender.MAN
         val birthYear = BirthYear(1999)
-        val university = UniversityName("서울대학교")
-        val major = MajorName("컴퓨터 공학과")
+        val universityId = UuidCreator.create()
+        val majorId = UuidCreator.create()
         val mbti = Mbti.ENFJ
 
         // act
@@ -29,8 +28,8 @@ class UserTest : FunSpec({
             gender = gender,
             mbti = mbti,
             birthYear = birthYear,
-            university = university,
-            major = major,
+            universityId = universityId,
+            majorId = majorId,
         )
 
         // assert
@@ -39,7 +38,8 @@ class UserTest : FunSpec({
         user.gender shouldBe gender
         user.mbti shouldBe mbti
         user.birthYear shouldBe birthYear
-        user.major shouldBe major
+        user.universityId shouldBe universityId
+        user.majorId shouldBe majorId
     }
 
 })

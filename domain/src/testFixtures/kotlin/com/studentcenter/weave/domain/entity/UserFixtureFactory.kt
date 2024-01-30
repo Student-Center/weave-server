@@ -4,6 +4,7 @@ import com.studentcenter.weave.domain.enum.Gender
 import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
@@ -16,8 +17,8 @@ object UserFixtureFactory {
         gender: Gender = Gender.MAN,
         mbti: Mbti = Mbti.ENFJ,
         birthYear: BirthYear = BirthYear(1999),
-        universityId: UUID = UUID.randomUUID(),
-        majorId: UUID = UUID.randomUUID(),
+        universityId: UUID = UuidCreator.create(),
+        majorId: UUID = UuidCreator.create(),
         avatar: Url? = null,
     ): User {
         return User(
