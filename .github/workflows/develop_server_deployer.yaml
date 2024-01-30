@@ -15,12 +15,12 @@ jobs:
           webhook_id: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_ID }}
           webhook_token: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
-            🛰️Server Deployment Start (Dev)
+            🛰️ Server Deployment Start (Dev)
             
-            🛢️Repository  : ${{ github.repository }}
-            🎋Branch      : ${{ github.ref }}
-            🔁Run Attempt : ${{ github.run_attempt }}
-            🤗Actor       : ${{ github.triggering_actor }}
+            🛢️ Repository  : ${{ github.repository }}
+            🎋 Branch      : ${{ github.ref }}
+            🔁 Run Attempt : ${{ github.run_attempt }}
+            🤗 Actor       : ${{ github.triggering_actor }}
 
       - name: Copy Docker Compose file to server
         uses: appleboy/scp-action@master
@@ -72,9 +72,9 @@ jobs:
           webhook_id: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_ID }}
           webhook_token: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
-            🛰️Server Deployment Complete (Dev)
+            🛰️ Server Deployment Complete (Dev)
             
-            🛢️Repository  : ${{ github.repository }}
-            🎋Branch      : ${{ github.ref }}
-            🔁Run Attempt : ${{ github.run_attempt }}
-            🤗Actor       : ${{ github.triggering_actor }}
+            🛢️ Repository  : ${{ github.repository }}
+            🎋 Branch      : ${{ github.ref }}
+            🔁 Run Attempt : ${{ github.run_attempt }}
+            🤗 Actor       : ${{ github.triggering_actor }}
