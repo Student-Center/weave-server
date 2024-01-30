@@ -80,6 +80,7 @@ class UserJpaEntity(
         private set
 
     companion object {
+
         fun User.toJpaEntity(): UserJpaEntity {
             return UserJpaEntity(
                 id = id,
@@ -95,6 +96,22 @@ class UserJpaEntity(
                 updatedAt = updatedAt,
             )
         }
+    }
+
+    fun toDomain(): User {
+        return User(
+            id = id,
+            nickname = nickname,
+            email = email,
+            gender = gender,
+            mbti = mbti,
+            birthYear = birthYear,
+            universityId = universityId,
+            majorId = majorId,
+            avatar = avatar,
+            registeredAt = registeredAt,
+            updatedAt = updatedAt,
+        )
     }
 
 }
