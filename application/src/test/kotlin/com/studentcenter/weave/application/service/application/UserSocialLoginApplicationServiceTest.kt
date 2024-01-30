@@ -1,40 +1,49 @@
 package com.studentcenter.weave.application.service.application
 
+import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
-import com.studentcenter.weave.application.service.util.UserTokenServiceStub
-import com.studentcenter.weave.application.service.domain.UserAuthInfoDomainService
-import com.studentcenter.weave.application.service.domain.UserDomainServiceStub
-import com.studentcenter.weave.domain.entity.UserAuthInfo
+import com.studentcenter.weave.application.port.outbound.UserAuthInfoRepositorySpy
+import com.studentcenter.weave.application.port.outbound.UserRepositorySpy
+import com.studentcenter.weave.application.service.domain.impl.UserAuthInfoDomainServiceImpl
+import com.studentcenter.weave.application.service.domain.impl.UserDomainServiceImpl
+import com.studentcenter.weave.application.service.util.impl.UserTokenServiceImpl
+import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.domain.entity.UserAuthInfoFixtureFactory
+import com.studentcenter.weave.domain.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import io.kotest.assertions.asClue
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
-import io.mockk.every
-import io.mockk.mockk
 
 class UserSocialLoginApplicationServiceTest : DescribeSpec({
 
+    val userRepositorySpy = UserRepositorySpy()
+    val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
+
+    val sut = UserSocialLoginApplicationService(
+        userTokenService = UserTokenServiceImpl(
+            jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
+            openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+        ),
+        userDomainService = UserDomainServiceImpl(userRepositorySpy),
+        userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
+    )
+
+    afterTest {
+        userRepositorySpy.clear()
+        userAuthInfoRepositorySpy.clear()
+    }
+
     describe("UserSocialLoginApplicationService") {
-
-        val authInfoDomainServiceMock: UserAuthInfoDomainService =
-            mockk<UserAuthInfoDomainService>()
-        val userAuthInfoFixture: UserAuthInfo = UserAuthInfoFixtureFactory.create()
-        val sut = UserSocialLoginApplicationService(
-            userTokenService = UserTokenServiceStub(),
-            userDomainService = UserDomainServiceStub(),
-            userAuthInfoDomainService = authInfoDomainServiceMock,
-        )
-
-        context("소셜 로그인 성공시") {
-
-            every {
-                authInfoDomainServiceMock.findByEmail(userAuthInfoFixture.email)
-            } returns UserAuthInfoFixtureFactory.create()
-
-            enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
-
-                it("Access Token과 Refresh Token을 응답한다 : ${socialLoginProvider.name}") {
+        enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
+            context("idToken-${socialLoginProvider} 에 해당하는 회원이 존재하는 경우") {
+                it("로그인 토큰을 응답한다 : ${socialLoginProvider.name}") {
                     // arrange
+                    UserFixtureFactory.create()
+                        .also { userRepositorySpy.save(it) }
+                        .asClue { UserAuthInfoFixtureFactory.create(it, socialLoginProvider) }
+                        .let { userAuthInfoRepositorySpy.save(it) }
+
                     val idToken = "idToken"
                     val command = UserSocialLoginUseCase.Command(
                         socialLoginProvider = socialLoginProvider,
@@ -52,12 +61,8 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
             }
         }
 
-        context("회원이 존재하지 않는 경우") {
-
-            every { authInfoDomainServiceMock.findByEmail(userAuthInfoFixture.email) } returns null
-
-            enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
-
+        enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
+            context("id token에 해당하는 회원이 존재하지 않는 경우") {
                 it("회원 가입 토큰을 응답한다 : ${socialLoginProvider.name}") {
                     // arrange
                     val idToken = "idToken"
@@ -74,9 +79,7 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
                     result.registerToken.shouldBeTypeOf<String>()
                 }
             }
-
         }
-
     }
 
 })

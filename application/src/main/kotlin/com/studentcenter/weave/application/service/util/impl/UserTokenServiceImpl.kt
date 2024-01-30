@@ -2,10 +2,10 @@ package com.studentcenter.weave.application.service.util.impl
 
 import com.studentcenter.weave.application.common.properties.JwtTokenProperties
 import com.studentcenter.weave.application.service.util.UserTokenService
+import com.studentcenter.weave.application.service.util.UserTokenType
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategy
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.application.service.util.UserTokenType
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import com.studentcenter.weave.domain.vo.Nickname
