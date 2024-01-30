@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":support:security"))
     implementation(project(":domain"))
 
+    implementation("org.springframework:spring-tx:${Version.SPRING}")
     implementation("org.springframework.boot:spring-boot:${Version.SPRING_BOOT}")
     testImplementation(testFixtures(project(":domain")))
     testFixturesImplementation(testFixtures(project(":domain")))

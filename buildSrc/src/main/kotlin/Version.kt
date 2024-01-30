@@ -3,6 +3,7 @@ object Version {
     const val JAVA = "17"
 
     // plugins
+    const val SPRING = "6.1.2"
     const val SPRING_BOOT = "3.2.1"
     const val SPRING_BOOT_DEPENDENCY_MANAGEMENT = "1.1.4"
     const val KOTLIN = "1.9.21"
