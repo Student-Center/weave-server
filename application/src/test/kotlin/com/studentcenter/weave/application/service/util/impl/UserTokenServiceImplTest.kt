@@ -1,8 +1,7 @@
 package com.studentcenter.weave.application.service.util.impl
 
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
-import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
-import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyStub
+import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.entity.UserFixtureFactory
@@ -13,23 +12,14 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.every
-import io.mockk.mockk
 
 @DisplayName("UserTokenServiceImpl")
 class UserTokenServiceImplTest : DescribeSpec({
 
-
-    val openIdTokenResolveStrategyFactoryMock: OpenIdTokenResolveStrategyFactory =
-        mockk<OpenIdTokenResolveStrategyFactory>()
     val sut = UserTokenServiceImpl(
         jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
-        openIdTokenResolveStrategyFactory = openIdTokenResolveStrategyFactoryMock
+        openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub()
     )
-
-    beforeTest {
-        every { openIdTokenResolveStrategyFactoryMock.getStrategy(any()) } returns OpenIdTokenResolveStrategyStub()
-    }
 
     describe("resolveIdToken") {
 

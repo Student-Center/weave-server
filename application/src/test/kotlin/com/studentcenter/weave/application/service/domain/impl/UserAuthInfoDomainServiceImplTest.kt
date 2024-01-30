@@ -10,9 +10,7 @@ import io.kotest.matchers.shouldBe
 class UserAuthInfoDomainServiceImplTest : DescribeSpec({
 
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
-    val sut = UserAuthInfoDomainServiceImpl(
-        userAuthInfoRepository = userAuthInfoRepositorySpy,
-    )
+    val sut = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy)
 
     afterTest {
         userAuthInfoRepositorySpy.clear()
