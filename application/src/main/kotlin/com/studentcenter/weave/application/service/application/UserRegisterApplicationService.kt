@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.service.domain.UserAuthInfoDomainServ
 import com.studentcenter.weave.application.service.domain.UserDomainService
 import com.studentcenter.weave.application.service.util.UserTokenService
 import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserAuthInfo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,20 +17,20 @@ class UserRegisterApplicationService(
 
     @Transactional
     override fun invoke(command: UserRegisterUseCase.Command): UserRegisterUseCase.Result {
-        val user: User = User.create(
+        val user: User = userDomainService.create(
             nickname = command.nickname,
             email = command.email,
             gender = command.gender,
-            birthYear = command.birthYear,
             mbti = command.mbti,
+            birthYear = command.birthYear,
             universityId = command.universityId,
             majorId = command.majorId,
-        ).also { userDomainService.save(it) }
+        )
 
-        UserAuthInfo.create(
+        userAuthInfoDomainService.create(
             user = user,
             socialLoginProvider = command.socialLoginProvider,
-        ).let { userAuthInfoDomainService.save(it) }
+        )
 
         return UserRegisterUseCase.Result.Success(
             accessToken = userTokenService.generateAccessToken(user),
