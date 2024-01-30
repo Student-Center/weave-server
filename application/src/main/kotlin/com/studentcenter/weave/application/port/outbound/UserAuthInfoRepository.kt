@@ -7,4 +7,6 @@ interface UserAuthInfoRepository {
 
     fun findByEmail(email: Email): UserAuthInfo?
 
+    fun save(userAuthInfo: UserAuthInfo)
+
 }

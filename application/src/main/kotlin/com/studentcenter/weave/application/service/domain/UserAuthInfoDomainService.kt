@@ -7,4 +7,6 @@ interface UserAuthInfoDomainService {
 
     fun findByEmail(email: Email): UserAuthInfo?
 
+    fun save(userAuthInfo: UserAuthInfo)
+
 }

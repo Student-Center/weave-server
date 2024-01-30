@@ -8,4 +8,6 @@ interface UserDomainService {
 
     fun getById(id: UUID): User
 
+    fun save(user: User)
+
 }

@@ -15,4 +15,8 @@ class UserAuthInfoDomainServiceImpl(
         return userAuthInfoRepository.findByEmail(email)
     }
 
+    override fun save(userAuthInfo: UserAuthInfo) {
+        userAuthInfoRepository.save(userAuthInfo)
+    }
+
 }
