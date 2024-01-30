@@ -3,9 +3,7 @@ package com.studentcenter.weave.domain.entity
 import com.studentcenter.weave.domain.enum.Gender
 import com.studentcenter.weave.domain.enum.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.Nickname
-import com.studentcenter.weave.domain.vo.UniversityName
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
@@ -19,8 +17,8 @@ data class User(
     val gender: Gender,
     val mbti: Mbti,
     val birthYear: BirthYear,
-    val university: UniversityName,
-    val major: MajorName,
+    val universityId: UUID,
+    val majorId: UUID,
     val avatar: Url? = null,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
@@ -28,14 +26,15 @@ data class User(
 
 
     companion object {
+
         fun create(
             nickname: Nickname,
             email: Email,
             gender: Gender,
             mbti: Mbti,
             birthYear: BirthYear,
-            university: UniversityName,
-            major: MajorName,
+            universityId: UUID,
+            majorId: UUID,
             avatar: Url? = null,
         ): User {
             return User(
@@ -44,8 +43,8 @@ data class User(
                 gender = gender,
                 mbti = mbti,
                 birthYear = birthYear,
-                university = university,
-                major = major,
+                universityId = universityId,
+                majorId = majorId,
                 avatar = avatar,
             )
         }
