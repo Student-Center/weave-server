@@ -12,7 +12,7 @@ create table `user`
     avatar        varchar(255),
     registered_at datetime(6)  not null,
     updated_at    datetime(6)  not null,
-    primary key (`id`),
+    primary key (id),
     index idx_university_id (university_id),
     index idx_major_id (major_id)
 ) engine = InnoDB
