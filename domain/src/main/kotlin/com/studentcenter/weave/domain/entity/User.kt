@@ -1,7 +1,7 @@
 package com.studentcenter.weave.domain.entity
 
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -20,6 +20,7 @@ data class User(
     val universityId: UUID,
     val majorId: UUID,
     val avatar: Url? = null,
+    val height: Height? = null,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {

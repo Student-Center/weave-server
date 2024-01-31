@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.adapter.dto
 
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*

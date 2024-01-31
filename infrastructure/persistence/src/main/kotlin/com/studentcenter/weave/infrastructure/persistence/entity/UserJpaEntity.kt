@@ -2,7 +2,7 @@ package com.studentcenter.weave.infrastructure.persistence.entity
 
 import com.studentcenter.weave.domain.entity.User
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -51,7 +51,6 @@ class UserJpaEntity(
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(value = EnumType.STRING)
     var mbti: Mbti = mbti
         private set
 

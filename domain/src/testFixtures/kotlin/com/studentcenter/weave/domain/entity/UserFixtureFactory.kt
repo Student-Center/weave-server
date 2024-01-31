@@ -1,7 +1,7 @@
 package com.studentcenter.weave.domain.entity
 
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -15,7 +15,7 @@ object UserFixtureFactory {
         nickname: Nickname = Nickname("닉네임"),
         email: Email = Email("test@test.com"),
         gender: Gender = Gender.MAN,
-        mbti: Mbti = Mbti.ENFJ,
+        mbti: Mbti = Mbti("EnTJ"),
         birthYear: BirthYear = BirthYear(1999),
         universityId: UUID = UuidCreator.create(),
         majorId: UUID = UuidCreator.create(),
