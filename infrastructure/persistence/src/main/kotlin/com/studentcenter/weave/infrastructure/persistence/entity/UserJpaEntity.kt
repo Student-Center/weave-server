@@ -1,13 +1,16 @@
 package com.studentcenter.weave.infrastructure.persistence.entity
 
 import com.studentcenter.weave.domain.entity.User
+import com.studentcenter.weave.domain.enum.AnimalType
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
+import com.studentcenter.weave.domain.vo.Height
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -28,6 +31,8 @@ class UserJpaEntity(
     universityId: UUID,
     majorId: UUID,
     avatar: Url? = null,
+    height: Height? = null,
+    animalType: AnimalType? = null,
     registeredAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -51,12 +56,16 @@ class UserJpaEntity(
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(value = EnumType.STRING)
     var mbti: Mbti = mbti
         private set
 
     @Column(nullable = false)
     var birthYear: BirthYear = birthYear
+        private set
+
+    @Embedded
+    @Column(nullable = true, updatable = true, columnDefinition = "integer")
+    var height: Height? = height
         private set
 
     @Column(nullable = false, updatable = false)
@@ -67,8 +76,13 @@ class UserJpaEntity(
     var majorId: UUID = majorId
         private set
 
-    @Column()
+    @Column(nullable = true)
     var avatar: Url? = avatar
+        private set
+
+    @Column(nullable = true, updatable = true, columnDefinition = "varchar(255)")
+    @Enumerated(value = EnumType.STRING)
+    var animalType: AnimalType? = animalType
         private set
 
     @Column(nullable = false, updatable = false)
@@ -92,6 +106,8 @@ class UserJpaEntity(
                 universityId = universityId,
                 majorId = majorId,
                 avatar = avatar,
+                height = height,
+                animalType = animalType,
                 registeredAt = registeredAt,
                 updatedAt = updatedAt,
             )
@@ -109,6 +125,8 @@ class UserJpaEntity(
             universityId = universityId,
             majorId = majorId,
             avatar = avatar,
+            height = height,
+            animalType = animalType,
             registeredAt = registeredAt,
             updatedAt = updatedAt,
         )

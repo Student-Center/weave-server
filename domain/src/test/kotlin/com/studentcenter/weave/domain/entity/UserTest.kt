@@ -1,7 +1,7 @@
 package com.studentcenter.weave.domain.entity
 
 import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.enum.Mbti
+import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.BirthYear
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -19,7 +19,7 @@ class UserTest : FunSpec({
         val birthYear = BirthYear(1999)
         val universityId = UuidCreator.create()
         val majorId = UuidCreator.create()
-        val mbti = Mbti.ENFJ
+        val mbti = Mbti("EnTJ")
 
         // act
         val user = User.create(
