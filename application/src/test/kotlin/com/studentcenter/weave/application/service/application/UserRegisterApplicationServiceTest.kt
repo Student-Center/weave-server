@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.common.properties.JwtTokenProperties
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.port.outbound.UserAuthInfoRepositorySpy
+import com.studentcenter.weave.application.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.service.domain.impl.UserAuthInfoDomainServiceImpl
 import com.studentcenter.weave.application.service.domain.impl.UserDomainServiceImpl
@@ -26,7 +27,8 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
     val sut = UserRegisterApplicationService(
         userTokenService = UserTokenServiceImpl(
             jwtTokenProperties = jwtTokenProperties,
-            openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub()
+            userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+            openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
         ),
         userDomainService = UserDomainServiceImpl(userRepositorySpy),
         userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy)

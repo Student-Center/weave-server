@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.service.application
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
 import com.studentcenter.weave.application.port.outbound.UserAuthInfoRepositorySpy
+import com.studentcenter.weave.application.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.service.domain.impl.UserAuthInfoDomainServiceImpl
 import com.studentcenter.weave.application.service.domain.impl.UserDomainServiceImpl
@@ -23,6 +24,7 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
     val sut = UserSocialLoginApplicationService(
         userTokenService = UserTokenServiceImpl(
             jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
+            userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
             openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
         ),
         userDomainService = UserDomainServiceImpl(userRepositorySpy),

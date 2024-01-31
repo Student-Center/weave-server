@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.service.util.impl
 
 import com.studentcenter.weave.application.common.properties.JwtTokenProperties
+import com.studentcenter.weave.application.port.outbound.UserRefreshTokenRepository
 import com.studentcenter.weave.application.service.util.UserTokenService
 import com.studentcenter.weave.application.service.util.UserTokenType
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategy
@@ -20,6 +21,7 @@ import java.util.*
 @Component
 class UserTokenServiceImpl(
     private val jwtTokenProperties: JwtTokenProperties,
+    private val userRefreshTokenRepository: UserRefreshTokenRepository,
     private val openIdTokenResolveStrategyFactory: OpenIdTokenResolveStrategyFactory
 ) : UserTokenService {
 
@@ -112,7 +114,15 @@ class UserTokenServiceImpl(
             }
         }
 
-        return JwtTokenProvider.createToken(jwtClaims, jwtTokenProperties.refresh.secret)
+        return JwtTokenProvider
+            .createToken(jwtClaims, jwtTokenProperties.refresh.secret)
+            .also {
+                userRefreshTokenRepository.save(
+                    id = user.id,
+                    refreshToken = it,
+                    expirationSeconds = jwtTokenProperties.refresh.expireSeconds
+                )
+            }
     }
 
     override fun resolveRefreshToken(refreshToken: String): UserTokenClaims.RefreshToken {
