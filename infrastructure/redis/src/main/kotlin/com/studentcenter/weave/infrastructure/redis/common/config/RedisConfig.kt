@@ -26,5 +26,4 @@ class RedisConfig {
         return template
     }
 
-
 }
