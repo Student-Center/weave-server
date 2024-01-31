@@ -118,7 +118,7 @@ class UserTokenServiceImpl(
             .createToken(jwtClaims, jwtTokenProperties.refresh.secret)
             .also {
                 userRefreshTokenRepository.save(
-                    id = user.id,
+                    userId = user.id,
                     refreshToken = it,
                     expirationSeconds = jwtTokenProperties.refresh.expireSeconds
                 )
