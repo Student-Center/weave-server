@@ -5,7 +5,7 @@ import java.util.*
 interface UserRefreshTokenRepository {
 
     fun save(
-        id: UUID,
+        userId: UUID,
         refreshToken: String,
         expirationSeconds: Long
     )
