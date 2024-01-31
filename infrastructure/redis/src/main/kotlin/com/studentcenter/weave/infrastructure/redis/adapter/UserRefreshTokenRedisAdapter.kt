@@ -12,12 +12,12 @@ class UserRefreshTokenRedisAdapter(
 ) : UserRefreshTokenRepository {
 
     override fun save(
-        id: UUID,
+        userId: UUID,
         refreshToken: String,
         expirationSeconds: Long
     ) {
         val userRefreshTokenRedisHash = UserRefreshTokenRedisHash(
-            id = id,
+            id = userId,
             refreshToken = refreshToken,
             expirationSeconds = expirationSeconds,
         )
@@ -31,5 +31,8 @@ class UserRefreshTokenRedisAdapter(
             .orElse(null)
     }
 
+    override fun deleteByUserId(userId: UUID) {
+        return userRefreshTokenRedisRepository.deleteById(userId)
+    }
 
 }

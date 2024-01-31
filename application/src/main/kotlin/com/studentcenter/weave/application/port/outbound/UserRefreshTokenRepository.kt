@@ -12,4 +12,6 @@ interface UserRefreshTokenRepository {
 
     fun findByUserId(userId: UUID): String?
 
+    fun deleteByUserId(userId: UUID)
+
 }
