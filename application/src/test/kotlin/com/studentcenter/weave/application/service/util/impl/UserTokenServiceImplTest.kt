@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.service.util.impl
 
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
+import com.studentcenter.weave.application.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.domain.entity.User
@@ -18,6 +19,7 @@ class UserTokenServiceImplTest : DescribeSpec({
 
     val sut = UserTokenServiceImpl(
         jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
+        userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
         openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub()
     )
 

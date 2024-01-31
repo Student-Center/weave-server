@@ -34,6 +34,9 @@ project(":infrastructure:persistence").projectDir = file("infrastructure/persist
 include(":infrastructure:client")
 project(":infrastructure:client").projectDir = file("infrastructure/client")
 
+include(":infrastructure:redis")
+project(":infrastructure:redis").projectDir = file("infrastructure/redis")
+
 // bootstrap
 include(":bootstrap:http")
 project(":bootstrap:http").projectDir = file("bootstrap/http")

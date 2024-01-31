@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.adapter.api.UserApi
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserResponse
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
@@ -34,7 +35,7 @@ class UserRestController(
                     accessToken = result.accessToken,
                     refreshToken = result.refreshToken,
                 )
-                ResponseEntity.ok(body)
+                ResponseEntity.status(HttpStatus.CREATED).body(body)
             }
         }
     }
