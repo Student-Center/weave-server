@@ -25,6 +25,4 @@ class OpenApiConfig {
                 .bearerFormat("JWT")
         )
     }
-
-
 }
