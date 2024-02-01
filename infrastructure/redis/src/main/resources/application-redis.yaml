@@ -2,6 +2,10 @@ spring:
   config:
     activate:
       on-profile: local
+  data:
+    redis:
+      host: localhost
+      port: 6379
 ---
 spring:
   config:
@@ -9,5 +13,5 @@ spring:
       on-profile: dev
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${DEV_REDIS_HOST:localhost}
+      port: ${DEV_REDIS_PORT:6379}
