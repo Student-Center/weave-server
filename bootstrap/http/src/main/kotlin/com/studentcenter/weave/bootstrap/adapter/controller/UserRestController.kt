@@ -5,6 +5,13 @@ import com.studentcenter.weave.application.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.adapter.api.UserApi
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserResponse
+import com.studentcenter.weave.bootstrap.adapter.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.domain.vo.BirthYear
+import com.studentcenter.weave.domain.vo.MajorName
+import com.studentcenter.weave.domain.vo.Mbti
+import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.support.common.uuid.UuidCreator
+import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -38,6 +45,20 @@ class UserRestController(
                 ResponseEntity.status(HttpStatus.CREATED).body(body)
             }
         }
+    }
+
+    override fun getMyProfile(): UserGetMyProfileResponse {
+        return UserGetMyProfileResponse(
+            id = UuidCreator.create(),
+            nickname = Nickname("test"),
+            birthYear = BirthYear(1999),
+            majorName = MajorName("컴퓨터 공학과"),
+            avatar = Url("https://test.com"),
+            mbti = Mbti("INFP"),
+            animalType = null,
+            height = null,
+            isUniversityEmailVerified = false,
+        )
     }
 
 }
