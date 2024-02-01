@@ -13,5 +13,5 @@ spring:
       on-profile: dev
   data:
     redis:
-      host: ${DEV_REDIS_HOST:localhost}
+      host: ${DEV_REDIS_HOST:redis}
       port: ${DEV_REDIS_PORT:6379}
