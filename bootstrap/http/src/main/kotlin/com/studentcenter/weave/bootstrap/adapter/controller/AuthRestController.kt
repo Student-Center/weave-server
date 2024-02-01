@@ -1,5 +1,6 @@
 package com.studentcenter.weave.bootstrap.adapter.controller
 
+import com.studentcenter.weave.application.port.inbound.UserLogoutUseCase
 import com.studentcenter.weave.application.port.inbound.UserRefreshTokenUseCase
 import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
 import com.studentcenter.weave.bootstrap.adapter.api.AuthApi
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthRestController(
     private val socialLoginUseCase: UserSocialLoginUseCase,
     private val userRefreshTokenUseCase: UserRefreshTokenUseCase,
+    private val userLogoutUseCase: UserLogoutUseCase,
 ) : AuthApi {
 
     override fun socialLogin(
@@ -63,5 +65,9 @@ class AuthRestController(
                     refreshToken = it.refreshToken,
                 )
             }
+    }
+
+    override fun logout() {
+        userLogoutUseCase.invoke()
     }
 }
