@@ -47,7 +47,7 @@ interface UserApi {
     ): ResponseEntity<RegisterUserResponse>
 
     @Operation(summary = "User My Page")
-    @SecurityRequirement(name = "Bearer")
+    @SecurityRequirement(name = "AccessToken")
     @GetMapping("/my-profile")
     @ResponseStatus(HttpStatus.OK)
     fun getMyProfile(): UserGetMyProfileResponse

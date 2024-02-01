@@ -18,7 +18,7 @@ class OpenApiConfig {
     private fun securityComponents(): Components {
         return Components()
             .addSecuritySchemes(
-            "Bearer",
+            "AccessToken",
             SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
