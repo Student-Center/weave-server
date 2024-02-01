@@ -1,5 +1,7 @@
 package com.studentcenter.weave.infrastructure.redis.common.config
 
+import com.studentcenter.weave.infrastructure.redis.common.properties.RedisProperties
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -12,11 +14,14 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @ComponentScan(basePackages = ["com.studentcenter.weave.infrastructure.redis"])
 @EnableRedisRepositories(basePackages = ["com.studentcenter.weave.infrastructure.redis.repository"])
-class RedisConfig {
+@ConfigurationPropertiesScan(basePackages = ["com.studentcenter.weave.infrastructure.redis.common.properties"])
+class RedisConfig(
+    private val redisProperties: RedisProperties
+) {
 
     @Bean
     fun connectionFactory(): RedisConnectionFactory {
-        return LettuceConnectionFactory()
+        return LettuceConnectionFactory(redisProperties.host, redisProperties.port)
     }
 
     @Bean

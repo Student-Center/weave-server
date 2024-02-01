@@ -8,6 +8,7 @@ spring:
       - client
       - application
       - persistence
+      - redis
 ---
 spring:
   config:
