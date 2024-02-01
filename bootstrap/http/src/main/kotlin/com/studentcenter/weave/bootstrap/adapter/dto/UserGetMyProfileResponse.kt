@@ -2,16 +2,15 @@ package com.studentcenter.weave.bootstrap.adapter.dto
 
 import com.studentcenter.weave.domain.enum.AnimalType
 import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.Height
 import com.studentcenter.weave.domain.vo.MajorName
 import com.studentcenter.weave.domain.vo.Mbti
 import com.studentcenter.weave.domain.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Url
 import io.swagger.v3.oas.annotations.media.Schema
-import java.util.UUID
+import java.util.*
 
 @Schema(description = "유저 마이페이지 응답")
-data class UserGetMyProfileResponse (
+data class UserGetMyProfileResponse(
     @Schema(description = "유저 아이디")
     val id: UUID,
     @Schema(description = "닉네임")
@@ -27,7 +26,7 @@ data class UserGetMyProfileResponse (
     @Schema(description = "닮은 동물")
     val animalType: AnimalType?,
     @Schema(description = "키")
-    val height: Height?,
+    val height: Int?,
     @Schema(description = "대학교 이메일 인증 여부")
     val isUniversityEmailVerified: Boolean,
 )
