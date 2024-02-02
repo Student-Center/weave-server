@@ -1,8 +1,8 @@
-package com.studentcenter.weave.infrastructure.redis.adapter
+package com.studentcenter.weave.infrastructure.redis.user.adapter
 
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository
-import com.studentcenter.weave.infrastructure.redis.entity.UserRefreshTokenRedisHash
-import com.studentcenter.weave.infrastructure.redis.repository.UserRefreshTokenRedisRepository
+import com.studentcenter.weave.infrastructure.redis.user.entity.UserRefreshTokenRedisHash
+import com.studentcenter.weave.infrastructure.redis.user.repository.UserRefreshTokenRedisRepository
 import org.springframework.stereotype.Component
 import java.util.*
 

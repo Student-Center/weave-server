@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.redis.entity
+package com.studentcenter.weave.infrastructure.redis.user.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
