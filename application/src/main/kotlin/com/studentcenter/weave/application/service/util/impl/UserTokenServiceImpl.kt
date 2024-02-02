@@ -7,9 +7,9 @@ import com.studentcenter.weave.application.service.util.UserTokenType
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategy
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider

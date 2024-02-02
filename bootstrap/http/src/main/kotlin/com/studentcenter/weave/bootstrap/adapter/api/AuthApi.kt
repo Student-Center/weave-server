@@ -5,7 +5,7 @@ import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

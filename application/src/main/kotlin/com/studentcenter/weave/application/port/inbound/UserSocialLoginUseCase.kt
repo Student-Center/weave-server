@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.port.inbound
 
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 
 fun interface UserSocialLoginUseCase {
 

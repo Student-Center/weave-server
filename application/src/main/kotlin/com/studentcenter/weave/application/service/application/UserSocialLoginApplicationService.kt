@@ -5,8 +5,8 @@ import com.studentcenter.weave.application.service.util.UserTokenService
 import com.studentcenter.weave.application.service.domain.UserAuthInfoDomainService
 import com.studentcenter.weave.application.service.domain.UserDomainService
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserAuthInfo
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import org.springframework.stereotype.Service
 
 @Service

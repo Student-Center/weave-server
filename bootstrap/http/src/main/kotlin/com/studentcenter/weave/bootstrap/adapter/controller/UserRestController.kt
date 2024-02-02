@@ -6,10 +6,10 @@ import com.studentcenter.weave.bootstrap.adapter.api.UserApi
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UserGetMyProfileResponse
-import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.MajorName
-import com.studentcenter.weave.domain.vo.Mbti
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.university.vo.MajorName
+import com.studentcenter.weave.domain.user.vo.Mbti
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.http.HttpStatus

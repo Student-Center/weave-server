@@ -8,8 +8,8 @@ import com.studentcenter.weave.application.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.service.util.impl.UserTokenServiceImpl
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.common.exception.CustomException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName

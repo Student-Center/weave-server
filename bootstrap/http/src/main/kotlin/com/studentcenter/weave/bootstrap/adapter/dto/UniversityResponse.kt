@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.adapter.dto
 
-import com.studentcenter.weave.domain.entity.University
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.UUID
 

@@ -4,10 +4,10 @@ import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesF
 import com.studentcenter.weave.application.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserFixtureFactory
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec

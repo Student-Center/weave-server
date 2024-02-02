@@ -1,7 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.adapter
 
 import com.studentcenter.weave.application.port.outbound.UserRepository
-import com.studentcenter.weave.domain.entity.User
+import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity.Companion.toJpaEntity

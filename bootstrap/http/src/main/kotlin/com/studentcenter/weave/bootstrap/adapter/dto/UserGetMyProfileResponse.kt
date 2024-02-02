@@ -1,10 +1,10 @@
 package com.studentcenter.weave.bootstrap.adapter.dto
 
-import com.studentcenter.weave.domain.enum.AnimalType
-import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.MajorName
-import com.studentcenter.weave.domain.vo.Mbti
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.enums.AnimalType
+import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.university.vo.MajorName
+import com.studentcenter.weave.domain.user.vo.Mbti
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Url
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*

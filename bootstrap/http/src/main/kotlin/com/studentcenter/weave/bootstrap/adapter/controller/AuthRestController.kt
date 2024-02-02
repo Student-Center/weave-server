@@ -8,7 +8,7 @@ import com.studentcenter.weave.bootstrap.adapter.dto.RefreshLoginTokenResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController

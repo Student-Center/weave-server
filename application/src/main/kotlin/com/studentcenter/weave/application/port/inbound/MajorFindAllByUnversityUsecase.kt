@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.port.inbound
 
-import com.studentcenter.weave.domain.entity.Major
+import com.studentcenter.weave.domain.university.entity.Major
 import java.util.*
 
 fun interface MajorFindAllByUnversityUsecase {

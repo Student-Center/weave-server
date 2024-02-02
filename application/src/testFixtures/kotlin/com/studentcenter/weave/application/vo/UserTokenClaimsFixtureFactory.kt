@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.vo
 
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 
 object UserTokenClaimsFixtureFactory {
 

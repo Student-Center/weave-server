@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.vo
 
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*

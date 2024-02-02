@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.service.domain
 
-import com.studentcenter.weave.domain.entity.University
+import com.studentcenter.weave.domain.university.entity.University
 import java.util.*
 
 interface UniversityDomainService {

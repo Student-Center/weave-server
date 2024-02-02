@@ -2,11 +2,11 @@ package com.studentcenter.weave.application.service.domain.impl
 
 import com.studentcenter.weave.application.port.outbound.UserRepository
 import com.studentcenter.weave.application.service.domain.UserDomainService
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.enum.Gender
-import com.studentcenter.weave.domain.vo.Mbti
-import com.studentcenter.weave.domain.vo.BirthYear
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.domain.user.vo.Mbti
+import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Service

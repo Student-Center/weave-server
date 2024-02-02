@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.port.outbound
 
-import com.studentcenter.weave.domain.entity.User
+import com.studentcenter.weave.domain.user.entity.User
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

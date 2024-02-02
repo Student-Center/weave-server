@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.common.security.vo
 
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import com.studentcenter.weave.support.security.authority.Authentication

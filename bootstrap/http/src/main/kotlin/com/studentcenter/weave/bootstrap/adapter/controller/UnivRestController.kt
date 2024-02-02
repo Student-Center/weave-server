@@ -5,8 +5,8 @@ import com.studentcenter.weave.bootstrap.adapter.dto.UniversityResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
-import com.studentcenter.weave.domain.vo.MajorName
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.domain.university.vo.MajorName
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.web.bind.annotation.PathVariable

@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.service.util.impl.strategy
 
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 
 interface OpenIdTokenResolveStrategyFactory {
 

@@ -1,8 +1,8 @@
 package com.studentcenter.weave.application.service.domain.impl
 
 import com.studentcenter.weave.application.port.outbound.UserRepositorySpy
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

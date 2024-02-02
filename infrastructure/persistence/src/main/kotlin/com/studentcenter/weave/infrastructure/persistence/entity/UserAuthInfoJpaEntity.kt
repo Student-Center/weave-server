@@ -1,7 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.entity
 
-import com.studentcenter.weave.domain.entity.UserAuthInfo
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.entity.UserAuthInfo
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.support.common.vo.Email
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

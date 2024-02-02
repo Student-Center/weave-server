@@ -2,8 +2,8 @@ package com.studentcenter.weave.application.service.util.impl.strategy
 
 import com.studentcenter.weave.application.common.properties.OpenIdProperties
 import com.studentcenter.weave.application.vo.UserTokenClaims
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
-import com.studentcenter.weave.domain.vo.Nickname
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
+import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims

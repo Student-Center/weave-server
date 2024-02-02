@@ -1,6 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.entity
 
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id

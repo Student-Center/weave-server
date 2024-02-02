@@ -10,9 +10,9 @@ import com.studentcenter.weave.application.service.domain.impl.UserAuthInfoDomai
 import com.studentcenter.weave.application.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.service.util.impl.UserTokenServiceImpl
 import com.studentcenter.weave.application.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
-import com.studentcenter.weave.domain.entity.User
-import com.studentcenter.weave.domain.entity.UserFixtureFactory
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
