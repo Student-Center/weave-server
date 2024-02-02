@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 class WebMvcConfig(
     private val registerTokenArgumentResolver: RegisterTokenArgumentResolver,
-    private val authorizationInterceptor: AuthorizationInterceptor
+    private val authorizationInterceptor: AuthorizationInterceptor,
 ) : WebMvcConfigurer {
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {

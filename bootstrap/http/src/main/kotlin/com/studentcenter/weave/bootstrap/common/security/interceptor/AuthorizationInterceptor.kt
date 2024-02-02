@@ -20,7 +20,7 @@ class AuthorizationInterceptor : HandlerInterceptor {
         handler: Any
     ): Boolean {
         if (hasSecuredAnnotation(handler) && isNotAuthenticated()) {
-            throw CustomException(ApiExceptionType.UNAUTHORIZED, "요청 권한이 없습니다.")
+            throw CustomException(ApiExceptionType.UNAUTHORIZED_REQUEST, "요청 권한이 없습니다.")
         }
 
         return super.preHandle(request, response, handler)
