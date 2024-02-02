@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.common.security.filter
 
-import com.studentcenter.weave.application.service.util.UserTokenService
+import com.studentcenter.weave.application.user.service.util.UserTokenService
 import com.studentcenter.weave.application.user.vo.UserTokenClaimsFixtureFactory
 import com.studentcenter.weave.bootstrap.controller.JwtAuthenticationFilterTestController
 import io.kotest.core.spec.DisplayName

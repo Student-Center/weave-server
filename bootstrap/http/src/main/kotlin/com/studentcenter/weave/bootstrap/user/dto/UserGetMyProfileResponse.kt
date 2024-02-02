@@ -1,4 +1,4 @@
-package com.studentcenter.weave.bootstrap.adapter.dto
+package com.studentcenter.weave.bootstrap.user.dto
 
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.vo.BirthYear

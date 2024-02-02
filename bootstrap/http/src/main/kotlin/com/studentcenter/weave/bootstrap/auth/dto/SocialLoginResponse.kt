@@ -1,4 +1,4 @@
-package com.studentcenter.weave.bootstrap.adapter.dto
+package com.studentcenter.weave.bootstrap.auth.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 

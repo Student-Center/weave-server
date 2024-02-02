@@ -1,4 +1,4 @@
-package com.studentcenter.weave.bootstrap.adapter.dto
+package com.studentcenter.weave.bootstrap.user.dto
 
 import com.studentcenter.weave.support.common.vo.Email
 import io.swagger.v3.oas.annotations.media.Schema
@@ -6,11 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(
     name = "Register User Response",
     oneOf = [
-        RegisterUserResponse.Success::class,
-        RegisterUserResponse.DuplicatedUserAuthInfo::class
+        UserRegisterResponse.Success::class,
+        UserRegisterResponse.DuplicatedUserAuthInfo::class
     ]
 )
-sealed class RegisterUserResponse {
+sealed class UserRegisterResponse {
 
     @Schema(
         name = "Register User Response - Success",
@@ -19,7 +19,7 @@ sealed class RegisterUserResponse {
     data class Success(
         val accessToken: String,
         val refreshToken: String,
-    ) : RegisterUserResponse()
+    ) : UserRegisterResponse()
 
     @Schema(
         name = "Register User Response - Duplicated User Auth Info",
@@ -27,6 +27,6 @@ sealed class RegisterUserResponse {
     )
     data class DuplicatedUserAuthInfo(
         val email: Email,
-    ) : RegisterUserResponse()
+    ) : UserRegisterResponse()
 
 }

@@ -1,8 +1,8 @@
-package com.studentcenter.weave.bootstrap.adapter.api
+package com.studentcenter.weave.bootstrap.university.api
 
-import com.studentcenter.weave.bootstrap.adapter.dto.UniversityResponse
-import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
-import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
+import com.studentcenter.weave.bootstrap.university.dto.UniversityResponse
+import com.studentcenter.weave.bootstrap.university.dto.MajorsResponse
+import com.studentcenter.weave.bootstrap.university.dto.UniversitiesResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping

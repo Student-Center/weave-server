@@ -1,9 +1,9 @@
-package com.studentcenter.weave.bootstrap.adapter.api
+package com.studentcenter.weave.bootstrap.auth.api
 
-import com.studentcenter.weave.bootstrap.adapter.dto.RefreshLoginTokenResponse
-import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
-import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
-import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
+import com.studentcenter.weave.bootstrap.auth.dto.RefreshLoginTokenResponse
+import com.studentcenter.weave.bootstrap.auth.dto.RefreshTokenRequest
+import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginRequest
+import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import io.swagger.v3.oas.annotations.Operation

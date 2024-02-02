@@ -1,4 +1,4 @@
-package com.studentcenter.weave.bootstrap.adapter.dto
+package com.studentcenter.weave.bootstrap.university.dto
 
 import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.university.vo.UniversityName

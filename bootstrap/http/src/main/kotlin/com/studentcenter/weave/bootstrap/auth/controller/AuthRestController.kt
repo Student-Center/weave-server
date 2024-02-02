@@ -1,13 +1,13 @@
-package com.studentcenter.weave.bootstrap.adapter.controller
+package com.studentcenter.weave.bootstrap.auth.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserLogoutUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase
-import com.studentcenter.weave.bootstrap.adapter.api.AuthApi
-import com.studentcenter.weave.bootstrap.adapter.dto.RefreshLoginTokenResponse
-import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
-import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
-import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
+import com.studentcenter.weave.bootstrap.auth.api.AuthApi
+import com.studentcenter.weave.bootstrap.auth.dto.RefreshLoginTokenResponse
+import com.studentcenter.weave.bootstrap.auth.dto.RefreshTokenRequest
+import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginRequest
+import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginResponse
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

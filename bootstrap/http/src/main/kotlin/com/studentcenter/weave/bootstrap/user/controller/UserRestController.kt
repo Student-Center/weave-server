@@ -1,11 +1,11 @@
-package com.studentcenter.weave.bootstrap.adapter.controller
+package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
-import com.studentcenter.weave.bootstrap.adapter.api.UserApi
-import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserRequest
-import com.studentcenter.weave.bootstrap.adapter.dto.RegisterUserResponse
-import com.studentcenter.weave.bootstrap.adapter.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.bootstrap.user.api.UserApi
+import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.domain.university.vo.MajorName
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
@@ -23,8 +23,8 @@ class UserRestController(
 
     override fun register(
         registerTokenClaim: UserTokenClaims.RegisterToken,
-        request: RegisterUserRequest
-    ): ResponseEntity<RegisterUserResponse> {
+        request: UserRegisterRequest
+    ): ResponseEntity<UserRegisterResponse> {
         val command: UserRegisterUseCase.Command =
             UserRegisterUseCase.Command(
                 nickname = registerTokenClaim.nickname,
@@ -40,7 +40,7 @@ class UserRestController(
         return when (val result: UserRegisterUseCase.Result =
             userRegisterUseCase.invoke(command)) {
             is UserRegisterUseCase.Result.Success -> {
-                val body = RegisterUserResponse.Success(
+                val body = UserRegisterResponse.Success(
                     accessToken = result.accessToken,
                     refreshToken = result.refreshToken,
                 )
