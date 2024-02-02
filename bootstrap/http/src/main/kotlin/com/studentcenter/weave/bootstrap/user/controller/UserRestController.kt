@@ -1,11 +1,12 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.user.api.UserApi
+import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
-import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.domain.university.vo.MajorName
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserRestController(
     private val userRegisterUseCase: UserRegisterUseCase,
+    private val userUnregisterUseCase: UserUnregisterUseCase,
 ) : UserApi {
 
     override fun register(
@@ -47,6 +49,10 @@ class UserRestController(
                 ResponseEntity.status(HttpStatus.CREATED).body(body)
             }
         }
+    }
+
+    override fun unregister() {
+        userUnregisterUseCase.invoke()
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {
