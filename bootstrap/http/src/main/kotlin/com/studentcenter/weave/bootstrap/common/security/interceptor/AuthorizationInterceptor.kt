@@ -43,7 +43,7 @@ class AuthorizationInterceptor : HandlerInterceptor {
     }
 
     companion object {
-        const val UNAUTHORIZED_REQUEST_MESSAGE = "요청 권한이 없습니다."
+        const val UNAUTHORIZED_REQUEST_MESSAGE = "인증되지 않은 사용자 입니다."
     }
 
 }
