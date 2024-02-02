@@ -2,10 +2,10 @@ package com.studentcenter.weave.support.security.context
 
 import com.studentcenter.weave.support.security.authority.Authentication
 
-interface SecurityContext {
+interface SecurityContext<T: Authentication> {
 
-    fun getAuthentication(): Authentication?
+    fun getAuthentication(): T
 
-    fun setAuthentication(authentication: Authentication)
+    fun setAuthentication(authentication: T)
 
 }

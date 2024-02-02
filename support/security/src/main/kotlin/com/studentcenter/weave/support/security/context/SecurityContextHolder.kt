@@ -1,14 +1,17 @@
 package com.studentcenter.weave.support.security.context
 
+import com.studentcenter.weave.support.security.authority.Authentication
+
 object SecurityContextHolder {
 
-    private val contextHolder = ThreadLocal<SecurityContext>()
+    private val contextHolder = ThreadLocal<SecurityContext<*>>()
 
-    fun getContext(): SecurityContext {
-        return contextHolder.get()
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Authentication> getContext(): SecurityContext<T>? {
+        return contextHolder.get() as SecurityContext<T>?
     }
 
-    fun setContext(context: SecurityContext) {
+    fun <T : Authentication> setContext(context: SecurityContext<T>) {
         contextHolder.set(context)
     }
 
