@@ -1,6 +1,5 @@
 package com.studentcenter.weave.domain.user.vo
 
-import com.studentcenter.weave.domain.user.vo.Height
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 

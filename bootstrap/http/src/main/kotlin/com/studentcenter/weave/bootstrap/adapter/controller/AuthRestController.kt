@@ -1,8 +1,8 @@
 package com.studentcenter.weave.bootstrap.adapter.controller
 
-import com.studentcenter.weave.application.port.inbound.UserLogoutUseCase
-import com.studentcenter.weave.application.port.inbound.UserRefreshTokenUseCase
-import com.studentcenter.weave.application.port.inbound.UserSocialLoginUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserLogoutUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase
 import com.studentcenter.weave.bootstrap.adapter.api.AuthApi
 import com.studentcenter.weave.bootstrap.adapter.dto.RefreshLoginTokenResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest

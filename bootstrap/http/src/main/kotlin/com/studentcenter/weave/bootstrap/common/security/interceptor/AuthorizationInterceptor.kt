@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.common.security.interceptor
 
-import com.studentcenter.weave.application.common.security.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured

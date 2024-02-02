@@ -1,6 +1,5 @@
 package com.studentcenter.weave.domain.user.vo
 
-import com.studentcenter.weave.domain.user.vo.Mbti
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.types.shouldBeInstanceOf
 

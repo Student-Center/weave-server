@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.common.security.interceptor
 
-import com.studentcenter.weave.application.service.util.UserTokenService
-import com.studentcenter.weave.application.vo.UserTokenClaimsFixtureFactory
+import com.studentcenter.weave.application.user.service.util.UserTokenService
+import com.studentcenter.weave.application.user.vo.UserTokenClaimsFixtureFactory
 import com.studentcenter.weave.bootstrap.common.exception.CustomExceptionHandler
 import com.studentcenter.weave.bootstrap.common.security.filter.JwtAuthenticationFilter
 import com.studentcenter.weave.bootstrap.controller.AuthorizationInterceptorTestController

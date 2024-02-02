@@ -1,6 +1,5 @@
 package com.studentcenter.weave.domain.university.entity
 
-import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.university.vo.UniversityName
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo

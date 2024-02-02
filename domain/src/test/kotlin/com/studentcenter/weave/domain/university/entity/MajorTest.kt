@@ -1,5 +1,5 @@
 package com.studentcenter.weave.domain.university.entity
-import com.studentcenter.weave.domain.university.entity.Major
+
 import com.studentcenter.weave.domain.university.vo.MajorName
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import io.kotest.core.spec.style.FunSpec
