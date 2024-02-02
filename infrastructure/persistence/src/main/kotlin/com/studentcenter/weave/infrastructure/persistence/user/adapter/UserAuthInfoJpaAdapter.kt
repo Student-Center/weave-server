@@ -1,9 +1,9 @@
-package com.studentcenter.weave.infrastructure.persistence.adapter
+package com.studentcenter.weave.infrastructure.persistence.user.adapter
 
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepository
 import com.studentcenter.weave.domain.user.entity.UserAuthInfo
-import com.studentcenter.weave.infrastructure.persistence.entity.UserAuthInfoJpaEntity.Companion.toJpaEntity
-import com.studentcenter.weave.infrastructure.persistence.repository.UserAuthInfoJpaRepository
+import com.studentcenter.weave.infrastructure.persistence.user.entity.UserAuthInfoJpaEntity.Companion.toJpaEntity
+import com.studentcenter.weave.infrastructure.persistence.user.repository.UserAuthInfoJpaRepository
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Component
 

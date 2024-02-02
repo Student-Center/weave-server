@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.persistence.entity
+package com.studentcenter.weave.infrastructure.persistence.user.entity
 
 import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider

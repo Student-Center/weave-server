@@ -1,11 +1,11 @@
-package com.studentcenter.weave.infrastructure.persistence.adapter
+package com.studentcenter.weave.infrastructure.persistence.user.adapter
 
 import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
-import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity
-import com.studentcenter.weave.infrastructure.persistence.entity.UserJpaEntity.Companion.toJpaEntity
-import com.studentcenter.weave.infrastructure.persistence.repository.UserJpaRepository
+import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity
+import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity.Companion.toJpaEntity
+import com.studentcenter.weave.infrastructure.persistence.user.repository.UserJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Component
 import java.util.*

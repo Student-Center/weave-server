@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.persistence.entity
+package com.studentcenter.weave.infrastructure.persistence.university.entity
 
 import com.studentcenter.weave.domain.university.vo.MajorName
 import jakarta.persistence.Column
