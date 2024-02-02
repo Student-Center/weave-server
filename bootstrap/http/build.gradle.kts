@@ -13,4 +13,6 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools:${Version.SPRING_BOOT}")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose:${Version.SPRING_BOOT}")
+
+    testImplementation(testFixtures(project(":application")))
 }
