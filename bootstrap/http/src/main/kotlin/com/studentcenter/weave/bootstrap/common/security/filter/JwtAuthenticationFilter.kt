@@ -15,12 +15,6 @@ class JwtAuthenticationFilter(
     private val userTokenService: UserTokenService,
 ) : OncePerRequestFilter() {
 
-    companion object {
-
-        const val TOKEN_HEADER = "Authorization"
-        const val TOKEN_PREFIX = "Bearer "
-    }
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -46,6 +40,11 @@ class JwtAuthenticationFilter(
         }.also { securityContext ->
             SecurityContextHolder.setContext(securityContext)
         }
+    }
+
+    companion object {
+        const val TOKEN_HEADER = "Authorization"
+        const val TOKEN_PREFIX = "Bearer "
     }
 
 }
