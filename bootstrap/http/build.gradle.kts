@@ -1,5 +1,7 @@
 dependencies {
     implementation(project(":support:common"))
+    implementation(project(":support:security"))
+
     implementation(project(":domain"))
     implementation(project(":application"))
     implementation(project(":infrastructure:client"))
@@ -11,4 +13,6 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools:${Version.SPRING_BOOT}")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose:${Version.SPRING_BOOT}")
+
+    testImplementation(testFixtures(project(":application")))
 }
