@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.controller
 
-import com.studentcenter.weave.application.common.security.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

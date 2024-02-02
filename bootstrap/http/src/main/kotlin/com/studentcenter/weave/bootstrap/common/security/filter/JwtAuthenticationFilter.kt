@@ -1,8 +1,8 @@
 package com.studentcenter.weave.bootstrap.common.security.filter
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.common.security.vo.UserAuthentication
-import com.studentcenter.weave.application.service.util.UserTokenService
+import com.studentcenter.weave.application.user.service.util.UserTokenService
+import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -43,6 +43,7 @@ class JwtAuthenticationFilter(
     }
 
     companion object {
+
         const val TOKEN_HEADER = "Authorization"
         const val TOKEN_PREFIX = "Bearer "
     }

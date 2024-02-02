@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.common.security.resolver
 
-import com.studentcenter.weave.application.service.util.UserTokenService
-import com.studentcenter.weave.application.vo.UserTokenClaims
+import com.studentcenter.weave.application.user.service.util.UserTokenService
+import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter

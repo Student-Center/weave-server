@@ -13,7 +13,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @Configuration
 @ComponentScan(basePackages = ["com.studentcenter.weave.infrastructure.redis"])
-@EnableRedisRepositories(basePackages = ["com.studentcenter.weave.infrastructure.redis.repository"])
+@EnableRedisRepositories(basePackages = ["com.studentcenter.weave.infrastructure.redis"])
 @ConfigurationPropertiesScan(basePackages = ["com.studentcenter.weave.infrastructure.redis.common.properties"])
 class RedisConfig(
     private val redisProperties: RedisProperties

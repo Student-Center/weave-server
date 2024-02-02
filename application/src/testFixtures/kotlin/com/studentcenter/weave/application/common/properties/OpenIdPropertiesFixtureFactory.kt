@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.common.properties
 
-import com.studentcenter.weave.domain.enum.SocialLoginProvider
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 
 class OpenIdPropertiesFixtureFactory {
 
