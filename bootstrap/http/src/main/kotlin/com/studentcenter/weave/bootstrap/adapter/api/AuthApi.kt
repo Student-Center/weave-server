@@ -4,13 +4,13 @@ import com.studentcenter.weave.bootstrap.adapter.dto.RefreshLoginTokenResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.RefreshTokenRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.adapter.dto.SocialLoginResponse
+import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.domain.enum.SocialLoginProvider
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -67,9 +67,9 @@ interface AuthApi {
     ): RefreshLoginTokenResponse
 
 
+    @Secured
     @Operation(summary = "Logout")
     @PostMapping("/logout")
-    @SecurityRequirement(name = "AccessToken")
     @ResponseStatus(HttpStatus.OK)
     fun logout()
 

@@ -19,20 +19,19 @@ class AuthorizationInterceptor : HandlerInterceptor {
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
+        if (handler !is HandlerMethod) {
+            return super.preHandle(request, response, handler)
+        }
+
         if (hasSecuredAnnotation(handler) && isNotAuthenticated()) {
-            throw CustomException(ApiExceptionType.UNAUTHORIZED_REQUEST, "요청 권한이 없습니다.")
+            throw CustomException(ApiExceptionType.UNAUTHORIZED_REQUEST, UNAUTHORIZED_REQUEST_MESSAGE)
         }
 
         return super.preHandle(request, response, handler)
     }
 
     private fun hasSecuredAnnotation(handler: Any): Boolean {
-        (handler as HandlerMethod).method.declaredAnnotations.forEach {
-            if (it is Secured) {
-                return true
-            }
-        }
-        return false
+        return (handler as HandlerMethod).hasMethodAnnotation(Secured::class.java)
     }
 
     private fun isNotAuthenticated(): Boolean {
@@ -41,6 +40,10 @@ class AuthorizationInterceptor : HandlerInterceptor {
             .let { userAuthentication ->
                 return userAuthentication == null
             }
+    }
+
+    companion object {
+        const val UNAUTHORIZED_REQUEST_MESSAGE = "인증되지 않은 사용자 입니다."
     }
 
 }
