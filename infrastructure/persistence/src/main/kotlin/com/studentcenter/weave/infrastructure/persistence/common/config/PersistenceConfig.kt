@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
 @ComponentScan(basePackages = ["com.studentcenter.weave.infrastructure.persistence"])
-@EntityScan(basePackages = ["com.studentcenter.weave.infrastructure.persistence.entity"])
-@EnableJpaRepositories(basePackages = ["com.studentcenter.weave.infrastructure.persistence.repository"])
+@EntityScan(basePackages = ["com.studentcenter.weave.infrastructure.persistence"])
+@EnableJpaRepositories(basePackages = ["com.studentcenter.weave.infrastructure.persistence"])
 class PersistenceConfig
