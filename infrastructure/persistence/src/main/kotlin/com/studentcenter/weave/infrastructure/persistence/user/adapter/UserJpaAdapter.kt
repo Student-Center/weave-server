@@ -13,7 +13,7 @@ import java.util.*
 @Component
 class UserJpaAdapter(
     private val userJpaRepository: UserJpaRepository
-) : com.studentcenter.weave.application.user.port.outbound.UserRepository {
+) : UserRepository {
 
     override fun save(user: User) {
         val userJpaEntity: UserJpaEntity = user.toJpaEntity()

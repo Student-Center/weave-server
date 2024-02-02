@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class UserAuthInfoJpaAdapter(
     private val userAuthInfoJpaRepository: UserAuthInfoJpaRepository
-) : com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepository {
+) : UserAuthInfoRepository {
 
     override fun findByEmail(email: Email): UserAuthInfo? {
         return userAuthInfoJpaRepository.findByEmail(email)?.toDomain()

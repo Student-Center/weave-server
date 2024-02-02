@@ -4,7 +4,7 @@ import com.studentcenter.weave.domain.user.entity.User
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class UserRepositorySpy : com.studentcenter.weave.application.user.port.outbound.UserRepository {
+class UserRepositorySpy : UserRepository {
 
     private val bucket = ConcurrentHashMap<UUID, User>()
 

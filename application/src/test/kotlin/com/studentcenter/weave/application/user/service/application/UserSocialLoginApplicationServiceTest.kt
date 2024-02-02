@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
+import com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
@@ -46,18 +47,16 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
                         .let { userAuthInfoRepositorySpy.save(it) }
 
                     val idToken = "idToken"
-                    val command =
-                        com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Command(
-                            socialLoginProvider = socialLoginProvider,
-                            idToken = idToken,
-                        )
+                    val command = UserSocialLoginUseCase.Command(
+                        socialLoginProvider = socialLoginProvider,
+                        idToken = idToken,
+                    )
 
                     // act
-                    val result: com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Result =
-                        sut.invoke(command)
+                    val result: UserSocialLoginUseCase.Result = sut.invoke(command)
 
                     // assert
-                    result.shouldBeTypeOf<com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Result.Success>()
+                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.Success>()
                     result.accessToken.shouldBeTypeOf<String>()
                     result.refreshToken.shouldBeTypeOf<String>()
                 }
@@ -70,17 +69,17 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
                     // arrange
                     val idToken = "idToken"
                     val command =
-                        com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Command(
+                        UserSocialLoginUseCase.Command(
                             socialLoginProvider = socialLoginProvider,
                             idToken = idToken,
                         )
 
                     // act
-                    val result: com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Result =
+                    val result: UserSocialLoginUseCase.Result =
                         sut.invoke(command)
 
                     // assert
-                    result.shouldBeTypeOf<com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase.Result.NotRegistered>()
+                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.NotRegistered>()
                     result.registerToken.shouldBeTypeOf<String>()
                 }
             }

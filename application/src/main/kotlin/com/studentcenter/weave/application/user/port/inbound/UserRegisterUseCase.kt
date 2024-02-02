@@ -10,7 +10,7 @@ import java.util.*
 
 fun interface UserRegisterUseCase {
 
-    fun invoke(command: com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase.Command): com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase.Result
+    fun invoke(command: Command): Result
 
     data class Command(
         val nickname: Nickname,
@@ -28,7 +28,7 @@ fun interface UserRegisterUseCase {
         data class Success(
             val accessToken: String,
             val refreshToken: String,
-        ) : com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase.Result()
+        ) : Result()
 
     }
 

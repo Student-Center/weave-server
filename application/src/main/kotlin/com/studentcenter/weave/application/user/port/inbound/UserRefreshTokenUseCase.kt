@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.user.port.inbound
 
 fun interface UserRefreshTokenUseCase {
 
-    fun invoke(command: com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase.Command): com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase.Result
+    fun invoke(command: Command): Result
 
     data class Command(
         val refreshToken: String,

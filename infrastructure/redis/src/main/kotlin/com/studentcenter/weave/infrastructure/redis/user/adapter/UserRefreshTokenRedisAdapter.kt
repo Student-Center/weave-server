@@ -9,7 +9,7 @@ import java.util.*
 @Component
 class UserRefreshTokenRedisAdapter(
     private val userRefreshTokenRedisRepository: UserRefreshTokenRedisRepository
-) : com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository {
+) : UserRefreshTokenRepository {
 
     override fun save(
         userId: UUID,
