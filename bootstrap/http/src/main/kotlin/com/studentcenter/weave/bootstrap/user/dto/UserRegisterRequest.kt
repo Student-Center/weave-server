@@ -1,7 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.domain.user.vo.Mbti
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -12,7 +11,7 @@ import java.util.*
 data class UserRegisterRequest(
     val gender: Gender,
     val birthYear: Int,
-    val mbti: Mbti,
+    val mbti: String,
     val universityId: UUID,
     val majorId: UUID,
 )

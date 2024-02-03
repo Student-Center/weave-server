@@ -3,14 +3,13 @@ package com.studentcenter.weave.infrastructure.persistence.user.entity
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
 import jakarta.persistence.Column
-import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -23,15 +22,15 @@ import java.util.*
 @Table(name = "`user`")
 class UserJpaEntity(
     id: UUID,
-    nickname: Nickname,
-    email: Email,
+    nickname: String,
+    email: String,
     gender: Gender,
-    mbti: Mbti,
-    birthYear: BirthYear,
+    mbti: String,
+    birthYear: Int,
     universityId: UUID,
     majorId: UUID,
-    avatar: Url? = null,
-    height: Height? = null,
+    avatar: String? = null,
+    height: Int? = null,
     animalType: AnimalType? = null,
     registeredAt: LocalDateTime,
     updatedAt: LocalDateTime,
@@ -43,11 +42,11 @@ class UserJpaEntity(
         private set
 
     @Column(nullable = false, updatable = false)
-    var nickname: Nickname = nickname
+    var nickname: String = nickname
         private set
 
     @Column(nullable = false, updatable = false)
-    var email: Email = email
+    var email: String = email
         private set
 
     @Column(nullable = false, updatable = false, columnDefinition = "varchar(255)")
@@ -56,16 +55,15 @@ class UserJpaEntity(
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
-    var mbti: Mbti = mbti
+    var mbti: String = mbti
         private set
 
     @Column(nullable = false)
-    var birthYear: BirthYear = birthYear
+    var birthYear: Int = birthYear
         private set
 
-    @Embedded
     @Column(nullable = true, updatable = true, columnDefinition = "integer")
-    var height: Height? = height
+    var height: Int? = height
         private set
 
     @Column(nullable = false, updatable = false)
@@ -77,7 +75,7 @@ class UserJpaEntity(
         private set
 
     @Column(nullable = true)
-    var avatar: Url? = avatar
+    var avatar: String? = avatar
         private set
 
     @Column(nullable = true, updatable = true, columnDefinition = "varchar(255)")
@@ -98,15 +96,15 @@ class UserJpaEntity(
         fun User.toJpaEntity(): UserJpaEntity {
             return UserJpaEntity(
                 id = id,
-                nickname = nickname,
-                email = email,
+                nickname = nickname.value,
+                email = email.value,
                 gender = gender,
-                mbti = mbti,
-                birthYear = birthYear,
+                mbti = mbti.value,
+                birthYear = birthYear.value,
                 universityId = universityId,
                 majorId = majorId,
-                avatar = avatar,
-                height = height,
+                avatar = avatar?.value,
+                height = height?.value,
                 animalType = animalType,
                 registeredAt = registeredAt,
                 updatedAt = updatedAt,
@@ -117,15 +115,15 @@ class UserJpaEntity(
     fun toDomain(): User {
         return User(
             id = id,
-            nickname = nickname,
-            email = email,
+            nickname = Nickname(nickname),
+            email = Email(email),
             gender = gender,
-            mbti = mbti,
-            birthYear = birthYear,
+            mbti = Mbti(mbti),
+            birthYear = BirthYear(birthYear),
             universityId = universityId,
             majorId = majorId,
-            avatar = avatar,
-            height = height,
+            avatar = avatar?.let { Url(it) },
+            height = height?.let { Height(it) },
             animalType = animalType,
             registeredAt = registeredAt,
             updatedAt = updatedAt,

@@ -2,7 +2,6 @@ package com.studentcenter.weave.infrastructure.persistence.user.entity
 
 import com.studentcenter.weave.domain.user.entity.DeletedUserInfo
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
-import com.studentcenter.weave.support.common.vo.Email
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -14,21 +13,21 @@ import java.util.*
 
 @Entity
 @Table(name = "deleted_user_info")
-class DeletedUserInfoJpaEntity (
+class DeletedUserInfoJpaEntity(
     id: UUID,
-    email: Email,
+    email: String,
     socialLoginProvider: SocialLoginProvider,
     reason: String? = null,
     registeredAt: LocalDateTime,
     deletedAt: LocalDateTime
-){
+) {
 
     @Id
     var id: UUID = id
         private set
 
     @Column(nullable = false)
-    var email: Email = email
+    var email: String = email
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
@@ -49,10 +48,11 @@ class DeletedUserInfoJpaEntity (
         private set
 
     companion object {
+
         fun DeletedUserInfo.toJpaEntity(): DeletedUserInfoJpaEntity {
             return DeletedUserInfoJpaEntity(
                 id = id,
-                email = email,
+                email = email.value,
                 socialLoginProvider = socialLoginProvider,
                 reason = reason,
                 registeredAt = registeredAt,

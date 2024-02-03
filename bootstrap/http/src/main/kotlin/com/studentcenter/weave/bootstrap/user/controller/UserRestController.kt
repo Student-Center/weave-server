@@ -8,6 +8,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,7 +30,7 @@ class UserRestController(
                 email = registerTokenClaim.email,
                 socialLoginProvider = registerTokenClaim.socialLoginProvider,
                 gender = request.gender,
-                mbti = request.mbti,
+                mbti = Mbti(request.mbti),
                 birthYear = BirthYear(request.birthYear),
                 universityId = request.universityId,
                 majorId = request.majorId,
