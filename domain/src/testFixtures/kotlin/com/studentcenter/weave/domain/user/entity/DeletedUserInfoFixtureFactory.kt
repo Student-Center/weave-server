@@ -1,13 +1,13 @@
 package com.studentcenter.weave.domain.user.entity
 
-object DeactivateUserInfoFixtureFactory {
+object DeletedUserInfoFixtureFactory {
 
     fun create(
         user: User = UserFixtureFactory.create(),
         userAuthInfo: UserAuthInfo = UserAuthInfoFixtureFactory.create(),
         reason: String? = null,
-    ): DeactivateUserInfo {
-        return DeactivateUserInfo(
+    ): DeletedUserInfo {
+        return DeletedUserInfo(
             email = user.email,
             socialLoginProvider = userAuthInfo.socialLoginProvider,
             reason = reason,
