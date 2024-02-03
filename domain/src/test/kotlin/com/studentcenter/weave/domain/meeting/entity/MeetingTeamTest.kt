@@ -1,29 +1,50 @@
 package com.studentcenter.weave.domain.meeting.entity
 
-import com.studentcenter.weave.domain.meeting.enums.TeamType
-import com.studentcenter.weave.domain.meeting.vo.Location
+import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.support.common.uuid.UuidCreator
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
-import java.util.*
 
 class MeetingTeamTest : FunSpec({
 
-    enumValues<TeamType>().forEach { teamType ->
-        test("팀원 수가 팀 타입의 최대 인원 수를 초과하면 예외가 발생한다. teamType: $teamType") {
-            val memberUserIds: Set<UUID> =
-                (1..teamType.peopleCount).map { UuidCreator.create() }.toSet()
-            val leaderUserId: UUID = UuidCreator.create()
-            val location = Location("서울특별시 강남구")
-            val teamIntroduce = TeamIntroduce("팀 소개")
+    (2..4).forEach() { memberCount ->
+        test("팀원의 수는 최소 2명 최대 4명까지 가능하다 : $memberCount 명 - 성공") {
+            // arrange
+            val teamIntroduce = TeamIntroduce("팀 한줄 소개")
+            val leaderUserId = UuidCreator.create()
+            val memberUserIds = setOf(UuidCreator.create(), UuidCreator.create())
+            val location = Location.BUSAN
 
+            // act, assert
+            shouldNotThrowAny {
+                MeetingTeam.create(
+                    teamIntroduce = teamIntroduce,
+                    leaderUserId = leaderUserId,
+                    memberUserIds = memberUserIds,
+                    memberCount = memberCount,
+                    location = location,
+                )
+            }
+        }
+    }
+
+    listOf(1, 5).forEach() { memberCount ->
+        test("팀원의 수는 최소 2명 최대 4명까지 가능하다 : $memberCount 명 - 실패") {
+            // arrange
+            val teamIntroduce = TeamIntroduce("팀 한줄 소개")
+            val leaderUserId = UuidCreator.create()
+            val memberUserIds = setOf(UuidCreator.create(), UuidCreator.create())
+            val location = Location.BUSAN
+
+            // act, assert
             shouldThrow<IllegalArgumentException> {
                 MeetingTeam.create(
                     teamIntroduce = teamIntroduce,
                     leaderUserId = leaderUserId,
                     memberUserIds = memberUserIds,
-                    teamType = teamType,
+                    memberCount = memberCount,
                     location = location,
                 )
             }

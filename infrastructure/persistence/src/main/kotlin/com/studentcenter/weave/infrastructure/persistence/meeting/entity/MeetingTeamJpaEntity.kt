@@ -1,7 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.entity
 
-import com.studentcenter.weave.domain.meeting.enums.TeamType
-import com.studentcenter.weave.domain.meeting.vo.Location
+import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
@@ -21,7 +20,6 @@ class MeetingTeamJpaEntity(
     teamIntroduce: TeamIntroduce,
     leaderUserId: UUID,
     memberUserIds: Set<UUID>,
-    teamType: TeamType,
     location: Location,
 ) {
 
@@ -45,11 +43,7 @@ class MeetingTeamJpaEntity(
         private set
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    var teamType: TeamType = teamType
-        private set
-
-    @Column
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     var location: Location = location
         private set
 
