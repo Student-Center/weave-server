@@ -3,7 +3,7 @@ package com.studentcenter.weave.domain.user.entity
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DeactivateUserInfoTest : FunSpec({
+class DeletedUserInfoTest : FunSpec({
 
     test("탈퇴 유저 정보 생성") {
         // arrange
@@ -12,15 +12,15 @@ class DeactivateUserInfoTest : FunSpec({
         val reason = "탈퇴 사유"
 
         // act
-        val deactivateUserInfo = DeactivateUserInfo.create(
+        val deletedUserInfo = DeletedUserInfo.create(
             userAuthInfo = userAuthInfo,
             reason = reason,
         )
 
         // assert
-        deactivateUserInfo.email shouldBe user.email
-        deactivateUserInfo.socialLoginProvider shouldBe userAuthInfo.socialLoginProvider
-        deactivateUserInfo.reason shouldBe reason
+        deletedUserInfo.email shouldBe user.email
+        deletedUserInfo.socialLoginProvider shouldBe userAuthInfo.socialLoginProvider
+        deletedUserInfo.reason shouldBe reason
     }
 
 })
