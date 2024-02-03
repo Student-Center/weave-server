@@ -31,6 +31,15 @@ class CustomExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(exception: IllegalArgumentException): ErrorResponse {
+        return ErrorResponse(
+            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            message = exception.message!!,
+        )
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DateTimeException::class)
     fun handleDateTimeException(exception: DateTimeException): ErrorResponse {
         return ErrorResponse(
