@@ -1,11 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
 import com.studentcenter.weave.domain.user.enums.AnimalType
-import com.studentcenter.weave.domain.user.vo.BirthYear
-import com.studentcenter.weave.domain.university.vo.MajorName
-import com.studentcenter.weave.domain.user.vo.Mbti
-import com.studentcenter.weave.domain.user.vo.Nickname
-import com.studentcenter.weave.support.common.vo.Url
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -14,15 +9,15 @@ data class UserGetMyProfileResponse(
     @Schema(description = "유저 아이디")
     val id: UUID,
     @Schema(description = "닉네임")
-    val nickname: Nickname,
+    val nickname: String,
     @Schema(description = "생년")
-    val birthYear: BirthYear,
+    val birthYear: Int,
     @Schema(description = "전공명")
-    val majorName: MajorName,
+    val majorName: String,
     @Schema(description = "프로필 이미지")
-    val avatar: Url?,
+    val avatar: String?,
     @Schema(description = "MBTI")
-    val mbti: Mbti,
+    val mbti: String,
     @Schema(description = "닮은 동물")
     val animalType: AnimalType?,
     @Schema(description = "키")

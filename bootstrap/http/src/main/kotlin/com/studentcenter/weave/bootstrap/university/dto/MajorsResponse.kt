@@ -1,7 +1,6 @@
 package com.studentcenter.weave.bootstrap.university.dto
 
 import com.studentcenter.weave.domain.university.entity.Major
-import com.studentcenter.weave.domain.university.vo.MajorName
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -14,11 +13,11 @@ data class MajorsResponse(
     val majors: List<MajorDto>
 ) {
 
-    data class MajorDto(val id: UUID, val name: MajorName)
+    data class MajorDto(val id: UUID, val name: String)
 
     companion object {
         fun from(domains: List<Major>): MajorsResponse {
-            return MajorsResponse(domains.map { MajorDto(it.id, it.name) })
+            return MajorsResponse(domains.map { MajorDto(it.id, it.name.value) })
         }
     }
 }
