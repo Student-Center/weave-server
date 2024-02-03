@@ -15,6 +15,12 @@ data class DeletedUserInfo(
     val deletedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
+    init {
+        require(reason?.isNotBlank()?.let { it && reason.length <= 100 } ?: true) {
+            "최대 200자 이내로 탈퇴 사유를 입력해주세요."
+        }
+    }
+
     companion object {
         fun create(
             userAuthInfo: UserAuthInfo,
