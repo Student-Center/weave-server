@@ -1,9 +1,8 @@
 package com.studentcenter.weave.bootstrap.university.dto
 
 import com.studentcenter.weave.domain.university.entity.University
-import com.studentcenter.weave.domain.university.vo.UniversityName
 import io.swagger.v3.oas.annotations.media.Schema
-import java.util.UUID
+import java.util.*
 
 
 @Schema(
@@ -12,15 +11,16 @@ import java.util.UUID
 )
 data class UniversityResponse(
     val id: UUID,
-    val name: UniversityName,
+    val name: String,
     val domainAddress: String,
     val logoAddress: String,
 ) {
 
     companion object {
+
         fun from(domain: University) = UniversityResponse(
             id = domain.id,
-            name = domain.name,
+            name = domain.name.value,
             domainAddress = domain.domainAddress,
             logoAddress = domain.logoAddress,
         )

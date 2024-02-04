@@ -7,12 +7,9 @@ import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
-import com.studentcenter.weave.domain.university.vo.MajorName
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
-import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
-import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -33,8 +30,8 @@ class UserRestController(
                 email = registerTokenClaim.email,
                 socialLoginProvider = registerTokenClaim.socialLoginProvider,
                 gender = request.gender,
-                mbti = request.mbti,
-                birthYear = request.birthYear,
+                mbti = Mbti(request.mbti),
+                birthYear = BirthYear(request.birthYear),
                 universityId = request.universityId,
                 majorId = request.majorId,
             )
@@ -58,11 +55,11 @@ class UserRestController(
     override fun getMyProfile(): UserGetMyProfileResponse {
         return UserGetMyProfileResponse(
             id = UuidCreator.create(),
-            nickname = Nickname("test"),
-            birthYear = BirthYear(1999),
-            majorName = MajorName("컴퓨터 공학과"),
-            avatar = Url("https://test.com"),
-            mbti = Mbti("INFP"),
+            nickname = "test",
+            birthYear = 1999,
+            majorName = "컴퓨터 공학과",
+            avatar = "https://test.com",
+            mbti = "INFP",
             animalType = null,
             height = null,
             isUniversityEmailVerified = false,

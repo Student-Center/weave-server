@@ -5,8 +5,6 @@ import com.studentcenter.weave.bootstrap.university.dto.UniversityResponse
 import com.studentcenter.weave.bootstrap.university.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.university.dto.UniversitiesResponse
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
-import com.studentcenter.weave.domain.university.vo.MajorName
-import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.web.bind.annotation.PathVariable
@@ -48,11 +46,11 @@ class UnivRestController : UnivApi {
 
     companion object {
         private val KU_ID = UuidCreator.create()
-        private val KU = UniversityResponse(KU_ID, UniversityName("건국대학교"), "konkuk.ac.kr", "public/university/$KU_ID/logo")
+        private val KU = UniversityResponse(KU_ID, "건국대학교", "konkuk.ac.kr", "public/university/$KU_ID/logo")
         private val DKU_ID = UuidCreator.create()
-        private val DKU = UniversityResponse(DKU_ID, UniversityName("단국대학교"), "dankook.ac.kr", "public/university/$DKU_ID/logo")
+        private val DKU = UniversityResponse(DKU_ID, "단국대학교", "dankook.ac.kr", "public/university/$DKU_ID/logo")
         private val MJU_ID = UuidCreator.create()
-        private val MJU = UniversityResponse(MJU_ID, UniversityName("명지대학교"), "mju.ac.kr", "public/university/$MJU_ID/logo")
+        private val MJU = UniversityResponse(MJU_ID, "명지대학교", "mju.ac.kr", "public/university/$MJU_ID/logo")
         private val KU_MAJORS = listOf(
             "화장품공학과",
             "국제무역학과",
@@ -116,7 +114,7 @@ class UnivRestController : UnivApi {
             "건축학부",
             "미디어커뮤니케이션학과",
             "체육교육과",
-        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), it) }
         private val DKU_MAJORS = listOf(
             "국제스포츠학부 태권도전공",
             "생명자원학부 식량생명공학전공",
@@ -273,7 +271,7 @@ class UnivRestController : UnivApi {
             "의과대학",
             "무역학과",
             "치의학과",
-        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), it) }
         private val MJU_MAJORS = listOf(
             "융합전공학부(인문)",
             "전공자유학부",
@@ -379,6 +377,6 @@ class UnivRestController : UnivApi {
             "인문대학",
             "교양학과",
             "만화애니콘텐츠학과",
-        ).map { MajorsResponse.MajorDto(UuidCreator.create(), MajorName(it)) }
+        ).map { MajorsResponse.MajorDto(UuidCreator.create(), it) }
     }
 }

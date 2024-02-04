@@ -17,7 +17,7 @@ import java.util.*
 class UserAuthInfoJpaEntity(
     id: UUID,
     userId: UUID,
-    email: Email,
+    email: String,
     socialLoginProvider: SocialLoginProvider,
     registeredAt: LocalDateTime,
 ) {
@@ -31,7 +31,7 @@ class UserAuthInfoJpaEntity(
         private set
 
     @Column(unique = true, nullable = false)
-    var email: Email = email
+    var email: String = email
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
@@ -49,7 +49,7 @@ class UserAuthInfoJpaEntity(
             return UserAuthInfoJpaEntity(
                 id = id,
                 userId = userId,
-                email = email,
+                email = email.value,
                 socialLoginProvider = socialLoginProvider,
                 registeredAt = registeredAt,
             )
@@ -61,7 +61,7 @@ class UserAuthInfoJpaEntity(
         return UserAuthInfo(
             id = id,
             userId = userId,
-            email = email,
+            email = Email(email),
             socialLoginProvider = socialLoginProvider,
             registeredAt = registeredAt,
         )
