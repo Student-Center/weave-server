@@ -43,6 +43,7 @@ class UserUnregisterApplicationServiceTest : DescribeSpec({
         userRepositorySpy.clear()
         userAuthInfoRepositorySpy.clear()
         deletedUserInfoRepositorySpy.clear()
+        SecurityContextHolder.clearContext()
     }
 
     describe("UserUnregisterApplicationService") {
