@@ -18,10 +18,13 @@ class UserUnregisterApplicationService(
     @Transactional
     override fun invoke(command: UserUnregisterUseCase.Command) {
         getCurrentUserAuthentication()
-            .let { userAuthInfoDomainService.getByUserId(it.userId) }
-            .also { userDomainService.deleteById(it.userId) }
-            .also { userAuthInfoDomainService.deleteById(it.id) }
-            .let { deletedUserInfoDomainService.create(it) }
+            .let {
+                userAuthInfoDomainService.getByUserId(it.userId)
+            }.let {
+                userDomainService.deleteById(it.userId)
+                userAuthInfoDomainService.deleteById(it.id)
+                deletedUserInfoDomainService.create(it)
+            }
     }
 
 }

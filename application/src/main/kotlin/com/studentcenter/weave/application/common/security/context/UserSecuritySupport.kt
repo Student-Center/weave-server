@@ -10,8 +10,11 @@ fun getCurrentUserAuthentication(): UserAuthentication {
         .getContext<UserAuthentication>()
         ?.getAuthentication()
 
-    return userAuthentication ?: throw CustomException(
-        type = AuthExceptionType.USER_NOT_AUTHENTICATED,
-        "인증되지 않은 사용자입니다."
-    )
+    return userAuthentication ?: run {
+        val message = "인증되지 않은 사용자입니다."
+        throw CustomException(
+            type = AuthExceptionType.USER_NOT_AUTHENTICATED,
+            message = message
+        )
+    }
 }
