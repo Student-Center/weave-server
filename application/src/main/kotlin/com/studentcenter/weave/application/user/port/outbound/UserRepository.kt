@@ -9,4 +9,6 @@ interface UserRepository {
 
     fun getById(id: UUID): User
 
+    fun deleteById(id: UUID)
+
 }

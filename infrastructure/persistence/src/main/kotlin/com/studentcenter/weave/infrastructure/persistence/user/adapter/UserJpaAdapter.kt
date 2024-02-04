@@ -32,4 +32,8 @@ class UserJpaAdapter(
             .toDomain()
     }
 
+    override fun deleteById(id: UUID) {
+        userJpaRepository.deleteById(id)
+    }
+
 }

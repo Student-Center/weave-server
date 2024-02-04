@@ -20,6 +20,10 @@ class UserRepositorySpy : UserRepository {
         return bucket[id] ?: throw NoSuchElementException()
     }
 
+    override fun deleteById(id: UUID) {
+        bucket.remove(id)
+    }
+
     fun clear() {
         bucket.clear()
     }

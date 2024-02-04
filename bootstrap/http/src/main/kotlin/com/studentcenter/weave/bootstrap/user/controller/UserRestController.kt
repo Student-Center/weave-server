@@ -49,7 +49,8 @@ class UserRestController(
     }
 
     override fun unregister() {
-        userUnregisterUseCase.invoke()
+        UserUnregisterUseCase.Command()
+            .let { userUnregisterUseCase.invoke(it) }
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {

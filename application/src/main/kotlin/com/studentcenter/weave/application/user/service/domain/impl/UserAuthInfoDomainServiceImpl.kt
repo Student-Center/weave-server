@@ -7,6 +7,7 @@ import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class UserAuthInfoDomainServiceImpl(
@@ -15,6 +16,14 @@ class UserAuthInfoDomainServiceImpl(
 
     override fun findByEmail(email: Email): UserAuthInfo? {
         return userAuthInfoRepository.findByEmail(email)
+    }
+
+    override fun getByUserId(userId: UUID): UserAuthInfo {
+        return userAuthInfoRepository.getByUserId(userId)
+    }
+
+    override fun deleteById(id: UUID) {
+        userAuthInfoRepository.deleteById(id)
     }
 
     override fun create(

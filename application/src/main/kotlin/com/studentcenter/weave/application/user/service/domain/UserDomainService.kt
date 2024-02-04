@@ -25,4 +25,6 @@ interface UserDomainService {
         avatar: Url? = null,
     ): User
 
+    fun deleteById(id: UUID)
+
 }
