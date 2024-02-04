@@ -1,5 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
+import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
@@ -9,7 +10,6 @@ import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
-import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 class UserRestController(
     private val userRegisterUseCase: UserRegisterUseCase,
     private val userUnregisterUseCase: UserUnregisterUseCase,
+    private val userGetMyProfileUseCase: UserGetMyProfileUseCase,
 ) : UserApi {
 
     override fun register(
@@ -54,17 +55,21 @@ class UserRestController(
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {
-        return UserGetMyProfileResponse(
-            id = UuidCreator.create(),
-            nickname = "test",
-            birthYear = 1999,
-            majorName = "컴퓨터 공학과",
-            avatar = "https://test.com",
-            mbti = "INFP",
-            animalType = null,
-            height = null,
-            isUniversityEmailVerified = false,
-        )
+        return userGetMyProfileUseCase
+            .invoke()
+            .let {
+                UserGetMyProfileResponse(
+                    id = it.id,
+                    nickname = it.nickname.value,
+                    birthYear = it.birthYear.value,
+                    majorName = it.majorName.value,
+                    avatar = it.avatar?.value,
+                    mbti = it.mbti.value,
+                    animalType = it.animalType,
+                    height = it.height?.value,
+                    isUniversityEmailVerified = it.isUniversityEmailVerified,
+                )
+            }
     }
 
 }
