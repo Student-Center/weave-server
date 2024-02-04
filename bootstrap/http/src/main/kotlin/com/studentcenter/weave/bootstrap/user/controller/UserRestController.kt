@@ -2,13 +2,16 @@ package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Mbti
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +22,7 @@ class UserRestController(
     private val userRegisterUseCase: UserRegisterUseCase,
     private val userUnregisterUseCase: UserUnregisterUseCase,
     private val userGetMyProfileUseCase: UserGetMyProfileUseCase,
+    private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
 ) : UserApi {
 
     override fun register(
@@ -70,6 +74,11 @@ class UserRestController(
                     isUniversityEmailVerified = it.isUniversityEmailVerified,
                 )
             }
+    }
+
+    override fun setHeight(request: UserSetMyHeightRequest) {
+        Height(request.height)
+            .let { userSetMyHeightUseCase.invoke(it) }
     }
 
 }

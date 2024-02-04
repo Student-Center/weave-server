@@ -28,6 +28,18 @@ data class User(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
+    fun update(
+        height: Height?,
+        animalType: AnimalType?,
+        avatar: Url?,
+    ): User {
+        return this.copy(
+            height = height,
+            animalType = animalType,
+            avatar = avatar,
+            updatedAt = LocalDateTime.now(),
+        )
+    }
 
     companion object {
 

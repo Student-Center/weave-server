@@ -1,9 +1,11 @@
 package com.studentcenter.weave.application.user.service.domain
 
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
@@ -26,5 +28,12 @@ interface UserDomainService {
     ): User
 
     fun deleteById(id: UUID)
+
+    fun updateById(
+        id: UUID,
+        height: Height? = null,
+        animalType: AnimalType? = null,
+        avatar: Url? = null,
+    ): User
 
 }
