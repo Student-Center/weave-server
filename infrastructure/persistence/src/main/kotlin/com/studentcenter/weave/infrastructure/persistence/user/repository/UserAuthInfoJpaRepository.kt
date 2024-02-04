@@ -11,4 +11,6 @@ interface UserAuthInfoJpaRepository : JpaRepository<UserAuthInfoJpaEntity, UUID>
 
     fun findByEmail(email: Email): UserAuthInfoJpaEntity?
 
+    fun findByUserId(userId: UUID): UserAuthInfoJpaEntity?
+
 }

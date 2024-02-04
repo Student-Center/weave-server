@@ -4,8 +4,8 @@ import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
@@ -14,7 +14,7 @@ import java.util.*
 
 @Service
 class UserDomainServiceImpl(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : UserDomainService {
 
     override fun getById(id: UUID): User {
@@ -42,4 +42,9 @@ class UserDomainServiceImpl(
             avatar = avatar,
         ).also { userRepository.save(it) }
     }
+
+    override fun deleteById(id: UUID) {
+        userRepository.deleteById(id)
+    }
+
 }
