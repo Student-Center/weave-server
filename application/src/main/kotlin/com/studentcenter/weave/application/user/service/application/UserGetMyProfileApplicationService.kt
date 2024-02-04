@@ -1,14 +1,39 @@
 package com.studentcenter.weave.application.user.service.application
 
+import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
+import com.studentcenter.weave.application.user.service.domain.UserDomainService
+import com.studentcenter.weave.domain.university.vo.MajorName
+import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserGetMyProfileApplicationService (
-): UserGetMyProfileUseCase {
+class UserGetMyProfileApplicationService(
+    private val userDomainService: UserDomainService,
+) : UserGetMyProfileUseCase {
 
+    @Transactional(readOnly = true)
     override fun invoke(): UserGetMyProfileUseCase.Result {
-        TODO("Not yet implemented")
+        val user: User = getCurrentUserAuthentication()
+            .let { userDomainService.getById(it.userId) }
+
+        // TODO: Implement majorName
+        val majorName = MajorName("구현 예정")
+        // TODO: Implement isUniversityEmailVerified
+        val isUniversityEmailVerified = false
+
+        return UserGetMyProfileUseCase.Result(
+            id = user.id,
+            nickname = user.nickname,
+            birthYear = user.birthYear,
+            majorName = majorName,
+            avatar = user.avatar,
+            mbti = user.mbti,
+            animalType = user.animalType,
+            height = user.height,
+            isUniversityEmailVerified = isUniversityEmailVerified,
+        )
     }
 
 }
