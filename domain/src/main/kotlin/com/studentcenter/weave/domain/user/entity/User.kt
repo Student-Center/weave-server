@@ -30,9 +30,9 @@ data class User(
 ) {
 
     fun update(
-        height: UpdateParam<out Height>?,
-        animalType: UpdateParam<out AnimalType>?,
-        avatar: UpdateParam<out Url>?,
+        height: UpdateParam<out Height>? = null,
+        animalType: UpdateParam<out AnimalType>? = null,
+        avatar: UpdateParam<out Url>? = null,
     ): User {
         return copy(
             height = if (height == null) this.height else height.value,
