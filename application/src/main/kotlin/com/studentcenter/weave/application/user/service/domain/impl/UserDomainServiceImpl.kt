@@ -3,11 +3,14 @@ package com.studentcenter.weave.application.user.service.domain.impl
 import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Service
 import java.util.*
@@ -46,5 +49,18 @@ class UserDomainServiceImpl(
     override fun deleteById(id: UUID) {
         userRepository.deleteById(id)
     }
+
+    override fun updateById(
+        id: UUID,
+        height: UpdateParam<Height?>?,
+        animalType: UpdateParam<AnimalType?>?,
+        avatar: UpdateParam<Url?>?,
+    ): User {
+        return userRepository
+            .getById(id)
+            .update(height, animalType, avatar)
+            .also { userRepository.save(it) }
+    }
+
 
 }

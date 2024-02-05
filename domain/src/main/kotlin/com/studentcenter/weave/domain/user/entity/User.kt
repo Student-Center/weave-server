@@ -2,13 +2,15 @@ package com.studentcenter.weave.domain.user.entity
 
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.Url
+import com.studentcenter.weave.support.common.vo.getUpdateValue
 import java.time.LocalDateTime
 import java.util.*
 
@@ -28,6 +30,17 @@ data class User(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
+    fun update(
+        height: UpdateParam<Height?>? = null,
+        animalType: UpdateParam<AnimalType?>? = null,
+        avatar: UpdateParam<Url?>? = null,
+    ): User {
+        return copy(
+            height = height.getUpdateValue(this.height),
+            animalType = animalType.getUpdateValue(this.animalType),
+            avatar = avatar.getUpdateValue(this.avatar),
+        )
+    }
 
     companion object {
 
