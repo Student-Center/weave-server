@@ -10,6 +10,7 @@ import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Service
 import java.util.*
@@ -51,9 +52,9 @@ class UserDomainServiceImpl(
 
     override fun updateById(
         id: UUID,
-        height: Height?,
-        animalType: AnimalType?,
-        avatar: Url?
+        height: UpdateParam<out Height>?,
+        animalType: UpdateParam<out AnimalType>?,
+        avatar: UpdateParam<out Url>?,
     ): User {
         return userRepository
             .getById(id)

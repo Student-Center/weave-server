@@ -8,6 +8,7 @@ import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
@@ -31,9 +32,9 @@ interface UserDomainService {
 
     fun updateById(
         id: UUID,
-        height: Height? = null,
-        animalType: AnimalType? = null,
-        avatar: Url? = null,
+        height: UpdateParam<out Height>? = null,
+        animalType: UpdateParam<out AnimalType>? = null,
+        avatar: UpdateParam<out Url>? = null,
     ): User
 
 }

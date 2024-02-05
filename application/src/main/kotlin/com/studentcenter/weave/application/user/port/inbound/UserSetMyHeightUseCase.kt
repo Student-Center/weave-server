@@ -4,6 +4,6 @@ import com.studentcenter.weave.domain.user.vo.Height
 
 fun interface UserSetMyHeightUseCase {
 
-    fun invoke(height: Height)
+    fun invoke(height: Height?)
 
 }
