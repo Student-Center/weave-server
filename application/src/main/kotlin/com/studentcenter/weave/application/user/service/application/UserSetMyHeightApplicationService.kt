@@ -4,7 +4,6 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.domain.user.vo.Height
-import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.toUpdateParam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,10 +14,9 @@ class UserSetMyHeightApplicationService(
 ) : UserSetMyHeightUseCase {
 
     @Transactional
-    override fun invoke(height: Height?) {
-        val updateHeight: UpdateParam<Height?> = height?.toUpdateParam() ?: UpdateParam(null)
+    override fun invoke(height: Height) {
         getCurrentUserAuthentication()
-            .let { userDomainService.updateById(it.userId, height = updateHeight) }
+            .let { userDomainService.updateById(it.userId, height = height.toUpdateParam()) }
     }
 
 }

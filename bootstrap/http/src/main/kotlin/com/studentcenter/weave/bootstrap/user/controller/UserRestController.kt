@@ -78,7 +78,7 @@ class UserRestController(
 
     override fun setHeight(request: UserSetMyHeightRequest) {
         request.height
-            ?.let { Height(it) }
+            .let { Height(it) }
             .let { userSetMyHeightUseCase.invoke(it) }
     }
 
