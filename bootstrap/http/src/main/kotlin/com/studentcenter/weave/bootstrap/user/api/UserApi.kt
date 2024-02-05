@@ -74,7 +74,7 @@ interface UserApi {
     @Operation(summary = "Set My Animal Type")
     @PatchMapping("/my/animal-type")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun setMyAnimalLike(
+    fun setMyAnimalType(
         @RequestBody
         request: UserSetMyAnimalTypeRequest
     )

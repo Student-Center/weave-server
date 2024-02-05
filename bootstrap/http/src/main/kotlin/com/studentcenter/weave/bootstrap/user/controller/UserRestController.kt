@@ -85,7 +85,7 @@ class UserRestController(
             .let { userSetMyHeightUseCase.invoke(it) }
     }
 
-    override fun setMyAnimalLike(request: UserSetMyAnimalTypeRequest) {
+    override fun setMyAnimalType(request: UserSetMyAnimalTypeRequest) {
         request.animalType
             .let { userSetMyAnimalTypeUseCase.invoke(it) }
     }
