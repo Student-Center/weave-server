@@ -25,7 +25,7 @@ data class MeetingTeam(
         fun create(
             teamIntroduce: TeamIntroduce,
             leaderUserId: UUID,
-            memberUserIds: Set<UUID>,
+            memberUserIds: Set<UUID> = emptySet(),
             memberCount: Int,
             location: Location,
         ): MeetingTeam {

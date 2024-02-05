@@ -1,5 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.entity
 
+import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
 import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import jakarta.persistence.CollectionTable
@@ -20,11 +21,12 @@ class MeetingTeamJpaEntity(
     teamIntroduce: TeamIntroduce,
     leaderUserId: UUID,
     memberUserIds: Set<UUID>,
+    memberCount: Int,
     location: Location,
 ) {
 
     @Id
-    @Column
+    @Column(nullable = false)
     var id: UUID = id
         private set
 
@@ -32,8 +34,12 @@ class MeetingTeamJpaEntity(
     var teamIntroduce: TeamIntroduce = teamIntroduce
         private set
 
-    @Column
+    @Column(nullable = false)
     var leaderUserId: UUID = leaderUserId
+        private set
+
+    @Column(nullable = false)
+    var memberCount: Int = memberCount
         private set
 
     @ElementCollection
@@ -46,5 +52,19 @@ class MeetingTeamJpaEntity(
     @Column(nullable = false, columnDefinition = "varchar(255)")
     var location: Location = location
         private set
+
+
+    companion object{
+        fun MeetingTeam.toJpaEntity(): MeetingTeamJpaEntity {
+            return MeetingTeamJpaEntity(
+                id = id,
+                teamIntroduce = teamIntroduce,
+                leaderUserId = leaderUserId,
+                memberUserIds = memberUserIds,
+                memberCount = memberCount,
+                location = location
+            )
+        }
+    }
 
 }
