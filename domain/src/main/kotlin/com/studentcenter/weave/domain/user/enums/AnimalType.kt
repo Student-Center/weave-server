@@ -1,6 +1,6 @@
 package com.studentcenter.weave.domain.user.enums
 
-enum class AnimalType(private val description: String) {
+enum class AnimalType(val description: String) {
     PUPPY("🐶강아지상"),
     CAT("🐱고양이상"),
     HEDGEHOG("🦔고슴도치상"),
@@ -23,8 +23,4 @@ enum class AnimalType(private val description: String) {
     SLOTH("🦥나무늘보상"),
     LION("🦁사자상"),
     CAMEL("🐪낙타상");
-
-    override fun toString(): String {
-        return this.description
-    }
 }
