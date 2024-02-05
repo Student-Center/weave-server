@@ -1,6 +1,7 @@
 package com.studentcenter.weave.domain.meeting.entity
 
 import com.studentcenter.weave.domain.meeting.enums.Location
+import com.studentcenter.weave.domain.meeting.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.util.*
@@ -12,6 +13,7 @@ data class MeetingTeam(
     val memberCount: Int,
     val leaderUserId: UUID,
     val location: Location,
+    val status: MeetingTeamStatus,
 ) {
 
     init {
@@ -35,6 +37,7 @@ data class MeetingTeam(
                 memberCount = memberCount,
                 leaderUserId = leaderUserId,
                 location = location,
+                status = MeetingTeamStatus.WAITING,
             )
         }
     }
