@@ -32,9 +32,9 @@ interface UserDomainService {
 
     fun updateById(
         id: UUID,
-        height: UpdateParam<out Height>? = null,
-        animalType: UpdateParam<out AnimalType>? = null,
-        avatar: UpdateParam<out Url>? = null,
+        height: UpdateParam<Height?>? = null,
+        animalType: UpdateParam<AnimalType?>? = null,
+        avatar: UpdateParam<Url?>? = null,
     ): User
 
 }

@@ -16,7 +16,7 @@ class UserSetMyHeightApplicationService(
 
     @Transactional
     override fun invoke(height: Height?) {
-        val updateHeight: UpdateParam<out Height> = height?.toUpdateParam() ?: UpdateParam(null)
+        val updateHeight: UpdateParam<Height?> = height?.toUpdateParam() ?: UpdateParam(null)
         getCurrentUserAuthentication()
             .let { userDomainService.updateById(it.userId, height = updateHeight) }
     }

@@ -52,9 +52,9 @@ class UserDomainServiceImpl(
 
     override fun updateById(
         id: UUID,
-        height: UpdateParam<out Height>?,
-        animalType: UpdateParam<out AnimalType>?,
-        avatar: UpdateParam<out Url>?,
+        height: UpdateParam<Height?>?,
+        animalType: UpdateParam<AnimalType?>?,
+        avatar: UpdateParam<Url?>?,
     ): User {
         return userRepository
             .getById(id)
