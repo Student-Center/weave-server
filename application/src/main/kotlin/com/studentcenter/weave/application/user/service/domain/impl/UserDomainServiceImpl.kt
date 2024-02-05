@@ -55,10 +55,11 @@ class UserDomainServiceImpl(
         height: UpdateParam<Height?>?,
         animalType: UpdateParam<AnimalType?>?,
         avatar: UpdateParam<Url?>?,
+        mbti: Mbti?,
     ): User {
         return userRepository
             .getById(id)
-            .update(height, animalType, avatar)
+            .update(height, animalType, avatar, mbti)
             .also { userRepository.save(it) }
     }
 

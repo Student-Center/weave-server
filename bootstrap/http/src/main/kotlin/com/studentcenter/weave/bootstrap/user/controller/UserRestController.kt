@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
@@ -8,6 +9,7 @@ import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCa
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
@@ -26,6 +28,7 @@ class UserRestController(
     private val userGetMyProfileUseCase: UserGetMyProfileUseCase,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
     private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
+    private val userModifyMyMbtiUseCase: UserModifyMyMbtiUseCase,
 ) : UserApi {
 
     override fun register(
@@ -88,6 +91,11 @@ class UserRestController(
     override fun setMyAnimalType(request: UserSetMyAnimalTypeRequest) {
         request.animalType
             .let { userSetMyAnimalTypeUseCase.invoke(it) }
+    }
+
+    override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {
+        Mbti(request.mbti)
+            .let { userModifyMyMbtiUseCase.invoke(it) }
     }
 
 }

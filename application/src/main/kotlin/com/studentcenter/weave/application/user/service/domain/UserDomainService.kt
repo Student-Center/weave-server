@@ -35,6 +35,7 @@ interface UserDomainService {
         height: UpdateParam<Height?>? = null,
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
+        mbti: Mbti? = null,
     ): User
 
 }
