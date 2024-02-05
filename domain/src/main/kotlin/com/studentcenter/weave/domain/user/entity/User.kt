@@ -10,7 +10,6 @@ import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.UpdateParam
 import com.studentcenter.weave.support.common.vo.Url
-import com.studentcenter.weave.support.common.vo.toUpdateParam
 import java.time.LocalDateTime
 import java.util.*
 
@@ -36,9 +35,9 @@ data class User(
         avatar: UpdateParam<out Url>?,
     ): User {
         return copy(
-            height = if(height == null) this.height else height.value,
-            animalType = if(animalType == null) this.animalType else animalType.value,
-            avatar = if(avatar == null) this.avatar else avatar.value,
+            height = if (height == null) this.height else height.value,
+            animalType = if (animalType == null) this.animalType else animalType.value,
+            avatar = if (avatar == null) this.avatar else avatar.value,
         )
     }
 
@@ -67,23 +66,4 @@ data class User(
         }
     }
 
-}
-
-
-fun main() {
-    val user = User.create(
-        nickname = Nickname("nickname"),
-        email = Email("email"),
-        gender = Gender.MAN,
-        mbti = Mbti("entp"),
-        birthYear = BirthYear(1999),
-        universityId = UUID.randomUUID(),
-        majorId = UUID.randomUUID(),
-    )
-
-    user.update(
-        height = Height(180).toUpdateParam(),
-        animalType = AnimalType.CAT.toUpdateParam(),
-        avatar = UpdateParam(null)
-    )
 }
