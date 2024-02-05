@@ -34,11 +34,13 @@ data class User(
         height: UpdateParam<Height?>? = null,
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
+        mbti: Mbti? = null,
     ): User {
         return copy(
             height = height.getUpdateValue(this.height),
             animalType = animalType.getUpdateValue(this.animalType),
             avatar = avatar.getUpdateValue(this.avatar),
+            mbti = mbti ?: this.mbti,
         )
     }
 

@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
@@ -77,6 +78,15 @@ interface UserApi {
     fun setMyAnimalType(
         @RequestBody
         request: UserSetMyAnimalTypeRequest
+    )
+
+    @Secured
+    @Operation(summary = "Modify My Mbti")
+    @PatchMapping("/my/mbti")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun modifyMyMbti(
+        @RequestBody
+        request: UserModifyMyMbtiRequest
     )
 
 }
