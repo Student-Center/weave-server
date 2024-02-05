@@ -6,6 +6,7 @@ import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -67,6 +68,15 @@ interface UserApi {
     fun setHeight(
         @RequestBody
         request: UserSetMyHeightRequest
+    )
+
+    @Secured
+    @Operation(summary = "Set My Animal Type")
+    @PatchMapping("/my/animal-type")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun setMyAnimalType(
+        @RequestBody
+        request: UserSetMyAnimalTypeRequest
     )
 
 }
