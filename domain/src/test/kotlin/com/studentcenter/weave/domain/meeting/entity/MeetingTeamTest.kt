@@ -1,11 +1,14 @@
 package com.studentcenter.weave.domain.meeting.entity
 
 import com.studentcenter.weave.domain.meeting.enums.Location
+import com.studentcenter.weave.domain.meeting.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import java.util.UUID
 
 class MeetingTeamTest : FunSpec({
 
@@ -49,6 +52,26 @@ class MeetingTeamTest : FunSpec({
                 )
             }
         }
+    }
+
+    test("미팅 팀 생성시 WAITING 상태로 생성된다.") {
+        // arrange
+        val teamIntroduce = TeamIntroduce("팀 한줄 소개")
+        val leaderUserId = UuidCreator.create()
+        val memberUserIds = emptySet<UUID>()
+        val location = Location.BUSAN
+
+        // act
+        val meetingTeam = MeetingTeam.create(
+            teamIntroduce = teamIntroduce,
+            leaderUserId = leaderUserId,
+            memberUserIds = memberUserIds,
+            memberCount = 2,
+            location = location,
+        )
+
+        // assert
+        meetingTeam.status shouldBe MeetingTeamStatus.WAITING
     }
 
 })
