@@ -16,6 +16,10 @@ data class UserSil(
         require(amount >= 0) { "amount는 0 이상이어야 합니다." }
     }
 
+    fun increment(amount: Long): UserSil {
+        return copy(amount = this.amount + amount)
+    }
+
     companion object {
 
         fun create(userId: UUID): UserSil {

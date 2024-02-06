@@ -16,7 +16,7 @@ class UserSilJpaEntity(
     var id: UUID = id
         private set
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, unique = true)
     var userId: UUID = userId
         private set
 
