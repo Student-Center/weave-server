@@ -9,6 +9,7 @@ import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomai
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.UserSil
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -30,6 +31,8 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
 
     afterEach {
         SecurityContextHolder.clearContext()
+        userRepositorySpy.clear()
+        userSilRepositorySpy.clear()
     }
 
     describe("UserGetMyProfileApplicationService") {
@@ -46,6 +49,7 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
                 val userSecurityContext = UserSecurityContext(userAuthentication)
                 SecurityContextHolder.setContext(userSecurityContext)
                 userRepositorySpy.save(user)
+                userSilRepositorySpy.save(UserSil.create(user.id))
 
                 // act
                 val result: UserGetMyProfileUseCase.Result = sut.invoke()
