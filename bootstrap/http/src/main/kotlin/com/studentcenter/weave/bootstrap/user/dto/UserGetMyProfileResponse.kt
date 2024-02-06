@@ -24,4 +24,6 @@ data class UserGetMyProfileResponse(
     val height: Int?,
     @Schema(description = "대학교 이메일 인증 여부")
     val isUniversityEmailVerified: Boolean,
+    @Schema(description = "실(포인트)")
+    val sil: Long,
 )

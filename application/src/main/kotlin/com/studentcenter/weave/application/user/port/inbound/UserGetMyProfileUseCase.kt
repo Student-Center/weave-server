@@ -23,6 +23,7 @@ fun interface UserGetMyProfileUseCase {
         val animalType: AnimalType?,
         val height: Height?,
         val isUniversityEmailVerified: Boolean,
+        val sil: Long,
     )
 
 }

@@ -3,7 +3,9 @@ package com.studentcenter.weave.application.user.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
+import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
+import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -17,7 +19,14 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
-    val sut = UserGetMyProfileApplicationService(userDomainService)
+
+    val userSilRepositorySpy = UserSilRepositorySpy()
+    val userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy)
+
+    val sut = UserGetMyProfileApplicationService(
+        userDomainService = userDomainService,
+        userSilDomainService = userSilDomainService,
+    )
 
     afterEach {
         SecurityContextHolder.clearContext()

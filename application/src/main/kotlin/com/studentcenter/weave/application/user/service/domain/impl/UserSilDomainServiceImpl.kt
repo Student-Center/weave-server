@@ -26,4 +26,8 @@ class UserSilDomainServiceImpl(
             .increment(amount)
             .also { userSilRepository.save(it) }
     }
+
+    override fun getByUserId(userId: UUID): UserSil {
+        return userSilRepository.getByUserId(userId)
+    }
 }

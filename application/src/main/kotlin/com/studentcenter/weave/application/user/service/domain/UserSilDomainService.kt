@@ -9,4 +9,6 @@ interface UserSilDomainService {
 
     fun incrementByUserId(userId: UUID, amount: Long): UserSil
 
+    fun getByUserId(userId: UUID): UserSil
+
 }
