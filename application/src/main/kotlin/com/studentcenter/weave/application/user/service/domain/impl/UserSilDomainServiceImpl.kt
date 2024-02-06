@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.user.port.outbound.UserSilRepository
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.user.entity.UserSil
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -17,6 +18,7 @@ class UserSilDomainServiceImpl(
             .also { userSilRepository.save(it) }
     }
 
+    @Transactional
     override fun incrementByUserId(
         userId: UUID,
         amount: Long
