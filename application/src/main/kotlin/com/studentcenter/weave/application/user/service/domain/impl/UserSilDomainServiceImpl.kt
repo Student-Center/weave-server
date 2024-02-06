@@ -12,6 +12,7 @@ class UserSilDomainServiceImpl(
     private val userSilRepository: UserSilRepository
 ) : UserSilDomainService {
 
+    @Transactional
     override fun create(userId: UUID): UserSil {
         return UserSil
             .create(userId)
@@ -29,7 +30,9 @@ class UserSilDomainServiceImpl(
             .also { userSilRepository.save(it) }
     }
 
+    @Transactional(readOnly = true)
     override fun getByUserId(userId: UUID): UserSil {
         return userSilRepository.getByUserId(userId)
     }
+
 }
