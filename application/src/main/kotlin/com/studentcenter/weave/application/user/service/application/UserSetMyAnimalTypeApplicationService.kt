@@ -8,6 +8,7 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.support.common.vo.toUpdateParam
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserSetMyAnimalTypeApplicationService(
@@ -15,6 +16,7 @@ class UserSetMyAnimalTypeApplicationService(
     private val userSilDomainService: UserSilDomainService,
 ) : UserSetMyAnimalTypeUseCase {
 
+    @Transactional
     override fun invoke(animalType: AnimalType) {
         val user: User = getCurrentUserAuthentication()
             .let { userDomainService.getById(it.userId) }
