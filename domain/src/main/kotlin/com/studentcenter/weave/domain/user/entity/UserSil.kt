@@ -9,16 +9,17 @@ import java.util.*
 data class UserSil(
     val id: UUID = UuidCreator.create(),
     val userId: UUID,
-    val amount: Int,
+    val amount: Long = 0,
 ) {
+
+    init {
+        require(amount >= 0) { "amount는 0 이상이어야 합니다." }
+    }
 
     companion object {
 
         fun create(userId: UUID): UserSil {
-            return UserSil(
-                userId = userId,
-                amount = 0,
-            )
+            return UserSil(userId = userId)
         }
     }
 

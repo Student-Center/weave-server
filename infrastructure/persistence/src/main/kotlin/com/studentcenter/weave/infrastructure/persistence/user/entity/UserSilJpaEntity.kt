@@ -8,7 +8,7 @@ import java.util.*
 class UserSilJpaEntity(
     id: UUID,
     userId: UUID,
-    amount: Int,
+    amount: Long,
 ) {
 
     @Id
@@ -21,7 +21,7 @@ class UserSilJpaEntity(
         private set
 
     @Column(nullable = false)
-    var amount: Int = amount
+    var amount: Long = amount
         private set
 
     companion object {
