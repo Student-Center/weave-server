@@ -21,4 +21,5 @@ data class MajorsResponse(
             return MajorsResponse(domains.map { MajorDto(it.id, it.name) })
         }
     }
+    
 }
