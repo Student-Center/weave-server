@@ -10,4 +10,5 @@ fun interface UniversityGetByIdUsecase {
     data class Command(val id: UUID)
 
     data class Result(val university: University)
+    
 }
