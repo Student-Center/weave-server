@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.port.inbound
 
-import com.studentcenter.weave.domain.entity.University
+import com.studentcenter.weave.domain.university.entity.University
 
 fun interface UniversityFindAllUsecase {
 

@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.adapter.dto
 
-import com.studentcenter.weave.domain.entity.University
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -16,14 +16,14 @@ data class UniversitiesResponse(
 
     data class UniversityDto(
         val id: UUID,
-        val name: UniversityName,
+        val name: String,
         val domainAddress: String,
         val logoAddress: String,
     )
 
     companion object {
         fun from(domains: List<University>) = UniversitiesResponse(
-            domains.map { UniversityDto(it.id, it.name, it.domainAddress, it.logoAddress) }
+            domains.map { UniversityDto(it.id, it.name.value, it.domainAddress, it.logoAddress) }
         )
     }
     

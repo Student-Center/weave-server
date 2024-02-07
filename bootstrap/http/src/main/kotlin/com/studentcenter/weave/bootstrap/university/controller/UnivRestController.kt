@@ -1,12 +1,11 @@
 package com.studentcenter.weave.bootstrap.adapter.controller
 
 import com.studentcenter.weave.bootstrap.adapter.api.UnivApi
-import com.studentcenter.weave.bootstrap.adapter.dto.UniversityResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.adapter.dto.UniversitiesResponse
 import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
-import com.studentcenter.weave.domain.vo.MajorName
-import com.studentcenter.weave.domain.vo.UniversityName
+import com.studentcenter.weave.bootstrap.university.dto.UniversityResponse
+import com.studentcenter.weave.domain.university.vo.MajorName
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.web.bind.annotation.PathVariable
@@ -48,11 +47,11 @@ class UnivRestController : UnivApi {
 
     companion object {
         private val KU_ID = UuidCreator.create()
-        private val KU = UniversityResponse(KU_ID, UniversityName("건국대학교"), "konkuk.ac.kr", "public/university/${KU_ID}/logo")
+        private val KU = UniversityResponse(KU_ID, "건국대학교", "konkuk.ac.kr", "public/university/${KU_ID}/logo")
         private val DKU_ID = UuidCreator.create()
-        private val DKU = UniversityResponse(DKU_ID, UniversityName("단국대학교"), "dankook.ac.kr", "public/university/${DKU_ID}/logo")
+        private val DKU = UniversityResponse(DKU_ID, "단국대학교", "dankook.ac.kr", "public/university/${DKU_ID}/logo")
         private val MJU_ID = UuidCreator.create()
-        private val MJU = UniversityResponse(MJU_ID, UniversityName("명지대학교"), "mju.ac.kr", "public/university/${MJU_ID}/logo")
+        private val MJU = UniversityResponse(MJU_ID, "명지대학교", "mju.ac.kr", "public/university/${MJU_ID}/logo")
         private val KU_MAJORS = listOf(
             "화장품공학과",
             "국제무역학과",
