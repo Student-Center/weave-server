@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUse
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.university.vo.MajorName
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,6 +21,8 @@ class UserGetMyProfileApplicationService(
         val user: User = getCurrentUserAuthentication()
             .let { userDomainService.getById(it.userId) }
 
+        // TODO: Implement universityName
+        val universityName = UniversityName("구현 예정")
         // TODO: Implement majorName
         val majorName = MajorName("구현 예정")
         // TODO: Implement isUniversityEmailVerified
@@ -33,6 +36,7 @@ class UserGetMyProfileApplicationService(
             id = user.id,
             nickname = user.nickname,
             birthYear = user.birthYear,
+            universityName = universityName,
             majorName = majorName,
             avatar = user.avatar,
             mbti = user.mbti,
