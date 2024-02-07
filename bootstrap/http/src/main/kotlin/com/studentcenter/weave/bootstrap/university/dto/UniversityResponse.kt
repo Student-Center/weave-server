@@ -24,6 +24,7 @@ data class UniversityResponse(
             domainAddress = domain.domainAddress,
             logoAddress = domain.logoAddress,
         )
+
     }
 
 }
