@@ -78,6 +78,7 @@ class UserRestController(
                     animalType = it.animalType,
                     height = it.height?.value,
                     isUniversityEmailVerified = it.isUniversityEmailVerified,
+                    sil = it.sil,
                 )
             }
     }

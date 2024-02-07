@@ -2,9 +2,13 @@ package com.studentcenter.weave.infrastructure.persistence.user.entity
 
 import com.studentcenter.weave.domain.user.entity.UserSil
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.util.*
 
+@Entity
+@Table(name = "user_sil")
 class UserSilJpaEntity(
     id: UUID,
     userId: UUID,
@@ -16,7 +20,7 @@ class UserSilJpaEntity(
     var id: UUID = id
         private set
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, unique = true)
     var userId: UUID = userId
         private set
 
