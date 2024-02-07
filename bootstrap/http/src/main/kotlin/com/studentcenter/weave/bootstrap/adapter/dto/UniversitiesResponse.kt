@@ -26,4 +26,5 @@ data class UniversitiesResponse(
             domains.map { UniversityDto(it.id, it.name, it.domainAddress, it.logoAddress) }
         )
     }
+    
 }
