@@ -7,4 +7,5 @@ fun interface UniversityFindAllUsecase {
     fun invoke(): Result
 
     data class Result(val universities: List<University>)
+    
 }
