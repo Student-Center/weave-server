@@ -4,5 +4,5 @@ create table user_sil
     user_id binary(16) not null,
     amount  bigint     not null,
     primary key (id),
-    unique (user_id)
+    index (user_id)
 )
