@@ -72,6 +72,7 @@ class UserRestController(
                     id = it.id,
                     nickname = it.nickname.value,
                     birthYear = it.birthYear.value,
+                    universityName = it.universityName.value,
                     majorName = it.majorName.value,
                     avatar = it.avatar?.value,
                     mbti = it.mbti.value,

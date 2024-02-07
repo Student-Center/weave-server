@@ -12,6 +12,8 @@ data class UserGetMyProfileResponse(
     val nickname: String,
     @Schema(description = "생년")
     val birthYear: Int,
+    @Schema(description = "대학명")
+    val universityName: String,
     @Schema(description = "전공명")
     val majorName: String,
     @Schema(description = "프로필 이미지")
