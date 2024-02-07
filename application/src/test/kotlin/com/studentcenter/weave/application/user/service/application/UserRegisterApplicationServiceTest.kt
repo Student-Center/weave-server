@@ -6,8 +6,10 @@ import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
+import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserAuthInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
+import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.service.util.impl.UserTokenServiceImpl
 import com.studentcenter.weave.application.user.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.domain.user.entity.User
@@ -22,17 +24,18 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
+    val userSilRepositorySpy = UserSilRepositorySpy()
     val jwtTokenProperties: JwtTokenProperties = JwtTokenPropertiesFixtureFactory.create()
 
-    val sut =
-        UserRegisterApplicationService(
+    val sut = UserRegisterApplicationService(
             userTokenService = UserTokenServiceImpl(
                 jwtTokenProperties = jwtTokenProperties,
                 userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
                 openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
             ),
             userDomainService = UserDomainServiceImpl(userRepositorySpy),
-            userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy)
+            userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
+            userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
         )
 
     describe("회원가입 유스케이스") {

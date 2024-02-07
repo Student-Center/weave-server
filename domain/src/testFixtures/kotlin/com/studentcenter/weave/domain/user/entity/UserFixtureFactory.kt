@@ -1,7 +1,9 @@
 package com.studentcenter.weave.domain.user.entity
 
+import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -20,6 +22,8 @@ object UserFixtureFactory {
         universityId: UUID = UuidCreator.create(),
         majorId: UUID = UuidCreator.create(),
         avatar: Url? = null,
+        height: Height? = null,
+        animalType: AnimalType? = null,
     ): User {
         return User(
             nickname = nickname,
@@ -30,6 +34,8 @@ object UserFixtureFactory {
             universityId = universityId,
             majorId = majorId,
             avatar = avatar,
+            height = height,
+            animalType = animalType
         )
     }
 
