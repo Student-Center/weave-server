@@ -13,6 +13,7 @@ import java.util.*
 data class UniversitiesResponse(
     val universities: List<UniversityDto>
 ) {
+
     data class UniversityDto(
         val id: UUID,
         val name: UniversityName,
