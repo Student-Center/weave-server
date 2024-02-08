@@ -31,6 +31,7 @@ class UniversityFindAllApplicationServiceTest : DescribeSpec({
         }
 
         context("대학이 있다면") {
+
             // arrange
             val expectedUniversities = listOf(
                 UniversityFixtureFactory.create(name = UniversityName("위브대학교1")),
@@ -38,7 +39,6 @@ class UniversityFindAllApplicationServiceTest : DescribeSpec({
                 UniversityFixtureFactory.create(name = UniversityName("위브대학교3")),
                 UniversityFixtureFactory.create(name = UniversityName("위브대학교4")),
             )
-
             universityRepository.saveAll(expectedUniversities)
 
             it("모두 조회되어야 한다.") {
@@ -51,6 +51,5 @@ class UniversityFindAllApplicationServiceTest : DescribeSpec({
             }
         }
     }
-
 
 })
