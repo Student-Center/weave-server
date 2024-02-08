@@ -1,5 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.university.entity
 
+import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -41,4 +43,16 @@ class UniversityJpaEntity(
     @Column(nullable = false)
     var updatedAt: LocalDateTime = updatedAt
         private set
+
+    fun toDomain() : University {
+        return University(
+            id = this.id,
+            name = UniversityName(value = this.name),
+            domainAddress = this.domainAddress,
+            logoAddress = this.logoAddress,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+        )
+    }
+
 }

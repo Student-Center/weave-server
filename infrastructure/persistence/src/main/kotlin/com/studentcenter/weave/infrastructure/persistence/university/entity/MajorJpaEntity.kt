@@ -1,5 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.university.entity
 
+import com.studentcenter.weave.domain.university.entity.Major
+import com.studentcenter.weave.domain.university.vo.MajorName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -31,4 +33,13 @@ class MajorJpaEntity(
     @Column(nullable = false)
     var createdAt: LocalDateTime = createdAt
         private set
+
+    fun toDomain() : Major {
+        return Major(
+            id = this.id,
+            univId = this.univId,
+            name = MajorName(value = this.name),
+            createdAt = this.createdAt
+        )
+    }
 }
