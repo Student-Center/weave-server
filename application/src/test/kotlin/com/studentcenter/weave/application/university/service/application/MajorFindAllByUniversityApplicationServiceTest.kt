@@ -20,7 +20,7 @@ class MajorFindAllByUniversityApplicationServiceTest : DescribeSpec({
     }
 
     describe("대학교 정보를 이용한 전공 조회 유스케이스") {
-        context("해당 대학의 전공 과목이 하나도 없다며") {
+        context("해당 대학의 전공 과목이 하나도 없다면") {
             it("빈 리스트를 반환한다.") {
                 // arrange
                 val univId = UuidCreator.create()
