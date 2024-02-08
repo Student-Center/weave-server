@@ -13,7 +13,7 @@ data class UniversityResponse(
     val id: UUID,
     val name: String,
     val domainAddress: String,
-    val logoAddress: String,
+    val logoAddress: String?,
 ) {
 
     companion object {

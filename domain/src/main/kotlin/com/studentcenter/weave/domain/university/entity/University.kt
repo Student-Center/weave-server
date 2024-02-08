@@ -9,7 +9,7 @@ data class University(
     val id: UUID = UuidCreator.create(),
     val name: UniversityName,
     val domainAddress: String,
-    val logoAddress: String,
+    val logoAddress: String?,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {

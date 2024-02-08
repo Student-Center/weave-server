@@ -1,5 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.university.entity
 
+import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -13,7 +15,7 @@ class UniversityJpaEntity(
     id: UUID,
     name: String,
     domainAddress: String,
-    logoAddress: String,
+    logoAddress: String?,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -30,8 +32,8 @@ class UniversityJpaEntity(
     var domainAddress: String = domainAddress
         private set
 
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    var logoAddress: String = logoAddress
+    @Column(nullable = true, columnDefinition = "varchar(255)")
+    var logoAddress: String? = logoAddress
         private set
 
     @Column(nullable = false)
@@ -41,4 +43,16 @@ class UniversityJpaEntity(
     @Column(nullable = false)
     var updatedAt: LocalDateTime = updatedAt
         private set
+
+    fun toDomain() : University {
+        return University(
+            id = this.id,
+            name = UniversityName(value = this.name),
+            domainAddress = this.domainAddress,
+            logoAddress = this.logoAddress,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+        )
+    }
+
 }
