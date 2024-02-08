@@ -58,5 +58,4 @@ class MajorFindAllByUniversityApplicationServiceTest : DescribeSpec({
         }
     }
 
-
 })
