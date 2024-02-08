@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 interface MeetingTeamApi {
 
     @Secured
-    @Operation(description = "Create new meeting team")
+    @Operation(summary = "Create new meeting team")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createMeetingTeam(

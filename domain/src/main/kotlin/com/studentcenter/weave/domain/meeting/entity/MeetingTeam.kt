@@ -3,6 +3,8 @@ package com.studentcenter.weave.domain.meeting.entity
 import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
+import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.util.*
 
@@ -14,6 +16,7 @@ data class MeetingTeam(
     val leaderUserId: UUID,
     val location: Location,
     val status: MeetingTeamStatus,
+    val gender: Gender,
 ) {
 
     init {
@@ -26,7 +29,7 @@ data class MeetingTeam(
 
         fun create(
             teamIntroduce: TeamIntroduce,
-            leaderUserId: UUID,
+            leaderUser: User,
             memberUserIds: Set<UUID> = emptySet(),
             memberCount: Int,
             location: Location,
@@ -35,9 +38,10 @@ data class MeetingTeam(
                 teamIntroduce = teamIntroduce,
                 memberUserIds = memberUserIds,
                 memberCount = memberCount,
-                leaderUserId = leaderUserId,
+                leaderUserId = leaderUser.id,
                 location = location,
                 status = MeetingTeamStatus.WAITING,
+                gender = leaderUser.gender,
             )
         }
     }

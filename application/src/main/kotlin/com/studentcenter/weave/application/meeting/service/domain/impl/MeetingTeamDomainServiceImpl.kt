@@ -5,8 +5,8 @@ import com.studentcenter.weave.application.meeting.service.domain.MeetingTeamDom
 import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
 import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
+import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
-import java.util.UUID
 
 @Service
 class MeetingTeamDomainServiceImpl(
@@ -16,13 +16,13 @@ class MeetingTeamDomainServiceImpl(
     override fun create(
         teamIntroduce: TeamIntroduce,
         memberCount: Int,
-        leaderUserId: UUID,
+        leaderUser: User,
         location: Location
     ): MeetingTeam {
         return MeetingTeam.create(
             teamIntroduce = teamIntroduce,
             memberCount = memberCount,
-            leaderUserId = leaderUserId,
+            leaderUser = leaderUser,
             location = location
         ).also { meetingTeamRepository.save(it) }
     }
