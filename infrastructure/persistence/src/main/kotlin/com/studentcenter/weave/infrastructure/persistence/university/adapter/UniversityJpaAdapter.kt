@@ -12,13 +12,13 @@ class UniversityJpaAdapter(
 ) : UniversityRepository {
 
     override fun findAll(): List<University> {
-        val universityEntities = universityJpaRepository.findAll()
-        return universityEntities.map { it.toDomain() }
+        return universityJpaRepository.findAll()
+            .let { it.map { entity -> entity.toDomain() } }
     }
 
     override fun getById(id: UUID): University {
-        val universityEntity = universityJpaRepository.getReferenceById(id)
-        return universityEntity.toDomain()
+        return universityJpaRepository.getReferenceById(id)
+            .toDomain()
     }
 
 }

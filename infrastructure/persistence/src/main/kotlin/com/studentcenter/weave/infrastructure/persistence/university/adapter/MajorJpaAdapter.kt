@@ -12,8 +12,8 @@ class MajorJpaAdapter(
 ) : MajorRepository {
 
     override fun findAllByUnivId(univId: UUID): List<Major> {
-        val majorEntities = majorJpaRepository.findAllByUnivId(univId = univId)
-        return majorEntities.map { it.toDomain() }
+        return majorJpaRepository.findAllByUnivId(univId = univId)
+            .let { it.map { entity -> entity.toDomain() } }
     }
 
 }
