@@ -10,8 +10,8 @@ class MajorFindAllByUniversityApplicationService(
 ) : MajorFindAllByUnversityUsecase {
 
     override fun invoke(command: MajorFindAllByUnversityUsecase.Command): MajorFindAllByUnversityUsecase.Result {
-        val majors = majorDomainService.findAll(univId = command.univId)
-        return MajorFindAllByUnversityUsecase.Result(majors)
+        return majorDomainService.findAll(univId = command.univId)
+            .let { MajorFindAllByUnversityUsecase.Result(it) }
     }
 
 }

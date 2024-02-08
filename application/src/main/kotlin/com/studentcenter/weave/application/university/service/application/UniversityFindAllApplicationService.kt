@@ -10,8 +10,8 @@ class UniversityFindAllApplicationService(
 ) : UniversityFindAllUsecase {
 
     override fun invoke(): UniversityFindAllUsecase.Result {
-        val universities = universityDomainService.findAll()
-        return UniversityFindAllUsecase.Result(universities)
+        return universityDomainService.findAll()
+            .let { UniversityFindAllUsecase.Result(it) }
     }
 
 }

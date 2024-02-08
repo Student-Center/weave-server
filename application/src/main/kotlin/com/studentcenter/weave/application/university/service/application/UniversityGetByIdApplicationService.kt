@@ -10,8 +10,8 @@ class UniversityGetByIdApplicationService(
 ) : UniversityGetByIdUsecase {
 
     override fun invoke(command: UniversityGetByIdUsecase.Command): UniversityGetByIdUsecase.Result {
-        val university = universityDomainService.getById(command.id)
-        return UniversityGetByIdUsecase.Result(university)
+        return universityDomainService.getById(command.id)
+            .let { UniversityGetByIdUsecase.Result(it) }
     }
 
 }
