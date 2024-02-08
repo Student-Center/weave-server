@@ -7,9 +7,9 @@ import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class MeetingTeamRestController (
+class MeetingTeamRestController(
     private val meetingTeamCreateUseCase: MeetingTeamCreateUseCase,
-): MeetingTeamApi {
+) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
         MeetingTeamCreateUseCase.Command(

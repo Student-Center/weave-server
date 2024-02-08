@@ -4,6 +4,8 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meeting.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingTeamDomainServiceImpl
+import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
+import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
@@ -19,8 +21,18 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(meetingTeamRepositorySpy)
-    val sut = MeetingTeamCreateApplicationService(meetingTeamDomainService)
+    val userRepositorySpy = UserRepositorySpy()
+    val userDomainService = UserDomainServiceImpl(userRepositorySpy)
+    val sut = MeetingTeamCreateApplicationService(
+        meetingTeamDomainService,
+        userDomainService,
+    )
 
+    afterTest {
+        SecurityContextHolder.clearContext()
+        meetingTeamRepositorySpy.clear()
+        userRepositorySpy.clear()
+    }
 
     describe("미팅 팀 생성 유스케이스") {
         context("사용자가 로그인 한 상태이면") {
@@ -36,6 +48,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
                 )
 
                 val leaderUserFixture: User = UserFixtureFactory.create()
+                userRepositorySpy.save(leaderUserFixture)
                 UserAuthentication(
                     userId = leaderUserFixture.id,
                     email = leaderUserFixture.email,
