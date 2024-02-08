@@ -7,5 +7,7 @@ import java.util.*
 
 @Repository
 interface MajorJpaRepository : JpaRepository<MajorJpaEntity, UUID> {
+
     fun findAllByUnivId(univId: UUID): List<MajorJpaEntity>
+
 }
