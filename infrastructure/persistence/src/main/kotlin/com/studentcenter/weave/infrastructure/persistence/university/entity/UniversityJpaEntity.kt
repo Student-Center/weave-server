@@ -15,7 +15,7 @@ class UniversityJpaEntity(
     id: UUID,
     name: String,
     domainAddress: String,
-    logoAddress: String,
+    logoAddress: String?,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -32,8 +32,8 @@ class UniversityJpaEntity(
     var domainAddress: String = domainAddress
         private set
 
-    @Column(nullable = false, columnDefinition = "varchar(255)")
-    var logoAddress: String = logoAddress
+    @Column(nullable = true, columnDefinition = "varchar(255)")
+    var logoAddress: String? = logoAddress
         private set
 
     @Column(nullable = false)
