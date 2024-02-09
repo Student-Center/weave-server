@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.user.service.util.impl.strategy
 
 import com.studentcenter.weave.application.common.properties.OpenIdPropertiesFixtureFactory
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
 import io.kotest.core.annotation.DisplayName
@@ -13,9 +14,10 @@ import io.mockk.mockkObject
 @DisplayName("KakaoOpenIdTokenResolveStrategy")
 class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
 
+    val socialLoginProvider: SocialLoginProvider = SocialLoginProvider.KAKAO
 
     val sut = KakaoOpenIdTokenResolveStrategy(
-        openIdProperties = OpenIdPropertiesFixtureFactory.create(SOCIAL_LOGIN_PROVIDER_TYPE),
+        openIdProperties = OpenIdPropertiesFixtureFactory.create(socialLoginProvider),
     )
 
     beforeTest {
@@ -51,11 +53,3 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
     }
 
 })
-
-{
-    companion object {
-        const val SOCIAL_LOGIN_PROVIDER_TYPE = "KAKAO"
-    }
-}
-
-

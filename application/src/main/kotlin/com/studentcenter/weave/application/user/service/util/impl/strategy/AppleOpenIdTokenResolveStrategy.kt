@@ -15,9 +15,7 @@ class AppleOpenIdTokenResolveStrategy(
     private val openIdProperties: OpenIdProperties
 ) : OpenIdTokenResolveStrategy {
 
-    companion object {
-        const val DEFAULT_NICKNAME = ""
-    }
+    val emailDelimiter: String = "@"
 
     override fun resolveIdToken(idToken: String): UserTokenClaims.IdToken {
         val jwksUri =
@@ -27,8 +25,21 @@ class AppleOpenIdTokenResolveStrategy(
         val email = result.customClaims["email"] as String
 
         return UserTokenClaims.IdToken(
-            nickname = Nickname(DEFAULT_NICKNAME),
+            nickname = Nickname(extractNicknameFromEmail(email)),
             email = Email(email),
         )
+    }
+
+    private fun extractNicknameFromEmail(email: String): String {
+        val nickname: String = email.substringBefore(emailDelimiter)
+
+        return adjustNickname(nickname)
+    }
+
+    private fun adjustNickname(nickname: String): String {
+        return if (nickname.length > Nickname.MAX_LENGTH) nickname.substring(
+            0,
+            Nickname.MAX_LENGTH
+        ) else nickname
     }
 }

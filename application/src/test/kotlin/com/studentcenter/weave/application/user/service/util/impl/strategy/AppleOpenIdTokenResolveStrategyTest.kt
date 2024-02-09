@@ -1,18 +1,23 @@
 package com.studentcenter.weave.application.user.service.util.impl.strategy
 
 import com.studentcenter.weave.application.common.properties.OpenIdPropertiesFixtureFactory
+import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkObject
 
+@DisplayName("AppleOpenIdTokenResolveStrategy")
 class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
 
+    val socialLoginProvider: SocialLoginProvider = SocialLoginProvider.APPLE
+
     val sut = AppleOpenIdTokenResolveStrategy(
-        openIdProperties = OpenIdPropertiesFixtureFactory.create(SOCIAL_LOGIN_PROVIDER_TYPE),
+        openIdProperties = OpenIdPropertiesFixtureFactory.create(socialLoginProvider),
     )
 
     beforeTest {
@@ -22,7 +27,6 @@ class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
         } returns runCatching {
             JwtClaims {
                 customClaims {
-                    this["nickname"] = ""
                     this["email"] = "test@test.com"
                 }
             }
@@ -42,15 +46,9 @@ class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
             val result = sut.resolveIdToken(idToken)
 
             // assert
-            result.nickname.value shouldBe ""
+            result.nickname.value shouldBe "test"
             result.email.value shouldBe "test@test.com"
         }
     }
 
 })
-
-{
-    companion object {
-        const val SOCIAL_LOGIN_PROVIDER_TYPE = "APPLE"
-    }
-}
