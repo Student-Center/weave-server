@@ -6,8 +6,9 @@ class OpenIdPropertiesFixtureFactory {
 
     companion object {
         fun create(
+            providerType : String,
             providers: Map<SocialLoginProvider, OpenIdProperties.Properties> = mapOf(
-                SocialLoginProvider.KAKAO to createProperties(),
+                SocialLoginProvider.valueOf(providerType) to createProperties(),
             ),
         ): OpenIdProperties {
             return OpenIdProperties(

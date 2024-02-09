@@ -3,18 +3,15 @@ package com.studentcenter.weave.application.user.service.util.impl.strategy
 import com.studentcenter.weave.application.common.properties.OpenIdPropertiesFixtureFactory
 import com.studentcenter.weave.support.security.jwt.util.JwtTokenProvider
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
-import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkObject
 
-@DisplayName("KakaoOpenIdTokenResolveStrategy")
-class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
+class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
 
-
-    val sut = KakaoOpenIdTokenResolveStrategy(
+    val sut = AppleOpenIdTokenResolveStrategy(
         openIdProperties = OpenIdPropertiesFixtureFactory.create(SOCIAL_LOGIN_PROVIDER_TYPE),
     )
 
@@ -25,7 +22,7 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
         } returns runCatching {
             JwtClaims {
                 customClaims {
-                    this["nickname"] = "nickname"
+                    this["nickname"] = ""
                     this["email"] = "test@test.com"
                 }
             }
@@ -45,7 +42,7 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
             val result = sut.resolveIdToken(idToken)
 
             // assert
-            result.nickname.value shouldBe "nickname"
+            result.nickname.value shouldBe ""
             result.email.value shouldBe "test@test.com"
         }
     }
@@ -54,8 +51,6 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
 
 {
     companion object {
-        const val SOCIAL_LOGIN_PROVIDER_TYPE = "KAKAO"
+        const val SOCIAL_LOGIN_PROVIDER_TYPE = "APPLE"
     }
 }
-
-
