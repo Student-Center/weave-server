@@ -28,4 +28,7 @@ object Version {
     const val FLYWAY = "10.6.0"
 
     const val KOTLIN_LOGGING = "5.1.0"
+
+    const val AWS_SDK_KOTLIN_SES = "1.0.53"
+//    const val KOTLINX_COROUTINES_CORE = "1.6.4"
 }

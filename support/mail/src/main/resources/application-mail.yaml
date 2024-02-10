@@ -1,0 +1,13 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/mail-templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+    cache: false
+
+aws:
+  ses:
+    access-key: ${AWS_SES_ACCESS_KEY:AKIA6ODU77DHAOXAVIOJ}
+    secret-key: ${AWS_SES_SECRET_KEY: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}
