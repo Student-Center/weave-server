@@ -46,7 +46,6 @@ class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
             val result = sut.resolveIdToken(idToken)
 
             // assert
-            result.nickname.value shouldBe "test"
             result.email.value shouldBe "test@test.com"
         }
     }

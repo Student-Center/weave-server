@@ -33,13 +33,7 @@ class AppleOpenIdTokenResolveStrategy(
     private fun extractNicknameFromEmail(email: String): String {
         val nickname: String = email.substringBefore(emailDelimiter)
 
-        return adjustNickname(nickname)
-    }
-
-    private fun adjustNickname(nickname: String): String {
-        return if (nickname.length > Nickname.MAX_LENGTH) nickname.substring(
-            0,
-            Nickname.MAX_LENGTH
-        ) else nickname
+        return if (nickname.length <= Nickname.MAX_LENGTH) nickname
+            else nickname.substring(0, Nickname.MAX_LENGTH)
     }
 }
