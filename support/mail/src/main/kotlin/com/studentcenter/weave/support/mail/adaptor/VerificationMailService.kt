@@ -41,4 +41,5 @@ class VerificationNumberMailService(
     companion object {
         const val TEMPLATE_FILE_NAME = "email-verification-number"
     }
+
 }
