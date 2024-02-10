@@ -73,4 +73,10 @@ interface AuthApi {
     @ResponseStatus(HttpStatus.OK)
     fun logout()
 
+//    @Secured
+    @Operation(summary = "Verification University Email")
+    @PostMapping("/verification-code:send")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun sendVerificationCodeEmail()
+
 }
