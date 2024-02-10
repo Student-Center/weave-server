@@ -11,20 +11,23 @@ import org.thymeleaf.context.Context
 import org.thymeleaf.spring6.SpringTemplateEngine
 
 @Service
-class VerificationCodeService(
+class VerificationNumberMailService(
     private val javaMailSender: JavaMailSender,
     private val templateEngine: SpringTemplateEngine,
 ) {
-    fun sendVerificationCode(to: Email, verificationNumber : String) {
+    fun send(to: Email, verificationNumber : String) {
         val mimeMessage = javaMailSender.createMimeMessage()
         MimeMessageHelper(mimeMessage, true, "UTF-8").apply {
             setTo(to.value)
             setSubject(String.format(EMAIL_TITLE_FORMAT, verificationNumber))
             setText(templateEngine.process(
                 TEMPLATE_FILE_NAME,
-                Context().also { it.setVariable("verificationNumber", verificationNumber) },
+                Context().also {
+                    it.setVariable(TEMPLATE_VARIABLE_VERIFICATION_NUMBER, verificationNumber)
+                },
             ), true)
         }
+
         try {
             javaMailSender.send(mimeMessage)
         } catch (e: MailException) {
@@ -33,8 +36,8 @@ class VerificationCodeService(
     }
 
     companion object {
-        const val DEFAULT_SENDER_EMAIL = "studentcenter.weave@gmail.com"
         const val TEMPLATE_FILE_NAME = "email-verification-number"
+        const val TEMPLATE_VARIABLE_VERIFICATION_NUMBER = "verificationNumber"
         const val EMAIL_TITLE_FORMAT = "\uD83D\uDD10 위브(WEAVE) 인증코드: %s"
     }
 }
