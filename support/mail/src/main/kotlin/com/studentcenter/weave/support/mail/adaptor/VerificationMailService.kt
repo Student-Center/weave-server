@@ -20,7 +20,7 @@ class VerificationNumberMailService(
         val mimeMessage = javaMailSender.createMimeMessage()
         MimeMessageHelper(mimeMessage, true, "UTF-8").apply {
             setTo(to.value)
-            setSubject(String.format(EMAIL_TITLE_FORMAT, verificationNumber))
+            setSubject("\uD83D\uDD10 위브(WEAVE) 인증코드: $verificationNumber")
             setText(createText(verificationNumber, expirationDuration), true)
         }
 
@@ -40,6 +40,5 @@ class VerificationNumberMailService(
 
     companion object {
         const val TEMPLATE_FILE_NAME = "email-verification-number"
-        const val EMAIL_TITLE_FORMAT = "\uD83D\uDD10 위브(WEAVE) 인증코드: %s"
     }
 }
