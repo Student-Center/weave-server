@@ -11,12 +11,12 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkObject
 
-@DisplayName("KakaoOpenIdTokenResolveStrategy")
-class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
+@DisplayName("AppleOpenIdTokenResolveStrategy")
+class AppleOpenIdTokenResolveStrategyTest : DescribeSpec({
 
-    val socialLoginProvider: SocialLoginProvider = SocialLoginProvider.KAKAO
+    val socialLoginProvider: SocialLoginProvider = SocialLoginProvider.APPLE
 
-    val sut = KakaoOpenIdTokenResolveStrategy(
+    val sut = AppleOpenIdTokenResolveStrategy(
         openIdProperties = OpenIdPropertiesFixtureFactory.create(socialLoginProvider),
     )
 
@@ -27,7 +27,6 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
         } returns runCatching {
             JwtClaims {
                 customClaims {
-                    this["nickname"] = "nickname"
                     this["email"] = "test@test.com"
                 }
             }
@@ -47,7 +46,6 @@ class KakaoOpenIdTokenResolveStrategyTest : DescribeSpec({
             val result = sut.resolveIdToken(idToken)
 
             // assert
-            result.nickname.value shouldBe "nickname"
             result.email.value shouldBe "test@test.com"
         }
     }
