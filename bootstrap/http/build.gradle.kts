@@ -1,7 +1,6 @@
 dependencies {
     implementation(project(":support:common"))
     implementation(project(":support:security"))
-    implementation(project(":support:mail"))
 
     implementation(project(":domain"))
     implementation(project(":application"))

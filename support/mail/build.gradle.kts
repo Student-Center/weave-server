@@ -8,7 +8,7 @@ jar.enabled = true
 
 dependencies {
     implementation(project(":support:common"))
-    // 메일 TEMPLATE 사용을 위한 thymeleaf
+
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-mail")
 

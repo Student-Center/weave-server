@@ -29,6 +29,6 @@ object Version {
 
     const val KOTLIN_LOGGING = "5.1.0"
 
-    const val AWS_SDK_KOTLIN_SES = "1.0.53"
-//    const val KOTLINX_COROUTINES_CORE = "1.6.4"
+    // TODO(SES Sandbox): SES Sandbox 해제시 적용
+    // const val AWS_SDK_KOTLIN_SES = "1.0.53"
 }
