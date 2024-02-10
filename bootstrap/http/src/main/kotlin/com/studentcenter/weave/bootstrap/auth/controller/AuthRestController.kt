@@ -10,7 +10,7 @@ import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginResponse
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.email.adaptor.VerificationCodeService
+import com.studentcenter.weave.support.mail.adaptor.VerificationCodeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController

@@ -31,8 +31,8 @@ jobs:
           REGISTRY_ALIAS: h3l4i6v1
           REPOSITORY: weave_server_dev_cr
           IMAGE_TAG: latest
-          AWS_SES_ACCESS_KEY: ${{ secrets.AWS_SES_ACCESS_KEY }}
-          AWS_SES_SECRET_KEY: ${{ secrets.AWS_SES_SECRET_KEY }}
+          DEV_EMAIL_USERNAME: ${{ secrets.DEV_EMAIL_USERNAME }}
+          DEV_EMAIL_PASSWORD: ${{ secrets.DEV_EMAIL_PASSWORD }}
         run: |
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
