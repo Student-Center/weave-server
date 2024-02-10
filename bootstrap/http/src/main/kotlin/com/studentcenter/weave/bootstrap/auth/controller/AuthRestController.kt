@@ -9,8 +9,6 @@ import com.studentcenter.weave.bootstrap.auth.dto.RefreshTokenRequest
 import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginRequest
 import com.studentcenter.weave.bootstrap.auth.dto.SocialLoginResponse
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
-import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.mail.adaptor.VerificationCodeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -20,7 +18,6 @@ class AuthRestController(
     private val socialLoginUseCase: UserSocialLoginUseCase,
     private val userRefreshTokenUseCase: UserRefreshTokenUseCase,
     private val userLogoutUseCase: UserLogoutUseCase,
-    private val verificationCodeService: VerificationCodeService,
 ) : AuthApi {
 
     override fun socialLogin(
@@ -72,9 +69,5 @@ class AuthRestController(
 
     override fun logout() {
         userLogoutUseCase.invoke()
-    }
-
-    override fun sendVerificationCodeEmail() {
-        verificationCodeService.sendVerificationCode(Email("djyou128@gmail.com"), "002345")
     }
 }

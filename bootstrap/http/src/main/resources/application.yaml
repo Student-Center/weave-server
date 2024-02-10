@@ -9,7 +9,6 @@ spring:
       - application
       - persistence
       - redis
-      - mail
 ---
 spring:
   config:
