@@ -1,4 +1,4 @@
-package com.studentcenter.weave.support.mail.ses.config
+package com.studentcenter.weave.infrastructure.mail.ses.config
 
 // TODO(SES Sandbox): SES Sandbox 해제시 적용
 //@Configuration

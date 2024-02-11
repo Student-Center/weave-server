@@ -1,22 +1,23 @@
-package com.studentcenter.weave.support.mail.adaptor
+package com.studentcenter.weave.infrastructure.mail.adaptor
 
+import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
+import com.studentcenter.weave.infrastructure.mail.common.exception.MailExceptionType
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.mail.common.exception.MailExceptionType
 import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring6.SpringTemplateEngine
 import kotlin.time.Duration
 
-@Service
-class VerificationNumberMailService(
+@Component
+class VerificationNumberGmailAdaptor(
     private val javaMailSender: JavaMailSender,
     private val templateEngine: SpringTemplateEngine,
-) {
-    fun send(to: Email, verificationNumber: String, expirationDuration: Duration) {
+): VerificationNumberMailer {
+    override fun send(to: Email, verificationNumber: String, expirationDuration: Duration) {
         val mimeMessage = javaMailSender.createMimeMessage()
         MimeMessageHelper(mimeMessage, true, "UTF-8").apply {
             setTo(to.value)

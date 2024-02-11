@@ -1,4 +1,4 @@
-package com.studentcenter.weave.support.mail.common.exception
+package com.studentcenter.weave.infrastructure.mail.common.exception
 
 import com.studentcenter.weave.support.common.exception.CustomExceptionType
 

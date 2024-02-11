@@ -1,4 +1,4 @@
-package com.studentcenter.weave.support.mail.common.config
+package com.studentcenter.weave.infrastructure.mail.common.config
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.context.properties.EnableConfigurationProperties
