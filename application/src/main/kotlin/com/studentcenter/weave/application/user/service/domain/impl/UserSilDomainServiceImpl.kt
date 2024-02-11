@@ -35,4 +35,8 @@ class UserSilDomainServiceImpl(
         return userSilRepository.getByUserId(userId)
     }
 
+    override fun save(userSil: UserSil) {
+        userSilRepository.save(userSil)
+    }
+
 }

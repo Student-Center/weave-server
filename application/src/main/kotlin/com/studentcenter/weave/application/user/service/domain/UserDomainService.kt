@@ -38,6 +38,6 @@ interface UserDomainService {
         mbti: Mbti? = null,
     ): User
 
-    fun verifyById(id: UUID)
+    fun save(user: User)
 
 }

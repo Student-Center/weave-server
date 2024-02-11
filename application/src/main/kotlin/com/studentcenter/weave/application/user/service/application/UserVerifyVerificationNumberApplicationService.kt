@@ -7,6 +7,7 @@ import com.studentcenter.weave.application.user.port.outbound.UserVerificationNu
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.application.user.service.domain.UserUniversityVerificationInfoDomainService
+import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfo
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
@@ -35,9 +36,13 @@ class UserVerifyVerificationNumberApplicationService(
             "유저의 인증 요청을 찾을 수 없습니다.",
         )
 
-        userDomainService.verifyById(user.id)
-        userVerificationInfoDomainService.create(user, command.universityEmail)
-        userSilDomainService.incrementByUserId(user.id, getRewardAmount(command.universityEmail))
+        val verifiedUser = user.verifyUniversity().also { userDomainService.save(it) }
+        UserUniversityVerificationInfo.create(verifiedUser, command.universityEmail).also {
+            userVerificationInfoDomainService.save(it)
+        }
+        userSilDomainService.getByUserId(user.id).also {
+            userSilDomainService.save(it.increment(getRewardAmount(command.universityEmail)))
+        }
         verificationNumberRepository.deleteByUserId(user.id)
     }
 

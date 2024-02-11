@@ -9,7 +9,7 @@ fun interface UserVerifyVerificationNumberUseCase {
 
     data class Command(
         val universityEmail: Email,
-        val verificationNumber: UserUniversityVerificationNumber
+        val verificationNumber: UserUniversityVerificationNumber,
     )
 
 }
