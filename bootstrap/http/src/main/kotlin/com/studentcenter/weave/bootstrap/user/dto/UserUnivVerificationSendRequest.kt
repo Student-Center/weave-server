@@ -1,5 +1,5 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
-data class UserUnivVerificationSendiRequest (
+data class UserUnivVerificationSendRequest (
     val universityEmail: String,
 )

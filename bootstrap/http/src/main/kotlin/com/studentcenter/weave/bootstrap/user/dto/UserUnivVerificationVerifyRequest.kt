@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
-data class UserUnivVerificationVerifyiRequest (
+data class UserUnivVerificationVerifyRequest (
     val universityEmail: String,
     val verificationNumber: String,
 )
