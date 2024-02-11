@@ -26,6 +26,7 @@ data class User(
     val avatar: Url? = null,
     val height: Height? = null,
     val animalType: AnimalType? = null,
+    val isUnivVerified: Boolean = false,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
@@ -41,6 +42,12 @@ data class User(
             animalType = animalType.getUpdateValue(this.animalType),
             avatar = avatar.getUpdateValue(this.avatar),
             mbti = mbti ?: this.mbti,
+        )
+    }
+
+    fun verifyUniversity(): User {
+        return copy(
+            isUnivVerified = true
         )
     }
 
