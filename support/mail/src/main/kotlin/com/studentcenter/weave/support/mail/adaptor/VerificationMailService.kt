@@ -16,7 +16,7 @@ class VerificationNumberMailService(
     private val javaMailSender: JavaMailSender,
     private val templateEngine: SpringTemplateEngine,
 ) {
-    fun send(to: Email, verificationNumber : String, expirationDuration: Duration) {
+    fun send(to: Email, verificationNumber: String, expirationDuration: Duration) {
         val mimeMessage = javaMailSender.createMimeMessage()
         MimeMessageHelper(mimeMessage, true, "UTF-8").apply {
             setTo(to.value)
