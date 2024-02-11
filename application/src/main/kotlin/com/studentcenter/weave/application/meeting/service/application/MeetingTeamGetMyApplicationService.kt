@@ -12,7 +12,6 @@ import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
-import com.studentcenter.weave.support.common.dto.ScrollRequest
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class MeetingTeamGetMyApplicationService : MeetingTeamGetMyUseCase {
 
-    override fun invoke(scrollRequest: ScrollRequest): MeetingTeamGetMyUseCase.Result {
+    override fun invoke(command: MeetingTeamGetMyUseCase.Command): MeetingTeamGetMyUseCase.Result {
 
         // TODO: Implement the logic
 
@@ -62,8 +61,8 @@ class MeetingTeamGetMyApplicationService : MeetingTeamGetMyUseCase {
 
         return MeetingTeamGetMyUseCase.Result(
             item = listOf(meetingTeamInfo),
-            lastItemId = null,
-            limit = scrollRequest.limit,
+            next = null,
+            limit = command.limit,
         )
     }
 

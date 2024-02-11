@@ -1,9 +1,7 @@
 package com.studentcenter.weave.support.common.dto
 
-import java.util.UUID
-
-abstract class ScrollResponse<T>(
+abstract class ScrollResponse<T, N>(
     open val item: List<T>,
-    open val lastItemId: UUID?,
+    open val next: N,
     open val limit: Int,
 )

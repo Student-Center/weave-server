@@ -6,11 +6,11 @@ import java.util.*
 
 data class MeetingTeamGetMyResponse(
     override val item: List<MeetingTeamDto>,
-    override val lastItemId: UUID?,
+    override val next: UUID?,
     override val limit: Int,
-) : ScrollResponse<MeetingTeamGetMyResponse.MeetingTeamDto>(
+) : ScrollResponse<MeetingTeamGetMyResponse.MeetingTeamDto, UUID?>(
     item = item,
-    lastItemId = lastItemId,
+    next = next,
     limit = limit,
 ) {
 
