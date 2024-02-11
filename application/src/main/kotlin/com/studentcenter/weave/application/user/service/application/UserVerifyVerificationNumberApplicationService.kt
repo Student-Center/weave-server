@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.common.exception.VerificationExceptionType
+import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
@@ -26,12 +26,12 @@ class UserVerifyVerificationNumberApplicationService(
         verificationNumberRepository.findByUserId(user.id)?.let {
             if (it.first != command.universityEmail || it.second != command.verificationNumber) {
                 throw CustomException(
-                    VerificationExceptionType.INVALID_VERIFICATION_INFOMATION,
+                    UniversityVerificationExceptionType.INVALID_VERIFICATION_INFORMATION,
                     "인증 정보가 일치하지 않습니다.",
                 )
             }
         } ?: throw CustomException(
-            VerificationExceptionType.VERIFICATION_NUMBER_NOT_FOUND,
+            UniversityVerificationExceptionType.VERIFICATION_INFORMATION_NOT_FOUND,
             "유저의 인증 요청을 찾을 수 없습니다.",
         )
 
