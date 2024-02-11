@@ -13,9 +13,11 @@ import com.studentcenter.weave.domain.user.entity.UserAuthInfoFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import io.kotest.assertions.asClue
+import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 
+@DisplayName("UserSocialLoginApplicationService")
 class UserSocialLoginApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
