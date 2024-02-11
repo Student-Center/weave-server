@@ -5,7 +5,7 @@ import com.studentcenter.weave.support.common.vo.Email
 import java.time.LocalDateTime
 import java.util.*
 
-data class UserUniveristyVerificationInfo(
+data class UserUniversityVerificationInfo(
     val id: UUID = UuidCreator.create(),
     val userId: UUID,
     val universityId: UUID,
@@ -14,8 +14,8 @@ data class UserUniveristyVerificationInfo(
 ) {
 
     companion object {
-        fun create(user: User, universityEmail: Email): UserUniveristyVerificationInfo {
-            return UserUniveristyVerificationInfo(
+        fun create(user: User, universityEmail: Email): UserUniversityVerificationInfo {
+            return UserUniversityVerificationInfo(
                 userId = user.id,
                 universityId = user.universityId,
                 universityEmail = universityEmail,

@@ -63,4 +63,11 @@ class UserDomainServiceImpl(
             .also { userRepository.save(it) }
     }
 
+    override fun verifyById(id: UUID) {
+        userRepository
+            .getById(id)
+            .verifyUniversity()
+            .also { userRepository.save(it) }
+    }
+
 }

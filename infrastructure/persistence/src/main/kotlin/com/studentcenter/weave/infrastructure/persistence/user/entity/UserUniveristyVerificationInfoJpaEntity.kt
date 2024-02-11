@@ -1,6 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.user.entity
 
-import com.studentcenter.weave.domain.user.entity.UserUniveristyVerificationInfo
+import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfo
 import com.studentcenter.weave.support.common.vo.Email
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -41,7 +41,7 @@ class UserUniveristyVerificationInfoJpaEntity(
 
     companion object {
 
-        fun UserUniveristyVerificationInfo.toJpaEntity(): UserUniveristyVerificationInfoJpaEntity {
+        fun UserUniversityVerificationInfo.toJpaEntity(): UserUniveristyVerificationInfoJpaEntity {
             return UserUniveristyVerificationInfoJpaEntity(
                 id = id,
                 userId = userId,
@@ -53,8 +53,8 @@ class UserUniveristyVerificationInfoJpaEntity(
 
     }
 
-    fun toDomain(): UserUniveristyVerificationInfo {
-        return UserUniveristyVerificationInfo(
+    fun toDomain(): UserUniversityVerificationInfo {
+        return UserUniversityVerificationInfo(
             id = id,
             userId = userId,
             universityId = universityId,

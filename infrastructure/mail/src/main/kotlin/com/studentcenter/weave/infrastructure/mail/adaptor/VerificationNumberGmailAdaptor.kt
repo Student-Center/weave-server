@@ -33,6 +33,7 @@ class VerificationNumberGmailAdaptor(
     }
 
     private fun createText(verificationNumber: String, expirationDuration: Duration): String {
+//        return "$verificationNumber, $expirationDuration"
         return templateEngine.process(TEMPLATE_FILE_NAME, Context().also {
             it.setVariable("expirationMinute", expirationDuration.inWholeMinutes)
             it.setVariable("verificationNumber", verificationNumber)
