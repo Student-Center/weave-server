@@ -10,8 +10,8 @@ import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
-import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendiRequest
-import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyiRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
@@ -101,7 +101,7 @@ interface UserApi {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun sendEmailVerificationNumber(
         @RequestBody
-        request: UserUnivVerificationSendiRequest
+        request: UserUnivVerificationSendRequest
     )
 
     @Secured
@@ -130,7 +130,7 @@ interface UserApi {
     )
     fun verifyVerificationNumber(
         @RequestBody
-        request: UserUnivVerificationVerifyiRequest
+        request: UserUnivVerificationVerifyRequest
     )
 
 }
