@@ -1,4 +1,4 @@
-alter table user add column is_univ_verified bool not null default false
+alter table user add column is_univ_verified BOOLEAN not null default false;
 
 create table user_university_verification_info
 (
