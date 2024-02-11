@@ -8,6 +8,8 @@ services:
       DB_URL: jdbc:mysql://mysql/weave?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
       DB_USERNAME: root
       DB_PASSWORD: secret
+      DEV_EMAIL_USERNAME: ${DEV_EMAIL_USERNAME}
+      DEV_EMAIL_PASSWORD: ${DEV_EMAIL_PASSWORD}
     depends_on:
       - mysql
     ports:

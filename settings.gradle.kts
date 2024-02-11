@@ -10,9 +10,6 @@ project(":support:lock").projectDir = file("support/lock")
 include(":support:logger")
 project(":support:logger").projectDir = file("support/logger")
 
-include(":support:mail")
-project(":support:mail").projectDir = file("support/mail")
-
 include(":support:security")
 project(":support:security").projectDir = file("support/security")
 
@@ -36,6 +33,9 @@ project(":infrastructure:client").projectDir = file("infrastructure/client")
 
 include(":infrastructure:redis")
 project(":infrastructure:redis").projectDir = file("infrastructure/redis")
+
+include(":infrastructure:mail")
+project(":infrastructure:mail").projectDir = file("infrastructure/mail")
 
 // bootstrap
 include(":bootstrap:http")

@@ -28,4 +28,7 @@ object Version {
     const val FLYWAY = "10.6.0"
 
     const val KOTLIN_LOGGING = "5.1.0"
+
+    // TODO(SES Sandbox): SES Sandbox 해제시 적용
+    // const val AWS_SDK_KOTLIN_SES = "1.0.53"
 }
