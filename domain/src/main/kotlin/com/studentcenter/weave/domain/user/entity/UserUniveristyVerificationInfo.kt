@@ -14,10 +14,7 @@ data class UserUniveristyVerificationInfo(
 ) {
 
     companion object {
-        fun create(
-            user: User,
-            universityEmail: Email,
-        ): UserUniveristyVerificationInfo {
+        fun create(user: User, universityEmail: Email): UserUniveristyVerificationInfo {
             return UserUniveristyVerificationInfo(
                 userId = user.id,
                 universityId = user.universityId,
@@ -26,4 +23,5 @@ data class UserUniveristyVerificationInfo(
             )
         }
     }
+
 }
