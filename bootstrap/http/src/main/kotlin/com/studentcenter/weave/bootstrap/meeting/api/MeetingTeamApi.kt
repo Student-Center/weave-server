@@ -2,8 +2,8 @@ package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
-import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -31,7 +31,7 @@ interface MeetingTeamApi {
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
     fun getMyMeetingTeams(
-        scrollRequest: ScrollRequest
+        scrollRequest: MeetingTeamGetMyRequest
     ): MeetingTeamGetMyResponse
 
 }
