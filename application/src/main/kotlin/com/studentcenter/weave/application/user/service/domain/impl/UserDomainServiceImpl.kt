@@ -63,4 +63,8 @@ class UserDomainServiceImpl(
             .also { userRepository.save(it) }
     }
 
+    override fun save(user: User) {
+        userRepository.save(user)
+    }
+
 }

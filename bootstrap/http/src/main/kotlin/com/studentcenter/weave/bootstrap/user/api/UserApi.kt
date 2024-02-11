@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.user.api
 
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
+import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
@@ -9,11 +10,16 @@ import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
 import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -87,6 +93,44 @@ interface UserApi {
     fun modifyMyMbti(
         @RequestBody
         request: UserModifyMyMbtiRequest
+    )
+
+    @Secured
+    @Operation(summary = "Send verification number email")
+    @PostMapping("/my/university-verification:send")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun sendEmailVerificationNumber(
+        @RequestBody
+        request: UserUnivVerificationSendRequest
+    )
+
+    @Secured
+    @Operation(summary = "Verify university email with verification number")
+    @PostMapping("/my/university-verification:verify")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "204",
+                description = "인증 성공",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "인증 실패 / 이미 인증된 경우",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = ErrorResponse::class
+                        )
+                    ),
+                ]
+            ),
+        ]
+    )
+    fun verifyVerificationNumber(
+        @RequestBody
+        request: UserUnivVerificationVerifyRequest
     )
 
 }

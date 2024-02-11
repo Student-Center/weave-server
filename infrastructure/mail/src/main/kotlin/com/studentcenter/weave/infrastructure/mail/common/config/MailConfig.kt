@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-@ComponentScan(basePackages = ["com.studentcenter.weave.support.mail"])
+@ComponentScan(basePackages = ["com.studentcenter.weave.infrastructure.mail"])
 @EnableConfigurationProperties
-@ConfigurationPropertiesScan(basePackages = ["com.studentcenter.weave.support.mail"])
+@ConfigurationPropertiesScan(basePackages = ["com.studentcenter.weave.infrastructure.mail"])
 class MailConfig

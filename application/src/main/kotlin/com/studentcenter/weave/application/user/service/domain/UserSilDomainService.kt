@@ -11,4 +11,6 @@ interface UserSilDomainService {
 
     fun getByUserId(userId: UUID): UserSil
 
+    fun save(userSil: UserSil)
+
 }

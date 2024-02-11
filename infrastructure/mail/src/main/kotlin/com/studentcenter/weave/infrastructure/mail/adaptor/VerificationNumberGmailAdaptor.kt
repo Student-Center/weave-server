@@ -1,6 +1,7 @@
 package com.studentcenter.weave.infrastructure.mail.adaptor
 
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
+import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.infrastructure.mail.common.exception.MailExceptionType
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
@@ -17,11 +18,15 @@ class VerificationNumberGmailAdaptor(
     private val javaMailSender: JavaMailSender,
     private val templateEngine: SpringTemplateEngine,
 ): VerificationNumberMailer {
-    override fun send(to: Email, verificationNumber: String, expirationDuration: Duration) {
+    override fun send(
+        to: Email,
+        verificationNumber: UserUniversityVerificationNumber,
+        expirationDuration: Duration,
+    ) {
         val mimeMessage = javaMailSender.createMimeMessage()
         MimeMessageHelper(mimeMessage, true, "UTF-8").apply {
             setTo(to.value)
-            setSubject("\uD83D\uDD10 위브(WEAVE) 인증코드: $verificationNumber")
+            setSubject("\uD83D\uDD10 위브(WEAVE) 인증코드: ${verificationNumber.value}")
             setText(createText(verificationNumber, expirationDuration), true)
         }
 
@@ -32,10 +37,11 @@ class VerificationNumberGmailAdaptor(
         }
     }
 
-    private fun createText(verificationNumber: String, expirationDuration: Duration): String {
+    private fun createText(verificationNumber: UserUniversityVerificationNumber, expirationDuration: Duration): String {
+//        return "$verificationNumber, $expirationDuration"
         return templateEngine.process(TEMPLATE_FILE_NAME, Context().also {
             it.setVariable("expirationMinute", expirationDuration.inWholeMinutes)
-            it.setVariable("verificationNumber", verificationNumber)
+            it.setVariable("verificationNumber", verificationNumber.value)
         })
     }
 
