@@ -37,10 +37,10 @@ class UserVerifyVerificationNumberApplicationService(
         )
 
         val verifiedUser = user.verifyUniversity().also { userDomainService.save(it) }
-        UserUniversityVerificationInfo.create(verifiedUser, command.universityEmail).also {
+        UserUniversityVerificationInfo.create(verifiedUser, command.universityEmail).let {
             userVerificationInfoDomainService.save(it)
         }
-        userSilDomainService.getByUserId(user.id).also {
+        userSilDomainService.getByUserId(user.id).let {
             userSilDomainService.save(it.increment(getRewardAmount(command.universityEmail)))
         }
         verificationNumberRepository.deleteByUserId(user.id)
