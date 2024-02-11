@@ -9,6 +9,7 @@ import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseC
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
+import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
@@ -115,7 +116,7 @@ class UserRestController(
         userVerifyVerificationNumberUseCase.invoke(
             command = UserVerifyVerificationNumberUseCase.Command(
                 universityEmail = Email(request.universityEmail),
-                verificationNumber = request.verificationNumber
+                verificationNumber = UserUniversityVerificationNumber(request.verificationNumber),
             )
         )
     }

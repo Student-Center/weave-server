@@ -10,8 +10,8 @@ import com.studentcenter.weave.application.user.port.outbound.VerificationNumber
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
-import com.studentcenter.weave.application.user.service.util.VerificationNumberGenerator
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
@@ -93,9 +93,11 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
                 val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
-                val invalidVerificationNumber = verificationNumber.replace(
-                    verificationNumber[0],
-                    if (verificationNumber[0] == '9') '8' else verificationNumber[0] + 1
+                val invalidVerificationNumber = UserUniversityVerificationNumber(
+                    verificationNumber.value.replace(
+                        verificationNumber.value[0],
+                        if (verificationNumber.value[0] == '9') '8' else verificationNumber.value[0] + 1
+                    )
                 )
                 val command = UserVerifyVerificationNumberUseCase.Command(email, invalidVerificationNumber)
 
@@ -116,9 +118,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 )
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
-                val verificationNumber = VerificationNumberGenerator.generate(
-                    UserSendVerificationNumberEmailApplicationService.VERIFICATION_NUMBER_SIZE
-                )
+                val verificationNumber = UserUniversityVerificationNumber.generate()
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
 
                 // act, assert

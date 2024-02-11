@@ -49,7 +49,10 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
 
                 // assert
                 userVerificationNumberRepository.findByUserId(userFixture.id) shouldNotBe null
-                verify { verificationNumberMailer.send(email, any(), any()) }
+                val verificationNumber = userVerificationNumberRepository
+                    .findByUserId(userFixture.id)!!
+                    .second
+                verify { verificationNumberMailer.send(email, verificationNumber, any()) }
             }
         }
 

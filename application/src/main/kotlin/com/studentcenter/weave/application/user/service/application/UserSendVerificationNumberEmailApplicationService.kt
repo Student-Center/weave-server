@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
-import com.studentcenter.weave.application.user.service.util.VerificationNumberGenerator
+import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
 import kotlin.time.Duration.Companion.minutes
@@ -16,7 +16,7 @@ class UserSendVerificationNumberEmailApplicationService(
 ): UserSendVerificationNumberEmailUseCase {
 
     override fun invoke(universityEmail: Email) {
-        VerificationNumberGenerator.generate(VERIFICATION_NUMBER_SIZE).run {
+        UserUniversityVerificationNumber.generate().run {
             userVerificationNumberRepository.save(
                 getCurrentUserAuthentication().userId,
                 universityEmail,
@@ -28,7 +28,6 @@ class UserSendVerificationNumberEmailApplicationService(
     }
 
     companion object {
-        const val VERIFICATION_NUMBER_SIZE = 6
         const val DEFAULT_DURATION_MINUTE = 5
     }
 }
