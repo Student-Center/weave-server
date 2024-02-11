@@ -16,7 +16,7 @@ class UserVerificationNumberRedisAdapter(
         userId: UUID,
         universityEmail: Email,
         verificationNumber: UserUniversityVerificationNumber,
-        expirationSeconds: Long
+        expirationSeconds: Long,
     ) {
         val userVerificationNumberRedisHash = UserVerificationNumberRedisHash(
             id = userId,

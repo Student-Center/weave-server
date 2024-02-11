@@ -10,7 +10,7 @@ interface UserVerificationNumberRepository {
         userId: UUID,
         universityEmail: Email,
         verificationNumber: UserUniversityVerificationNumber,
-        expirationSeconds: Long
+        expirationSeconds: Long,
     )
 
     fun findByUserId(userId: UUID): Pair<Email, UserUniversityVerificationNumber>?

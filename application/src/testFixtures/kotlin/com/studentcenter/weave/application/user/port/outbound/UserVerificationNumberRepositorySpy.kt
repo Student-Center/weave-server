@@ -13,7 +13,7 @@ class UserVerificationNumberRepositorySpy : UserVerificationNumberRepository {
         userId: UUID,
         universityEmail: Email,
         verificationNumber: UserUniversityVerificationNumber,
-        expirationSeconds: Long
+        expirationSeconds: Long,
     ) {
         bucket[userId] = universityEmail to verificationNumber
     }
