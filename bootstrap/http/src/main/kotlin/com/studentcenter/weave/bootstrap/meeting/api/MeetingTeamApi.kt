@@ -31,7 +31,7 @@ interface MeetingTeamApi {
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
     fun getMyMeetingTeams(
-        scrollRequest: MeetingTeamGetMyRequest
+        request: MeetingTeamGetMyRequest
     ): MeetingTeamGetMyResponse
 
 }
