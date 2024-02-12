@@ -5,6 +5,8 @@ import java.util.*
 
 interface MajorDomainService {
 
+    fun getById(id: UUID): Major
+
     fun findAll(univId: UUID): List<Major>
 
 }

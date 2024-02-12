@@ -1,7 +1,6 @@
 package com.studentcenter.weave.application.university.port.outbound
 
 import com.studentcenter.weave.domain.university.entity.University
-import com.studentcenter.weave.support.common.exception.CustomException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -22,7 +21,7 @@ class UniversityRepositorySpy: UniversityRepository {
     }
 
     override fun getById(id: UUID): University {
-        return bucket[id] ?: throw IllegalArgumentException()
+        return bucket[id] ?: throw NoSuchElementException()
     }
 
 }
