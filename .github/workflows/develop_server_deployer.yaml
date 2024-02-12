@@ -63,6 +63,7 @@ jobs:
           host: ${{ secrets.DEV_INSTANCE_HOST }}
           username: ${{ secrets.DEV_INSTANCE_USERNAME }}
           key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          envs: SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
             jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
