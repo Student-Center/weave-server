@@ -28,6 +28,9 @@ spring:
   config:
     activate:
       on-profile: dev
+  datasource:
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
