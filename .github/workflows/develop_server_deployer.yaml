@@ -55,11 +55,20 @@ jobs:
               echo "Docker Compose already installed."
             fi
 
-      - name: Run Docker Compose up
+      - name: Configuration Env file
         uses: appleboy/ssh-action@master
         env:
-            DEV_EMAIL_USERNAME: ${{ secrets.DEV_EMAIL_USERNAME }}
-            DEV_EMAIL_PASSWORD: ${{ secrets.DEV_EMAIL_PASSWORD }}
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+        with:
+          host: ${{ secrets.DEV_INSTANCE_HOST }}
+          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
+          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          script: |
+            cd ~/app/bootstrap/http
+            jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+
+      - name: Run Docker Compose up
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEV_INSTANCE_HOST }}
           username: ${{ secrets.DEV_INSTANCE_USERNAME }}
