@@ -10,6 +10,9 @@ import java.util.*
 class MajorDomainServiceImpl(
     private val majorRepository: MajorRepository
 ) : MajorDomainService {
+    override fun getById(id: UUID): Major {
+        return majorRepository.getById(id)
+    }
 
     override fun findAll(univId: UUID): List<Major> {
         return majorRepository.findAllByUnivId(univId = univId)

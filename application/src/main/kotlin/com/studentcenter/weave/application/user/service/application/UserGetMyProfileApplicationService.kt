@@ -1,6 +1,8 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
+import com.studentcenter.weave.application.university.service.domain.MajorDomainService
+import com.studentcenter.weave.application.university.service.domain.UniversityDomainService
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserGetMyProfileApplicationService(
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
+    private val universityDomainService: UniversityDomainService,
+    private val majorDomainService: MajorDomainService,
 ) : UserGetMyProfileUseCase {
 
     @Transactional(readOnly = true)
@@ -21,13 +25,12 @@ class UserGetMyProfileApplicationService(
         val user: User = getCurrentUserAuthentication()
             .let { userDomainService.getById(it.userId) }
 
-        // TODO: Implement universityName
-        val universityName = UniversityName("구현 예정")
-        // TODO: Implement majorName
-        val majorName = MajorName("구현 예정")
-        // TODO: Implement isUniversityEmailVerified
-        val isUniversityEmailVerified = false
-
+        val universityName = universityDomainService
+            .getById(user.universityId)
+            .name
+        val majorName = majorDomainService
+            .getById(user.majorId)
+            .name
         val silAmount: Long = userSilDomainService
             .getByUserId(user.id)
             .amount
@@ -42,7 +45,7 @@ class UserGetMyProfileApplicationService(
             mbti = user.mbti,
             animalType = user.animalType,
             height = user.height,
-            isUniversityEmailVerified = isUniversityEmailVerified,
+            isUniversityEmailVerified = user.isUnivVerified,
             sil = silAmount,
         )
     }
