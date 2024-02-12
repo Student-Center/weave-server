@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   spring:
-    image: public.ecr.aws/u1i8r6z9/weave_server_dev_cr
+    image: public.ecr.aws/${ECR_REGISTRY_ALIAS}/weave_server_dev_cr
     pull_policy: always
     environment:
       SPRING_PROFILES_ACTIVE: dev
