@@ -66,7 +66,7 @@ jobs:
           envs: SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
-            jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+            jq 'del(.DEV_INSTANCE_PEM_KEY)' <<< "$SECRETS_CONTEXT" | jq -r 'to_entries|map("(.key)=(.value|tostring)")|.[]' > .env
 
       - name: Run Docker Compose up
         uses: appleboy/ssh-action@master
