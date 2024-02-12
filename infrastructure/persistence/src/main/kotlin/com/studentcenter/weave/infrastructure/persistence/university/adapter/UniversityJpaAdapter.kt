@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.persistence.meeting.adapter
+package com.studentcenter.weave.infrastructure.persistence.university.adapter
 
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepository
 import com.studentcenter.weave.domain.university.entity.University

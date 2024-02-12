@@ -5,6 +5,8 @@ import java.util.*
 
 interface MajorRepository {
 
+    fun getById(id: UUID): Major
+
     fun findAllByUnivId(univId: UUID): List<Major>
 
 }
