@@ -33,12 +33,12 @@ class VerificationNumberGmailAdaptor(
         try {
             javaMailSender.send(mimeMessage)
         } catch (e: MailException) {
+            println(e.message)
             throw CustomException(MailExceptionType.MAIL_CLIENT_EXCEPTION, "Mail Client 이슈가 발생했습니다.")
         }
     }
 
     private fun createText(verificationNumber: UserUniversityVerificationNumber, expirationDuration: Duration): String {
-//        return "$verificationNumber, $expirationDuration"
         return templateEngine.process(TEMPLATE_FILE_NAME, Context().also {
             it.setVariable("expirationMinute", expirationDuration.inWholeMinutes)
             it.setVariable("verificationNumber", verificationNumber.value)
