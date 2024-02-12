@@ -46,6 +46,8 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
     afterEach {
         SecurityContextHolder.clearContext()
         userRepositorySpy.clear()
+        userSilRepositorySpy.clear()
+        universityRepository.clear()
         majorRepository.clear()
     }
 
