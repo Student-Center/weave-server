@@ -57,6 +57,9 @@ jobs:
 
       - name: Run Docker Compose up
         uses: appleboy/ssh-action@master
+        env:
+            DEV_EMAIL_USERNAME: ${{ secrets.DEV_EMAIL_USERNAME }}
+            DEV_EMAIL_PASSWORD: ${{ secrets.DEV_EMAIL_PASSWORD }}
         with:
           host: ${{ secrets.DEV_INSTANCE_HOST }}
           username: ${{ secrets.DEV_INSTANCE_USERNAME }}
