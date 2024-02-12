@@ -6,8 +6,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
       DB_URL: jdbc:mysql://mysql/weave?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-      DB_USERNAME: ${DEV_DB_USERNAME}
-      DB_PASSWORD: ${DEV_DB_PASSWORD}
+      DEV_DB_USERNAME: ${DEV_DB_USERNAME}
+      DEV_DB_PASSWORD: ${DEV_DB_PASSWORD}
       DEV_EMAIL_USERNAME: ${DEV_EMAIL_USERNAME}
       DEV_EMAIL_PASSWORD: ${DEV_EMAIL_PASSWORD}
     depends_on:
@@ -18,7 +18,7 @@ services:
     image: mysql:8.0.33
     environment:
       MYSQL_DATABASE: weave
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: ${DEV_DB_PASSWORD}
     ports:
       - "3306:3306"
   redis:
