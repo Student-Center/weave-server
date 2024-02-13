@@ -6,6 +6,7 @@ import com.studentcenter.weave.bootstrap.meeting.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamLocationResponse
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
 
@@ -38,4 +39,7 @@ class MeetingTeamRestController(
         }
     }
 
+    override fun getMeetingTeamLocations(): MeetingTeamLocationResponse {
+        return MeetingTeamLocationResponse.of()
+    }
 }
