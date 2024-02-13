@@ -1,9 +1,12 @@
 package com.studentcenter.weave.application.meeting.port.outbound
 
 import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
+import java.util.*
 
 interface MeetingTeamRepository {
 
     fun save(meetingTeam: MeetingTeam)
+
+    fun getById(id: UUID): MeetingTeam
 
 }

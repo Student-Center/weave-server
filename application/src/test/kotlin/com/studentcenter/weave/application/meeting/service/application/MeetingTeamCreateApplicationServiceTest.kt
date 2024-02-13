@@ -1,11 +1,12 @@
 package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
+import com.studentcenter.weave.application.meeting.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meeting.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingTeamDomainServiceImpl
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
-import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
@@ -14,23 +15,30 @@ import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 @DisplayName("MeetingTeamCreateApplicationServiceTest")
 class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(meetingTeamRepositorySpy)
+    val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
+    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
+        meetingTeamRepositorySpy,
+        meetingMemberRepositorySpy,
+    )
+
     val userRepositorySpy = UserRepositorySpy()
-    val userDomainService = UserDomainServiceImpl(userRepositorySpy)
+    val userQueryUseCaseStub = UserQueryUseCaseStub()
     val sut = MeetingTeamCreateApplicationService(
         meetingTeamDomainService,
-        userDomainService,
+        userQueryUseCaseStub,
     )
 
     afterTest {
         SecurityContextHolder.clearContext()
         meetingTeamRepositorySpy.clear()
+        meetingMemberRepositorySpy.clear()
         userRepositorySpy.clear()
     }
 
@@ -60,7 +68,13 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
                 sut.invoke(command)
 
                 // assert
-                meetingTeamRepositorySpy.findByLeaderUserId(leaderUserFixture.id) shouldNotBe null
+                val meetingTeam = meetingTeamRepositorySpy.getLast() shouldNotBe null
+                val member = meetingMemberRepositorySpy.getByMeetingTeamIdAndUserId(
+                    meetingTeam.id,
+                    leaderUserFixture.id
+                )
+                member.meetingTeamId shouldBe meetingTeam.id
+                member.userId shouldBe leaderUserFixture.id
             }
         }
     }

@@ -13,8 +13,12 @@ class MeetingTeamRepositorySpy: MeetingTeamRepository {
         bucket[meetingTeam.id] = meetingTeam
     }
 
-    fun findByLeaderUserId(leaderUserId: UUID): MeetingTeam? {
-        return bucket.values.find { it.leaderUserId == leaderUserId }
+    override fun getById(id: UUID): MeetingTeam {
+        return bucket[id] ?: throw NoSuchElementException()
+    }
+
+    fun getLast(): MeetingTeam {
+        return bucket.values.last()
     }
 
     fun clear() {
