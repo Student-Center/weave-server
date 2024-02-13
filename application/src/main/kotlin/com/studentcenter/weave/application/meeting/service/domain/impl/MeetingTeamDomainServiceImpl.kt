@@ -31,6 +31,7 @@ class MeetingTeamDomainServiceImpl(
         meetingTeam: MeetingTeam,
         role: MeetingMemberRole,
     ): MeetingMember {
+        // TODO: 동시성 문제 해결
         require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
             "팀원의 수가 초과되었습니다"
         }
