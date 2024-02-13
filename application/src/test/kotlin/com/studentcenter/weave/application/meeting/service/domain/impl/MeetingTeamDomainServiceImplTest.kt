@@ -86,30 +86,29 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
         }
 
         context("미팅 멤버가 이미 존재하는 경우") {
-            it("이미 존재한다는 예외를 던진다") {
+            it("해당 멤버를 반환한다.") {
                 // arrange
                 val memberCount = 2
                 val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
                 val user = UserFixtureFactory.create()
-
-                val meetingTeamMember = MeetingMember.create(
+                val meetingMember = MeetingMember.create(
                     meetingTeamId = meetingTeam.id,
                     userId = user.id,
                     role = MeetingMemberRole.MEMBER
                 )
-                meetingMemberRepositorySpy.save(meetingTeamMember)
+                meetingMemberRepositorySpy.save(meetingMember)
 
-                // act, assert
-                shouldThrow<IllegalArgumentException> {
-                    sut.addMember(
-                        user = user,
-                        meetingTeam = meetingTeam,
-                        role = MeetingMemberRole.MEMBER
-                    )
-                }
+                // act
+                val result = sut.addMember(
+                    user = user,
+                    meetingTeam = meetingTeam,
+                    role = MeetingMemberRole.MEMBER
+                )
+
+                // assert
+                result shouldBe meetingMember
             }
         }
-
     }
 
 })
