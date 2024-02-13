@@ -32,9 +32,8 @@ class MeetingTeamDomainServiceImpl(
         role: MeetingMemberRole,
     ): MeetingMember {
         // TODO: 동시성 문제 해결
-        require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
-            "팀원의 수가 초과되었습니다"
-        }
+        checkMemberCount(meetingTeam)
+        checkAlreadyMember(meetingTeam, user)
 
         return MeetingMember.create(
             meetingTeamId = meetingTeam.id,
@@ -42,6 +41,26 @@ class MeetingTeamDomainServiceImpl(
             role = role,
         ).also {
             meetingMemberRepository.save(it)
+        }
+    }
+
+    private fun checkMemberCount(meetingTeam: MeetingTeam) {
+        require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
+            "팀원의 수가 초과되었습니다"
+        }
+    }
+
+    private fun checkAlreadyMember(
+        meetingTeam: MeetingTeam,
+        user: User
+    ) {
+        require(
+            meetingMemberRepository.findByMeetingTeamIdAndUserId(
+                meetingTeam.id,
+                user.id
+            ) == null
+        ) {
+            "이미 팀원으로 등록되어 있습니다"
         }
     }
 

@@ -9,4 +9,9 @@ interface MeetingMemberRepository {
 
     fun countByMeetingTeamId(meetingTeamId: UUID): Int
 
+    fun findByMeetingTeamIdAndUserId(
+        meetingTeamId: UUID,
+        userId: UUID
+    ): MeetingMember?
+
 }

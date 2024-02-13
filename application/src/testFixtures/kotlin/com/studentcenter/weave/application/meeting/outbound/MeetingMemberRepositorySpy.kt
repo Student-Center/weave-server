@@ -17,8 +17,19 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         return bucket.values.count { it.meetingTeamId == meetingTeamId }
     }
 
-    fun getAllMyMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
-        return bucket.values.filter { it.meetingTeamId == meetingTeamId }
+    override fun findByMeetingTeamIdAndUserId(
+        meetingTeamId: UUID,
+        userId: UUID
+    ): MeetingMember? {
+        return bucket.values.find { it.meetingTeamId == meetingTeamId && it.userId == userId }
+    }
+
+    fun getByMeetingTeamIdAndUserId(
+        meetingTeamId: UUID,
+        userId: UUID
+    ): MeetingMember {
+        return findByMeetingTeamIdAndUserId(meetingTeamId, userId)
+            ?: throw NoSuchElementException("MeetingMember not found")
     }
 
     fun clear() {

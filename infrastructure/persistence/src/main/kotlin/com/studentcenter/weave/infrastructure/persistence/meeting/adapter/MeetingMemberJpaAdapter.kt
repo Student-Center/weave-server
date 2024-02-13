@@ -10,7 +10,7 @@ import java.util.*
 @Component
 class MeetingMemberJpaAdapter(
     private val meetingMemberJpaRepository: MeetingMemberJpaRepository,
-): MeetingMemberRepository {
+) : MeetingMemberRepository {
 
     override fun save(meetingMember: MeetingMember) {
         meetingMemberJpaRepository.save(meetingMember.toJpaEntity())
@@ -18,6 +18,14 @@ class MeetingMemberJpaAdapter(
 
     override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
         return meetingMemberJpaRepository.countByMeetingTeamId(meetingTeamId)
+    }
+
+    override fun findByMeetingTeamIdAndUserId(
+        meetingTeamId: UUID,
+        userId: UUID
+    ): MeetingMember? {
+        return meetingMemberJpaRepository.findByMeetingTeamIdAndUserId(meetingTeamId, userId)
+            ?.toDomain()
     }
 
 }

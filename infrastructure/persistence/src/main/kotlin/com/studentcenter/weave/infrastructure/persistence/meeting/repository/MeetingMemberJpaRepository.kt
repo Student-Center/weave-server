@@ -10,4 +10,9 @@ interface MeetingMemberJpaRepository : JpaRepository<MeetingMemberJpaEntity, UUI
 
     fun countByMeetingTeamId(meetingTeamId: UUID): Int
 
+    fun findByMeetingTeamIdAndUserId(
+        meetingTeamId: UUID,
+        userId: UUID
+    ): MeetingMemberJpaEntity?
+
 }

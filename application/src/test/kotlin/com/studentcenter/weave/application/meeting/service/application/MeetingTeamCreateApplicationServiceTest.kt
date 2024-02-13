@@ -9,7 +9,6 @@ import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStu
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.meeting.enums.Location
-import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -70,10 +69,12 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
 
                 // assert
                 val meetingTeam = meetingTeamRepositorySpy.getLast() shouldNotBe null
-                val members = meetingMemberRepositorySpy.getAllMyMeetingTeamId(meetingTeam.id)
-                members.size shouldBe 1
-                members[0].userId shouldBe leaderUserFixture.id
-                members[0].role shouldBe MeetingMemberRole.LEADER
+                val member = meetingMemberRepositorySpy.getByMeetingTeamIdAndUserId(
+                    meetingTeam.id,
+                    leaderUserFixture.id
+                )
+                member.meetingTeamId shouldBe meetingTeam.id
+                member.userId shouldBe leaderUserFixture.id
             }
         }
     }
