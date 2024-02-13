@@ -7,7 +7,8 @@ create table weave.meeting_member
     role            varchar(255) not null,
     primary key (id),
     index meeting_member_meeting_team_id_index (meeting_team_id),
-    index meeting_member_user_id_index (user_id)
+    index meeting_member_user_id_index (user_id),
+    unique unique_meeting_member (meeting_team_id, user_id)
 );
 
 alter table weave.meeting_team
