@@ -20,9 +20,6 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-  flyway:
-    clean-disabled: false
-    clean-on-validation-error: true
 ---
 spring:
   config:

@@ -14,6 +14,7 @@ import java.util.*
 object UserFixtureFactory {
 
     fun create(
+        id: UUID = UuidCreator.create(),
         nickname: Nickname = Nickname("닉네임"),
         email: Email = Email("test@test.com"),
         gender: Gender = Gender.MAN,
@@ -26,6 +27,7 @@ object UserFixtureFactory {
         animalType: AnimalType? = null,
     ): User {
         return User(
+            id = id,
             nickname = nickname,
             email = email,
             gender = gender,
