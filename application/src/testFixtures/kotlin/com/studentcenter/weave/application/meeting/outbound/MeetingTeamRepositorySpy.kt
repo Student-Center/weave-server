@@ -17,7 +17,7 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket[id] ?: throw NoSuchElementException()
     }
 
-    override fun findAllByMemberUserId(
+    override fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
         limit: Int
