@@ -49,8 +49,8 @@ class MeetingTeamGetMyApplicationService : MeetingTeamGetMyUseCase {
 
         val meetingTeam = MeetingTeam.create(
             teamIntroduce = TeamIntroduce("test"),
-            leaderUser = user,
             memberCount = 4,
+            gender = Gender.MAN,
             location = Location.SUWON,
         )
 

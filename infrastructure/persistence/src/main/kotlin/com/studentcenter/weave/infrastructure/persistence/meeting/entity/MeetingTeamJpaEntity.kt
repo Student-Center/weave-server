@@ -5,14 +5,11 @@ import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.enums.Gender
-import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 import java.util.*
 
@@ -21,8 +18,6 @@ import java.util.*
 class MeetingTeamJpaEntity(
     id: UUID,
     teamIntroduce: TeamIntroduce,
-    leaderUserId: UUID,
-    memberUserIds: Set<UUID>,
     memberCount: Int,
     location: Location,
     status: MeetingTeamStatus,
@@ -39,17 +34,7 @@ class MeetingTeamJpaEntity(
         private set
 
     @Column(nullable = false)
-    var leaderUserId: UUID = leaderUserId
-        private set
-
-    @Column(nullable = false)
     var memberCount: Int = memberCount
-        private set
-
-    @ElementCollection
-    @CollectionTable(name = "meeting_team_member", joinColumns = [JoinColumn(name = "meeting_team_id")])
-    @Column(name = "user_id")
-    var memberUserIds: Set<UUID> = memberUserIds
         private set
 
     @Enumerated(EnumType.STRING)
@@ -67,19 +52,30 @@ class MeetingTeamJpaEntity(
     var gender: Gender = gender
         private set
 
-    companion object{
+    fun toDomain(): MeetingTeam {
+        return MeetingTeam(
+            id = id,
+            teamIntroduce = teamIntroduce,
+            memberCount = memberCount,
+            location = location,
+            status = status,
+            gender = gender,
+        )
+    }
+
+    companion object {
+
         fun MeetingTeam.toJpaEntity(): MeetingTeamJpaEntity {
             return MeetingTeamJpaEntity(
                 id = id,
                 teamIntroduce = teamIntroduce,
-                leaderUserId = leaderUserId,
-                memberUserIds = memberUserIds,
                 memberCount = memberCount,
                 location = location,
                 status = status,
                 gender = gender,
             )
         }
+
     }
 
 }
