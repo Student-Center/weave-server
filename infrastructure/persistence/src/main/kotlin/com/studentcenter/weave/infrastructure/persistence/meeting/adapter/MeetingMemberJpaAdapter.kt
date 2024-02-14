@@ -34,8 +34,8 @@ class MeetingMemberJpaAdapter(
             .map { it.toDomain() }
     }
 
-    override fun deleteAllByMeetingTeamId(id: UUID) {
-        meetingMemberJpaRepository.deleteAllByMeetingTeamId(id)
+    override fun deleteAllByMeetingTeamId(meetingTeamId: UUID) {
+        meetingMemberJpaRepository.deleteAllByMeetingTeamId(meetingTeamId)
     }
 
 }

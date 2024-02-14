@@ -61,6 +61,7 @@ class MeetingTeamDomainServiceImpl(
         }
     }
 
+    @Transactional
     override fun deleteById(id: UUID) {
         meetingMemberRepository.deleteAllByMeetingTeamId(id)
         meetingTeamRepository.deleteById(id)

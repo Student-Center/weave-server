@@ -28,8 +28,8 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         return bucket.values.filter { it.meetingTeamId == meetingTeamId }
     }
 
-    override fun deleteAllByMeetingTeamId(id: UUID) {
-        bucket.values.removeIf { it.meetingTeamId == id }
+    override fun deleteAllByMeetingTeamId(meetingTeamId: UUID) {
+        bucket.values.removeIf { it.meetingTeamId == meetingTeamId }
     }
 
     fun getByMeetingTeamIdAndUserId(

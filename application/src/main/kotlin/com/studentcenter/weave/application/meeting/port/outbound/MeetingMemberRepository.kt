@@ -16,6 +16,6 @@ interface MeetingMemberRepository {
 
     fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
 
-    fun deleteAllByMeetingTeamId(id: UUID)
+    fun deleteAllByMeetingTeamId(meetingTeamId: UUID)
 
 }
