@@ -9,7 +9,7 @@ interface MeetingTeamRepository {
 
     fun getById(id: UUID): MeetingTeam
 
-    fun findAllByMemberUserId(
+    fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
         limit: Int,

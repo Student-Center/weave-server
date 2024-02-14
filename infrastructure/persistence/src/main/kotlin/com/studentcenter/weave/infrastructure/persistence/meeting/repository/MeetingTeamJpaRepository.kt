@@ -23,7 +23,7 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
         """,
         nativeQuery = true
     )
-    fun findAllByMemberUserId(
+    fun scrollByMemberUserId(
         memberUserId: UUID,
         next: UUID?,
         limit: Int,

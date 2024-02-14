@@ -30,7 +30,7 @@ class MeetingTeamDomainServiceImpl(
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        return meetingTeamRepository.findAllByMemberUserId(userId, next, limit)
+        return meetingTeamRepository.scrollByMemberUserId(userId, next, limit)
     }
 
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {

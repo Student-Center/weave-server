@@ -31,13 +31,13 @@ class MeetingTeamJpaAdapter(
             }.toDomain()
     }
 
-    override fun findAllByMemberUserId(
+    override fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
         val result = meetingTeamJpaRepository
-            .findAllByMemberUserId(userId, next, limit)
+            .scrollByMemberUserId(userId, next, limit)
             .map { it.toDomain() }
 
         return result
