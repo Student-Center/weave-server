@@ -1,17 +1,18 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
 import com.studentcenter.weave.application.meeting.vo.MeetingTeamInfo
+import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
 data class MeetingTeamGetMyResponse(
     override val item: List<MeetingTeamDto>,
     override val next: UUID?,
-    override val limit: Int,
+    override val total: Int,
 ) : ScrollResponse<MeetingTeamGetMyResponse.MeetingTeamDto, UUID?>(
     item = item,
     next = next,
-    limit = limit,
+    total = total,
 ) {
 
     data class MeetingTeamDto(
@@ -45,7 +46,7 @@ data class MeetingTeamGetMyResponse(
         val universityName: String,
         val mbti: String,
         val birthYear: Int,
-        val isLeader: Boolean,
+        val role: MeetingMemberRole,
         val isMe: Boolean,
     ) {
 
@@ -59,7 +60,7 @@ data class MeetingTeamGetMyResponse(
                     universityName = memberInfo.university.name.value,
                     mbti = memberInfo.user.mbti.value,
                     birthYear = memberInfo.user.birthYear.value,
-                    isLeader = memberInfo.isLeader,
+                    role = memberInfo.role,
                     isMe = memberInfo.isMe,
                 )
             }

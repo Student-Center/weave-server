@@ -1,68 +1,57 @@
 package com.studentcenter.weave.application.meeting.service.application
 
+import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamGetMyUseCase
+import com.studentcenter.weave.application.meeting.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meeting.vo.MeetingTeamInfo
-import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
-import com.studentcenter.weave.domain.meeting.enums.Location
-import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
-import com.studentcenter.weave.domain.university.entity.University
-import com.studentcenter.weave.domain.university.vo.UniversityName
-import com.studentcenter.weave.domain.user.entity.User
-import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.domain.user.vo.BirthYear
-import com.studentcenter.weave.domain.user.vo.Mbti
-import com.studentcenter.weave.domain.user.vo.Nickname
-import com.studentcenter.weave.support.common.uuid.UuidCreator
-import com.studentcenter.weave.support.common.vo.Email
+import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.domain.meeting.entity.MeetingMember
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
-class MeetingTeamGetMyApplicationService : MeetingTeamGetMyUseCase {
+class MeetingTeamGetMyApplicationService(
+    private val userQueryUseCase: UserQueryUseCase,
+    private val universityGetByIdUsecase: UniversityGetByIdUsecase,
+    private val meetingDomainService: MeetingTeamDomainService,
+) : MeetingTeamGetMyUseCase {
 
     override fun invoke(command: MeetingTeamGetMyUseCase.Command): MeetingTeamGetMyUseCase.Result {
+        val currentUser = getCurrentUserAuthentication().let { userQueryUseCase.getById(it.userId) }
 
-        // TODO: Implement the logic
+        val meetingTeams =
+            meetingDomainService.findAllByMemberUserId(currentUser.id, command.next, command.limit)
 
-        val user = User.create(
-            nickname = Nickname("nickname"),
-            mbti = Mbti("Intj"),
-            email = Email("test@test.com"),
-            gender = Gender.MAN,
-            birthYear = BirthYear(1995),
-            universityId = UuidCreator.create(),
-            majorId = UuidCreator.create(),
-            avatar = null,
-        )
+        val meetingTeamInfos = meetingTeams.map { team ->
+            val memberInfos = meetingDomainService
+                .findAllMeetingMembersByMeetingTeamId(team.id)
+                .map { createMemberInfo(it, currentUser.id) }
 
-        val university = University.create(
-            name = UniversityName("test"),
-            domainAddress = "test",
-            logoAddress = "test"
-        )
-
-        val memberInfo = MeetingTeamInfo.MemberInfo.of(
-            user = user,
-            university = university,
-            isLeader = true,
-            isMe = true,
-        )
-
-        val meetingTeam = MeetingTeam.create(
-            teamIntroduce = TeamIntroduce("test"),
-            memberCount = 4,
-            gender = Gender.MAN,
-            location = Location.SUWON,
-        )
-
-        val meetingTeamInfo = MeetingTeamInfo.of(
-            team = meetingTeam,
-            memberInfos = listOf(memberInfo),
-        )
+            MeetingTeamInfo(
+                team = team,
+                memberInfos = memberInfos
+            )
+        }
 
         return MeetingTeamGetMyUseCase.Result(
-            item = listOf(meetingTeamInfo),
-            next = null,
-            limit = command.limit,
+            item = meetingTeamInfos,
+            next = meetingTeamInfos.lastOrNull()?.team?.id,
+        )
+    }
+
+    private fun createMemberInfo(
+        member: MeetingMember,
+        currentUserId: UUID
+    ): MeetingTeamInfo.MemberInfo {
+        val memberUser = userQueryUseCase.getById(member.userId)
+        val university =
+            universityGetByIdUsecase.invoke(UniversityGetByIdUsecase.Command(memberUser.universityId)).university
+        return MeetingTeamInfo.MemberInfo(
+            user = memberUser,
+            university = university,
+            role = member.role,
+            isMe = member.userId == currentUserId
         )
     }
 

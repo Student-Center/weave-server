@@ -9,4 +9,10 @@ interface MeetingTeamRepository {
 
     fun getById(id: UUID): MeetingTeam
 
+    fun findAllByMemberUserId(
+        userId: UUID,
+        next: UUID?,
+        limit: Int,
+    ): List<MeetingTeam>
+
 }

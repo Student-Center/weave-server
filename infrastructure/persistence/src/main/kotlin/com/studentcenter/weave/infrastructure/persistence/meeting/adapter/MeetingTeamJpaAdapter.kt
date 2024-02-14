@@ -31,4 +31,17 @@ class MeetingTeamJpaAdapter(
             }.toDomain()
     }
 
+    override fun findAllByMemberUserId(
+        userId: UUID,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        val result = meetingTeamJpaRepository
+            .findAllByMemberUserId(userId, next, limit)
+            .map { it.toDomain() }
+
+        println("result: $result")
+        return result
+    }
+
 }

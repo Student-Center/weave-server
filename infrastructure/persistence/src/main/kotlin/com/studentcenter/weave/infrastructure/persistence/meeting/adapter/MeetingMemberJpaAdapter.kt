@@ -28,4 +28,10 @@ class MeetingMemberJpaAdapter(
             ?.toDomain()
     }
 
+    override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
+        return meetingMemberJpaRepository
+            .findAllByMeetingTeamId(meetingTeamId)
+            .map { it.toDomain() }
+    }
+
 }
