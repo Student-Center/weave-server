@@ -18,7 +18,7 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
             INNER JOIN meeting_member mm ON mt.id = mm.meeting_team_id
             WHERE mm.user_id = :memberUserId
             AND (:next IS NULL OR mt.id > :next)
-            ORDER BY mt.id
+            ORDER BY mt.id DESC
             LIMIT :limit
         """,
         nativeQuery = true
