@@ -14,4 +14,6 @@ interface MeetingMemberRepository {
         userId: UUID
     ): MeetingMember?
 
+    fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
+
 }

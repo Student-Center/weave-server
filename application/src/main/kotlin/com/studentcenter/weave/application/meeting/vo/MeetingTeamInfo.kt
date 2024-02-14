@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.meeting.vo
 
 import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
+import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.user.entity.User
 
@@ -26,7 +27,7 @@ data class MeetingTeamInfo(
     data class MemberInfo(
         val user: User,
         val university: University,
-        val isLeader: Boolean,
+        val role: MeetingMemberRole,
         val isMe: Boolean,
     ) {
 
@@ -35,13 +36,13 @@ data class MeetingTeamInfo(
             fun of(
                 user: User,
                 university: University,
-                isLeader: Boolean,
+                role: MeetingMemberRole,
                 isMe: Boolean,
             ): MemberInfo {
                 return MemberInfo(
                     user = user,
                     university = university,
-                    isLeader = isLeader,
+                    role = role,
                     isMe = isMe,
                 )
             }

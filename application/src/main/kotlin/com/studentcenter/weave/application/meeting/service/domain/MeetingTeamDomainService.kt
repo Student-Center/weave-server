@@ -10,12 +10,16 @@ interface MeetingTeamDomainService {
 
     fun save(meetingTeam: MeetingTeam)
 
-    fun getById(id: UUID): MeetingTeam
-
     fun addMember(
         user: User,
         meetingTeam: MeetingTeam,
         role: MeetingMemberRole,
     ): MeetingMember
+
+    fun getById(id: UUID): MeetingTeam
+
+    fun scrollByMemberUserId(userId: UUID, next: UUID?, limit: Int): List<MeetingTeam>
+
+    fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
 
 }

@@ -31,4 +31,16 @@ class MeetingTeamJpaAdapter(
             }.toDomain()
     }
 
+    override fun scrollByMemberUserId(
+        userId: UUID,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        val result = meetingTeamJpaRepository
+            .scrollByMemberUserId(userId, next, limit)
+            .map { it.toDomain() }
+
+        return result
+    }
+
 }
