@@ -34,7 +34,7 @@ class MeetingTeamDomainServiceImpl(
     }
 
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
-        return meetingMemberRepository.findAllMeetingMembersByMeetingTeamId(meetingTeamId)
+        return meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
     }
 
     @Transactional
@@ -59,6 +59,12 @@ class MeetingTeamDomainServiceImpl(
                 meetingMemberRepository.save(it)
             }
         }
+    }
+
+    @Transactional
+    override fun deleteById(id: UUID) {
+        meetingMemberRepository.deleteAllByMeetingTeamId(id)
+        meetingTeamRepository.deleteById(id)
     }
 
     private fun checkMemberCount(meetingTeam: MeetingTeam) {

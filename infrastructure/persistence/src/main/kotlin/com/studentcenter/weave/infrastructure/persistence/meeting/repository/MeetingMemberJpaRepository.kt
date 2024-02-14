@@ -2,6 +2,8 @@ package com.studentcenter.weave.infrastructure.persistence.meeting.repository
 
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingMemberJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.util.*
 
@@ -16,5 +18,16 @@ interface MeetingMemberJpaRepository : JpaRepository<MeetingMemberJpaEntity, UUI
     ): MeetingMemberJpaEntity?
 
     fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMemberJpaEntity>
+
+    @Modifying
+    @Query(
+        """
+            DELETE FROM MeetingMemberJpaEntity m
+            WHERE m.meetingTeamId = :teamId 
+        """
+    )
+    fun deleteAllByMeetingTeamId(
+        teamId: UUID
+    )
 
 }
