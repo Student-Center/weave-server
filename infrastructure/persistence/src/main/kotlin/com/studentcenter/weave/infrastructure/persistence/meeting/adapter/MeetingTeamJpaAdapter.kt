@@ -40,7 +40,6 @@ class MeetingTeamJpaAdapter(
             .findAllByMemberUserId(userId, next, limit)
             .map { it.toDomain() }
 
-        println("result: $result")
         return result
     }
 
