@@ -9,4 +9,10 @@ interface MeetingTeamRepository {
 
     fun getById(id: UUID): MeetingTeam
 
+    fun scrollByMemberUserId(
+        userId: UUID,
+        next: UUID?,
+        limit: Int,
+    ): List<MeetingTeam>
+
 }

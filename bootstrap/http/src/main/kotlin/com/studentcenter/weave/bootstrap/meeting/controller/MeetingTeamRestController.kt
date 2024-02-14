@@ -34,7 +34,7 @@ class MeetingTeamRestController(
             MeetingTeamGetMyResponse(
                 item = it.item.map { item -> MeetingTeamGetMyResponse.MeetingTeamDto.from(item) },
                 next = it.next,
-                limit = it.limit,
+                total = it.total
             )
         }
     }
