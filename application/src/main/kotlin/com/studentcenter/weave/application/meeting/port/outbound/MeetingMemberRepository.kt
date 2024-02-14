@@ -14,6 +14,8 @@ interface MeetingMemberRepository {
         userId: UUID
     ): MeetingMember?
 
-    fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
+    fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
+
+    fun deleteAllByMeetingTeamId(id: UUID)
 
 }

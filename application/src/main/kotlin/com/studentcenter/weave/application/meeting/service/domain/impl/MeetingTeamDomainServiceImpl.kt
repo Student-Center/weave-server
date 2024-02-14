@@ -34,7 +34,7 @@ class MeetingTeamDomainServiceImpl(
     }
 
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
-        return meetingMemberRepository.findAllMeetingMembersByMeetingTeamId(meetingTeamId)
+        return meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
     }
 
     @Transactional

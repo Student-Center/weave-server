@@ -15,4 +15,6 @@ interface MeetingTeamRepository {
         limit: Int,
     ): List<MeetingTeam>
 
+    fun deleteById(id: UUID)
+
 }

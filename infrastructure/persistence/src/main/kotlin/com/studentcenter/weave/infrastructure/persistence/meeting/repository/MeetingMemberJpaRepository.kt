@@ -17,4 +17,6 @@ interface MeetingMemberJpaRepository : JpaRepository<MeetingMemberJpaEntity, UUI
 
     fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMemberJpaEntity>
 
+    fun deleteAllByMeetingTeamId(id: UUID)
+
 }

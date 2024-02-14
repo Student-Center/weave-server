@@ -43,4 +43,9 @@ class MeetingTeamJpaAdapter(
         return result
     }
 
+    override fun deleteById(id: UUID) {
+        meetingTeamJpaRepository.deleteById(id)
+    }
+
+
 }

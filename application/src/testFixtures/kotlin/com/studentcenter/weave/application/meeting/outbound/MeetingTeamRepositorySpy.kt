@@ -25,6 +25,14 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket.values.toList()
     }
 
+    override fun deleteById(id: UUID) {
+        bucket.remove(id)
+    }
+
+    fun findById(id: UUID): MeetingTeam? {
+        return bucket[id]
+    }
+
     fun getLast(): MeetingTeam {
         return bucket.values.last()
     }
