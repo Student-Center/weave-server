@@ -25,7 +25,7 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.getById(id)
     }
 
-    override fun findAllByMemberUserId(
+    override fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
         limit: Int

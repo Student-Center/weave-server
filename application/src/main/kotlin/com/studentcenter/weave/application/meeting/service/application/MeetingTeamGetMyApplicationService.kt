@@ -21,7 +21,7 @@ class MeetingTeamGetMyApplicationService(
         val currentUser = getCurrentUserAuthentication().let { userQueryUseCase.getById(it.userId) }
 
         val meetingTeams =
-            meetingDomainService.findAllByMemberUserId(currentUser.id, command.next, command.limit)
+            meetingDomainService.scrollByMemberUserId(currentUser.id, command.next, command.limit)
 
         val meetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingDomainService

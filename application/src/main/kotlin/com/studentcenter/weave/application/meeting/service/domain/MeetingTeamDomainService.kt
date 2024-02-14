@@ -18,7 +18,7 @@ interface MeetingTeamDomainService {
 
     fun getById(id: UUID): MeetingTeam
 
-    fun findAllByMemberUserId(userId: UUID, next: UUID?, limit: Int): List<MeetingTeam>
+    fun scrollByMemberUserId(userId: UUID, next: UUID?, limit: Int): List<MeetingTeam>
 
     fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
 
