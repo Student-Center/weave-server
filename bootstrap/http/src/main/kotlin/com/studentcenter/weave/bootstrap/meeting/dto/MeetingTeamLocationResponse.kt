@@ -7,16 +7,23 @@ data class MeetingTeamLocationResponse(
 ) {
 
     data class MeetingTeamLocationDto(
-        val item: String,
-        val value: String
+        val name: String,
+        val value: String,
+        val isCapitalArea: String
     )
 
     companion object {
+        private lateinit var instance: MeetingTeamLocationResponse
 
-        fun of(): MeetingTeamLocationResponse {
-            return MeetingTeamLocationResponse(Location.entries.map {
-                MeetingTeamLocationDto(it.name, it.value)
-            })
+        fun getInstance(): MeetingTeamLocationResponse {
+
+            instance = MeetingTeamLocationResponse(
+                Location.entries.map {
+                    MeetingTeamLocationDto(it.name, it.value, it.isCapitalArea.toString())
+                }
+            )
+
+            return instance
         }
 
     }

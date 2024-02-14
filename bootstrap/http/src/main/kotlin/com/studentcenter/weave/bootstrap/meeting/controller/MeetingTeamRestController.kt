@@ -40,6 +40,6 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeamLocations(): MeetingTeamLocationResponse {
-        return MeetingTeamLocationResponse.of()
+        return MeetingTeamLocationResponse.getInstance()
     }
 }
