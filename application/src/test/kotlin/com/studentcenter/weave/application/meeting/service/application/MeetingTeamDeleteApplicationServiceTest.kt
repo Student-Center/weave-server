@@ -46,5 +46,4 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
         }
     }
 
-
 })
