@@ -25,6 +25,18 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.getById(id)
     }
 
+    override fun scrollByMemberUserId(
+        userId: UUID,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        return meetingTeamRepository.scrollByMemberUserId(userId, next, limit)
+    }
+
+    override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
+        return meetingMemberRepository.findAllMeetingMembersByMeetingTeamId(meetingTeamId)
+    }
+
     @Transactional
     override fun addMember(
         user: User,

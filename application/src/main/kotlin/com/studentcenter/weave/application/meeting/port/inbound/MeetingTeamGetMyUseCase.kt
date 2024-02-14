@@ -16,11 +16,10 @@ interface MeetingTeamGetMyUseCase {
     data class Result(
         override val item: List<MeetingTeamInfo>,
         override val next: UUID?,
-        override val limit: Int,
     ) : ScrollResponse<MeetingTeamInfo, UUID?>(
         item = item,
         next = next,
-        limit = limit,
+        total = item.size,
     )
 
 }
