@@ -3,6 +3,8 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.meeting.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meeting.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamDeleteUseCase
+import com.studentcenter.weave.application.meeting.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.domain.meeting.entity.MeetingMember
 import com.studentcenter.weave.domain.meeting.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
@@ -16,10 +18,11 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
-    val sut = MeetingTeamDeleteApplicationService(
+    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository,
-        meetingMemberRepository
+        meetingMemberRepository,
     )
+    val sut = MeetingTeamDeleteApplicationService(meetingTeamDomainService)
 
     describe("미팅 팀 삭제 유스케이스") {
         it("해당 미팀팀과 미팅 멤버 정보를 삭제한다") {

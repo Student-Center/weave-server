@@ -61,6 +61,11 @@ class MeetingTeamDomainServiceImpl(
         }
     }
 
+    override fun deleteById(id: UUID) {
+        meetingMemberRepository.deleteAllByMeetingTeamId(id)
+        meetingTeamRepository.deleteById(id)
+    }
+
     private fun checkMemberCount(meetingTeam: MeetingTeam) {
         require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
             "팀원의 수가 초과되었습니다"
