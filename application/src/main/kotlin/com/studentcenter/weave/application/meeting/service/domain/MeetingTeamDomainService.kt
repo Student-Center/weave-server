@@ -16,6 +16,8 @@ interface MeetingTeamDomainService {
         role: MeetingMemberRole,
     ): MeetingMember
 
+    fun deleteById(id: UUID)
+
     fun getById(id: UUID): MeetingTeam
 
     fun scrollByMemberUserId(userId: UUID, next: UUID?, limit: Int): List<MeetingTeam>
