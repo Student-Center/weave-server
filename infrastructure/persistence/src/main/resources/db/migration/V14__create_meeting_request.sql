@@ -8,5 +8,5 @@ create table weave.meeting_request
     respondAt datetime(6),
     primary key (id),
     index requesting_meeting_team_id_index (requestingMeetingTeamId),
-    index receiving_meeting_team_id_index (receivingMeetingTeamId),
+    index receiving_meeting_team_id_index (receivingMeetingTeamId)
 );
