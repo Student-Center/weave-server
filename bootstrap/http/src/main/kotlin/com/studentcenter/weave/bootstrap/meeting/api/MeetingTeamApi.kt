@@ -4,6 +4,7 @@ import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamEditRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetDetailResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -64,5 +65,14 @@ interface MeetingTeamApi {
         @RequestBody
         request: MeetingTeamEditRequest,
     )
+
+    @Secured
+    @Operation(summary = "Get meeting team detail by id")
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMeetingTeamDetail(
+        @PathVariable
+        id: UUID,
+    ): MeetingTeamGetDetailResponse
 
 }
