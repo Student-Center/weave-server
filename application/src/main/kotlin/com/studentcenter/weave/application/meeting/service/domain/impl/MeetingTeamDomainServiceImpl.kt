@@ -5,7 +5,9 @@ import com.studentcenter.weave.application.meeting.port.outbound.MeetingTeamRepo
 import com.studentcenter.weave.application.meeting.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.domain.meeting.entity.MeetingMember
 import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
+import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
+import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -37,6 +39,11 @@ class MeetingTeamDomainServiceImpl(
         return meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
     }
 
+    @Transactional(readOnly = true)
+    override fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember {
+        return meetingMemberRepository.getLeaderByMeetingTeamId(meetingTeamId)
+    }
+
     @Transactional
     override fun addMember(
         user: User,
@@ -58,6 +65,31 @@ class MeetingTeamDomainServiceImpl(
             ).also {
                 meetingMemberRepository.save(it)
             }
+        }
+    }
+
+    override fun updateById(
+        id: UUID,
+        location: Location?,
+        memberCount: Int?,
+        teamIntroduce: TeamIntroduce?,
+    ): MeetingTeam {
+        if (memberCount != null) {
+            checkMemberCountUpdatable(id, memberCount)
+        }
+
+        return meetingTeamRepository
+            .getById(id)
+            .update(teamIntroduce, memberCount, location)
+            .also { meetingTeamRepository.save(it) }
+    }
+
+    private fun checkMemberCountUpdatable(
+        meetingTeamId: UUID,
+        memberCount: Int,
+    ) {
+        require(meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId).size < memberCount) {
+            "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
         }
     }
 

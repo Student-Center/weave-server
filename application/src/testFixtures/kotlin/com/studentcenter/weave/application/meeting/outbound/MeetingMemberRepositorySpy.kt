@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meeting.outbound
 
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingMemberRepository
 import com.studentcenter.weave.domain.meeting.entity.MeetingMember
+import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -30,6 +31,11 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
 
     override fun deleteAllByMeetingTeamId(meetingTeamId: UUID) {
         bucket.values.removeIf { it.meetingTeamId == meetingTeamId }
+    }
+
+    override fun getLeaderByMeetingTeamId(meetingTeamId: UUID): MeetingMember {
+        return bucket.values.find { it.meetingTeamId == meetingTeamId && it.role == MeetingMemberRole.LEADER }
+            ?: throw NoSuchElementException("MeetingMember not found")
     }
 
     fun getByMeetingTeamIdAndUserId(

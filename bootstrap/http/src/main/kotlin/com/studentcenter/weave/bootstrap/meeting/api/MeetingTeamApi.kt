@@ -2,6 +2,7 @@ package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -44,6 +46,17 @@ interface MeetingTeamApi {
     fun deleteMeetingTeam(
         @PathVariable
         id: UUID
+    )
+
+    @Secured
+    @Operation(summary = "Edit meeting team by id")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun editMeetingTeam(
+        @PathVariable
+        id: UUID,
+        @RequestBody
+        request: MeetingTeamEditRequest,
     )
 
 }

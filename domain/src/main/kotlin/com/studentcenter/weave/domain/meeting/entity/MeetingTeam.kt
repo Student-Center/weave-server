@@ -22,6 +22,18 @@ data class MeetingTeam(
         }
     }
 
+    fun update(
+        teamIntroduce: TeamIntroduce?,
+        memberCount: Int?,
+        location: Location?,
+    ): MeetingTeam {
+        return copy(
+            teamIntroduce = teamIntroduce ?: this.teamIntroduce,
+            memberCount = memberCount ?: this.memberCount,
+            location = location ?: this.location,
+        )
+    }
+
     companion object {
 
         fun create(
