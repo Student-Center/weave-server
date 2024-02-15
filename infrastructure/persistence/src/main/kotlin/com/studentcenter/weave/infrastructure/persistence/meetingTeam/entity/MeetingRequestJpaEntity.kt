@@ -1,12 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.entity
 
 import com.studentcenter.weave.domain.meeting.entity.MeetingRequest
-import com.studentcenter.weave.domain.meeting.entity.MeetingTeam
-import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.enums.MeetingRequestStatus
-import com.studentcenter.weave.domain.meeting.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
-import com.studentcenter.weave.domain.user.enums.Gender
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
