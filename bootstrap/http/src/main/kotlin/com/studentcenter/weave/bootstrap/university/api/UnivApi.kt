@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.util.*
 
 
@@ -26,5 +27,9 @@ interface UnivApi {
     @Operation(summary = "Get university by id")
     @GetMapping("/{id}")
     fun get(@PathVariable id: UUID): UniversityResponse
+
+    @Operation(summary = "get university by name")
+    @GetMapping
+    fun getByName(@RequestParam(required = true) name: String): UniversityResponse
 
 }

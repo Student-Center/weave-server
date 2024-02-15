@@ -1,17 +1,17 @@
 package com.studentcenter.weave.application.university.service.application
 
-import com.studentcenter.weave.application.university.port.inbound.MajorFindAllByUnversityUsecase
+import com.studentcenter.weave.application.university.port.inbound.MajorFindAllByUniversityUsecase
 import com.studentcenter.weave.application.university.service.domain.MajorDomainService
 import org.springframework.stereotype.Service
 
 @Service
 class MajorFindAllByUniversityApplicationService(
     private val majorDomainService: MajorDomainService,
-) : MajorFindAllByUnversityUsecase {
+) : MajorFindAllByUniversityUsecase {
 
-    override fun invoke(command: MajorFindAllByUnversityUsecase.Command): MajorFindAllByUnversityUsecase.Result {
+    override fun invoke(command: MajorFindAllByUniversityUsecase.Command): MajorFindAllByUniversityUsecase.Result {
         return majorDomainService.findAll(univId = command.univId)
-            .let { MajorFindAllByUnversityUsecase.Result(it) }
+            .let { MajorFindAllByUniversityUsecase.Result(it) }
     }
 
 }
