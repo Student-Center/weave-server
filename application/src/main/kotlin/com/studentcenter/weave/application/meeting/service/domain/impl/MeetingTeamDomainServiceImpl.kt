@@ -1,6 +1,5 @@
 package com.studentcenter.weave.application.meeting.service.domain.impl
 
-import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingMemberRepository
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meeting.service.domain.MeetingTeamDomainService
@@ -10,7 +9,6 @@ import com.studentcenter.weave.domain.meeting.enums.Location
 import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
-import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -46,10 +44,7 @@ class MeetingTeamDomainServiceImpl(
         return meetingMemberRepository
             .findAllByMeetingTeamId(meetingTeamId)
             .firstOrNull { it.role == MeetingMemberRole.LEADER }
-            ?: throw CustomException(
-                type = MeetingExceptionType.LEADER_NOT_FOUND,
-                message = "팀장을 찾을 수 없어요!"
-            )
+            ?: throw NoSuchElementException("미팅팀 팀장을 찾을 수 없어요!")
     }
 
     @Transactional
