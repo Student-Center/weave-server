@@ -16,8 +16,10 @@ class MeetingTeamEditApplicationService(
     override fun invoke(command: MeetingTeamEditUseCase.Command) {
         meetingTeamDomainService
             .getById(command.id)
-            .also { validateCurrentUserIsLeader(it.id) }
-            .let { updateMeetingTeam(it.id, command) }
+            .also {
+                validateCurrentUserIsLeader(it.id)
+                updateMeetingTeam(it.id, command)
+            }
     }
 
     private fun updateMeetingTeam(

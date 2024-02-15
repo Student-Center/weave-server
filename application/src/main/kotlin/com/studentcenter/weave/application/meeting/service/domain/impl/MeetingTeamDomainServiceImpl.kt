@@ -74,9 +74,7 @@ class MeetingTeamDomainServiceImpl(
         memberCount: Int?,
         teamIntroduce: TeamIntroduce?,
     ): MeetingTeam {
-        if (memberCount != null) {
-            checkMemberCountUpdatable(id, memberCount)
-        }
+        memberCount?.let { checkMemberCountUpdatable(id, it) }
 
         return meetingTeamRepository
             .getById(id)
