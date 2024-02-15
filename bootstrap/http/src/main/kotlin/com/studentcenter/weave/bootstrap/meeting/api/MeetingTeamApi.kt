@@ -2,9 +2,9 @@ package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
-import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamLocationResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -41,7 +41,7 @@ interface MeetingTeamApi {
     @Operation(summary = "Get meeting locations")
     @GetMapping("/locations")
     @ResponseStatus(HttpStatus.OK)
-    fun getMeetingTeamLocations(): MeetingTeamLocationResponse
+    fun getMeetingTeamLocations(): MeetingTeamGetLocationsResponse
 
     @Secured
     @Operation(summary = "Delete meeting team by id")
@@ -51,5 +51,4 @@ interface MeetingTeamApi {
         @PathVariable
         id: UUID
     )
-    
 }

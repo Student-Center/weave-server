@@ -2,29 +2,30 @@ package com.studentcenter.weave.bootstrap.meeting.dto
 
 import com.studentcenter.weave.domain.meeting.enums.Location
 
-data class MeetingTeamLocationResponse(
+data class MeetingTeamGetLocationsResponse(
     val locations: List<MeetingTeamLocationDto>
 ) {
 
     data class MeetingTeamLocationDto(
         val name: String,
         val displayName: String,
-        val isCapitalArea: Boolean
+        val isCapitalArea: Boolean,
     )
 
     companion object {
-        private var instance: MeetingTeamLocationResponse? = null
-
-        fun getInstance(): MeetingTeamLocationResponse {
-
-            return instance ?: MeetingTeamLocationResponse(
+        private val instance: MeetingTeamGetLocationsResponse by lazy {
+            MeetingTeamGetLocationsResponse(
                 Location.entries.map {
                     MeetingTeamLocationDto(it.name, it.value, it.isCapitalArea)
-                }.also { instance }
+                }
             )
-
         }
 
+        @JvmStatic
+        @JvmName("getLocationInstance")
+        fun getInstance(): MeetingTeamGetLocationsResponse {
+            return instance
+        }
     }
 
 }
