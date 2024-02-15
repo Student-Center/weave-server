@@ -33,11 +33,6 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         bucket.values.removeIf { it.meetingTeamId == meetingTeamId }
     }
 
-    override fun getLeaderByMeetingTeamId(meetingTeamId: UUID): MeetingMember {
-        return bucket.values.find { it.meetingTeamId == meetingTeamId && it.role == MeetingMemberRole.LEADER }
-            ?: throw NoSuchElementException("MeetingMember not found")
-    }
-
     fun getByMeetingTeamIdAndUserId(
         meetingTeamId: UUID,
         userId: UUID

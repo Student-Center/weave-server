@@ -41,7 +41,10 @@ class MeetingTeamDomainServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember {
-        return meetingMemberRepository.getLeaderByMeetingTeamId(meetingTeamId)
+        return meetingMemberRepository
+            .findAllByMeetingTeamId(meetingTeamId)
+            .firstOrNull { it.role == MeetingMemberRole.LEADER }
+            ?: throw NoSuchElementException("팀장이 존재하지 않아요!")
     }
 
     @Transactional

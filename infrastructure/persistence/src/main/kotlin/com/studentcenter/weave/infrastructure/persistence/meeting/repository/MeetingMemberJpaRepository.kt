@@ -1,6 +1,5 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.repository
 
-import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingMemberJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -30,10 +29,5 @@ interface MeetingMemberJpaRepository : JpaRepository<MeetingMemberJpaEntity, UUI
     fun deleteAllByMeetingTeamId(
         teamId: UUID
     )
-
-    fun findByMeetingTeamIdAndRole(
-        meetingTeamId: UUID,
-        role: MeetingMemberRole
-    ): MeetingMemberJpaEntity?
 
 }
