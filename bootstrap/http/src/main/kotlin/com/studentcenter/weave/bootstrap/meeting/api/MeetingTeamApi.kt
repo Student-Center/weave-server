@@ -51,7 +51,7 @@ interface MeetingTeamApi {
     @Secured
     @Operation(summary = "Edit meeting team by id")
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun editMeetingTeam(
         @PathVariable
         id: UUID,
