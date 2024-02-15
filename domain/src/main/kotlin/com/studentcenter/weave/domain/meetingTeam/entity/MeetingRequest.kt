@@ -7,7 +7,7 @@ import java.util.*
 
 data class MeetingRequest(
     val id: UUID = UuidCreator.create(),
-    val requestingMeetingTeamId:UUID,
+    val requestingMeetingTeamId: UUID,
     val receivingMeetingTeamId: UUID,
     val status: MeetingRequestStatus = MeetingRequestStatus.REQUESTED,
     val createdAt: LocalDateTime = LocalDateTime.now(),
