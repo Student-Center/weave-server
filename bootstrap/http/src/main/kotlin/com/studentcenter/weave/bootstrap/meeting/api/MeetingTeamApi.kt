@@ -2,6 +2,7 @@ package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
@@ -38,6 +39,11 @@ interface MeetingTeamApi {
     fun getMyMeetingTeams(
         request: MeetingTeamGetMyRequest
     ): MeetingTeamGetMyResponse
+
+    @Operation(summary = "Get meeting locations")
+    @GetMapping("/locations")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMeetingTeamLocations(): MeetingTeamGetLocationsResponse
 
     @Secured
     @Operation(summary = "Delete meeting team by id")

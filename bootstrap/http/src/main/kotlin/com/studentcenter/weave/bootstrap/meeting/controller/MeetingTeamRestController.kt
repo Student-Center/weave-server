@@ -5,11 +5,14 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamDelet
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.bootstrap.meeting.api.MeetingTeamApi
+
+import com.studentcenter.weave.bootstrap.meeting.dto.*
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingTeamGetMyResponse
 import com.studentcenter.weave.domain.meeting.vo.TeamIntroduce
+
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -42,6 +45,10 @@ class MeetingTeamRestController(
                 total = it.total
             )
         }
+    }
+
+    override fun getMeetingTeamLocations(): MeetingTeamGetLocationsResponse {
+        return MeetingTeamGetLocationsResponse.getInstance()
     }
 
     override fun deleteMeetingTeam(id: UUID) {
