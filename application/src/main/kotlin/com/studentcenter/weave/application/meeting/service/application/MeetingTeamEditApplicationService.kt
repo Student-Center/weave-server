@@ -16,7 +16,7 @@ class MeetingTeamEditApplicationService(
     override fun invoke(command: MeetingTeamEditUseCase.Command) {
         meetingTeamDomainService
             .getById(command.id)
-            .also { validateCurrentLeader(it.id) }
+            .also { validateCurrentUserIsLeader(it.id) }
             .let { updateMeetingTeam(it.id, command) }
     }
 
@@ -32,7 +32,7 @@ class MeetingTeamEditApplicationService(
         )
     }
 
-    private fun validateCurrentLeader(meetingTeamId: UUID) {
+    private fun validateCurrentUserIsLeader(meetingTeamId: UUID) {
         val leader = meetingTeamDomainService.getLeaderMemberByMeetingTeamId(meetingTeamId)
         val currentUser = getCurrentUserAuthentication()
         require(leader.userId == currentUser.userId) {
