@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meeting.outbound
 
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingMemberRepository
 import com.studentcenter.weave.domain.meeting.entity.MeetingMember
+import com.studentcenter.weave.domain.meeting.enums.MeetingMemberRole
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
