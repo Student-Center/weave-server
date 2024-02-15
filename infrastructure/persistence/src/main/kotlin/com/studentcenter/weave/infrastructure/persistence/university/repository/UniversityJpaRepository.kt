@@ -7,6 +7,7 @@ import java.util.*
 
 @Repository
 interface UniversityJpaRepository : JpaRepository<UniversityJpaEntity, UUID> {
+
     fun findByName(value: String): UniversityJpaEntity?
 
 }
