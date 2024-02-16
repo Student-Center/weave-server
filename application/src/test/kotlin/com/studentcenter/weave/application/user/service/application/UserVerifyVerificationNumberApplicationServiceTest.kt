@@ -13,6 +13,7 @@ import com.studentcenter.weave.application.user.service.domain.impl.UserUniversi
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -24,7 +25,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import java.util.*
 
-@DisplayName("UseSendVerificationNumberEmailApplicationService")
+@DisplayName("UserVerifyVerificationNumberApplicationService")
 class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
@@ -33,15 +34,17 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
     val userVerificationNumberRepository = UserVerificationNumberRepositorySpy()
 
     val userDomainService = UserDomainServiceImpl(userRepository)
-    val userSilDomainService  = UserSilDomainServiceImpl(userSilRepository)
-    val userVerificationInfoDomainService  = UserUniversityVerificationInfoDomainServiceImpl(
+    val userSilDomainService = UserSilDomainServiceImpl(userSilRepository)
+    val userVerificationInfoDomainService = UserUniversityVerificationInfoDomainServiceImpl(
         userUniversityVerificationInfoRepository
     )
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
-    val userSendVerificationNumberEmailApplicationService = UserSendVerificationNumberEmailApplicationService(
-        verificationNumberMailer = verificationNumberMailer,
-        userVerificationNumberRepository = userVerificationNumberRepository,
-    )
+    val userSendVerificationNumberEmailApplicationService =
+        UserSendVerificationNumberEmailApplicationService(
+            verificationNumberMailer = verificationNumberMailer,
+            verificationInfoDomainService = userVerificationInfoDomainService,
+            userVerificationNumberRepository = userVerificationNumberRepository,
+        )
     val sut = UserVerifyVerificationNumberApplicationService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
@@ -57,7 +60,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
         SecurityContextHolder.clearContext()
     }
 
-    describe("사용자 인증 요청 유스케이스") {
+    describe("대학 인증 요청 유스케이스") {
         context("요청된 이메일이 저장된 이메일과 다른 경우") {
             it("예외를 던진다.") {
                 // arrange
@@ -117,6 +120,30 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                     avatar = userFixture.avatar,
                 )
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+                val email = Email("weave@studentcenter.com")
+                val verificationNumber = UserUniversityVerificationNumber.generate()
+                val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
+
+                // act, assert
+                shouldThrow<RuntimeException> { sut.invoke(command) }
+            }
+        }
+
+        context("이미 인증된 유저인 경우") {
+            it("예외를 던진다.") {
+                // arrange
+                val userFixture = UserFixtureFactory.create()
+                val userAuthentication = UserAuthentication(
+                    userId = userFixture.id,
+                    nickname = userFixture.nickname,
+                    email = userFixture.email,
+                    avatar = userFixture.avatar,
+                )
+                SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+                val verificationInfo = UserUniversityVerificationInfoFixtureFactory.create(
+                    user = userFixture
+                )
+                userVerificationInfoDomainService.save(verificationInfo)
                 val email = Email("weave@studentcenter.com")
                 val verificationNumber = UserUniversityVerificationNumber.generate()
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)

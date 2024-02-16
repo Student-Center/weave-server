@@ -23,8 +23,14 @@ class UserVerifyVerificationNumberApplicationService(
 
     @Transactional
     override fun invoke(command: UserVerifyVerificationNumberUseCase.Command) {
-        val user = getCurrentUserAuthentication().let { userDomainService.getById(it.userId) }
-        verificationNumberRepository.findByUserId(user.id)?.let {
+        val currentUserId = getCurrentUserAuthentication().userId
+        if (userVerificationInfoDomainService.existsByUserId(currentUserId)) {
+            throw CustomException(
+                UniversityVerificationExceptionType.VERIFICATED_USER,
+                "이미 인증된 유저입니다.",
+            )
+        }
+        verificationNumberRepository.findByUserId(currentUserId)?.let {
             if (it.first != command.universityEmail || it.second != command.verificationNumber) {
                 throw CustomException(
                     UniversityVerificationExceptionType.INVALID_VERIFICATION_INFORMATION,
@@ -36,6 +42,7 @@ class UserVerifyVerificationNumberApplicationService(
             "유저의 인증 요청을 찾을 수 없습니다.",
         )
 
+        val user = userDomainService.getById(currentUserId)
         val verifiedUser = user.verifyUniversity().also { userDomainService.save(it) }
         UserUniversityVerificationInfo.create(verifiedUser, command.universityEmail).let {
             userVerificationInfoDomainService.save(it)
