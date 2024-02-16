@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.university.service.domain.impl
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepository
 import com.studentcenter.weave.application.university.service.domain.UniversityDomainService
 import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -17,6 +18,10 @@ class UniversityDomainServiceImpl(
 
     override fun getById(id: UUID): University {
         return universityRepository.getById(id)
+    }
+
+    override fun getByName(name: UniversityName): University {
+        return universityRepository.getByName(name)
     }
 
 }

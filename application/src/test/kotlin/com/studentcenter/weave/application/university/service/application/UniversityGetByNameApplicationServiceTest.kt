@@ -1,19 +1,19 @@
 package com.studentcenter.weave.application.university.service.application
 
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.UniversityGetByNameUsecase
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.university.service.domain.impl.UniversityDomainServiceImpl
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
-import com.studentcenter.weave.support.common.uuid.UuidCreator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.equals.shouldBeEqual
 
-class UniversityGetByIdApplicationServiceTest : DescribeSpec({
+class UniversityGetByNameApplicationServiceTest : DescribeSpec({
 
     val universityRepository = UniversityRepositorySpy()
     val universityDomainService = UniversityDomainServiceImpl(universityRepository)
-    val sut = UniversityGetByIdApplicationService(universityDomainService)
+    val sut = UniversityGetByNameApplicationService(universityDomainService)
 
     afterTest {
         universityRepository.clear()
@@ -23,24 +23,27 @@ class UniversityGetByIdApplicationServiceTest : DescribeSpec({
         context("저장된 대학이 없다면") {
             it("예외가 발생한다.") {
                 // arrange
-                val univId = UuidCreator.create()
+                val univName = UniversityName("없는대학교")
+                val command = UniversityGetByNameUsecase.Command(univName)
 
                 // act & assert
-                shouldThrow<RuntimeException> { sut.invoke(univId) }
+                shouldThrow<RuntimeException> { sut.invoke(command) }
             }
         }
 
         context("대학이 있다면") {
-            val univId = UuidCreator.create()
-            val expectedUniversity = UniversityFixtureFactory.create(id = univId)
+            val expectedUniversity = UniversityFixtureFactory.create()
             universityRepository.saveAll(listOf(expectedUniversity))
 
             it("조회되어야 한다.") {
+                // arrange
+                val command = UniversityGetByNameUsecase.Command(expectedUniversity.name)
+
                 // act
-                val result = sut.invoke(univId)
+                val result = sut.invoke(command)
 
                 // assert
-                result shouldBeEqual expectedUniversity
+                result.university shouldBeEqual expectedUniversity
             }
         }
     }

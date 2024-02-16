@@ -5,9 +5,6 @@ import java.util.*
 
 fun interface UniversityGetByIdUsecase {
 
-    fun invoke(command: Command): Result
+    fun invoke(id: UUID): University
 
-    data class Command(val id: UUID)
-
-    data class Result(val university: University)
 }

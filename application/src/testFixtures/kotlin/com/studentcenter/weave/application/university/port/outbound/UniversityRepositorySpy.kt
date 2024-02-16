@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.university.port.outbound
 
 import com.studentcenter.weave.domain.university.entity.University
+import com.studentcenter.weave.domain.university.vo.UniversityName
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -22,6 +23,10 @@ class UniversityRepositorySpy: UniversityRepository {
 
     override fun getById(id: UUID): University {
         return bucket[id] ?: throw NoSuchElementException()
+    }
+
+    override fun getByName(name: UniversityName): University {
+        return findAll().first { it.name == name }
     }
 
 }

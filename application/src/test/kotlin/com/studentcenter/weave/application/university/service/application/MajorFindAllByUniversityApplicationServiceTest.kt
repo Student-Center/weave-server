@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.university.service.application
 
-import com.studentcenter.weave.application.university.port.inbound.MajorFindAllByUnversityUsecase
+import com.studentcenter.weave.application.university.port.inbound.MajorFindAllByUniversityUsecase
 import com.studentcenter.weave.application.university.port.outbound.MajorRepositorySpy
 import com.studentcenter.weave.application.university.service.domain.impl.MajorDomainServiceImpl
 import com.studentcenter.weave.domain.university.vo.MajorName
@@ -24,7 +24,7 @@ class MajorFindAllByUniversityApplicationServiceTest : DescribeSpec({
             it("빈 리스트를 반환한다.") {
                 // arrange
                 val univId = UuidCreator.create()
-                val command = MajorFindAllByUnversityUsecase.Command(univId)
+                val command = MajorFindAllByUniversityUsecase.Command(univId)
 
                 // act
                 val result = sut.invoke(command)
@@ -47,7 +47,7 @@ class MajorFindAllByUniversityApplicationServiceTest : DescribeSpec({
 
             it("전공과목을 반환한다.") {
                 // arrange
-                val command = MajorFindAllByUnversityUsecase.Command(univId)
+                val command = MajorFindAllByUniversityUsecase.Command(univId)
 
                 // act
                 val result = sut.invoke(command)
