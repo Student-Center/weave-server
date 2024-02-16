@@ -1,14 +1,13 @@
 package com.studentcenter.weave.bootstrap.university.api
 
-import com.studentcenter.weave.bootstrap.university.dto.UniversityResponse
 import com.studentcenter.weave.bootstrap.university.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.university.dto.UniversitiesResponse
+import com.studentcenter.weave.bootstrap.university.dto.UniversityResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import java.util.*
 
 
@@ -29,7 +28,7 @@ interface UnivApi {
     fun get(@PathVariable id: UUID): UniversityResponse
 
     @Operation(summary = "get university by name")
-    @GetMapping
-    fun getByName(@RequestParam(required = true) name: String): UniversityResponse
+    @GetMapping("/name/{name}")
+    fun getByName(@PathVariable(required = true) name: String): UniversityResponse
 
 }
