@@ -2,9 +2,11 @@ package com.studentcenter.weave.bootstrap.meetingTeam.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -74,5 +76,12 @@ interface MeetingTeamApi {
         @PathVariable
         id: UUID,
     ): MeetingTeamGetDetailResponse
+
+    @Operation(summary = "Get meeting team list")
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun getMeetingTeams(
+        request: MeetingTeamGetListRequest
+    ): MeetingTeamGetListResponse
 
 }

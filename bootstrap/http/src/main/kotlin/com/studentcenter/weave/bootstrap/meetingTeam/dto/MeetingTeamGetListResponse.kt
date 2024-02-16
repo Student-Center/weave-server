@@ -1,15 +1,15 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.dto
 
-import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-data class MeetingTeamGetMyResponse(
+data class MeetingTeamGetListResponse(
     override val items: List<MeetingTeamDto>,
     override val next: UUID?,
     override val total: Int,
-) : ScrollResponse<MeetingTeamGetMyResponse.MeetingTeamDto, UUID?>(
+) : ScrollResponse<MeetingTeamGetListResponse.MeetingTeamDto, UUID?>(
     items = items,
     next = next,
     total = total,
@@ -26,14 +26,14 @@ data class MeetingTeamGetMyResponse(
         companion object {
 
             fun from(
-                myMeetingTeamInfo: MyMeetingTeamInfo,
+                meetingTeamInfo: MeetingTeamInfo,
             ): MeetingTeamDto {
                 return MeetingTeamDto(
-                    id = myMeetingTeamInfo.team.id,
-                    teamIntroduce = myMeetingTeamInfo.team.teamIntroduce.value,
-                    memberCount = myMeetingTeamInfo.team.memberCount,
-                    location = myMeetingTeamInfo.team.location.value,
-                    memberInfos = myMeetingTeamInfo.memberInfos.map { MeetingMemberDto.from(it) },
+                    id = meetingTeamInfo.team.id,
+                    teamIntroduce = meetingTeamInfo.team.teamIntroduce.value,
+                    memberCount = meetingTeamInfo.team.memberCount,
+                    location = meetingTeamInfo.team.location.value,
+                    memberInfos = meetingTeamInfo.memberInfos.map { MeetingMemberDto.from(it) },
                 )
             }
 
@@ -47,21 +47,19 @@ data class MeetingTeamGetMyResponse(
         val mbti: String,
         val birthYear: Int,
         val role: MeetingMemberRole,
-        val isMe: Boolean,
     ) {
 
         companion object {
 
             fun from(
-                memberInfo: MyMeetingTeamInfo.MemberInfo,
+                memberInfo: MeetingTeamInfo.MemberInfo,
             ): MeetingMemberDto {
                 return MeetingMemberDto(
                     id = memberInfo.user.id,
                     universityName = memberInfo.university.name.value,
                     mbti = memberInfo.user.mbti.value,
                     birthYear = memberInfo.user.birthYear.value,
-                    role = memberInfo.role,
-                    isMe = memberInfo.isMe,
+                    role = memberInfo.role
                 )
             }
 
