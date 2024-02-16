@@ -16,7 +16,7 @@ data class MeetingTeamMemberSummary(
 
     init {
         require(minBirthYear.value >= maxBirthYear.value) {
-            "최소 년생은 최대 년생보다 클 수 없어요!"
+            "최소 년생은 최대 년생보다 작을 수 없어요!"
         }
     }
 
