@@ -60,7 +60,7 @@ class MeetingTeamMemberSummaryJpaEntity(
         }
     }
 
-    fun toDomainEntity(): MeetingTeamMemberSummary {
+    fun toDomain(): MeetingTeamMemberSummary {
         return MeetingTeamMemberSummary(
             id = id,
             meetingTeamId = meetingTeamId,
