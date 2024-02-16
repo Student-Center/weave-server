@@ -17,5 +17,4 @@ interface MeetingTeamGetDetailUseCase {
         val members: List<MeetingMemberDetailInfo>
     )
 
-
 }
