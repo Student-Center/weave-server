@@ -2,11 +2,12 @@ package com.studentcenter.weave.domain.meetingTeam.entity
 
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
+import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
 import java.util.*
 
 data class MeetingTeamMemberSummary(
-    val id: UUID,
+    val id: UUID = UuidCreator.create(),
     val meetingTeamId: UUID,
     val teamMbti: Mbti,
     val minBirthYear: BirthYear,
