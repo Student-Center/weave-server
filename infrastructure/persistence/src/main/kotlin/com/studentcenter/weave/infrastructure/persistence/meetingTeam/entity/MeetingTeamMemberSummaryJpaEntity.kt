@@ -13,8 +13,8 @@ class MeetingTeamMemberSummaryJpaEntity(
     id: UUID,
     meetingTeamId: UUID,
     teamMbti: String,
-    minAge: Int,
-    maxAge: Int,
+    minBirthYear: Int,
+    maxBirthYear: Int,
     createdAt: LocalDateTime,
 ) {
 
@@ -31,12 +31,12 @@ class MeetingTeamMemberSummaryJpaEntity(
     var teamMbti: String = teamMbti
         private set
 
-    @Column(name = "min_age", nullable = false)
-    var minAge: Int = minAge
+    @Column(name = "min_birth_year", nullable = false, updatable = false)
+    var minBirthYear: Int = minBirthYear
         private set
 
-    @Column(name = "max_age", nullable = false)
-    var maxAge: Int = maxAge
+    @Column(name = "max_birth_year", nullable = false, updatable = false)
+    var maxBirthYear: Int = maxBirthYear
         private set
 
     @Column(name = "created_at", nullable = false, updatable = false)
