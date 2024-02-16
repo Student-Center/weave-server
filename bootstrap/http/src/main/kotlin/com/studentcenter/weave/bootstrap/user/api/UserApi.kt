@@ -99,6 +99,27 @@ interface UserApi {
     @Operation(summary = "Send verification number email")
     @PostMapping("/my/university-verification:send")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "204",
+                description = "전송 성공",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "전송 실패 / 이미 인증된 이메일인 경우",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(
+                            implementation = ErrorResponse::class
+                        )
+                    ),
+                ]
+            ),
+        ]
+    )
+
     fun sendEmailVerificationNumber(
         @RequestBody
         request: UserUnivVerificationSendRequest
@@ -116,7 +137,7 @@ interface UserApi {
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "인증 실패 / 이미 인증된 경우",
+                description = "인증 실패 / 이미 인증된 유저인 경우 / 인증 정보를 찾을 수 없는 경우",
                 content = [
                     Content(
                         mediaType = "application/json",

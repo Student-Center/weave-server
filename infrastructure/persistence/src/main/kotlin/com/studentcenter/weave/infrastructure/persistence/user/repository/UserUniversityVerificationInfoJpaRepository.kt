@@ -7,4 +7,9 @@ import java.util.*
 
 @Repository
 interface UserUniversityVerificationInfoJpaRepository : JpaRepository<UserUniveristyVerificationInfoJpaEntity, UUID> {
+
+    fun existsByUniversityEmail(email: String): Boolean
+
+    fun existsByUserId(userId: UUID): Boolean
+
 }

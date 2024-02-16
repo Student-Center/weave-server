@@ -1,12 +1,17 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
+import com.studentcenter.weave.application.user.port.outbound.UserUniversityVerificationInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
+import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.equals.shouldNotBeEqual
@@ -20,9 +25,14 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
 
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
     val userVerificationNumberRepository = UserVerificationNumberRepositorySpy()
+    val userUniversityVerificationInfoRepository = UserUniversityVerificationInfoRepositorySpy()
+    val userVerificationInfoDomainService = UserUniversityVerificationInfoDomainServiceImpl(
+        userUniversityVerificationInfoRepository
+    )
     val sut = UserSendVerificationNumberEmailApplicationService(
         verificationNumberMailer = verificationNumberMailer,
         userVerificationNumberRepository = userVerificationNumberRepository,
+        verificationInfoDomainService = userVerificationInfoDomainService,
     )
 
     afterEach {
@@ -83,6 +93,29 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
                 verify {
                     verificationNumberMailer.send(currentEmail, currentVerificationNumber, any())
                 }
+            }
+        }
+
+        context("이미 인증된 메일이라면") {
+            it("예외를 던진다") {
+                // arrange
+                val userFixture = UserFixtureFactory.create()
+                val userAuthentication = UserAuthentication(
+                    userId = userFixture.id,
+                    nickname = userFixture.nickname,
+                    email = userFixture.email,
+                    avatar = userFixture.avatar,
+                )
+                SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+                val email = Email("re-weave@studentcenter.com")
+                val verificationInfo = UserUniversityVerificationInfoFixtureFactory.create(
+                    user = userFixture,
+                    universityEmail = email,
+                )
+                userVerificationInfoDomainService.save(verificationInfo)
+
+                // act, assert
+                shouldThrow<CustomException> { sut.invoke(email) }
             }
         }
     }
