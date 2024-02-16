@@ -27,11 +27,7 @@ class MeetingTeamApplicationService(
                 MeetingMemberDetailInfo.of(
                     user = userGetByIdUseCase.invoke(it.userId),
                     major = majorGetByIdUsecase.invoke(user.majorId),
-                    university = universityGetByIdUsecase.invoke(
-                        UniversityGetByIdUsecase.Command(
-                            user.universityId
-                        )
-                    ).university,
+                    university = universityGetByIdUsecase.invoke(user.universityId),
                     role = it.role
                 )
             }

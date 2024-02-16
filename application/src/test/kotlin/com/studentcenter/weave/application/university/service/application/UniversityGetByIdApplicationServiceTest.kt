@@ -24,10 +24,9 @@ class UniversityGetByIdApplicationServiceTest : DescribeSpec({
             it("예외가 발생한다.") {
                 // arrange
                 val univId = UuidCreator.create()
-                val command = UniversityGetByIdUsecase.Command(univId)
 
                 // act & assert
-                shouldThrow<RuntimeException> { sut.invoke(command) }
+                shouldThrow<RuntimeException> { sut.invoke(univId) }
             }
         }
 
@@ -37,14 +36,11 @@ class UniversityGetByIdApplicationServiceTest : DescribeSpec({
             universityRepository.saveAll(listOf(expectedUniversity))
 
             it("조회되어야 한다.") {
-                // arrange
-                val command = UniversityGetByIdUsecase.Command(univId)
-
                 // act
-                val result = sut.invoke(command)
+                val result = sut.invoke(univId)
 
                 // assert
-                result.university shouldBeEqual expectedUniversity
+                result shouldBeEqual expectedUniversity
             }
         }
     }

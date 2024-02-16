@@ -45,8 +45,7 @@ class MeetingTeamGetMyApplicationService(
         currentUserId: UUID
     ): MeetingTeamInfo.MemberInfo {
         val memberUser = userQueryUseCase.getById(member.userId)
-        val university =
-            universityGetByIdUsecase.invoke(UniversityGetByIdUsecase.Command(memberUser.universityId)).university
+        val university = universityGetByIdUsecase.invoke(memberUser.universityId)
         return MeetingTeamInfo.MemberInfo(
             user = memberUser,
             university = university,

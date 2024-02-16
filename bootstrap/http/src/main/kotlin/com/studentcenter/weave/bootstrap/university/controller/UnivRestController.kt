@@ -34,10 +34,9 @@ class UnivRestController(
     }
 
     override fun get(id: UUID): UniversityResponse {
-        val result = universityGetByIdUsecase.invoke(
-            UniversityGetByIdUsecase.Command(id)
-        )
-        return UniversityResponse.from(result.university)
+        return universityGetByIdUsecase
+            .invoke(id)
+            .let { UniversityResponse.from(it) }
     }
 
     override fun getByName(name: String): UniversityResponse {
