@@ -5,11 +5,11 @@ enum class Location(
     val isCapitalArea: Boolean,
 ) {
     // 수도권(서울)
-    KONDAE_SEONGSU("건대·성수", true),
-    HONGDAE_SINCHON("홍대·신촌", true),
-    GANGNAM_JAMSIL("강남·잠실", true),
-    NOWON_GONGREUNG("노원·공릉", true),
-    DAEHANGNO_HYEHWA("대학로·혜화", true),
+    KONDAE_SEONGSU("건대•성수", true),
+    HONGDAE_SINCHON("홍대•신촌", true),
+    GANGNAM_JAMSIL("강남•잠실", true),
+    NOWON_GONGREUNG("노원•공릉", true),
+    DAEHANGNO_HYEHWA("대학로•혜화", true),
     // 수도권 (인천, 경기)
     INCHON("인천", true),
     SUWON("수원", true),
