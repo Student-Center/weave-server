@@ -23,11 +23,11 @@ class MeetingTeamMemberSummaryJpaEntity(
     var id: UUID = id
         private set
 
-    @Column(name = "meeting_team_id", nullable = false)
+    @Column(name = "meeting_team_id", nullable = false, updatable = false)
     var meetingTeamId: UUID = meetingTeamId
         private set
 
-    @Column(name = "team_mbti", nullable = false, columnDefinition = "varchar(255)")
+    @Column(name = "team_mbti", nullable = false, columnDefinition = "varchar(255)", updatable = false)
     var teamMbti: String = teamMbti
         private set
 
