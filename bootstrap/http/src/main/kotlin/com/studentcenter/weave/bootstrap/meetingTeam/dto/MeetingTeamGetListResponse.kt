@@ -6,11 +6,11 @@ import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
 data class MeetingTeamGetListResponse(
-    override val item: List<MeetingTeamDto>,
+    override val items: List<MeetingTeamDto>,
     override val next: UUID?,
     override val total: Int,
 ) : ScrollResponse<MeetingTeamGetListResponse.MeetingTeamDto, UUID?>(
-    item = item,
+    items = items,
     next = next,
     total = total,
 ) {

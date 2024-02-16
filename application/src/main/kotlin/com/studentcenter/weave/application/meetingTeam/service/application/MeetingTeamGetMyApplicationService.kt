@@ -35,7 +35,7 @@ class MeetingTeamGetMyApplicationService(
         }
 
         return MeetingTeamGetMyUseCase.Result(
-            item = myMeetingTeamInfos,
+            items = myMeetingTeamInfos,
             next = myMeetingTeamInfos.lastOrNull()?.team?.id,
         )
     }

@@ -44,7 +44,7 @@ class MeetingTeamRestController(
             meetingTeamGetMyUseCase.invoke(it)
         }.let {
             MeetingTeamGetMyResponse(
-                item = it.item.map { item -> MeetingTeamGetMyResponse.MeetingTeamDto.from(item) },
+                items = it.items.map { item -> MeetingTeamGetMyResponse.MeetingTeamDto.from(item) },
                 next = it.next,
                 total = it.total
             )
@@ -80,7 +80,7 @@ class MeetingTeamRestController(
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
         return MeetingTeamGetListResponse(
-            item = listOf(
+            items = listOf(
                 MeetingTeamGetListResponse.MeetingTeamDto(
                     id = UUID.randomUUID(),
                     teamIntroduce = "팀 소개1",

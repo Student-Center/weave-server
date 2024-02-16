@@ -23,12 +23,12 @@ fun interface MeetingTeamGetListUseCase {
     )
 
     data class Result(
-        override val item: List<MeetingTeamInfo>,
+        override val items: List<MeetingTeamInfo>,
         override val next: UUID?,
     ) : ScrollResponse<MeetingTeamInfo, UUID?>(
-        item = item,
+        items = items,
         next = next,
-        total = item.size,
+        total = items.size,
     )
 
 }

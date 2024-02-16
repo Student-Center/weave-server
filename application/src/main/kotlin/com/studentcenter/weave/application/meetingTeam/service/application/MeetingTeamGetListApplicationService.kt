@@ -38,7 +38,7 @@ class MeetingTeamGetListApplicationService(
         }
 
         return MeetingTeamGetListUseCase.Result(
-            item = meetingTeamInfos,
+            items = meetingTeamInfos,
             next = meetingTeamInfos.lastOrNull()?.team?.id,
         )
     }
