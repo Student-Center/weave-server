@@ -10,14 +10,14 @@ data class MeetingTeamMemberSummary(
     val id: UUID = UuidCreator.create(),
     val meetingTeamId: UUID,
     val teamMbti: Mbti,
-    val minBirthYear: BirthYear,
-    val maxBirthYear: BirthYear,
+    val youngestMemberBirthYear: BirthYear,
+    val oldestMemberBirthYear: BirthYear,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
     init {
-        require(minBirthYear.value >= maxBirthYear.value) {
-            "최소 년생은 최대 년생보다 작을 수 없어요!"
+        require(youngestMemberBirthYear.value >= oldestMemberBirthYear.value) {
+            "가장 나이가 어린 멤버의 년생은 가장 나이가 많은 멤버의 년생보다 작아야 합니다."
         }
     }
 

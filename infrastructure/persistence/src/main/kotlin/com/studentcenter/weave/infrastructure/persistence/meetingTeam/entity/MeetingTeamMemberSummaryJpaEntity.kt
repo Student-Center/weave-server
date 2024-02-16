@@ -16,8 +16,8 @@ class MeetingTeamMemberSummaryJpaEntity(
     id: UUID,
     meetingTeamId: UUID,
     teamMbti: String,
-    minBirthYear: Int,
-    maxBirthYear: Int,
+    youngestMemberBirthYear: Int,
+    oldestMemberBirthYear: Int,
     createdAt: LocalDateTime,
 ) {
 
@@ -30,16 +30,21 @@ class MeetingTeamMemberSummaryJpaEntity(
     var meetingTeamId: UUID = meetingTeamId
         private set
 
-    @Column(name = "team_mbti", nullable = false, columnDefinition = "varchar(255)", updatable = false)
+    @Column(
+        name = "team_mbti",
+        nullable = false,
+        columnDefinition = "varchar(255)",
+        updatable = false
+    )
     var teamMbti: String = teamMbti
         private set
 
-    @Column(name = "min_birth_year", nullable = false, updatable = false)
-    var minBirthYear: Int = minBirthYear
+    @Column(name = "youngest_member_birth_year", nullable = false, updatable = false)
+    var youngestMemberBirthYear: Int = youngestMemberBirthYear
         private set
 
-    @Column(name = "max_birth_year", nullable = false, updatable = false)
-    var maxBirthYear: Int = maxBirthYear
+    @Column(name = "oldest_member_birth_year", nullable = false, updatable = false)
+    var oldestMemberBirthYear: Int = oldestMemberBirthYear
         private set
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -53,8 +58,8 @@ class MeetingTeamMemberSummaryJpaEntity(
                 id = id,
                 meetingTeamId = meetingTeamId,
                 teamMbti = teamMbti.value,
-                minBirthYear = minBirthYear.value,
-                maxBirthYear = maxBirthYear.value,
+                youngestMemberBirthYear = youngestMemberBirthYear.value,
+                oldestMemberBirthYear = oldestMemberBirthYear.value,
                 createdAt = createdAt,
             )
         }
@@ -65,8 +70,8 @@ class MeetingTeamMemberSummaryJpaEntity(
             id = id,
             meetingTeamId = meetingTeamId,
             teamMbti = Mbti(teamMbti),
-            minBirthYear = BirthYear(minBirthYear),
-            maxBirthYear = BirthYear(maxBirthYear),
+            youngestMemberBirthYear = BirthYear(youngestMemberBirthYear),
+            oldestMemberBirthYear = BirthYear(oldestMemberBirthYear),
             createdAt = createdAt,
         )
     }
