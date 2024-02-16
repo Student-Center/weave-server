@@ -1,0 +1,58 @@
+package com.studentcenter.weave.application.meetingTeam.service.application
+
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
+import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import org.springframework.stereotype.Service
+
+@Service
+class MeetingTeamGetListApplicationService(
+    private val userQueryUseCase: UserQueryUseCase,
+    private val universityGetByIdUsecase: UniversityGetByIdUsecase,
+    private val meetingTeamDomainService: MeetingTeamDomainService,
+) : MeetingTeamGetListUseCase {
+
+    override fun invoke(command: MeetingTeamGetListUseCase.Command): MeetingTeamGetListUseCase.Result {
+        val meetingTeams: List<MeetingTeam> = meetingTeamDomainService.scrollByFilter(
+            memberCount = command.memberCount,
+            minBirthYear = command.minBirthYear,
+            maxBirthYear = command.maxBirthYear,
+            preferredLocations = command.preferredLocations,
+            next = command.next,
+            limit = command.limit
+        )
+
+        val meetingTeamInfos = meetingTeams.map { team ->
+            val memberInfos = meetingTeamDomainService
+                .findAllMeetingMembersByMeetingTeamId(team.id)
+                .map { createMemberInfo(it) }
+
+            MeetingTeamInfo(
+                team = team,
+                memberInfos = memberInfos
+            )
+        }
+
+        return MeetingTeamGetListUseCase.Result(
+            item = meetingTeamInfos,
+            next = meetingTeamInfos.lastOrNull()?.team?.id,
+        )
+    }
+
+    private fun createMemberInfo(
+        member: MeetingMember
+    ): MeetingTeamInfo.MemberInfo {
+        val memberUser = userQueryUseCase.getById(member.userId)
+        val university = universityGetByIdUsecase.invoke(memberUser.universityId)
+        return MeetingTeamInfo.MemberInfo(
+            user = memberUser,
+            university = university,
+            role = member.role,
+        )
+    }
+
+}

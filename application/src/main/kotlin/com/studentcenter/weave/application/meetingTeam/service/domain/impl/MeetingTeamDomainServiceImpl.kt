@@ -35,6 +35,17 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.scrollByMemberUserId(userId, next, limit)
     }
 
+    override fun scrollByFilter(
+        memberCount: Int?,
+        minBirthYear: Int?,
+        maxBirthYear: Int?,
+        preferredLocations: List<Location>?,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        TODO("Not yet implemented")
+    }
+
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
         return meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
     }

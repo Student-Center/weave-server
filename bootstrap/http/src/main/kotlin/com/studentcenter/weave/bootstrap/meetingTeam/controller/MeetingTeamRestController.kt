@@ -9,9 +9,12 @@ import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
@@ -73,6 +76,73 @@ class MeetingTeamRestController(
         return MeetingTeamGetDetailUseCase.Command(id)
             .let { meetingTeamGetDetailUseCase.invoke(it) }
             .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members) }
+    }
+
+    override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
+        return MeetingTeamGetListResponse(
+            item = listOf(
+                MeetingTeamGetListResponse.MeetingTeamDto(
+                    id = UUID.randomUUID(),
+                    teamIntroduce = "팀 소개1",
+                    memberCount = 3,
+                    location = "서울",
+                    memberInfos = listOf(
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "서울대학교",
+                            mbti = "ENFP",
+                            birthYear = 1998,
+                            role = MeetingMemberRole.LEADER,
+                        ),
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "연세대학교",
+                            mbti = "INTJ",
+                            birthYear = 1999,
+                            role = MeetingMemberRole.MEMBER,
+                        ),
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "고려대학교",
+                            mbti = "ENFJ",
+                            birthYear = 1997,
+                            role = MeetingMemberRole.MEMBER,
+                        ),
+                    ),
+                ),
+                MeetingTeamGetListResponse.MeetingTeamDto(
+                    id = UUID.randomUUID(),
+                    teamIntroduce = "팀 소개2",
+                    memberCount = 3,
+                    location = "서울",
+                    memberInfos = listOf(
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "서울대학교",
+                            mbti = "ENFP",
+                            birthYear = 2000,
+                            role = MeetingMemberRole.LEADER,
+                        ),
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "연세대학교",
+                            mbti = "INTJ",
+                            birthYear = 1999,
+                            role = MeetingMemberRole.MEMBER,
+                        ),
+                        MeetingTeamGetListResponse.MeetingMemberDto(
+                            id = UUID.randomUUID(),
+                            universityName = "고려대학교",
+                            mbti = "ENFJ",
+                            birthYear = 1997,
+                            role = MeetingMemberRole.MEMBER,
+                        ),
+                    ),
+                ),
+            ),
+            next = UUID.randomUUID(),
+            total = 2,
+        )
     }
 
 }

@@ -35,6 +35,15 @@ interface MeetingTeamDomainService {
         limit: Int
     ): List<MeetingTeam>
 
+    fun scrollByFilter(
+        memberCount: Int?,
+        minBirthYear: Int?,
+        maxBirthYear: Int?,
+        preferredLocations: List<Location>?,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam>
+
     fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
 
     fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember

@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.port.inbound
 
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
@@ -14,9 +14,9 @@ interface MeetingTeamGetMyUseCase {
     )
 
     data class Result(
-        override val item: List<MeetingTeamInfo>,
+        override val item: List<MyMeetingTeamInfo>,
         override val next: UUID?,
-    ) : ScrollResponse<MeetingTeamInfo, UUID?>(
+    ) : ScrollResponse<MyMeetingTeamInfo, UUID?>(
         item = item,
         next = next,
         total = item.size,

@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
@@ -23,30 +23,30 @@ class MeetingTeamGetMyApplicationService(
         val meetingTeams =
             meetingDomainService.scrollByMemberUserId(currentUser.id, command.next, command.limit)
 
-        val meetingTeamInfos = meetingTeams.map { team ->
+        val myMeetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingDomainService
                 .findAllMeetingMembersByMeetingTeamId(team.id)
                 .map { createMemberInfo(it, currentUser.id) }
 
-            MeetingTeamInfo(
+            MyMeetingTeamInfo(
                 team = team,
                 memberInfos = memberInfos
             )
         }
 
         return MeetingTeamGetMyUseCase.Result(
-            item = meetingTeamInfos,
-            next = meetingTeamInfos.lastOrNull()?.team?.id,
+            item = myMeetingTeamInfos,
+            next = myMeetingTeamInfos.lastOrNull()?.team?.id,
         )
     }
 
     private fun createMemberInfo(
         member: MeetingMember,
         currentUserId: UUID
-    ): MeetingTeamInfo.MemberInfo {
+    ): MyMeetingTeamInfo.MemberInfo {
         val memberUser = userQueryUseCase.getById(member.userId)
         val university = universityGetByIdUsecase.invoke(memberUser.universityId)
-        return MeetingTeamInfo.MemberInfo(
+        return MyMeetingTeamInfo.MemberInfo(
             user = memberUser,
             university = university,
             role = member.role,

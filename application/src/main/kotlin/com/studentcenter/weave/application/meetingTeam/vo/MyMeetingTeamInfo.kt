@@ -5,7 +5,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.user.entity.User
 
-data class MeetingTeamInfo(
+data class MyMeetingTeamInfo(
     val team: MeetingTeam,
     val memberInfos: List<MemberInfo>
 ) {
@@ -15,8 +15,8 @@ data class MeetingTeamInfo(
         fun of(
             team: MeetingTeam,
             memberInfos: List<MemberInfo>,
-        ): MeetingTeamInfo {
-            return MeetingTeamInfo(
+        ): MyMeetingTeamInfo {
+            return MyMeetingTeamInfo(
                 team = team,
                 memberInfos = memberInfos,
             )
@@ -28,6 +28,7 @@ data class MeetingTeamInfo(
         val user: User,
         val university: University,
         val role: MeetingMemberRole,
+        val isMe: Boolean,
     ) {
 
         companion object {
@@ -36,11 +37,13 @@ data class MeetingTeamInfo(
                 user: User,
                 university: University,
                 role: MeetingMemberRole,
+                isMe: Boolean,
             ): MemberInfo {
                 return MemberInfo(
                     user = user,
                     university = university,
                     role = role,
+                    isMe = isMe,
                 )
             }
 
