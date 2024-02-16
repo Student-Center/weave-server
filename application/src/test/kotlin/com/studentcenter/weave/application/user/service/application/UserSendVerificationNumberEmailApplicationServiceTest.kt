@@ -8,6 +8,7 @@ import com.studentcenter.weave.application.user.service.domain.impl.UserUniversi
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -114,7 +115,7 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
                 userVerificationInfoDomainService.save(verificationInfo)
 
                 // act, assert
-                shouldThrow<RuntimeException> { sut.invoke(email) }
+                shouldThrow<CustomException> { sut.invoke(email) }
             }
         }
     }

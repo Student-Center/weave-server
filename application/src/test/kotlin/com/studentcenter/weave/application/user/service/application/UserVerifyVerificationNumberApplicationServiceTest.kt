@@ -14,6 +14,7 @@ import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -105,7 +106,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 val command = UserVerifyVerificationNumberUseCase.Command(email, invalidVerificationNumber)
 
                 // act, assert
-                shouldThrow<RuntimeException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(command) }
             }
         }
 
@@ -125,7 +126,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
 
                 // act, assert
-                shouldThrow<RuntimeException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(command) }
             }
         }
 
@@ -149,7 +150,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
 
                 // act, assert
-                shouldThrow<RuntimeException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(command) }
             }
         }
 
