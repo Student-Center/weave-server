@@ -1,5 +1,8 @@
 package com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity
 
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
+import com.studentcenter.weave.domain.user.vo.BirthYear
+import com.studentcenter.weave.domain.user.vo.Mbti
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -42,5 +45,30 @@ class MeetingTeamMemberSummaryJpaEntity(
     @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: LocalDateTime = createdAt
         private set
+
+    companion object {
+
+        fun MeetingTeamMemberSummary.toJpaEntity(): MeetingTeamMemberSummaryJpaEntity {
+            return MeetingTeamMemberSummaryJpaEntity(
+                id = id,
+                meetingTeamId = meetingTeamId,
+                teamMbti = teamMbti.value,
+                minBirthYear = minBirthYear.value,
+                maxBirthYear = maxBirthYear.value,
+                createdAt = createdAt,
+            )
+        }
+    }
+
+    fun toDomainEntity(): MeetingTeamMemberSummary {
+        return MeetingTeamMemberSummary(
+            id = id,
+            meetingTeamId = meetingTeamId,
+            teamMbti = Mbti(teamMbti),
+            minBirthYear = BirthYear(minBirthYear),
+            maxBirthYear = BirthYear(maxBirthYear),
+            createdAt = createdAt,
+        )
+    }
 
 }
