@@ -1,6 +1,7 @@
 package com.studentcenter.weave.domain.user.vo
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 class MbtiTest : FunSpec({
@@ -25,6 +26,34 @@ class MbtiTest : FunSpec({
 
         runCatching { Mbti("EnT!") }
             .exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
+    }
+
+    test("대표 MBTI 계산 - 1") {
+        val mbtis = listOf(
+            Mbti("EnTJ"),
+            Mbti("ISTP"),
+            Mbti("ESFJ"),
+            Mbti("INFP"),
+            Mbti("enFp")
+        )
+        Mbti.getDominantMbti(mbtis).value shouldBe "ENFP"
+    }
+
+    test("대표 MBTI 계산 - 2") {
+        val mbtis = listOf(
+            Mbti("EnTJ"),
+            Mbti("ISTP"),
+            Mbti("ESFJ"),
+        )
+        Mbti.getDominantMbti(mbtis).value shouldBe "ESTJ"
+    }
+
+    test("대표 MBTI 계산 - 3") {
+        val mbtis = listOf(
+            Mbti("EnTJ"),
+            Mbti("ISTP"),
+        )
+        Mbti.getDominantMbti(mbtis).value shouldBe "ESTP"
     }
 
 })
