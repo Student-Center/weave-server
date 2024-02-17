@@ -12,7 +12,7 @@ object MeetingAttendanceFixtureFactory {
         meetingMemberId: UUID = UuidCreator.create(),
         isAttend: Boolean = true,
         createdAt: LocalDateTime = LocalDateTime.now(),
-        updatedAT: LocalDateTime = LocalDateTime.now(),
+        updatedAt: LocalDateTime = LocalDateTime.now(),
     ): MeetingAttendance {
         return MeetingAttendance(
             id = id,
@@ -20,7 +20,7 @@ object MeetingAttendanceFixtureFactory {
             meetingMemberId = meetingMemberId,
             isAttend = isAttend,
             createdAt = createdAt,
-            updatedAT = updatedAT,
+            updatedAt = updatedAt,
         )
     }
 }
