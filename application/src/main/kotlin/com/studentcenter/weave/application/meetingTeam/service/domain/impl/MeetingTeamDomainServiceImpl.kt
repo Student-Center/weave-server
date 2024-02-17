@@ -130,8 +130,7 @@ class MeetingTeamDomainServiceImpl(
         userId: UUID
     ): MeetingMember {
         return meetingMemberRepository
-            .findAllByMeetingTeamId(teamId)
-            .findLast { it.userId == userId }
+            .findByMeetingTeamIdAndUserId(teamId, userId)
             ?: throw CustomException(
                 type = MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER,
                 message = "미팅 팀 멤버가 아니에요!"
@@ -142,7 +141,7 @@ class MeetingTeamDomainServiceImpl(
         if (meetingMember.role == MeetingMemberRole.LEADER) {
             throw CustomException(
                 type = MeetingTeamExceptionType.LEADER_CANNOT_LEAVE_TEAM,
-                message = "팀장은 팀을 나갈 수 없어요!"
+                message = "팀장은 팀을 나갈 수 없어요! - 팀을 삭제해주세요!"
             )
         }
     }
