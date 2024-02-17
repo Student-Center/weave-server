@@ -18,4 +18,6 @@ interface MeetingMemberRepository {
 
     fun deleteAllByMeetingTeamId(meetingTeamId: UUID)
 
+    fun deleteById(id: UUID)
+
 }

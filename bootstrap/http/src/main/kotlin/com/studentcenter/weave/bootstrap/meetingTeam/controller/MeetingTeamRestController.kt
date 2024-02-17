@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamD
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
@@ -26,6 +27,7 @@ class MeetingTeamRestController(
     private val meetingTeamDeleteUseCase: MeetingTeamDeleteUseCase,
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
+    private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -143,6 +145,10 @@ class MeetingTeamRestController(
             next = UUID.randomUUID(),
             total = 2,
         )
+    }
+
+    override fun leaveMeetingTeam(id: UUID) {
+        meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
     }
 
 }
