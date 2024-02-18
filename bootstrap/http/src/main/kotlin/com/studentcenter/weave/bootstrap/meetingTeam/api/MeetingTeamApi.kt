@@ -84,4 +84,13 @@ interface MeetingTeamApi {
         request: MeetingTeamGetListRequest
     ): MeetingTeamGetListResponse
 
+    @Secured
+    @Operation(summary = "Leave meeting team")
+    @DeleteMapping("/{id}/members/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun leaveMeetingTeam(
+        @PathVariable
+        id: UUID
+    )
+
 }

@@ -27,6 +27,11 @@ interface MeetingTeamDomainService {
 
     fun deleteById(id: UUID)
 
+    fun deleteMember(
+        memberUserId: UUID,
+        teamId: UUID
+    )
+
     fun getById(id: UUID): MeetingTeam
 
     fun scrollByMemberUserId(
