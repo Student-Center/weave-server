@@ -38,4 +38,8 @@ class MeetingMemberJpaAdapter(
         meetingMemberJpaRepository.deleteAllByMeetingTeamId(meetingTeamId)
     }
 
+    override fun deleteById(id: UUID) {
+        meetingMemberJpaRepository.deleteById(id)
+    }
+
 }

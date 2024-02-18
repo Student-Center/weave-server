@@ -32,6 +32,10 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         bucket.values.removeIf { it.meetingTeamId == meetingTeamId }
     }
 
+    override fun deleteById(id: UUID) {
+        bucket.remove(id)
+    }
+
     fun getByMeetingTeamIdAndUserId(
         meetingTeamId: UUID,
         userId: UUID

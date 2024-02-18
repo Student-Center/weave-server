@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.domain.impl
 
+import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingMemberRepository
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
@@ -9,6 +10,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -109,6 +111,39 @@ class MeetingTeamDomainServiceImpl(
     override fun deleteById(id: UUID) {
         meetingMemberRepository.deleteAllByMeetingTeamId(id)
         meetingTeamRepository.deleteById(id)
+    }
+
+    @Transactional
+    override fun deleteMember(
+        memberUserId: UUID,
+        teamId: UUID
+    ) {
+        getTeamMember(teamId, memberUserId)
+            .also {
+                verifyIsNotTeamLeader(it)
+                meetingMemberRepository.deleteById(it.id)
+            }
+    }
+
+    private fun getTeamMember(
+        teamId: UUID,
+        userId: UUID
+    ): MeetingMember {
+        return meetingMemberRepository
+            .findByMeetingTeamIdAndUserId(teamId, userId)
+            ?: throw CustomException(
+                type = MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER,
+                message = "미팅 팀 멤버가 아니에요!"
+            )
+    }
+
+    private fun verifyIsNotTeamLeader(meetingMember: MeetingMember) {
+        if (meetingMember.role == MeetingMemberRole.LEADER) {
+            throw CustomException(
+                type = MeetingTeamExceptionType.LEADER_CANNOT_LEAVE_TEAM,
+                message = "팀장은 팀을 나갈 수 없어요! - 팀을 삭제해주세요!"
+            )
+        }
     }
 
     private fun checkMemberCount(meetingTeam: MeetingTeam) {

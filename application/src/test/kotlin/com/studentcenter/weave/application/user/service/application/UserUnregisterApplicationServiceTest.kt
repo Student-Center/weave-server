@@ -10,6 +10,7 @@ import com.studentcenter.weave.application.user.service.domain.impl.DeletedUserI
 import com.studentcenter.weave.application.user.service.domain.impl.UserAuthInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import com.studentcenter.weave.domain.user.entity.UserAuthInfoFixtureFactory
@@ -55,12 +56,7 @@ class UserUnregisterApplicationServiceTest : DescribeSpec({
                 userRepositorySpy.save(user)
                 userAuthInfoRepositorySpy.save(userAuth)
 
-                val loginAuthentication = UserAuthentication(
-                    userId = user.id,
-                    email = user.email,
-                    nickname = user.nickname,
-                    avatar = user.avatar,
-                )
+                val loginAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(loginAuthentication))
 
                 val command = UserUnregisterUseCase.Command()

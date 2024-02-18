@@ -8,6 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.impl.Meeti
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
@@ -57,12 +58,9 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
 
                 val leaderUserFixture: User = UserFixtureFactory.create()
                 userRepositorySpy.save(leaderUserFixture)
-                UserAuthentication(
-                    userId = leaderUserFixture.id,
-                    email = leaderUserFixture.email,
-                    nickname = leaderUserFixture.nickname,
-                    avatar = leaderUserFixture.avatar
-                ).let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+                UserAuthenticationFixtureFactory
+                    .create(leaderUserFixture)
+                    .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 // act
                 sut.invoke(command)

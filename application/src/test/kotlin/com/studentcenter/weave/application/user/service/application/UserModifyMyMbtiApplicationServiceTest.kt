@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
@@ -26,12 +27,7 @@ class UserModifyMyMbtiApplicationServiceTest : DescribeSpec({
                 val user = UserFixtureFactory.create()
                 userRepositorySpy.save(user)
 
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    email = user.email,
-                    nickname = user.nickname,
-                    avatar = user.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act
