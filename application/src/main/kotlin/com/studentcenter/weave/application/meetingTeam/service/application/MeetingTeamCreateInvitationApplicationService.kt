@@ -7,7 +7,6 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTea
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -16,7 +15,6 @@ import java.util.*
 @Service
 class MeetingTeamCreateInvitationApplicationService(
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
-    private val userQueryUseCase: UserQueryUseCase,
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val meetingMemberRepository: MeetingMemberRepository,
 ) : MeetingTeamCreateInvitationUseCase {
@@ -33,11 +31,13 @@ class MeetingTeamCreateInvitationApplicationService(
                 )
             }
 
-        val invitationLink = meetingTeamInvitationService.create(meetingTeam.id)
+        val invitationCode = meetingTeamInvitationService.create(meetingTeam.id)
 
         return MeetingTeamCreateInvitationUseCase.Result(
-            invitationLink = invitationLink,
+            teamId = meetingTeam.id,
+            invitationCode = invitationCode,
         )
+
     }
 
     private fun validate(
@@ -61,21 +61,27 @@ class MeetingTeamCreateInvitationApplicationService(
         require(meetingTeamLeader.userId == currentUserId) {
             "팀장만 새로운 팀원을 초대할 수 있어요!"
         }
+
     }
 
     private fun validateTeamVacancy(meetingTeamId: UUID) {
         val meetingTeam = meetingTeamDomainService.getById(meetingTeamId)
 
         require(
-            meetingTeam.status == MeetingTeamStatus.WAITING && validateTeamVacancyIsNotFull(
+            validateTeamVacancyIsNotFull(meetingTeam) && validateMeetingTeamStateIsWaiting(
                 meetingTeam
             )
         ) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
+
     }
 
     private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam): Boolean {
         return meetingMemberRepository.findAllByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
+    }
+
+    private fun validateMeetingTeamStateIsWaiting(meetingTeam: MeetingTeam): Boolean {
+        return meetingTeam.status == MeetingTeamStatus.WAITING
     }
 }

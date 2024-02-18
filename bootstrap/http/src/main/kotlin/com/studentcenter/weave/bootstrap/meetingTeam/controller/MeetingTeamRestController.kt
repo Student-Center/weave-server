@@ -151,18 +151,16 @@ class MeetingTeamRestController(
         )
     }
 
-    override fun leaveMeetingTeam(id: UUID) {
-        meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
-    }
-
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
         val result = meetingTeamCreateInvitationUseCase.invoke(meetingTeamId)
 
         return MeetingTeamCreateInvitationResponse(
-            invitationLink = result.invitationLink,
+            invitationCode = result.invitationCode,
         )
     }
 
+    override fun leaveMeetingTeam(id: UUID) {
+        meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
     }
 
 }

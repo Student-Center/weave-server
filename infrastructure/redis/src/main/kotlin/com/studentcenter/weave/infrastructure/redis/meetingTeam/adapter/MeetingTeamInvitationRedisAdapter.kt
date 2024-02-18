@@ -1,23 +1,33 @@
 package com.studentcenter.weave.infrastructure.redis.meetingTeam.adapter
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamInvitationRepository
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.entity.MeetingTeamInvitationRedisHash
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.repository.MeetingTeamInvitationRedisRepository
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class MeetingTeamInvitationRedisAdapter(
     private val meetingTeamInvitationRedisRepository: MeetingTeamInvitationRedisRepository,
 ) : MeetingTeamInvitationRepository {
 
-    override fun save(meetingTeamInvitation: MeetingTeamInvitation) {
+    override fun save(
+        teamId: UUID,
+        invitationCode: UUID,
+        expirationDuration: Long
+    ): UUID {
+
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
-            invitationLink = meetingTeamInvitation.invitationLink,
-            teamId = meetingTeamInvitation.teamId,
-            expirationDuration = meetingTeamInvitation.expirationDuration,
+            code = invitationCode,
+            teamId = teamId,
+            expirationDuration = expirationDuration
         )
-        meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
+
+        val savedMeetingTeamInvitationRedisHash =
+            meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
+
+        return savedMeetingTeamInvitationRedisHash.code
+
     }
 
 }
