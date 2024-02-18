@@ -69,6 +69,7 @@ class MeetingTeamRestController(
     override fun editMeetingTeam(
         id: UUID,
         request: MeetingTeamEditRequest
+
     ) {
         MeetingTeamEditUseCase.Command(
             id = id,
