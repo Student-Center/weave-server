@@ -37,7 +37,6 @@ class MeetingTeamCreateInvitationApplicationService(
             teamId = meetingTeam.id,
             invitationCode = invitationCode,
         )
-
     }
 
     private fun validate(
@@ -61,7 +60,6 @@ class MeetingTeamCreateInvitationApplicationService(
         require(meetingTeamLeader.userId == currentUserId) {
             "팀장만 새로운 팀원을 초대할 수 있어요!"
         }
-
     }
 
     private fun validateTeamVacancy(meetingTeamId: UUID) {
@@ -74,7 +72,6 @@ class MeetingTeamCreateInvitationApplicationService(
         ) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
-
     }
 
     private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam): Boolean {
