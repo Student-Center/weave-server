@@ -11,6 +11,7 @@ import com.studentcenter.weave.application.user.service.domain.impl.UserDomainSe
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
@@ -66,12 +67,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
             it("예외를 던진다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 userSendVerificationNumberEmailApplicationService.invoke(Email("weave@studentcenter.com"))
                 val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
@@ -87,12 +83,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
             it("예외를 던진다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
@@ -114,12 +105,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
             it("예외를 던진다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 val verificationNumber = UserUniversityVerificationNumber.generate()
@@ -134,12 +120,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
             it("예외를 던진다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val verificationInfo = UserUniversityVerificationInfoFixtureFactory.create(
                     user = userFixture
@@ -174,6 +155,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                     nickname = user.nickname,
                     email = user.email,
                     avatar = user.avatar,
+                    gender = user.gender
                 )
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
@@ -190,7 +172,6 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 userSilRepository.getByUserId(user.id).amount shouldBeGreaterThan 0
             }
         }
-
     }
 
 })

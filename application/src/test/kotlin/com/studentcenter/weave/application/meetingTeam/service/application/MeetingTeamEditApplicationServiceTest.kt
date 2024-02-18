@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepos
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
@@ -51,12 +52,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 )
                 meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
-                val userAuthentication = UserAuthentication(
-                    userId = currentUser.id,
-                    email = currentUser.email,
-                    nickname = currentUser.nickname,
-                    avatar = currentUser.avatar
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert
@@ -89,12 +85,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 )
                 meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
-                val userAuthentication = UserAuthentication(
-                    userId = currentUser.id,
-                    email = currentUser.email,
-                    nickname = currentUser.nickname,
-                    avatar = currentUser.avatar
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act
@@ -144,12 +135,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 meetingMemberRepository.save(member2)
                 meetingTeamRepository.save(meetingTeam)
 
-                val userAuthentication = UserAuthentication(
-                    userId = currentUser.id,
-                    email = currentUser.email,
-                    nickname = currentUser.nickname,
-                    avatar = currentUser.avatar
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert

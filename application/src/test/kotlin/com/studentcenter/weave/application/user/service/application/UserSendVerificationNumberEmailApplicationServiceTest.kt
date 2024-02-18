@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.user.port.outbound.UserVerificationNu
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
 import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -45,12 +46,7 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
             it("인증 번호 전송 요청을 하면 인증 번호 전송, 저장한다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
 
@@ -70,12 +66,7 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
             it("전송 요청을 하면 인증 번호 전송 및 저장을 한다.") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 sut.invoke(Email("weave@studentcenter.com"))
                 val (existEmail, existVerificationNumber) = userVerificationNumberRepository
@@ -100,12 +91,7 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
             it("예외를 던진다") {
                 // arrange
                 val userFixture = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    avatar = userFixture.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("re-weave@studentcenter.com")
                 val verificationInfo = UserUniversityVerificationInfoFixtureFactory.create(

@@ -11,6 +11,7 @@ import com.studentcenter.weave.application.user.port.outbound.UserSilRepositoryS
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.MajorFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
@@ -56,12 +57,7 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
             it("사용자의 프로필 정보를 응답한다.") {
                 // arrange
                 val user: User = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    nickname = user.nickname,
-                    email = user.email,
-                    avatar = user.avatar,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
                 val userSecurityContext = UserSecurityContext(userAuthentication)
                 SecurityContextHolder.setContext(userSecurityContext)
                 userRepositorySpy.save(user)

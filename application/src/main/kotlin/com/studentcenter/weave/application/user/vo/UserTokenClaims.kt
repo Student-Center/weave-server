@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.vo
 
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -18,6 +19,7 @@ sealed class UserTokenClaims {
         val nickname: Nickname,
         val email: Email,
         val avatar: Url?,
+        val gender: Gender,
     ) : UserTokenClaims()
 
     data class RegisterToken(

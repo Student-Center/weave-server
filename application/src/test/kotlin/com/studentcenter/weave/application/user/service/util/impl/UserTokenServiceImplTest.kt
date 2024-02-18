@@ -115,6 +115,7 @@ class UserTokenServiceImplTest : DescribeSpec({
                 nickname = user.nickname,
                 email = user.email,
                 avatar = user.avatar,
+                gender = user.gender,
             )
         }
 
