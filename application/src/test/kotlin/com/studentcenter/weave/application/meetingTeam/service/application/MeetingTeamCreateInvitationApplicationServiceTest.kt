@@ -11,6 +11,7 @@ import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvi
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
@@ -32,20 +33,17 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
     )
 
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
-
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(
         meetingTeamInvitationProperties = MeetingTeamInvitationPropertiesFixtureFactory.create(),
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
     val userRepository = UserRepositorySpy()
-    val userQueryUseCaseStub = UserQueryUseCaseStub()
 
     val sut = MeetingTeamCreateInvitationApplicationService(
         meetingTeamInvitationService = meetingTeamInvitationService,
         meetingTeamDomainService = meetingTeamDomainService,
         meetingMemberRepository = meetingMemberRepository,
-        userQueryUseCase = userQueryUseCaseStub
     )
 
     afterTest {
@@ -71,21 +69,13 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
 
-                val userAuthentication = UserAuthentication(
-                    userId = currentUser.id,
-                    email = currentUser.email,
-                    nickname = currentUser.nickname,
-                    avatar = currentUser.avatar,
-                    gender = currentUser.gender,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert
                 val invitationCode = sut.invoke(
-                    MeetingTeamCreateInvitationUseCase.Command(
-                        meetingTeamId = meetingTeam.id,
-                    )
+                    meetingTeamId = meetingTeam.id,
                 )
 
                 // assert
@@ -108,22 +98,14 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
 
-                val userAuthentication = UserAuthentication(
-                    userId = currentUser.id,
-                    email = currentUser.email,
-                    nickname = currentUser.nickname,
-                    avatar = currentUser.avatar,
-                    gender = currentUser.gender,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
                     sut.invoke(
-                        MeetingTeamCreateInvitationUseCase.Command(
-                            meetingTeamId = meetingTeam.id,
-                        )
+                        meetingTeamId = meetingTeam.id,
                     )
                 }
             }
@@ -165,22 +147,14 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 meetingMemberRepository.save(member3)
                 meetingTeamRepository.save(meetingTeam)
 
-                val userAuthentication = UserAuthentication(
-                    userId = leaderUser.id,
-                    email = leaderUser.email,
-                    nickname = leaderUser.nickname,
-                    avatar = leaderUser.avatar,
-                    gender = leaderUser.gender,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(leaderUser)
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
                     sut.invoke(
-                        MeetingTeamCreateInvitationUseCase.Command(
-                            meetingTeamId = meetingTeam.id,
-                        )
+                        meetingTeamId = meetingTeam.id,
                     )
                 }
             }

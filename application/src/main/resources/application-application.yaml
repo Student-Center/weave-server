@@ -20,4 +20,4 @@ auth:
 meeting:
   team:
     invitation:
-      expire-seconds: ${INVITATION_EXPIRE_SECONDS:86400}
+      expire-duration: ${INVITATION_EXPIRE_SECONDS:3600}

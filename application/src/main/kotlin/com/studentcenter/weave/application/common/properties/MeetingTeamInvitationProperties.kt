@@ -4,5 +4,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(value = "meeting.team.invitation")
 data class MeetingTeamInvitationProperties(
-    val expireSeconds: Long,
+    val expireDuration: Long,
 )

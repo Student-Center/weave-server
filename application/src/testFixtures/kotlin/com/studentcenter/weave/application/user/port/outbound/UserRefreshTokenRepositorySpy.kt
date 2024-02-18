@@ -4,7 +4,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class UserRefreshTokenRepositorySpy :
-    com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository {
+    UserRefreshTokenRepository {
 
     private val bucket = ConcurrentHashMap<UUID, String>()
 

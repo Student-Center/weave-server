@@ -19,7 +19,7 @@ class UserVerifyVerificationNumberApplicationService(
     private val userSilDomainService: UserSilDomainService,
     private val userVerificationInfoDomainService: UserUniversityVerificationInfoDomainService,
     private val verificationNumberRepository: UserVerificationNumberRepository,
-): UserVerifyVerificationNumberUseCase {
+) : UserVerifyVerificationNumberUseCase {
 
     @Transactional
     override fun invoke(command: UserVerifyVerificationNumberUseCase.Command) {

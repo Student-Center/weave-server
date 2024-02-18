@@ -9,7 +9,7 @@ import java.util.*
 @Service
 class MajorGetByIdApplicationService(
     private val majorDomainService: MajorDomainService,
-): MajorGetByIdUseCase {
+) : MajorGetByIdUseCase {
 
     override fun invoke(id: UUID): Major {
         return majorDomainService.getById(id)

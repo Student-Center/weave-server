@@ -28,15 +28,15 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
     val jwtTokenProperties: JwtTokenProperties = JwtTokenPropertiesFixtureFactory.create()
 
     val sut = UserRegisterApplicationService(
-            userTokenService = UserTokenServiceImpl(
-                jwtTokenProperties = jwtTokenProperties,
-                userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
-                openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
-            ),
-            userDomainService = UserDomainServiceImpl(userRepositorySpy),
-            userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
-            userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
-        )
+        userTokenService = UserTokenServiceImpl(
+            jwtTokenProperties = jwtTokenProperties,
+            userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+            openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+        ),
+        userDomainService = UserDomainServiceImpl(userRepositorySpy),
+        userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
+        userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
+    )
 
     describe("회원가입 유스케이스") {
         context("요청이 유효하면") {

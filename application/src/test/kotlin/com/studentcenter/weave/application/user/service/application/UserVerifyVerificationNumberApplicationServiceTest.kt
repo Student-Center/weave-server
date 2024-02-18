@@ -70,7 +70,8 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 userSendVerificationNumberEmailApplicationService.invoke(Email("weave@studentcenter.com"))
-                val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val email = Email("invalid@studentcenter.com")
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
 
@@ -87,14 +88,16 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
-                val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val invalidVerificationNumber = UserUniversityVerificationNumber(
                     verificationNumber.value.replace(
                         verificationNumber.value[0],
                         if (verificationNumber.value[0] == '9') '8' else verificationNumber.value[0] + 1
                     )
                 )
-                val command = UserVerifyVerificationNumberUseCase.Command(email, invalidVerificationNumber)
+                val command =
+                    UserVerifyVerificationNumberUseCase.Command(email, invalidVerificationNumber)
 
                 // act, assert
                 shouldThrow<CustomException> { sut.invoke(command) }
@@ -160,7 +163,8 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
-                val verificationNumber = userVerificationNumberRepository.findByUserId(user.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(user.id)!!.second
                 val command = UserVerifyVerificationNumberUseCase.Command(email, verificationNumber)
 
                 // act

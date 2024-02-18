@@ -7,9 +7,9 @@ import com.studentcenter.weave.domain.user.vo.Mbti
 import org.springframework.stereotype.Service
 
 @Service
-class UserModifyMyMbtiApplicationService (
+class UserModifyMyMbtiApplicationService(
     private val userDomainService: UserDomainService,
-): UserModifyMyMbtiUseCase {
+) : UserModifyMyMbtiUseCase {
 
     override fun invoke(mbti: Mbti) {
         getCurrentUserAuthentication()
