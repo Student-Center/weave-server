@@ -29,7 +29,6 @@ class MeetingTeamRestController(
     private val meetingTeamDeleteUseCase: MeetingTeamDeleteUseCase,
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
-    private val meetingTeamCreateInvitationUseCase: MeetingTeamCreateInvitationUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
     private val meetingTeamCreateInvitationUseCase: MeetingTeamCreateInvitationUseCase,
 ) : MeetingTeamApi {
@@ -149,14 +148,6 @@ class MeetingTeamRestController(
             ),
             next = UUID.randomUUID(),
             total = 2,
-        )
-    }
-
-    override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
-        val result = meetingTeamCreateInvitationUseCase.invoke(meetingTeamId)
-
-        return MeetingTeamCreateInvitationResponse(
-            invitationLink = result.invitationLink,
         )
     }
 
