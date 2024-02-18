@@ -5,7 +5,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.NoSuchElementException
 
-class MajorRepositorySpy: MajorRepository {
+class MajorRepositorySpy : MajorRepository {
 
     private val bucket = ConcurrentHashMap<UUID, Major>()
     override fun getById(id: UUID): Major {

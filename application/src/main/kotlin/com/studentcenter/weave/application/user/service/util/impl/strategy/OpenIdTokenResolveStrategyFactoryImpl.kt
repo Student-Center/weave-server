@@ -5,9 +5,9 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 
 @Component
-class OpenIdTokenResolveStrategyFactoryImpl (
+class OpenIdTokenResolveStrategyFactoryImpl(
     private val applicationContext: ApplicationContext
-): OpenIdTokenResolveStrategyFactory {
+) : OpenIdTokenResolveStrategyFactory {
 
     override fun getStrategy(socialLoginProvider: SocialLoginProvider): OpenIdTokenResolveStrategy {
         return when (socialLoginProvider) {

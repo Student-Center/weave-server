@@ -14,13 +14,13 @@ class MeetingTeamInvitationRedisAdapter(
     override fun save(
         teamId: UUID,
         invitationCode: UUID,
-        expirationSeconds: Long
+        expirationDuration: Long
     ): UUID {
 
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
             code = invitationCode,
             teamId = teamId,
-            expirationSeconds = expirationSeconds
+            expirationDuration = expirationDuration
         )
 
         val savedMeetingTeamInvitationRedisHash =

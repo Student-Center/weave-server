@@ -9,7 +9,7 @@ import java.util.*
 @Service
 class UserQueryApplicationService(
     private val userDomainService: UserDomainService,
-): UserQueryUseCase {
+) : UserQueryUseCase {
 
     override fun getById(id: UUID): User {
         return userDomainService.getById(id)

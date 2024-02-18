@@ -12,7 +12,7 @@ import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.Mbti
 import java.util.*
 
-data class MeetingMemberDetailInfo (
+data class MeetingMemberDetailInfo(
     val userId: UUID,
     val universityName: UniversityName,
     val majorName: MajorName,

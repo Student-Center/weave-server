@@ -38,9 +38,9 @@ class MajorFindAllByUniversityApplicationServiceTest : DescribeSpec({
 
             val univId = UuidCreator.create()
             val expectedMajors = listOf(
-              MajorFixtureFactory.create(univId =  univId, name = MajorName("name1")),
-              MajorFixtureFactory.create(univId =  univId, name = MajorName("name2")),
-              MajorFixtureFactory.create(univId =  univId, name = MajorName("name3")),
+                MajorFixtureFactory.create(univId = univId, name = MajorName("name1")),
+                MajorFixtureFactory.create(univId = univId, name = MajorName("name2")),
+                MajorFixtureFactory.create(univId = univId, name = MajorName("name3")),
             )
 
             majorRepositorySpy.saveAll(expectedMajors)

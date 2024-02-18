@@ -9,7 +9,7 @@ import java.util.UUID
 class MeetingTeamInvitationRedisHash(
     teamId: UUID,
     code: UUID,
-    expirationSeconds: Long,
+    expirationDuration: Long,
 ) {
 
     @Id
@@ -20,7 +20,7 @@ class MeetingTeamInvitationRedisHash(
         private set
 
     @TimeToLive
-    var expirationSeconds: Long = expirationSeconds
+    var expirationDuration: Long = expirationDuration
         private set
 
 }

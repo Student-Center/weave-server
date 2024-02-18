@@ -5,7 +5,7 @@ import com.studentcenter.weave.domain.university.vo.UniversityName
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class UniversityRepositorySpy: UniversityRepository {
+class UniversityRepositorySpy : UniversityRepository {
 
     private val bucket = ConcurrentHashMap<UUID, University>()
 

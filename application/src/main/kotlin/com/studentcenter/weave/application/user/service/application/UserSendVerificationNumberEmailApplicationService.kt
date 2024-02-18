@@ -17,7 +17,7 @@ class UserSendVerificationNumberEmailApplicationService(
     private val verificationNumberMailer: VerificationNumberMailer,
     private val userVerificationNumberRepository: UserVerificationNumberRepository,
     private val verificationInfoDomainService: UserUniversityVerificationInfoDomainService,
-): UserSendVerificationNumberEmailUseCase {
+) : UserSendVerificationNumberEmailUseCase {
 
     override fun invoke(universityEmail: Email) {
         if (verificationInfoDomainService.existsByEmail(universityEmail)) {

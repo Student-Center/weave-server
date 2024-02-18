@@ -4,11 +4,7 @@ import java.util.UUID
 
 fun interface MeetingTeamCreateInvitationUseCase {
 
-    fun invoke(command: Command): Result
-
-    data class Command(
-        val meetingTeamId: UUID,
-    )
+    fun invoke(meetingTeamId: UUID): Result
 
     data class Result(
         val teamId: UUID,

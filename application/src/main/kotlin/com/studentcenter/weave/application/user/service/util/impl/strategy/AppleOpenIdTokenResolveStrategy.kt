@@ -34,6 +34,6 @@ class AppleOpenIdTokenResolveStrategy(
         val nickname: String = email.substringBefore(emailDelimiter)
 
         return if (nickname.length <= Nickname.MAX_LENGTH) nickname
-            else nickname.substring(0, Nickname.MAX_LENGTH)
+        else nickname.substring(0, Nickname.MAX_LENGTH)
     }
 }

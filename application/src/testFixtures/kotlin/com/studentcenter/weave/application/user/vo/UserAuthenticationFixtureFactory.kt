@@ -4,7 +4,7 @@ import com.studentcenter.weave.domain.user.entity.User
 
 object UserAuthenticationFixtureFactory {
 
-    fun create(user: User) : UserAuthentication {
+    fun create(user: User): UserAuthentication {
         return UserAuthentication(
             userId = user.id,
             nickname = user.nickname,

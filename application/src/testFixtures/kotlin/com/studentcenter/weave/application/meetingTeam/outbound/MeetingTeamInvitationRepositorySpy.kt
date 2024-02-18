@@ -7,10 +7,11 @@ import java.util.concurrent.ConcurrentHashMap
 class MeetingTeamInvitationRepositorySpy : MeetingTeamInvitationRepository {
 
     private val bucket = ConcurrentHashMap<UUID, UUID>()
+
     override fun save(
         teamId: UUID,
         invitationCode: UUID,
-        expirationSeconds: Long
+        expirationDuration: Long
     ): UUID {
         bucket[invitationCode] = teamId
 
