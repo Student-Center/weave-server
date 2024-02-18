@@ -15,12 +15,7 @@ class MeetingTeamLeaveApplicationService(
     override fun invoke(command: MeetingTeamLeaveUseCase.Command) {
         getCurrentUserAuthentication()
             .userId
-            .also {
-                meetingTeamDomainService.deleteMember(
-                    memberUserId = it,
-                    command.teamId
-                )
-            }
+            .also { meetingTeamDomainService.deleteMember(it, command.meetingTeamId) }
     }
 
 }
