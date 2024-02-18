@@ -118,14 +118,14 @@ class MeetingTeamDomainServiceImpl(
         memberUserId: UUID,
         teamId: UUID
     ) {
-        verifyIsTeamMember(teamId, memberUserId)
+        getTeamMember(teamId, memberUserId)
             .also {
                 verifyIsNotTeamLeader(it)
                 meetingMemberRepository.deleteById(it.id)
             }
     }
 
-    private fun verifyIsTeamMember(
+    private fun getTeamMember(
         teamId: UUID,
         userId: UUID
     ): MeetingMember {

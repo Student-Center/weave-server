@@ -6,8 +6,6 @@ fun interface MeetingTeamLeaveUseCase {
 
     fun invoke(command: Command)
 
-    data class Command(
-        val teamId: UUID,
-    )
+    data class Command(val meetingTeamId: UUID)
 
 }
