@@ -3,12 +3,11 @@ package com.studentcenter.weave.application.common.properties
 class MeetingTeamInvitationPropertiesFixtureFactory {
 
     companion object {
+        private const val EXPIRE_DURATION = 3600L
 
-        fun create(
-            expireSeconds: Long = 86400
-        ): MeetingTeamInvitationProperties {
+        fun create(): MeetingTeamInvitationProperties {
             return MeetingTeamInvitationProperties(
-                expireSeconds = expireSeconds
+                expireDuration = EXPIRE_DURATION
             )
         }
 

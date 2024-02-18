@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.util.impl
 import com.studentcenter.weave.application.common.properties.MeetingTeamInvitationProperties
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamInvitationRepository
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.stereotype.Component
 import java.util.*
@@ -17,11 +18,12 @@ class MeetingTeamInvitationServiceImpl(
         val invitationCode = UuidCreator.create()
 
         return meetingTeamInvitationRepository.save(
-            teamId = teamId,
-            invitationCode = invitationCode,
-            expirationDuration = meetingTeamInvitationProperties.expireDuration,
+            MeetingTeamInvitation.of(
+                teamId = teamId,
+                invitationCode = invitationCode,
+                expirationDuration = meetingTeamInvitationProperties.expireDuration,
+            )
         )
-
     }
 
 }
