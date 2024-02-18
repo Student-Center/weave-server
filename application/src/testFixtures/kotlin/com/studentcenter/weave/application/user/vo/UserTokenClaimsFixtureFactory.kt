@@ -12,7 +12,8 @@ object UserTokenClaimsFixtureFactory {
             userId = user.id,
             email = user.email,
             nickname = user.nickname,
-            avatar = user.avatar
+            avatar = user.avatar,
+            gender = user.gender,
         )
     }
 

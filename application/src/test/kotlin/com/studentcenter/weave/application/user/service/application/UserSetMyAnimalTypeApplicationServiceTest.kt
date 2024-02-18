@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.user.port.outbound.UserSilRepositoryS
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserSil
@@ -42,12 +43,7 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
                     userRepositorySpy.save(userFixture)
                     userSilRepositorySpy.save(UserSil.create(userFixture.id))
 
-                    val userAuthentication = UserAuthentication(
-                        userId = userFixture.id,
-                        email = userFixture.email,
-                        nickname = userFixture.nickname,
-                        avatar = userFixture.avatar
-                    )
+                    val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                     SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                     // act
@@ -68,12 +64,7 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
                 userRepositorySpy.save(userFixture)
                 userSilRepositorySpy.save(UserSil.create(userFixture.id))
 
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    email = userFixture.email,
-                    nickname = userFixture.nickname,
-                    avatar = userFixture.avatar
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act
@@ -92,12 +83,7 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
                 userRepositorySpy.save(userFixture)
                 userSilRepositorySpy.save(UserSil.create(userFixture.id))
 
-                val userAuthentication = UserAuthentication(
-                    userId = userFixture.id,
-                    email = userFixture.email,
-                    nickname = userFixture.nickname,
-                    avatar = userFixture.avatar
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act

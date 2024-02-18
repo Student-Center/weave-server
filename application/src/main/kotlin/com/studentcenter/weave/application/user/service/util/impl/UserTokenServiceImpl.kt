@@ -8,6 +8,7 @@ import com.studentcenter.weave.application.user.service.util.impl.strategy.OpenI
 import com.studentcenter.weave.application.user.service.util.impl.strategy.OpenIdTokenResolveStrategyFactory
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -82,6 +83,7 @@ class UserTokenServiceImpl(
                 this["userId"] = user.id.toString()
                 this["nickname"] = user.nickname.value
                 this["email"] = user.email.value
+                this["gender"] = user.gender.name
                 user.avatar?.let { this["avatar"] = it.value }
             }
         }
@@ -99,6 +101,7 @@ class UserTokenServiceImpl(
             nickname = Nickname(jwtClaims.customClaims["nickname"] as String),
             email = Email(jwtClaims.customClaims["email"] as String),
             avatar = (jwtClaims.customClaims["avatar"] as String?)?.let { Url(it) },
+            gender = (jwtClaims.customClaims["gender"] as String).let { Gender.valueOf(it) }
         )
     }
 

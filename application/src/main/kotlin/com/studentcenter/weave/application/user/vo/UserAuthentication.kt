@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.vo
 
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.Url
@@ -11,16 +12,17 @@ data class UserAuthentication(
     val nickname: Nickname,
     val email: Email,
     val avatar: Url?,
+    val gender: Gender,
 ) : Authentication {
 
     companion object {
-
         fun from(claims: UserTokenClaims.AccessToken): UserAuthentication {
             return UserAuthentication(
                 userId = claims.userId,
                 nickname = claims.nickname,
                 email = claims.email,
-                avatar = claims.avatar
+                avatar = claims.avatar,
+                gender = claims.gender
             )
         }
     }
