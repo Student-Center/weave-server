@@ -21,6 +21,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
+import java.util.*
 
 @DisplayName("MeetingTeamCreateInvitationApplicationServiceTest")
 class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
@@ -55,18 +56,28 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
     }
 
     describe("미팅 팀 새로운 팀원 초대") {
+        fun createMember(meetingTeamId: UUID, userId: UUID, role: MeetingMemberRole) {
+            val member = MeetingMember.create(
+                meetingTeamId = meetingTeamId,
+                userId = userId,
+                role = role,
+            )
+
+            meetingMemberRepository.save(member)
+        }
+
         context("현재 유저가 팀장인 경우") {
             it("초대 링크를 정상적으로 발급한다.") {
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()
                 val currentUser = UserFixtureFactory.create()
-                val meetingMember = MeetingMember.create(
+
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = currentUser.id,
                     role = MeetingMemberRole.LEADER,
                 )
 
-                meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
@@ -89,13 +100,13 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 val meetingTeam = MeetingTeamFixtureFactory.create()
                 val currentUser = UserFixtureFactory.create()
                 val leaderUser = UserFixtureFactory.create()
-                val meetingMember = MeetingMember.create(
+
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = leaderUser.id,
                     role = MeetingMemberRole.LEADER,
                 )
 
-                meetingMemberRepository.save(meetingMember)
                 meetingTeamRepository.save(meetingTeam)
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
@@ -120,31 +131,27 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 val user2 = UserFixtureFactory.create()
                 val user3 = UserFixtureFactory.create()
 
-                val leaderMember = MeetingMember.create(
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = leaderUser.id,
                     role = MeetingMemberRole.LEADER,
                 )
-                val member1 = MeetingMember.create(
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = user1.id,
                     role = MeetingMemberRole.MEMBER,
                 )
-                val member2 = MeetingMember.create(
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = user2.id,
                     role = MeetingMemberRole.MEMBER,
                 )
-                val member3 = MeetingMember.create(
+                createMember(
                     meetingTeamId = meetingTeam.id,
                     userId = user3.id,
                     role = MeetingMemberRole.MEMBER,
                 )
 
-                meetingMemberRepository.save(leaderMember)
-                meetingMemberRepository.save(member1)
-                meetingMemberRepository.save(member2)
-                meetingMemberRepository.save(member3)
                 meetingTeamRepository.save(meetingTeam)
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(leaderUser)
@@ -161,5 +168,4 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
         }
 
     }
-
 })
