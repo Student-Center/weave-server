@@ -1,5 +1,6 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.controller
 
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateInvitationUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
@@ -7,14 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.*
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
@@ -28,6 +22,7 @@ class MeetingTeamRestController(
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
+    private val meetingTeamCreateInvitationUseCase: MeetingTeamCreateInvitationUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -149,6 +144,20 @@ class MeetingTeamRestController(
 
     override fun leaveMeetingTeam(id: UUID) {
         meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
+    }
+
+    override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
+        return MeetingTeamCreateInvitationUseCase.Command(
+            meetingTeamId = meetingTeamId
+        ).let {
+            meetingTeamCreateInvitationUseCase.invoke(it)
+        }.let {
+            MeetingTeamCreateInvitationResponse(
+                teamId = it.teamId,
+                invitationCode = it.invitationCode
+            )
+        }
+
     }
 
 }

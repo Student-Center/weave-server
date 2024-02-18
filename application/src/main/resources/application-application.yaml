@@ -16,3 +16,8 @@ auth:
         jwks-uri: ${APPLE_JWKS_URI:https://appleid.apple.com/auth/keys}
       kakao:
         jwks-uri: ${KAKAO_JWKS_URI:https://kauth.kakao.com/.well-known/jwks.json}
+
+meeting:
+  team:
+    invitation:
+      expire-seconds: ${INVITATION_EXPIRE_SECONDS:86400}

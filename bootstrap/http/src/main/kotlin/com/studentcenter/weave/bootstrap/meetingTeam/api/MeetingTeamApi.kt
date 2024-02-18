@@ -1,14 +1,7 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
-import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -92,5 +85,14 @@ interface MeetingTeamApi {
         @PathVariable
         id: UUID
     )
+
+    @Secured
+    @Operation(summary = "Create meeting team invitation code")
+    @PostMapping("/{meetingTeamId}/invitation")
+    @ResponseStatus(HttpStatus.OK)
+    fun createMeetingTeamInvitation(
+        @PathVariable
+        meetingTeamId: UUID
+    ): MeetingTeamCreateInvitationResponse
 
 }
