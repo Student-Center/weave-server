@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRep
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
+import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
@@ -41,12 +41,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()
                 val user = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    email = user.email,
-                    nickname = user.nickname,
-                    avatar = null,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 val meetingMember = MeetingMember.create(
@@ -73,12 +68,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()
                 val user = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    email = user.email,
-                    nickname = user.nickname,
-                    avatar = null,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 meetingTeamRepository.save(meetingTeam)
 
@@ -95,12 +85,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()
                 val user = UserFixtureFactory.create()
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    email = user.email,
-                    nickname = user.nickname,
-                    avatar = null,
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 val meetingMember = MeetingMember.create(
