@@ -44,11 +44,13 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
     )
 
     val userRepository = UserRepositorySpy()
+    val userQueryUseCaseStub = UserQueryUseCaseStub()
 
     val sut = MeetingTeamCreateInvitationApplicationService(
         meetingTeamInvitationService = meetingTeamInvitationService,
         meetingTeamDomainService = meetingTeamDomainService,
         meetingMemberRepository = meetingMemberRepository,
+        userQueryUseCase = userQueryUseCaseStub
     )
 
     afterTest {

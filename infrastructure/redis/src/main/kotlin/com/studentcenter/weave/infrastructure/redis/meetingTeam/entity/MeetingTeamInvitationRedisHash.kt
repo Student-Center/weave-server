@@ -3,8 +3,8 @@ package com.studentcenter.weave.infrastructure.redis.meetingTeam.entity
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
-import java.util.*
 import kotlin.time.Duration
+import java.util.UUID
 
 @RedisHash("meeting_team_invitation")
 class MeetingTeamInvitationRedisHash(

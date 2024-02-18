@@ -7,6 +7,7 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTea
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -15,6 +16,7 @@ import java.util.*
 @Service
 class MeetingTeamCreateInvitationApplicationService(
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
+    private val userQueryUseCase: UserQueryUseCase,
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val meetingMemberRepository: MeetingMemberRepository,
 ) : MeetingTeamCreateInvitationUseCase {
