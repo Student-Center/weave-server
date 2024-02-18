@@ -25,6 +25,8 @@ data class Meeting(
     }
 
     fun cancel(): Meeting {
+        verifyNotFinished()
+
         return copy(
             status = MeetingStatus.CANCELED,
             finishedAt = LocalDateTime.now(),
@@ -32,10 +34,16 @@ data class Meeting(
     }
 
     fun complete(): Meeting {
+        verifyNotFinished()
+
         return copy(
             status = MeetingStatus.COMPLETED,
             finishedAt = LocalDateTime.now(),
         )
+    }
+
+    private fun verifyNotFinished() {
+        require(isFinished().not()) { "이미 종료된 미팅은 상태 변경이 불가능합니다." }
     }
 
     companion object {
