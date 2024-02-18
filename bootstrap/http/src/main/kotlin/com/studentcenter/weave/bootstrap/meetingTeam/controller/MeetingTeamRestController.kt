@@ -152,6 +152,7 @@ class MeetingTeamRestController(
     }
 
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
+
         return MeetingTeamCreateInvitationUseCase.Command(
             meetingTeamId = meetingTeamId
         ).let {
@@ -162,6 +163,7 @@ class MeetingTeamRestController(
                 invitationCode = it.invitationCode
             )
         }
+    }
 
     override fun leaveMeetingTeam(id: UUID) {
         meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
