@@ -76,6 +76,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                     email = currentUser.email,
                     nickname = currentUser.nickname,
                     avatar = currentUser.avatar,
+                    gender = currentUser.gender,
                 )
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
@@ -112,6 +113,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                     email = currentUser.email,
                     nickname = currentUser.nickname,
                     avatar = currentUser.avatar,
+                    gender = currentUser.gender,
                 )
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
@@ -168,6 +170,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                     email = leaderUser.email,
                     nickname = leaderUser.nickname,
                     avatar = leaderUser.avatar,
+                    gender = leaderUser.gender,
                 )
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
