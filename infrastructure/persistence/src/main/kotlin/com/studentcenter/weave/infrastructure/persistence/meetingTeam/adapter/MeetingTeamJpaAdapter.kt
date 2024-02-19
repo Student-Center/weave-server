@@ -2,6 +2,9 @@ package com.studentcenter.weave.infrastructure.persistence.meetingTeam.adapter
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.enums.Location
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingTeamJpaRepository
@@ -36,16 +39,36 @@ class MeetingTeamJpaAdapter(
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        val result = meetingTeamJpaRepository
+        return meetingTeamJpaRepository
             .scrollByMemberUserId(userId, next, limit)
             .map { it.toDomain() }
-
-        return result
     }
 
     override fun deleteById(id: UUID) {
         meetingTeamJpaRepository.deleteById(id)
     }
 
+    override fun scrollByFilter(
+        memberCount: Int?,
+        youngestMemberBirthYear: Int?,
+        oldestMemberBirthYear: Int?,
+        preferredLocations: List<Location>?,
+        gender: Gender?,
+        status: MeetingTeamStatus,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        return meetingTeamJpaRepository
+            .scrollByFilter(
+                memberCount = memberCount,
+                youngestMemberBirthYear = youngestMemberBirthYear,
+                oldestMemberBirthYear = oldestMemberBirthYear,
+                preferredLocations = preferredLocations?.map { it.name },
+                gender = gender?.name,
+                status = status.name,
+                next = next,
+                limit = limit
+            ).map { it.toDomain() }
+    }
 
 }

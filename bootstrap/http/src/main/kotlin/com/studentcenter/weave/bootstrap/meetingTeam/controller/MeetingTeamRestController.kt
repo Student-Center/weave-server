@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamC
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
@@ -15,7 +16,6 @@ import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRespo
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
@@ -28,6 +28,7 @@ class MeetingTeamRestController(
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
+    private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -81,70 +82,22 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
-        return MeetingTeamGetListResponse(
-            items = listOf(
-                MeetingTeamGetListResponse.MeetingTeamDto(
-                    id = UUID.randomUUID(),
-                    teamIntroduce = "팀 소개1",
-                    memberCount = 3,
-                    location = "서울",
-                    memberInfos = listOf(
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "서울대학교",
-                            mbti = "ENFP",
-                            birthYear = 1998,
-                            role = MeetingMemberRole.LEADER,
-                        ),
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "연세대학교",
-                            mbti = "INTJ",
-                            birthYear = 1999,
-                            role = MeetingMemberRole.MEMBER,
-                        ),
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "고려대학교",
-                            mbti = "ENFJ",
-                            birthYear = 1997,
-                            role = MeetingMemberRole.MEMBER,
-                        ),
-                    ),
-                ),
-                MeetingTeamGetListResponse.MeetingTeamDto(
-                    id = UUID.randomUUID(),
-                    teamIntroduce = "팀 소개2",
-                    memberCount = 3,
-                    location = "서울",
-                    memberInfos = listOf(
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "서울대학교",
-                            mbti = "ENFP",
-                            birthYear = 2000,
-                            role = MeetingMemberRole.LEADER,
-                        ),
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "연세대학교",
-                            mbti = "INTJ",
-                            birthYear = 1999,
-                            role = MeetingMemberRole.MEMBER,
-                        ),
-                        MeetingTeamGetListResponse.MeetingMemberDto(
-                            id = UUID.randomUUID(),
-                            universityName = "고려대학교",
-                            mbti = "ENFJ",
-                            birthYear = 1997,
-                            role = MeetingMemberRole.MEMBER,
-                        ),
-                    ),
-                ),
-            ),
-            next = UUID.randomUUID(),
-            total = 2,
-        )
+        return MeetingTeamGetListUseCase.Command(
+            memberCount = request.memberCount,
+            youngestMemberBirthYear = request.youngestMemberBirthYear,
+            oldestMemberBirthYear = request.oldestMemberBirthYear,
+            preferredLocations = request.preferredLocations,
+            next = request.next,
+            limit = request.limit
+        ).let {
+            meetingTeamGetListUseCase.invoke(it)
+        }.let {
+            MeetingTeamGetListResponse(
+                items = it.items.map { item -> MeetingTeamGetListResponse.MeetingTeamDto.from(item) },
+                next = it.next,
+                total = it.total
+            )
+        }
     }
 
     override fun leaveMeetingTeam(id: UUID) {

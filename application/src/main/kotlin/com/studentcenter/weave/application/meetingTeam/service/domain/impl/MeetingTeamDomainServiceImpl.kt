@@ -11,8 +11,10 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -47,13 +49,24 @@ class MeetingTeamDomainServiceImpl(
     @Transactional(readOnly = true)
     override fun scrollByFilter(
         memberCount: Int?,
-        minBirthYear: Int?,
-        maxBirthYear: Int?,
+        youngestMemberBirthYear: Int?,
+        oldestMemberBirthYear: Int?,
         preferredLocations: List<Location>?,
+        gender: Gender?,
+        status: MeetingTeamStatus,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        TODO("Not yet implemented")
+        return meetingTeamRepository.scrollByFilter(
+            memberCount = memberCount,
+            youngestMemberBirthYear = youngestMemberBirthYear,
+            oldestMemberBirthYear = oldestMemberBirthYear,
+            preferredLocations = preferredLocations,
+            gender = gender,
+            status = status,
+            next = next,
+            limit = limit,
+        )
     }
 
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
