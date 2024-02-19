@@ -35,7 +35,6 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
         meetingMemberRepository = meetingMemberRepository,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
         userQueryUseCase = userQueryUseCase
-
     )
 
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
