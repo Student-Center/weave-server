@@ -175,6 +175,29 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                 }
             }
         }
+
+        context("미팅팀에 소속된 멤버 수가 설정된 멤버수보다 작을 경우") {
+            it("예외를 발생시킨다.") {
+                // arrange
+                val memberCount = 2
+                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
+                val user = UserFixtureFactory.create()
+                val meetingMember = MeetingMember.create(
+                    meetingTeamId = meetingTeam.id,
+                    userId = user.id,
+                    role = MeetingMemberRole.LEADER
+                )
+
+                every { userQueryUseCase.getById(user.id) } returns user
+                meetingMemberRepositorySpy.save(meetingMember)
+                meetingTeamRepositorySpy.save(meetingTeam)
+
+                // act, assert
+                shouldThrow<IllegalArgumentException> {
+                    sut.publishById(meetingTeam.id)
+                }
+            }
+        }
     }
 
 })
