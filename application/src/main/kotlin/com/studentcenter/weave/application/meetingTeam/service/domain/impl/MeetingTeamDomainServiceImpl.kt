@@ -124,13 +124,15 @@ class MeetingTeamDomainServiceImpl(
 
     @Transactional
     override fun publishById(id: UUID): MeetingTeam {
-        return meetingTeamRepository
-            .getById(id)
-            .publish()
-            .also {
-                meetingTeamRepository.save(it)
-                meetingTeamMemberSummaryRepository.save(createMeetingTeamMemberSummary(it))
-            }
+        val meetingTeam = meetingTeamRepository.getById(id)
+        return if(meetingTeam.isPublished()) {
+            meetingTeam
+        } else {
+            createMeetingTeamMemberSummary(meetingTeam)
+                .also { meetingTeamMemberSummaryRepository.save(it) }
+                .let { meetingTeam.publish() }
+                .also { meetingTeamRepository.save(it) }
+        }
     }
 
     @Transactional

@@ -198,6 +198,41 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                 }
             }
         }
+
+        context("미팅팀이 이미 공개된 상태인 경우") {
+            it("미팅팀을 반환한다") {
+                // arrange
+                val memberCount = 2
+                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
+                val user1 = UserFixtureFactory.create()
+                val user2 = UserFixtureFactory.create()
+                val meetingMember1 = MeetingMember.create(
+                    meetingTeamId = meetingTeam.id,
+                    userId = user1.id,
+                    role = MeetingMemberRole.LEADER
+                )
+                val meetingMember2 = MeetingMember.create(
+                    meetingTeamId = meetingTeam.id,
+                    userId = user2.id,
+                    role = MeetingMemberRole.MEMBER
+                )
+
+                every { userQueryUseCase.getById(user1.id) } returns user1
+                every { userQueryUseCase.getById(user2.id) } returns user2
+
+                meetingMemberRepositorySpy.save(meetingMember1)
+                meetingMemberRepositorySpy.save(meetingMember2)
+                meetingTeamRepositorySpy.save(meetingTeam)
+
+                sut.publishById(meetingTeam.id)
+
+                // act
+                val result: MeetingTeam = sut.publishById(meetingTeam.id)
+
+                // assert
+                result.isPublished() shouldBe true
+            }
+        }
     }
 
 })
