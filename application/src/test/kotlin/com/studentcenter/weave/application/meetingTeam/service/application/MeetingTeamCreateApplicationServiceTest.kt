@@ -2,12 +2,12 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
+import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
@@ -18,15 +18,20 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.mockk.mockk
 
 @DisplayName("MeetingTeamCreateApplicationServiceTest")
 class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
+    val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
+    val userQueryUseCaseMock = mockk<UserQueryUseCaseStub>()
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepositorySpy,
         meetingMemberRepositorySpy,
+        meetingTeamMemberSummaryRepositorySpy,
+        userQueryUseCaseMock,
     )
 
     val userRepositorySpy = UserRepositorySpy()

@@ -3,9 +3,11 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
+import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -17,15 +19,20 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 
 @DisplayName("MeetingTeamLeaveApplicationService")
 class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
 
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamRepository = MeetingTeamRepositorySpy()
+    val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
+    val userQueryUseCase = mockk<UserQueryUseCase>()
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingMemberRepository = meetingMemberRepository,
-        meetingTeamRepository = meetingTeamRepository
+        meetingTeamRepository = meetingTeamRepository,
+        meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
+        userQueryUseCase = userQueryUseCase,
     )
     val sut = MeetingTeamLeaveApplicationService(meetingTeamDomainService)
 

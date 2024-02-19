@@ -34,6 +34,14 @@ data class MeetingTeam(
         )
     }
 
+    fun publish(): MeetingTeam {
+        return copy(status = MeetingTeamStatus.PUBLISHED)
+    }
+
+    fun isPublished(): Boolean {
+        return status == MeetingTeamStatus.PUBLISHED
+    }
+
     companion object {
 
         fun create(

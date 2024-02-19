@@ -2,10 +2,13 @@ package com.studentcenter.weave.application.meetingTeam.service.domain.impl
 
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingMemberRepository
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamMemberSummaryRepository
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
@@ -19,16 +22,20 @@ import java.util.*
 class MeetingTeamDomainServiceImpl(
     private val meetingTeamRepository: MeetingTeamRepository,
     private val meetingMemberRepository: MeetingMemberRepository,
+    private val meetingTeamMemberSummaryRepository: MeetingTeamMemberSummaryRepository,
+    private val userQueryUseCase: UserQueryUseCase,
 ) : MeetingTeamDomainService {
 
     override fun save(meetingTeam: MeetingTeam) {
         meetingTeamRepository.save(meetingTeam)
     }
 
+    @Transactional(readOnly = true)
     override fun getById(id: UUID): MeetingTeam {
         return meetingTeamRepository.getById(id)
     }
 
+    @Transactional(readOnly = true)
     override fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
@@ -37,6 +44,7 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.scrollByMemberUserId(userId, next, limit)
     }
 
+    @Transactional(readOnly = true)
     override fun scrollByFilter(
         memberCount: Int?,
         minBirthYear: Int?,
@@ -84,6 +92,7 @@ class MeetingTeamDomainServiceImpl(
         }
     }
 
+    @Transactional
     override fun updateById(
         id: UUID,
         location: Location?,
@@ -111,6 +120,17 @@ class MeetingTeamDomainServiceImpl(
     override fun deleteById(id: UUID) {
         meetingMemberRepository.deleteAllByMeetingTeamId(id)
         meetingTeamRepository.deleteById(id)
+    }
+
+    @Transactional
+    override fun publishById(id: UUID): MeetingTeam {
+        return meetingTeamRepository
+            .getById(id)
+            .publish()
+            .also {
+                meetingTeamRepository.save(it)
+                meetingTeamMemberSummaryRepository.save(createMeetingTeamMemberSummary(it))
+            }
     }
 
     @Transactional
@@ -150,6 +170,21 @@ class MeetingTeamDomainServiceImpl(
         require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
             "팀원의 수가 초과되었습니다"
         }
+    }
+
+    private fun createMeetingTeamMemberSummary(meetingTeam: MeetingTeam): MeetingTeamMemberSummary {
+        val meetingMemberUsers: List<User> = meetingMemberRepository
+            .findAllByMeetingTeamId(meetingTeam.id)
+            .map { userQueryUseCase.getById(it.userId) }
+
+        require(meetingMemberUsers.size == meetingTeam.memberCount) {
+            "설정된 팀원의 수와 실제 팀원의 수가 일치해야 팀을 공개할 수 있어요!"
+        }
+
+        return MeetingTeamMemberSummary.create(
+            meetingTeamId = meetingTeam.id,
+            members = meetingMemberUsers
+        )
     }
 
 }
