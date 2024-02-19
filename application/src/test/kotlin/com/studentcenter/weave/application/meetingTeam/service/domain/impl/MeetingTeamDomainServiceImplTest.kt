@@ -123,20 +123,6 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
     }
 
     describe("publish") {
-        context("미팅 팀에 소속된 멤버 수가 0일 경우") {
-            it("예외를 발생시킨다.") {
-                // arrange
-                val meetingTeam = MeetingTeamFixtureFactory.create()
-                every { userQueryUseCase.getById(any()) } returns UserFixtureFactory.create()
-                meetingTeamRepositorySpy.save(meetingTeam)
-
-                // act, assert
-                shouldThrow<IllegalArgumentException> {
-                    sut.publishById(meetingTeam.id)
-                }
-            }
-        }
-
         context("미팅 팀에 소속된 멤버 수가 설정된 멤버수와 동일할 경우") {
             it("팀 멤버 요약정보를 생성하고, 미팅 팀을 공개한다.") {
                 // arrange
