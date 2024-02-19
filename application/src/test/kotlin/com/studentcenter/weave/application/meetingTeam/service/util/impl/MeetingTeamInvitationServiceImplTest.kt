@@ -7,8 +7,6 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFacto
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
-import java.util.*
 
 @DisplayName("MeetingTeamInvitationServiceImpl")
 class MeetingTeamInvitationServiceImplTest : DescribeSpec({
@@ -22,16 +20,16 @@ class MeetingTeamInvitationServiceImplTest : DescribeSpec({
     )
 
     describe("create") {
-        it("초대 링크를 위한 랜덤 UUID를 생성한다.") {
+        it("랜덤 UUID와 함께 초대 링크를 생성한다.") {
             // arrange
             val meetingTeam = MeetingTeamFixtureFactory.create()
 
             // act
-            val actual: UUID = sut.create(meetingTeam.id)
+            val actual: String = sut.create(meetingTeam.id)
 
             // assert
+            // TODO 초대 링크 조회 API 작업 후 변경하기
             actual.shouldNotBeNull()
-            actual::class shouldBe UUID::class
         }
     }
 

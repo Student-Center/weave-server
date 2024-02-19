@@ -154,7 +154,7 @@ class MeetingTeamRestController(
         val result = meetingTeamCreateInvitationUseCase.invoke(meetingTeamId)
 
         return MeetingTeamCreateInvitationResponse(
-            invitationCode = result.invitationCode,
+            invitationLink = result.invitationLink,
         )
     }
 

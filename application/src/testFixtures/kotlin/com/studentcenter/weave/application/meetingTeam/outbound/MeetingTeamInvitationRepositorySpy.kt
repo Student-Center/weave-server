@@ -7,14 +7,10 @@ import java.util.concurrent.ConcurrentHashMap
 
 class MeetingTeamInvitationRepositorySpy : MeetingTeamInvitationRepository {
 
-    private val bucket = ConcurrentHashMap<UUID, UUID>()
+    private val bucket = ConcurrentHashMap<String, UUID>()
 
-    override fun save(
-        meetingTeamInvitation: MeetingTeamInvitation,
-    ): UUID {
-        bucket[meetingTeamInvitation.invitationCode] = meetingTeamInvitation.teamId
-
-        return meetingTeamInvitation.invitationCode
+    override fun save(meetingTeamInvitation: MeetingTeamInvitation) {
+        bucket[meetingTeamInvitation.invitationLink] = meetingTeamInvitation.teamId
     }
 
     fun clear() {
