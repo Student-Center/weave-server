@@ -20,4 +20,5 @@ auth:
 meeting:
   team:
     invitation:
-      expire-duration: ${INVITATION_EXPIRE_SECONDS:3600}
+      url-prefix: ${INVITATION_URL_PREFIX:https://api.dev.team-weave.me?code=}
+      expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
