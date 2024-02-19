@@ -14,16 +14,24 @@ class MeetingTeamInvitationServiceImpl(
     private val meetingTeamInvitationRepository: MeetingTeamInvitationRepository,
 ) : MeetingTeamInvitationService {
 
-    override fun create(teamId: UUID): UUID {
-        val invitationCode = UuidCreator.create()
+    override fun create(teamId: UUID): String {
+        val invitationLink = generateInvitationLink()
 
-        return meetingTeamInvitationRepository.save(
+        meetingTeamInvitationRepository.save(
             MeetingTeamInvitation.of(
                 teamId = teamId,
-                invitationCode = invitationCode,
-                expirationDuration = meetingTeamInvitationProperties.expireDuration,
+                invitationLink = invitationLink,
+                expirationDuration = meetingTeamInvitationProperties.expireSeconds,
             )
         )
+
+        return invitationLink
+    }
+
+    private fun generateInvitationLink(): String {
+        val invitationCode = UuidCreator.create()
+
+        return meetingTeamInvitationProperties.urlPrefix + invitationCode
     }
 
 }

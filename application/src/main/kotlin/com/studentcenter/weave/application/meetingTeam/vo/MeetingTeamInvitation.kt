@@ -1,23 +1,24 @@
 package com.studentcenter.weave.application.meetingTeam.vo
 
 import java.util.*
+import kotlin.time.Duration
 
 data class MeetingTeamInvitation(
     val teamId: UUID,
-    val invitationCode: UUID,
-    val expirationDuration: Long,
+    val invitationLink: String,
+    val expirationDuration: Duration,
 ) {
 
     companion object {
 
         fun of(
             teamId: UUID,
-            invitationCode: UUID,
-            expirationDuration: Long,
+            invitationLink: String,
+            expirationDuration: Duration,
         ): MeetingTeamInvitation {
             return MeetingTeamInvitation(
                 teamId = teamId,
-                invitationCode = invitationCode,
+                invitationLink = invitationLink,
                 expirationDuration = expirationDuration
             )
         }

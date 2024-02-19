@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.entity.MeetingTeamInvitationRedisHash
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.repository.MeetingTeamInvitationRedisRepository
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class MeetingTeamInvitationRedisAdapter(
@@ -13,18 +12,14 @@ class MeetingTeamInvitationRedisAdapter(
 ) : MeetingTeamInvitationRepository {
 
     override fun save(
-        meetingTeamInvitation: MeetingTeamInvitation
-    ): UUID {
+        meetingTeamInvitation: MeetingTeamInvitation,
+    ) {
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
-            code = meetingTeamInvitation.invitationCode,
+            invitationLink = meetingTeamInvitation.invitationLink,
             teamId = meetingTeamInvitation.teamId,
-            expirationDuration = meetingTeamInvitation.expirationDuration
+            expirationDuration = meetingTeamInvitation.expirationDuration,
         )
-
-        val savedMeetingTeamInvitationRedisHash =
-            meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
-
-        return savedMeetingTeamInvitationRedisHash.code
+        meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
     }
 
 }

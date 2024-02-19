@@ -5,6 +5,6 @@ import java.util.*
 
 interface MeetingTeamInvitationService {
 
-    fun create(teamId: UUID): UUID
+    fun create(teamId: UUID): String
 
 }

@@ -31,11 +31,10 @@ class MeetingTeamCreateInvitationApplicationService(
                 )
             }
 
-        val invitationCode = meetingTeamInvitationService.create(meetingTeam.id)
+        val invitationLink = meetingTeamInvitationService.create(meetingTeam.id)
 
         return MeetingTeamCreateInvitationUseCase.Result(
-            teamId = meetingTeam.id,
-            invitationCode = invitationCode,
+            invitationLink = invitationLink,
         )
     }
 
@@ -66,7 +65,7 @@ class MeetingTeamCreateInvitationApplicationService(
         val meetingTeam = meetingTeamDomainService.getById(meetingTeamId)
 
         require(
-            validateTeamVacancyIsNotFull(meetingTeam) && validateMeetingTeamStateIsWaiting(
+            meetingTeam.status == MeetingTeamStatus.WAITING && validateTeamVacancyIsNotFull(
                 meetingTeam
             )
         ) {
@@ -76,9 +75,5 @@ class MeetingTeamCreateInvitationApplicationService(
 
     private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam): Boolean {
         return meetingMemberRepository.findAllByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
-    }
-
-    private fun validateMeetingTeamStateIsWaiting(meetingTeam: MeetingTeam): Boolean {
-        return meetingTeam.status == MeetingTeamStatus.WAITING
     }
 }
