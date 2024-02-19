@@ -32,6 +32,8 @@ interface MeetingTeamDomainService {
         teamId: UUID
     )
 
+    fun publishById(id: UUID): MeetingTeam
+
     fun getById(id: UUID): MeetingTeam
 
     fun scrollByMemberUserId(

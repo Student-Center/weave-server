@@ -1,15 +1,18 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
+import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
+import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import org.springframework.stereotype.Service
 
 @Service("meetingTeamDeleteApplicationService")
@@ -17,9 +20,14 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
+    val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
+    val userQueryUseCase = mockk<UserQueryUseCase>()
+
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository,
         meetingMemberRepository,
+        meetingTeamMemberSummaryRepository,
+        userQueryUseCase,
     )
     val sut = MeetingTeamDeleteApplicationService(meetingTeamDomainService)
 

@@ -1,5 +1,6 @@
 package com.studentcenter.weave.domain.meetingTeam.entity
 
+import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -18,6 +19,43 @@ data class MeetingTeamMemberSummary(
     init {
         require(youngestMemberBirthYear.value >= oldestMemberBirthYear.value) {
             "가장 나이가 어린 멤버의 년생은 가장 나이가 많은 멤버의 년생보다 작아야 합니다."
+        }
+    }
+
+    companion object {
+
+        fun create(
+            meetingTeamId: UUID,
+            members: List<User>
+        ): MeetingTeamMemberSummary {
+            require(members.isNotEmpty()) {
+                "팀에 속한 멤버가 존재해야 합니다."
+            }
+            return MeetingTeamMemberSummary(
+                meetingTeamId = meetingTeamId,
+                teamMbti = getTeamMbti(members),
+                youngestMemberBirthYear = getYoungestMemberBirthYear(members),
+                oldestMemberBirthYear = getOldestMemberBirthYear(members)
+            )
+        }
+
+        private fun getTeamMbti(members: List<User>): Mbti {
+            return members
+                .map { it.mbti }
+                .toList()
+                .let { Mbti.getDominantMbti(it) }
+        }
+
+        private fun getYoungestMemberBirthYear(members: List<User>): BirthYear {
+            return members
+                .map { it.birthYear }
+                .minBy { it.value }
+        }
+
+        private fun getOldestMemberBirthYear(members: List<User>): BirthYear {
+            return members
+                .map { it.birthYear }
+                .maxBy { it.value }
         }
     }
 
