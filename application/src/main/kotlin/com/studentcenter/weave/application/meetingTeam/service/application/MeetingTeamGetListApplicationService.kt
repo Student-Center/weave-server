@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
@@ -23,16 +24,20 @@ class MeetingTeamGetListApplicationService(
             .gender
             .getOppositeGender()
 
-        val meetingTeams: List<MeetingTeam> = meetingTeamDomainService.scrollByFilter(
+        val meetingTeams: List<MeetingTeam> = MeetingTeamListFilter(
             memberCount = command.memberCount,
             youngestMemberBirthYear = command.youngestMemberBirthYear,
             oldestMemberBirthYear = command.oldestMemberBirthYear,
             preferredLocations = command.preferredLocations,
             gender = oppositeGender,
             status = MeetingTeamStatus.PUBLISHED,
-            next = command.next,
-            limit = command.limit
-        )
+        ).let {
+            meetingTeamDomainService.scrollByFilter(
+                filter = it,
+                next = command.next,
+                limit = command.limit
+            )
+        }
 
         val meetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingTeamDomainService

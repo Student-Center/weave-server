@@ -5,16 +5,15 @@ import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingMemb
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamMemberSummaryRepository
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
-import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -48,22 +47,12 @@ class MeetingTeamDomainServiceImpl(
 
     @Transactional(readOnly = true)
     override fun scrollByFilter(
-        memberCount: Int?,
-        youngestMemberBirthYear: Int?,
-        oldestMemberBirthYear: Int?,
-        preferredLocations: List<Location>?,
-        gender: Gender?,
-        status: MeetingTeamStatus,
+        filter: MeetingTeamListFilter,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
         return meetingTeamRepository.scrollByFilter(
-            memberCount = memberCount,
-            youngestMemberBirthYear = youngestMemberBirthYear,
-            oldestMemberBirthYear = oldestMemberBirthYear,
-            preferredLocations = preferredLocations,
-            gender = gender,
-            status = status,
+            filter = filter,
             next = next,
             limit = limit,
         )
@@ -138,7 +127,7 @@ class MeetingTeamDomainServiceImpl(
     @Transactional
     override fun publishById(id: UUID): MeetingTeam {
         val meetingTeam = meetingTeamRepository.getById(id)
-        return if(meetingTeam.isPublished()) {
+        return if (meetingTeam.isPublished()) {
             meetingTeam
         } else {
             createMeetingTeamMemberSummary(meetingTeam)

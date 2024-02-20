@@ -1,10 +1,8 @@
 package com.studentcenter.weave.infrastructure.persistence.meetingTeam.adapter
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.meetingTeam.enums.Location
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingTeamJpaRepository
@@ -49,23 +47,18 @@ class MeetingTeamJpaAdapter(
     }
 
     override fun scrollByFilter(
-        memberCount: Int?,
-        youngestMemberBirthYear: Int?,
-        oldestMemberBirthYear: Int?,
-        preferredLocations: List<Location>?,
-        gender: Gender?,
-        status: MeetingTeamStatus,
+        filter: MeetingTeamListFilter,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
         return meetingTeamJpaRepository
             .scrollByFilter(
-                memberCount = memberCount,
-                youngestMemberBirthYear = youngestMemberBirthYear,
-                oldestMemberBirthYear = oldestMemberBirthYear,
-                preferredLocations = preferredLocations?.map { it.name },
-                gender = gender?.name,
-                status = status.name,
+                memberCount = filter.memberCount,
+                youngestMemberBirthYear = filter.youngestMemberBirthYear,
+                oldestMemberBirthYear = filter.oldestMemberBirthYear,
+                preferredLocations = filter.preferredLocations?.map { it.name },
+                gender = filter.gender?.name,
+                status = filter.status.name,
                 next = next,
                 limit = limit
             ).map { it.toDomain() }
