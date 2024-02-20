@@ -1,7 +1,11 @@
 package com.studentcenter.weave.application.meetingTeam.outbound
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.enums.Location
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.domain.user.enums.Gender
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -29,6 +33,14 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         bucket.remove(id)
     }
 
+    override fun scrollByFilter(
+        filter: MeetingTeamListFilter,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        return bucket.values.toList()
+    }
+
     fun findById(id: UUID): MeetingTeam? {
         return bucket[id]
     }
@@ -40,4 +52,5 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
     fun clear() {
         bucket.clear()
     }
+
 }

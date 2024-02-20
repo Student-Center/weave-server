@@ -1,6 +1,7 @@
 package com.studentcenter.weave.infrastructure.persistence.meetingTeam.adapter
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity.Companion.toJpaEntity
@@ -36,16 +37,31 @@ class MeetingTeamJpaAdapter(
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        val result = meetingTeamJpaRepository
+        return meetingTeamJpaRepository
             .scrollByMemberUserId(userId, next, limit)
             .map { it.toDomain() }
-
-        return result
     }
 
     override fun deleteById(id: UUID) {
         meetingTeamJpaRepository.deleteById(id)
     }
 
+    override fun scrollByFilter(
+        filter: MeetingTeamListFilter,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeam> {
+        return meetingTeamJpaRepository
+            .scrollByFilter(
+                memberCount = filter.memberCount,
+                youngestMemberBirthYear = filter.youngestMemberBirthYear,
+                oldestMemberBirthYear = filter.oldestMemberBirthYear,
+                preferredLocations = filter.preferredLocations?.map { it.name },
+                gender = filter.gender?.name,
+                status = filter.status.name,
+                next = next,
+                limit = limit
+            ).map { it.toDomain() }
+    }
 
 }

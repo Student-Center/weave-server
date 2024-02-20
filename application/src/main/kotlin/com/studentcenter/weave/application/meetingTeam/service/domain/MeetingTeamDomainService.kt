@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.domain
 
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
@@ -43,10 +44,7 @@ interface MeetingTeamDomainService {
     ): List<MeetingTeam>
 
     fun scrollByFilter(
-        memberCount: Int?,
-        minBirthYear: Int?,
-        maxBirthYear: Int?,
-        preferredLocations: List<Location>?,
+        filter: MeetingTeamListFilter,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam>

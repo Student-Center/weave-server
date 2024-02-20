@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingMemb
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamMemberSummaryRepository
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -46,14 +47,15 @@ class MeetingTeamDomainServiceImpl(
 
     @Transactional(readOnly = true)
     override fun scrollByFilter(
-        memberCount: Int?,
-        minBirthYear: Int?,
-        maxBirthYear: Int?,
-        preferredLocations: List<Location>?,
+        filter: MeetingTeamListFilter,
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        TODO("Not yet implemented")
+        return meetingTeamRepository.scrollByFilter(
+            filter = filter,
+            next = next,
+            limit = limit,
+        )
     }
 
     override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
@@ -125,7 +127,7 @@ class MeetingTeamDomainServiceImpl(
     @Transactional
     override fun publishById(id: UUID): MeetingTeam {
         val meetingTeam = meetingTeamRepository.getById(id)
-        return if(meetingTeam.isPublished()) {
+        return if (meetingTeam.isPublished()) {
             meetingTeam
         } else {
             createMeetingTeamMemberSummary(meetingTeam)

@@ -77,6 +77,7 @@ interface MeetingTeamApi {
         id: UUID,
     ): MeetingTeamGetDetailResponse
 
+    @Secured
     @Operation(summary = "Get meeting team list")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

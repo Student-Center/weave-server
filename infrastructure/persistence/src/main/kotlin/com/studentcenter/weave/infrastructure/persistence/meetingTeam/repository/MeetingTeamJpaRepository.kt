@@ -30,4 +30,37 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
     ): List<MeetingTeamJpaEntity>
 
 
+    // TODO : JOOQ 설정 이후 변경 필요
+    @Query(
+        value =
+        """
+            SELECT mt.id, mt.team_introduce, mt.member_count, mt.location, mt.status, mt.gender
+            FROM (
+                SELECT *
+                FROM meeting_team
+                WHERE (:memberCount IS NULL OR member_count = :memberCount)
+                  AND (:next IS NULL OR id > :next)
+                  AND (:status IS NULL OR status = :status)
+                  AND (:gender IS NULL OR gender = :gender)
+                  AND (:preferredLocations IS NULL OR location IN (:preferredLocations))
+            ) mt
+            INNER JOIN weave.meeting_team_member_summary mtms ON mt.id = mtms.meeting_team_id
+            WHERE (mtms.youngest_member_birth_year <= :youngestMemberBirthYear)
+              AND (mtms.oldest_member_birth_year >= :oldestMemberBirthYear)
+            ORDER BY mt.id DESC
+            LIMIT :limit
+        """,
+        nativeQuery = true
+    )
+    fun scrollByFilter(
+        memberCount: Int?,
+        youngestMemberBirthYear: Int,
+        oldestMemberBirthYear: Int,
+        preferredLocations: List<String>?,
+        gender: String?,
+        status: String?,
+        next: UUID?,
+        limit: Int
+    ): List<MeetingTeamJpaEntity>
+
 }

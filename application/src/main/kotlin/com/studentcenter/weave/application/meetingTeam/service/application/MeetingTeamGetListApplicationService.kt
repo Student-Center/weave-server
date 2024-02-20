@@ -1,12 +1,15 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
+import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,14 +20,24 @@ class MeetingTeamGetListApplicationService(
 ) : MeetingTeamGetListUseCase {
 
     override fun invoke(command: MeetingTeamGetListUseCase.Command): MeetingTeamGetListUseCase.Result {
-        val meetingTeams: List<MeetingTeam> = meetingTeamDomainService.scrollByFilter(
+        val oppositeGender = getCurrentUserAuthentication()
+            .gender
+            .getOppositeGender()
+
+        val meetingTeams: List<MeetingTeam> = MeetingTeamListFilter(
             memberCount = command.memberCount,
-            minBirthYear = command.minBirthYear,
-            maxBirthYear = command.maxBirthYear,
+            youngestMemberBirthYear = command.youngestMemberBirthYear,
+            oldestMemberBirthYear = command.oldestMemberBirthYear,
             preferredLocations = command.preferredLocations,
-            next = command.next,
-            limit = command.limit
-        )
+            gender = oppositeGender,
+            status = MeetingTeamStatus.PUBLISHED,
+        ).let {
+            meetingTeamDomainService.scrollByFilter(
+                filter = it,
+                next = command.next,
+                limit = command.limit
+            )
+        }
 
         val meetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingTeamDomainService

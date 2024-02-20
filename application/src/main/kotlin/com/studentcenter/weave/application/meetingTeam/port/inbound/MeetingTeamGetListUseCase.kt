@@ -12,8 +12,8 @@ fun interface MeetingTeamGetListUseCase {
 
     data class Command(
         val memberCount: Int?,
-        val minBirthYear: Int?,
-        val maxBirthYear: Int?,
+        val youngestMemberBirthYear: Int,
+        val oldestMemberBirthYear: Int,
         val preferredLocations: List<Location>?,
         override val next: UUID?,
         override val limit: Int
