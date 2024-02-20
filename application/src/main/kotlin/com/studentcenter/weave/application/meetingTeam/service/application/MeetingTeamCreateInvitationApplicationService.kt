@@ -2,7 +2,6 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateInvitationUseCase
-import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingMemberRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -16,7 +15,6 @@ import java.util.*
 class MeetingTeamCreateInvitationApplicationService(
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-    private val meetingMemberRepository: MeetingMemberRepository,
 ) : MeetingTeamCreateInvitationUseCase {
 
     @Transactional
@@ -74,6 +72,6 @@ class MeetingTeamCreateInvitationApplicationService(
     }
 
     private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam): Boolean {
-        return meetingMemberRepository.findAllByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
+        return meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
     }
 }

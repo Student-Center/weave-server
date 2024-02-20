@@ -48,28 +48,26 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
     val sut = MeetingTeamCreateInvitationApplicationService(
         meetingTeamInvitationService = meetingTeamInvitationService,
         meetingTeamDomainService = meetingTeamDomainService,
-        meetingMemberRepository = meetingMemberRepository,
     )
 
     afterTest {
         SecurityContextHolder.clearContext()
         meetingTeamRepository.clear()
-        meetingMemberRepository.clear()
         meetingTeamInvitationRepositorySpy.clear()
         userRepository.clear()
     }
 
+    fun createMember(meetingTeamId: UUID, userId: UUID, role: MeetingMemberRole) {
+        val member = MeetingMember.create(
+            meetingTeamId = meetingTeamId,
+            userId = userId,
+            role = role,
+        )
+
+        meetingMemberRepository.save(member)
+    }
+
     describe("미팅 팀 새로운 팀원 초대") {
-        fun createMember(meetingTeamId: UUID, userId: UUID, role: MeetingMemberRole) {
-            val member = MeetingMember.create(
-                meetingTeamId = meetingTeamId,
-                userId = userId,
-                role = role,
-            )
-
-            meetingMemberRepository.save(member)
-        }
-
         context("현재 유저가 팀장인 경우") {
             it("초대 링크를 정상적으로 발급한다.") {
                 // arrange
