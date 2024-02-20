@@ -85,15 +85,6 @@ interface MeetingTeamApi {
         request: MeetingTeamGetListRequest
     ): MeetingTeamGetListResponse
 
-    @Secured
-    @Operation(summary = "Create meeting team invitation code")
-    @PostMapping("/{meetingTeamId}/invitation")
-    @ResponseStatus(HttpStatus.OK)
-    fun createMeetingTeamInvitation(
-        @PathVariable
-        meetingTeamId: UUID
-    ): MeetingTeamCreateInvitationResponse
-
     @Operation(summary = "Leave meeting team")
     @DeleteMapping("/{id}/members/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
