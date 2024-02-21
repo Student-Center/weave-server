@@ -32,7 +32,7 @@ class MeetingTeamCreateInvitationApplicationService(
 
         val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
 
-        return MeetingTeamCreateInvitationUseCase.Result(invitationLink = meetingTeamInvitation.invitationLink)
+        return MeetingTeamCreateInvitationUseCase.Result(meetingTeamInvitation = meetingTeamInvitation.invitationLink)
     }
 
     private fun validateCurrentUserIsLeader(
@@ -50,17 +50,13 @@ class MeetingTeamCreateInvitationApplicationService(
     private fun validateTeamStatusIsWaiting(
         meetingTeam: MeetingTeam
     ) {
-        require(
-            meetingTeam.status == MeetingTeamStatus.WAITING
-        ) {
+        require(meetingTeam.status == MeetingTeamStatus.WAITING) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
     }
 
     private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam) {
-        require(
-            meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
-        ) {
+        require(meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
     }

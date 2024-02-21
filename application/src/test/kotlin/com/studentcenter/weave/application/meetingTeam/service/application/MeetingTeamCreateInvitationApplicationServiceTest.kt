@@ -83,7 +83,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 )
 
                 // assert
-                meetingTeamInvitation.invitationLink.shouldNotBeNull()
+                meetingTeamInvitation.meetingTeamInvitation.shouldNotBeNull()
             }
         }
 

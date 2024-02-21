@@ -110,9 +110,7 @@ class MeetingTeamRestController(
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
         val result = meetingTeamCreateInvitationUseCase.invoke(meetingTeamId)
 
-        return MeetingTeamCreateInvitationResponse(
-            invitationLink = result.invitationLink,
-        )
+        return MeetingTeamCreateInvitationResponse(meetingTeamInvitation = result.meetingTeamInvitation)
     }
 
 }
