@@ -5,13 +5,12 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
 import java.util.*
-import kotlin.time.Duration
 
 @RedisHash("meeting_team_invitation")
 class MeetingTeamInvitationRedisHash(
     teamId: UUID,
     invitationLink: Url,
-    expirationDuration: Duration,
+    expirationDuration: Long,
 ) {
 
     @Id
@@ -22,7 +21,7 @@ class MeetingTeamInvitationRedisHash(
         private set
 
     @TimeToLive
-    var expirationDuration: Duration = expirationDuration
+    var expirationDuration: Long = expirationDuration
         private set
 
 }

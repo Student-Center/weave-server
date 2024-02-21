@@ -21,7 +21,7 @@ class MeetingTeamInvitationServiceImpl(
         val meetingTeamInvitation = MeetingTeamInvitation(
             teamId = teamId,
             invitationLink = invitationLink,
-            expirationDuration = meetingTeamInvitationProperties.expireSeconds,
+            expirationDuration = meetingTeamInvitationProperties.expireSeconds
         )
 
         meetingTeamInvitationRepository.save(meetingTeamInvitation)

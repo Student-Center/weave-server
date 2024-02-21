@@ -15,7 +15,7 @@ class MeetingTeamInvitationRedisAdapter(
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
             invitationLink = meetingTeamInvitation.invitationLink,
             teamId = meetingTeamInvitation.teamId,
-            expirationDuration = meetingTeamInvitation.expirationDuration,
+            expirationDuration = meetingTeamInvitation.expirationDuration.inWholeSeconds,
         )
         meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
     }
