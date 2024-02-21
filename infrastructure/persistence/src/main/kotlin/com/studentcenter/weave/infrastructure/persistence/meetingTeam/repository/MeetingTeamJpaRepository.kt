@@ -10,6 +10,21 @@ import java.util.*
 interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
 
     // TODO : JOOQ 설정 이후 변경 필요
+    // 멤버는 하나의 팀에만 소속될 수 있음 - MVP 기준
+    @Query(
+        value =
+        """
+            SELECT mt.id, mt.team_introduce, mt.member_count, mt.location, mt.status, mt.gender
+            FROM meeting_team mt
+            INNER JOIN meeting_member mm ON mt.id = mm.meeting_team_id
+            WHERE mm.user_id = :memberUserId
+            LIMIT 1
+        """,
+        nativeQuery = true,
+    )
+    fun findByMemberUserId(memberUserId: UUID): Optional<MeetingTeamJpaEntity>
+
+    // TODO : JOOQ 설정 이후 변경 필요
     @Query(
         value =
         """

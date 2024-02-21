@@ -32,6 +32,17 @@ class MeetingTeamJpaAdapter(
             }.toDomain()
     }
 
+    override fun getByMemberUserId(userId: UUID): MeetingTeam {
+        return meetingTeamJpaRepository
+            .findByMemberUserId(userId)
+            .orElseThrow {
+                CustomException(
+                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                    message = "MeetingTeam(memberUserId=$userId)를 찾을 수 없습니다"
+                )
+            }.toDomain()
+    }
+
     override fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,

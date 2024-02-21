@@ -26,4 +26,8 @@ class MeetingTeamMemberSummaryRepositorySpy : MeetingTeamMemberSummaryRepository
             ?: throw NoSuchElementException()
     }
 
+    fun clear() {
+        bucket.clear()
+    }
+
 }
