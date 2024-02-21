@@ -22,28 +22,17 @@ class MeetingTeamCreateInvitationApplicationService(
 
         val meetingTeam = meetingTeamDomainService.getById(meetingTeamId)
             .also {
-                validate(
+                validateCurrentUserIsLeader(
                     meetingTeamId = it.id,
                     currentUserId = currentUserId,
                 )
+                validateTeamStatusIsWaiting(it)
+                validateTeamVacancyIsNotFull(it)
             }
 
-        val invitationLink = meetingTeamInvitationService.create(meetingTeam.id)
+        val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
 
-        return MeetingTeamCreateInvitationUseCase.Result(
-            invitationLink = invitationLink,
-        )
-    }
-
-    private fun validate(
-        meetingTeamId: UUID,
-        currentUserId: UUID,
-    ) {
-        validateCurrentUserIsLeader(
-            meetingTeamId = meetingTeamId,
-            currentUserId = currentUserId,
-        )
-        validateTeamVacancy(meetingTeamId)
+        return MeetingTeamCreateInvitationUseCase.Result(invitationLink = meetingTeamInvitation.invitationLink)
     }
 
     private fun validateCurrentUserIsLeader(
@@ -58,19 +47,21 @@ class MeetingTeamCreateInvitationApplicationService(
         }
     }
 
-    private fun validateTeamVacancy(meetingTeamId: UUID) {
-        val meetingTeam = meetingTeamDomainService.getById(meetingTeamId)
-
+    private fun validateTeamStatusIsWaiting(
+        meetingTeam: MeetingTeam
+    ) {
         require(
-            meetingTeam.status == MeetingTeamStatus.WAITING && validateTeamVacancyIsNotFull(
-                meetingTeam
-            )
+            meetingTeam.status == MeetingTeamStatus.WAITING
         ) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
     }
 
-    private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam): Boolean {
-        return meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
+    private fun validateTeamVacancyIsNotFull(meetingTeam: MeetingTeam) {
+        require(
+            meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeam.id).size < meetingTeam.memberCount
+        ) {
+            "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
+        }
     }
 }

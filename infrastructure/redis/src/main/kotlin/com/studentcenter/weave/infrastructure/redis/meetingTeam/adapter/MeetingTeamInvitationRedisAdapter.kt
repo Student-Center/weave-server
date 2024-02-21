@@ -11,9 +11,7 @@ class MeetingTeamInvitationRedisAdapter(
     private val meetingTeamInvitationRedisRepository: MeetingTeamInvitationRedisRepository,
 ) : MeetingTeamInvitationRepository {
 
-    override fun save(
-        meetingTeamInvitation: MeetingTeamInvitation,
-    ) {
+    override fun save(meetingTeamInvitation: MeetingTeamInvitation) {
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
             invitationLink = meetingTeamInvitation.invitationLink,
             teamId = meetingTeamInvitation.teamId,

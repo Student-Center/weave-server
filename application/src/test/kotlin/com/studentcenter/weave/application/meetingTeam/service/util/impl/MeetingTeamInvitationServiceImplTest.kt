@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.util.impl
 import com.studentcenter.weave.application.common.properties.MeetingTeamInvitationPropertiesFixtureFactory
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvitationRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvitationServiceImpl
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -25,7 +26,7 @@ class MeetingTeamInvitationServiceImplTest : DescribeSpec({
             val meetingTeam = MeetingTeamFixtureFactory.create()
 
             // act
-            val actual: String = sut.create(meetingTeam.id)
+            val actual: MeetingTeamInvitation = sut.create(meetingTeam.id)
 
             // assert
             // TODO 초대 링크 조회 API 작업 후 변경하기
