@@ -1,5 +1,6 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.controller
 
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateInvitationLinkUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
@@ -8,6 +9,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
@@ -29,6 +31,7 @@ class MeetingTeamRestController(
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
+    private val meetingTeamCreateInvitationLinkUseCase: MeetingTeamCreateInvitationLinkUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -102,6 +105,12 @@ class MeetingTeamRestController(
 
     override fun leaveMeetingTeam(id: UUID) {
         meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
+    }
+
+    override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
+        val result = meetingTeamCreateInvitationLinkUseCase.invoke(meetingTeamId)
+
+        return MeetingTeamCreateInvitationResponse(meetingTeamInvitationLink = result.meetingTeamInvitationLink)
     }
 
 }

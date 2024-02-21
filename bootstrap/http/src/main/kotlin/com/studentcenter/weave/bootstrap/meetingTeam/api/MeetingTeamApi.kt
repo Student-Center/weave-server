@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
@@ -93,5 +94,14 @@ interface MeetingTeamApi {
         @PathVariable
         id: UUID
     )
+
+    @Secured
+    @Operation(summary = "Create meeting team invitation code")
+    @PostMapping("/{meetingTeamId}/invitation")
+    @ResponseStatus(HttpStatus.OK)
+    fun createMeetingTeamInvitation(
+        @PathVariable
+        meetingTeamId: UUID
+    ): MeetingTeamCreateInvitationResponse
 
 }
