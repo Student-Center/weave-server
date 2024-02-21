@@ -47,9 +47,7 @@ class MeetingTeamCreateInvitationLinkApplicationService(
         }
     }
 
-    private fun validateTeamStatusIsWaiting(
-        meetingTeam: MeetingTeam
-    ) {
+    private fun validateTeamStatusIsWaiting(meetingTeam: MeetingTeam) {
         require(meetingTeam.status == MeetingTeamStatus.WAITING) {
             "팀의 정원이 이미 가득 차 있어서 새로운 팀원을 초대할 수 없어요!"
         }
