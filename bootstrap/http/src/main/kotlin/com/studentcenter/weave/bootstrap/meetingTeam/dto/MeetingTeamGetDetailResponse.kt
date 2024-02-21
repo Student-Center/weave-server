@@ -7,6 +7,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -19,6 +20,8 @@ data class MeetingTeamGetDetailResponse(
     val gender: Gender,
     val members: List<MeetingMemberDto>,
     val status: MeetingTeamStatus,
+    @Schema(description = "해당 팀과의 케미 점수 (1~5, 확인 불가능 할 경우 null)")
+    val affinityScore: Int?
 ) {
 
     data class MeetingMemberDto(
@@ -50,7 +53,8 @@ data class MeetingTeamGetDetailResponse(
     companion object {
         fun of(
             team: MeetingTeam,
-            members: List<MeetingMemberDetailInfo>
+            members: List<MeetingMemberDetailInfo>,
+            affinityScore: MbtiAffinityScore?
         ): MeetingTeamGetDetailResponse {
             return MeetingTeamGetDetailResponse(
                 id = team.id,
@@ -60,6 +64,7 @@ data class MeetingTeamGetDetailResponse(
                 gender = team.gender,
                 members = members.map { MeetingMemberDto.from(it) },
                 status = team.status,
+                affinityScore = affinityScore?.value
             )
         }
     }
