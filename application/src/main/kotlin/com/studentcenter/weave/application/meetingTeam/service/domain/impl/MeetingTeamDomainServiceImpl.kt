@@ -12,8 +12,11 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
+import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore.Companion.getAffinityScore
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -34,6 +37,33 @@ class MeetingTeamDomainServiceImpl(
     @Transactional(readOnly = true)
     override fun getById(id: UUID): MeetingTeam {
         return meetingTeamRepository.getById(id)
+    }
+
+    override fun getByMemberUserId(userId: UUID): MeetingTeam {
+        return meetingTeamRepository.getByMemberUserId(userId)
+    }
+
+    override fun calculateTeamMbtiAffinityScore(
+        meetingTeam: MeetingTeam,
+        targetMeetingTeam: MeetingTeam
+    ): MbtiAffinityScore? {
+        if (meetingTeam.status != MeetingTeamStatus.PUBLISHED || targetMeetingTeam.status != MeetingTeamStatus.PUBLISHED) {
+            return null
+        }
+
+        if (meetingTeam.id == targetMeetingTeam.id) {
+            return null
+        }
+
+        val mbti = meetingTeamMemberSummaryRepository
+            .getByMeetingTeamId(meetingTeam.id)
+            .teamMbti
+
+        val targetMbti = meetingTeamMemberSummaryRepository
+            .getByMeetingTeamId(targetMeetingTeam.id)
+            .teamMbti
+
+        return mbti.getAffinityScore(targetMbti)
     }
 
     @Transactional(readOnly = true)

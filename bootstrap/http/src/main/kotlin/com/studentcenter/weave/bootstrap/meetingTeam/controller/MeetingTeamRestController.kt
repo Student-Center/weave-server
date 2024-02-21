@@ -78,7 +78,7 @@ class MeetingTeamRestController(
     override fun getMeetingTeamDetail(id: UUID): MeetingTeamGetDetailResponse {
         return MeetingTeamGetDetailUseCase.Command(id)
             .let { meetingTeamGetDetailUseCase.invoke(it) }
-            .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members) }
+            .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members, it.affinityScore) }
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {

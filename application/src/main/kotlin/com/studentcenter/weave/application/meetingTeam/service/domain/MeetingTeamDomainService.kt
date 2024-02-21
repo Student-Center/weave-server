@@ -7,6 +7,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import java.util.*
 
 interface MeetingTeamDomainService {
@@ -36,6 +37,18 @@ interface MeetingTeamDomainService {
     fun publishById(id: UUID): MeetingTeam
 
     fun getById(id: UUID): MeetingTeam
+
+    // 멤버는 하나의 팀에만 소속될 수있음(MVP 기준)
+    fun getByMemberUserId(userId: UUID): MeetingTeam
+
+    /**
+     * 팀 간 MBTI 궁합 점수를 계산해요
+     * @return null - 팀간 MBTI 궁합 점수를 계산할 수 없는 경우
+     */
+    fun calculateTeamMbtiAffinityScore(
+        meetingTeam: MeetingTeam,
+        targetMeetingTeam: MeetingTeam
+    ): MbtiAffinityScore?
 
     fun scrollByMemberUserId(
         userId: UUID,

@@ -10,6 +10,9 @@ interface MeetingTeamRepository {
 
     fun getById(id: UUID): MeetingTeam
 
+    // 멤버는 하나의 팀에만 소속될 수있음(MVP 기준)
+    fun getByMemberUserId(userId: UUID): MeetingTeam
+
     fun scrollByMemberUserId(
         userId: UUID,
         next: UUID?,
