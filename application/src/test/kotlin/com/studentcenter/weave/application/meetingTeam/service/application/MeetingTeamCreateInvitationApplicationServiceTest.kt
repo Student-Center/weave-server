@@ -45,7 +45,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
 
-    val sut = MeetingTeamCreateInvitationApplicationService(
+    val sut = MeetingTeamCreateInvitationLinkApplicationService(
         meetingTeamInvitationService = meetingTeamInvitationService,
         meetingTeamDomainService = meetingTeamDomainService,
     )
@@ -78,12 +78,10 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
                 // act & assert
-                val meetingTeamInvitation = sut.invoke(
-                    meetingTeamId = meetingTeam.id,
-                )
+                val meetingTeamInvitation = sut.invoke(meetingTeamId = meetingTeam.id)
 
                 // assert
-                meetingTeamInvitation.meetingTeamInvitation.shouldNotBeNull()
+                meetingTeamInvitation.meetingTeamInvitationLink.shouldNotBeNull()
             }
         }
 
@@ -108,9 +106,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
-                    sut.invoke(
-                        meetingTeamId = meetingTeam.id,
-                    )
+                    sut.invoke(meetingTeamId = meetingTeam.id)
                 }
             }
         }
@@ -150,9 +146,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
-                    sut.invoke(
-                        meetingTeamId = meetingTeam.id,
-                    )
+                    sut.invoke(meetingTeamId = meetingTeam.id)
                 }
             }
         }

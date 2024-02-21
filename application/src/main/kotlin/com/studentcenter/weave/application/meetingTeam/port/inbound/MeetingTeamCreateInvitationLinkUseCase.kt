@@ -3,12 +3,10 @@ package com.studentcenter.weave.application.meetingTeam.port.inbound
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
-fun interface MeetingTeamCreateInvitationUseCase {
+fun interface MeetingTeamCreateInvitationLinkUseCase {
 
     fun invoke(meetingTeamId: UUID): Result
 
-    data class Result(
-        val meetingTeamInvitation: Url,
-    )
+    data class Result(val meetingTeamInvitationLink: Url)
 
 }
