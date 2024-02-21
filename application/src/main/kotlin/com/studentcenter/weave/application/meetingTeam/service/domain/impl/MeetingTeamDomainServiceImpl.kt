@@ -43,7 +43,7 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.getByMemberUserId(userId)
     }
 
-    override fun getTeamMbtiAffinityScore(
+    override fun calculateTeamMbtiAffinityScore(
         meetingTeam: MeetingTeam,
         targetMeetingTeam: MeetingTeam
     ): MbtiAffinityScore? {

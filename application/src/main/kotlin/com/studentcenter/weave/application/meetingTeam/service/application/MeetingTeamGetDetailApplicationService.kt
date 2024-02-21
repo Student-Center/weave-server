@@ -30,7 +30,7 @@ class MeetingTeamGetDetailApplicationService(
         } else meetingTeamDomainService.getById(command.meetingId)
 
         val affinityScore: MbtiAffinityScore? =
-            meetingTeamDomainService.getTeamMbtiAffinityScore(myMeetingTeam, targetMeetingTeam)
+            meetingTeamDomainService.calculateTeamMbtiAffinityScore(myMeetingTeam, targetMeetingTeam)
 
         return MeetingTeamGetDetailUseCase.Result(
             meetingTeam = targetMeetingTeam,
