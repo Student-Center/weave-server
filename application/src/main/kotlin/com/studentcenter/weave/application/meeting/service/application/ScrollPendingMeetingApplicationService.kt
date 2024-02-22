@@ -16,17 +16,15 @@ class ScrollPendingMeetingApplicationService(
 
     @Transactional(readOnly = true)
     override fun invoke(command: ScrollPendingMeetingUseCase.Command): ScrollPendingMeetingUseCase.Result {
-        val userId = getCurrentUserAuthentication().userId
-        val meetings = meetingDomainService.scrollPendingMeetingByUserId(
-            userId = userId,
+        val page = meetingDomainService.scrollPendingMeetingByUserId(
+            userId = getCurrentUserAuthentication().userId,
             isRequester = command.isRequester,
             next = command.next,
             limit = command.limit,
         )
+        val next = if (page.size > command.limit) page.last().id else null
 
-        val hasNext = meetings.size > command.limit
-        val next = if(hasNext) meetings.last().id else null
-
+        val meetings = if (next != null) page.subList(0, page.lastIndex) else page
         val teamIds = meetings
             .flatMap { listOf(it.receivingTeamId, it.requestingTeamId) }
             .distinct()
