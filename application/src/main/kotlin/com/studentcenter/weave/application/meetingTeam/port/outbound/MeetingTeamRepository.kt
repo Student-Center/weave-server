@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.port.outbound
 
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import java.util.*
 
 interface MeetingTeamRepository {
@@ -10,8 +11,15 @@ interface MeetingTeamRepository {
 
     fun getById(id: UUID): MeetingTeam
 
+    fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam
+
     // 멤버는 하나의 팀에만 소속될 수있음(MVP 기준)
     fun getByMemberUserId(userId: UUID): MeetingTeam
+
+    fun findByMemberUserId(userId: UUID): MeetingTeam?
 
     fun scrollByMemberUserId(
         userId: UUID,

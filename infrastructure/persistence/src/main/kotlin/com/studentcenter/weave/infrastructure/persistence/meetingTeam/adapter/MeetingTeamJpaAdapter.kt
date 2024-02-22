@@ -3,6 +3,7 @@ package com.studentcenter.weave.infrastructure.persistence.meetingTeam.adapter
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingTeamJpaRepository
@@ -32,6 +33,20 @@ class MeetingTeamJpaAdapter(
             }.toDomain()
     }
 
+    override fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam {
+        return meetingTeamJpaRepository
+            .findByIdAndStatus(id, status)
+            .orElseThrow {
+                CustomException(
+                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                    message = "MeetingTeam(id=$id, status=$status)를 찾을 수 없습니다"
+                )
+            }.toDomain()
+    }
+
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
         return meetingTeamJpaRepository
             .findByMemberUserId(userId)
@@ -41,6 +56,13 @@ class MeetingTeamJpaAdapter(
                     message = "MeetingTeam(memberUserId=$userId)를 찾을 수 없습니다"
                 )
             }.toDomain()
+    }
+
+    override fun findByMemberUserId(userId: UUID): MeetingTeam? {
+        return meetingTeamJpaRepository
+            .findByMemberUserId(userId)
+            .map { it.toDomain() }
+            .orElse(null)
     }
 
     override fun scrollByMemberUserId(

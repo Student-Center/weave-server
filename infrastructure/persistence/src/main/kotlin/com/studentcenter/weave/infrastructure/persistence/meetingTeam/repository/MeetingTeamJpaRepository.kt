@@ -1,5 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository
 
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -8,6 +9,11 @@ import java.util.*
 
 @Repository
 interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
+
+    fun findByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): Optional<MeetingTeamJpaEntity>
 
     // TODO : JOOQ 설정 이후 변경 필요
     // 멤버는 하나의 팀에만 소속될 수 있음 - MVP 기준

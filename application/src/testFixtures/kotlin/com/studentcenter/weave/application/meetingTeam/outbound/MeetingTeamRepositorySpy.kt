@@ -3,9 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.outbound
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.user.enums.Gender
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -21,7 +19,18 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket[id] ?: throw NoSuchElementException()
     }
 
+    override fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam {
+        return bucket.values.first { it.id == id && it.status == status }
+    }
+
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
+        return bucket.values.first()
+    }
+
+    override fun findByMemberUserId(userId: UUID): MeetingTeam? {
         return bucket.values.first()
     }
 

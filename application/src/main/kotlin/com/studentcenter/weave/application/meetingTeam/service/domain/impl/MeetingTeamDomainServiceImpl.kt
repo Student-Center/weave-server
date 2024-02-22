@@ -39,8 +39,19 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.getById(id)
     }
 
+    override fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam {
+        return meetingTeamRepository.getByIdAndStatus(id, status)
+    }
+
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
         return meetingTeamRepository.getByMemberUserId(userId)
+    }
+
+    override fun findByMemberUserId(userId: UUID): MeetingTeam? {
+        return meetingTeamRepository.findByMemberUserId(userId)
     }
 
     override fun calculateTeamMbtiAffinityScore(
