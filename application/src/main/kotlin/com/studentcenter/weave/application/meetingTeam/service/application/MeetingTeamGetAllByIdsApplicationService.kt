@@ -29,7 +29,7 @@ class MeetingTeamGetAllByIdsApplicationService(
                 .findAllMeetingMembersByMeetingTeamId(team.id)
                 .map {
                     val memberUser = userQueryUseCase.getById(it.userId)
-                    val university = getUniversity(univCache, memberUser)
+                    val university = getUniversityWithCache(univCache, memberUser)
                     MeetingTeamInfo.MemberInfo(
                         id = it.id,
                         user = memberUser,
@@ -50,7 +50,7 @@ class MeetingTeamGetAllByIdsApplicationService(
     /**
      * 비슷한 학교가 많을 것으로 보여서 한번 조회한 뒤에 캐시처리하여 재활용
      */
-    private fun getUniversity(
+    private fun getUniversityWithCache(
         universityCache: HashMap<UUID, University>,
         memberUser: User,
     ): University {
