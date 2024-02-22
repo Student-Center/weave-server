@@ -62,6 +62,7 @@ class MeetingTeamGetListApplicationService(
         val memberUser = userQueryUseCase.getById(member.userId)
         val university = universityGetByIdUsecase.invoke(memberUser.universityId)
         return MeetingTeamInfo.MemberInfo(
+            id = member.id,
             user = memberUser,
             university = university,
             role = member.role,

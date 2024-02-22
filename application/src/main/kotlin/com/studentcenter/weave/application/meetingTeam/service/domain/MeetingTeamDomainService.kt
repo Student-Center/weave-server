@@ -74,4 +74,6 @@ interface MeetingTeamDomainService {
 
     fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember
 
+    fun getAllByIds(ids: List<UUID>): List<MeetingTeam>
+
 }

@@ -111,6 +111,11 @@ class MeetingTeamDomainServiceImpl(
             ?: throw NoSuchElementException("미팅팀 팀장을 찾을 수 없어요!")
     }
 
+    @Transactional(readOnly = true)
+    override fun getAllByIds(ids: List<UUID>): List<MeetingTeam> {
+        return meetingTeamRepository.findAllByInIds(ids)
+    }
+
     @Transactional
     override fun addMember(
         user: User,

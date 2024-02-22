@@ -57,6 +57,10 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket.values.toList()
     }
 
+    override fun findAllByInIds(ids: List<UUID>): List<MeetingTeam> {
+        return bucket.values.filter { it.id in ids }.toList()
+    }
+
     fun putUserToTeamMember(userId: UUID, teamId: UUID) {
         memberUserIdToTeamIdMap[userId] = teamId
     }

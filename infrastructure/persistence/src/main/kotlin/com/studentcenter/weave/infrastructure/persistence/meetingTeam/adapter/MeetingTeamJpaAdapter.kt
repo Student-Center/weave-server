@@ -79,6 +79,10 @@ class MeetingTeamJpaAdapter(
         meetingTeamJpaRepository.deleteById(id)
     }
 
+    override fun findAllByInIds(ids: List<UUID>): List<MeetingTeam> {
+        return meetingTeamJpaRepository.findAllById(ids).map{ it.toDomain() }
+    }
+
     override fun scrollByFilter(
         filter: MeetingTeamListFilter,
         next: UUID?,

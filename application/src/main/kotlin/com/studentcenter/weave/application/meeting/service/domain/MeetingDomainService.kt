@@ -1,11 +1,9 @@
-package com.studentcenter.weave.application.meeting.port.outbound
+package com.studentcenter.weave.application.meeting.service.domain
 
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import java.util.*
 
-interface MeetingRepository {
-
-    fun save(meeting: Meeting)
+interface MeetingDomainService {
 
     fun scrollPendingMeetingByUserId(
         userId: UUID,
