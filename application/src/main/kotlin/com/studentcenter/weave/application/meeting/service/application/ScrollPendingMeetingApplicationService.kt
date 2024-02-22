@@ -8,8 +8,6 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-private const val l = 3
-
 @Service
 class ScrollPendingMeetingApplicationService(
     private val meetingDomainService: MeetingDomainService,
