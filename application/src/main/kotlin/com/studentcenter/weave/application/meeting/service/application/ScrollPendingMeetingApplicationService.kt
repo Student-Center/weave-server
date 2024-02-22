@@ -46,7 +46,7 @@ class ScrollPendingMeetingApplicationService(
                 isRequestingTeam = command.isRequester,
                 status = it.status,
                 createdAt = it.createdAt,
-                pendingEndAt = it.createdAt.plusDays(PENDING_DAYS)
+                pendingEndAt = it.pendingEndAt,
             )
         }
 
@@ -55,9 +55,5 @@ class ScrollPendingMeetingApplicationService(
             items = pendingMeetingInfos,
             next = next,
         )
-    }
-
-    companion object {
-        const val PENDING_DAYS = 3L
     }
 }

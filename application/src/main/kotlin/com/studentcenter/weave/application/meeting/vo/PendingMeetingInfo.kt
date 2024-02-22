@@ -12,5 +12,5 @@ data class PendingMeetingInfo(
     val isRequestingTeam: Boolean,
     val status: MeetingStatus,
     val createdAt: LocalDateTime,
-    val pendingEndAt: LocalDateTime = createdAt.plusDays(3),
+    val pendingEndAt: LocalDateTime,
 )
