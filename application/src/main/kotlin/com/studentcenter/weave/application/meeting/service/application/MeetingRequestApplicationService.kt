@@ -23,6 +23,8 @@ class MeetingRequestApplicationService(
         validateMyUniversityEmailVerified()
 
         val myMeetingTeam: MeetingTeam = getMyMeetingTeam()
+            .also { validateMyMeetingTeamStatus(it) }
+
         val receivingMeetingTeam: MeetingTeam =
             meetingTeamQueryUseCase.getById(command.receivingMeetingTeamId)
 
@@ -49,6 +51,12 @@ class MeetingRequestApplicationService(
             ?: throw IllegalArgumentException("내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!")
     }
 
+    private fun validateMyMeetingTeamStatus(myMeetingTeam: MeetingTeam) {
+        require(myMeetingTeam.status == MeetingTeamStatus.PUBLISHED) {
+            "나의 미팅팀이 공개되지 않았어요! 미팅팀을 공개해 주세요!"
+        }
+    }
+
     private fun validateMeetingTeamConditions(
         myMeetingTeam: MeetingTeam,
         receivingMeetingTeam: MeetingTeam,
@@ -59,10 +67,6 @@ class MeetingRequestApplicationService(
 
         require(myMeetingTeam.memberCount == receivingMeetingTeam.memberCount) {
             "동일한 인원수의 미팅팀에만 미팅을 요청할 수 있어요!"
-        }
-
-        require(myMeetingTeam.status == MeetingTeamStatus.PUBLISHED) {
-            "내 미팅팀이 공개되지 않았어요! 미팅팀을 공개해 주세요!"
         }
     }
 
