@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
@@ -38,8 +39,15 @@ interface MeetingTeamDomainService {
 
     fun getById(id: UUID): MeetingTeam
 
+    fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam
+
     // 멤버는 하나의 팀에만 소속될 수있음(MVP 기준)
     fun getByMemberUserId(userId: UUID): MeetingTeam
+
+    fun findByMemberUserId(userId: UUID): MeetingTeam?
 
     /**
      * 팀 간 MBTI 궁합 점수를 계산해요
