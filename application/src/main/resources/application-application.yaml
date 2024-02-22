@@ -20,9 +20,37 @@ auth:
 meeting:
   team:
     invitation:
-      # 개발 환경 url
       url-prefix: ${INVITATION_URL_PREFIX:https://api.dev.team-weave.me/invitations?code=}
       expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
 
-      # TODO : 운영 환경 url로 변경 필요
-      # url-prefix: ${INVITATION_URL_PREFIX:https://api.team-weave.me/invitations?code=}
+# TODO : 운영 환경 url-prefix 변경 필요
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#auth:
+#  jwt:
+#    issuer: ${JWT_ISSUER:weave}
+#    access:
+#      expire-seconds: ${JWT_ACCESS_EXPIRE_SECONDS:3600}
+#      secret: ${JWT_ACCESS_SECRET:secret}
+#    refresh:
+#      expire-seconds: ${JWT_REFRESH_EXPIRE_SECONDS:604800}
+#      secret: ${JWT_REFRESH_SECRET:secret}
+#    register:
+#      expire-seconds: ${JWT_REGISTER_EXPIRE_SECONDS:300}
+#      secret: ${JWT_REGISTER_SECRET:secret}
+#  open-id:
+#    providers:
+#      apple:
+#        jwks-uri: ${APPLE_JWKS_URI:https://appleid.apple.com/auth/keys}
+#      kakao:
+#        jwks-uri: ${KAKAO_JWKS_URI:https://kauth.kakao.com/.well-known/jwks.json}
+#
+#meeting:
+#  team:
+#    invitation:
+#      url-prefix: ${INVITATION_URL_PREFIX:https://api.team-weave.me/invitations?code=}
+#      expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
