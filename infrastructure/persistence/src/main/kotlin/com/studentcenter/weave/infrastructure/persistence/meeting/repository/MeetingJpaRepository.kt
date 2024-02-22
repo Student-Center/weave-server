@@ -14,17 +14,15 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         value = """
             SELECT m.*
             FROM meeting as m
-            where m.requesting_team_id IN (
-                SELECT mm.meeting_team_id
-                FROM meeting_member as mm
-                WHERE mm.user_id = :userId
-            ) AND id < :next
+            where m.requesting_team_id = :teamId 
+            AND (:next is null or id < :next)
+            AND m.status = 'PENDING'
             LIMIT :limit
         """,
         nativeQuery = true,
     )
-    fun scrollRequestingPendingMeetingByUserId(
-        @Param("userId") userId: UUID,
+    fun findAllRequestingPendingMeeting(
+        @Param("teamId") teamId: UUID,
         @Param("next") next: UUID?,
         @Param("limit") limit: Int,
     ): List<MeetingJpaEntity>
@@ -34,19 +32,17 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         value = """
             SELECT m.*
             FROM meeting as m
-            where m.receiving_team_id IN (
-                SELECT mm.meeting_team_id
-                FROM meeting_member as mm
-                WHERE mm.user_id = :userId
-            ) AND id < :next
+            where m.receiving_team_id = :teamId 
+            AND (:next is null or id < :next)
+            AND m.status = 'PENDING'
             LIMIT :limit
         """,
         nativeQuery = true,
     )
-    fun scrollReceivingPendingMeetingByUserId(
-        userId: UUID,
-        next: UUID?,
-        limit: Int,
+    fun findAllReceivingPendingMeeting(
+        @Param("teamId") teamId: UUID,
+        @Param("next") next: UUID?,
+        @Param("limit") limit: Int,
     ): List<MeetingJpaEntity>
 
 }

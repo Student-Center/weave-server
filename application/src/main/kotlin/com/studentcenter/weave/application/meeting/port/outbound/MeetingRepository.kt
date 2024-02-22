@@ -7,8 +7,8 @@ interface MeetingRepository {
 
     fun save(meeting: Meeting)
 
-    fun scrollPendingMeetingByUserId(
-        userId: UUID,
+    fun findAllPendingMeetingByTeamId(
+        teamId: UUID,
         isRequester: Boolean,
         next: UUID?,
         limit: Int,

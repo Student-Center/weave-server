@@ -11,14 +11,14 @@ class MeetingDomainServiceImpl(
     private val meetingRepository: MeetingRepository,
 ) : MeetingDomainService {
 
-    override fun scrollPendingMeetingByUserId(
-        userId: UUID,
+    override fun findAllPendingMeetingByTeamId(
+        teamId: UUID,
         isRequester: Boolean,
         next: UUID?,
         limit: Int,
     ): List<Meeting> {
-        return meetingRepository.scrollPendingMeetingByUserId(
-            userId = userId,
+        return meetingRepository.findAllPendingMeetingByTeamId(
+            teamId = teamId,
             isRequester = isRequester,
             next = next,
             limit = limit,

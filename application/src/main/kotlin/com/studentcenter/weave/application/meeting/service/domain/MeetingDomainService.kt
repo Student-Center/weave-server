@@ -5,8 +5,8 @@ import java.util.*
 
 interface MeetingDomainService {
 
-    fun scrollPendingMeetingByUserId(
-        userId: UUID,
+    fun findAllPendingMeetingByTeamId(
+        teamId: UUID,
         isRequester: Boolean,
         next: UUID?,
         limit: Int,

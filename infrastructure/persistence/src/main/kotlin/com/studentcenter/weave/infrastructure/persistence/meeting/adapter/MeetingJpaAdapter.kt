@@ -18,20 +18,20 @@ class MeetingJpaAdapter(
             .let { meetingJpaRepository.save(it) }
     }
 
-    override fun scrollPendingMeetingByUserId(
-        userId: UUID,
+    override fun findAllPendingMeetingByTeamId(
+        teamId: UUID,
         isRequester: Boolean,
         next: UUID?,
         limit: Int,
     ): List<Meeting> {
-        val teamEntities = if (isRequester) meetingJpaRepository.scrollRequestingPendingMeetingByUserId(
-            userId = userId,
+        val teamEntities = if (isRequester) meetingJpaRepository.findAllRequestingPendingMeeting(
+            teamId = teamId,
             next = next,
-            limit = limit + 1,
-        ) else meetingJpaRepository.scrollReceivingPendingMeetingByUserId(
-            userId = userId,
+            limit = limit,
+        ) else meetingJpaRepository.findAllReceivingPendingMeeting(
+            teamId = teamId,
             next = next,
-            limit = limit + 1,
+            limit = limit,
         )
 
         return teamEntities.map { it.toDomain() }
