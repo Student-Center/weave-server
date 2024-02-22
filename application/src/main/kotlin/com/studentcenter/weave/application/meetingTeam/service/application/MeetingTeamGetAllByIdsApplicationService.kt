@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MeetingTeamGetAllByIdsApplicationService(
@@ -14,6 +15,7 @@ class MeetingTeamGetAllByIdsApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
 ) : MeetingTeamGetAllByIdsUseCase {
 
+    @Transactional(readOnly = true)
     override fun invoke(command: MeetingTeamGetAllByIdsUseCase.Command): MeetingTeamGetAllByIdsUseCase.Result {
         val meetingTeams = meetingTeamDomainService.getAllByIds(command.ids)
         val meetingTeamInfos = meetingTeams.map { team ->

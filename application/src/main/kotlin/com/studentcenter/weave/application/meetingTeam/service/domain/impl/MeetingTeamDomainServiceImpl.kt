@@ -113,7 +113,9 @@ class MeetingTeamDomainServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getAllByIds(ids: List<UUID>): List<MeetingTeam> {
-        return meetingTeamRepository.findAllByInIds(ids)
+        val meetingTeams = meetingTeamRepository.findAllByInIds(ids)
+        require(meetingTeams.size == ids.size) { "미팅 팀을 찾을 수 없습니다." }
+        return meetingTeams
     }
 
     @Transactional
