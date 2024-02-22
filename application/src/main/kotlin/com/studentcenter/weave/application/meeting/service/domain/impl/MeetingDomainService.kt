@@ -1,13 +1,9 @@
 package com.studentcenter.weave.application.meeting.service.domain.impl
 
-import java.util.*
+import com.studentcenter.weave.domain.meeting.entity.Meeting
 
 interface MeetingDomainService {
 
-    fun create(
-        requestingMeetingTeamId: UUID,
-        receivingMeetingTeamId: UUID,
-        meetingMemberIds: List<UUID>
-    )
+    fun save(meeting: Meeting)
 
 }

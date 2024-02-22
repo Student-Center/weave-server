@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUs
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
+import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import org.springframework.stereotype.Service
@@ -26,18 +26,12 @@ class MeetingRequestApplicationService(
         val receivingMeetingTeam: MeetingTeam =
             meetingTeamQueryUseCase.getById(command.receivingMeetingTeamId)
 
-        val myMeetingTeamMembers: List<MeetingMember> =
-            meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-        val receivingMeetingTeamMembers: List<MeetingMember> =
-            meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(receivingMeetingTeam.id)
-
         validateMeetingTeamConditions(myMeetingTeam, receivingMeetingTeam)
 
-        meetingDomainService.create(
-            requestingMeetingTeamId = myMeetingTeam.id,
-            receivingMeetingTeamId = receivingMeetingTeam.id,
-            meetingMemberIds = (myMeetingTeamMembers + receivingMeetingTeamMembers).map { it.id }
-        )
+        Meeting.create(
+            requestingTeamId = myMeetingTeam.id,
+            receivingTeamId = receivingMeetingTeam.id,
+        ).also { meetingDomainService.save(it) }
     }
 
     private fun validateMyUniversityEmailVerified() {
@@ -47,7 +41,6 @@ class MeetingRequestApplicationService(
         require(isUniversityEmailVerified) {
             "대학교 이메일 인증이 되지 않았어요! 대학교 이메일을 인증해 주세요!"
         }
-
     }
 
     private fun getMyMeetingTeam(): MeetingTeam {

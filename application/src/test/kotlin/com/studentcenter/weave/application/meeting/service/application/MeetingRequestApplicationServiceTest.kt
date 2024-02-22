@@ -1,7 +1,6 @@
 package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meeting.outbound.MeetingAttendanceRepositorySpy
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainServiceImpl
@@ -9,7 +8,6 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQ
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -20,7 +18,6 @@ import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
@@ -30,10 +27,8 @@ import java.util.*
 class MeetingRequestApplicationServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
-    val meetingAttendanceRepositorySpy = MeetingAttendanceRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy,
-        meetingAttendanceRepository = meetingAttendanceRepositorySpy,
     )
     val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
     val userQueryUseCase = mockk<UserQueryUseCase>()
@@ -46,7 +41,6 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
     afterEach {
         meetingRepositorySpy.clear()
-        meetingAttendanceRepositorySpy.clear()
         SecurityContextHolder.clearContext()
     }
 
@@ -89,14 +83,6 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns true
                     every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                     every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                    every {
-                        meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-                    } returns emptyList()
-                    every {
-                        meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(
-                            receivingMeetingTeam.id
-                        )
-                    } returns emptyList()
 
                     // act, assert
                     shouldThrow<IllegalArgumentException> {
@@ -122,14 +108,6 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-                } returns emptyList()
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(
-                        receivingMeetingTeam.id
-                    )
-                } returns emptyList()
 
                 // act, assert
                 shouldThrow<IllegalArgumentException> {
@@ -155,14 +133,6 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-                } returns emptyList()
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(
-                        receivingMeetingTeam.id
-                    )
-                } returns emptyList()
 
                 // act, assert
                 shouldThrow<IllegalArgumentException> {
@@ -197,7 +167,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
         }
 
         context("요청이 유효할 경우") {
-            it("미팅과 미팅 참석자가 생성된다") {
+            it("미팅이 생성된다") {
                 // arrange
                 val myMeetingTeam = MeetingTeamFixtureFactory.create(
                     status = MeetingTeamStatus.PUBLISHED
@@ -212,41 +182,19 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                val myMeetingMember = MeetingMemberFixtureFactory.create(
-                    meetingTeamId = myMeetingTeam.id,
-                    userId = userAuthentication.userId,
-                )
-                val receivingMeetingTeamMember = MeetingMemberFixtureFactory.create(
-                    meetingTeamId = receivingMeetingTeam.id,
-                )
-
                 every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-                } returns listOf(myMeetingMember)
-                every {
-                    meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(
-                        receivingMeetingTeam.id
-                    )
-                } returns listOf(receivingMeetingTeamMember)
 
                 // act
-                meetingRequestApplicationService.invoke(
-                    MeetingRequestUseCase.Command(receivingMeetingTeam.id)
-                )
+                MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                    .let { meetingRequestApplicationService.invoke(it) }
 
                 // assert
-                val meeting =
-                    meetingRepositorySpy.findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
-                        myMeetingTeam.id,
-                        receivingMeetingTeam.id
-                    ) shouldNotBe null
-
-                meetingAttendanceRepositorySpy
-                    .findAllByMeetingId(meeting!!.id)
-                    .size shouldBe 2
+                meetingRepositorySpy.findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
+                    myMeetingTeam.id,
+                    receivingMeetingTeam.id
+                ) shouldNotBe null
             }
         }
     }

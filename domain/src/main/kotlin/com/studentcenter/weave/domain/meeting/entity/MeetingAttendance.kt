@@ -18,7 +18,7 @@ data class MeetingAttendance(
         fun create(
             meetingId: UUID,
             meetingMemberId: UUID,
-            isAttend: Boolean = false,
+            isAttend: Boolean,
         ): MeetingAttendance {
             return MeetingAttendance(
                 meetingId = meetingId,
