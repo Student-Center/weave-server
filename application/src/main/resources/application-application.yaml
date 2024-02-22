@@ -20,5 +20,17 @@ auth:
 meeting:
   team:
     invitation:
-      url-prefix: ${INVITATION_URL_PREFIX:https://api.dev.team-weave.me?code=}
+      url-prefix: ${INVITATION_URL_PREFIX:https://api.dev.team-weave.me/invitations?code=}
+      expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+meeting:
+  team:
+    invitation:
+      url-prefix: ${INVITATION_URL_PREFIX:https://api.team-weave.me/invitations?code=}
       expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
