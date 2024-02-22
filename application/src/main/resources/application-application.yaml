@@ -20,5 +20,9 @@ auth:
 meeting:
   team:
     invitation:
+      # 개발 환경 url
       url-prefix: ${INVITATION_URL_PREFIX:https://api.dev.team-weave.me/invitations?code=}
       expire-seconds: ${INVITATION_EXPIRE_SECONDS:3600}
+
+      # TODO : 운영 환경 url로 변경 필요
+      # url-prefix: ${INVITATION_URL_PREFIX:https://api.team-weave.me/invitations?code=}
