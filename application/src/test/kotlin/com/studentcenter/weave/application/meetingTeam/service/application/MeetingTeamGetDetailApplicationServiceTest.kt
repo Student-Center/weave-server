@@ -20,6 +20,7 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.mockk.clearAllMocks
 import io.mockk.mockk
 
 @DisplayName("MeetingTeamGetDetailApplicationService")
@@ -54,6 +55,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
         meetingMemberRepositorySpy.clear()
         meetingTeamMemberSummaryRepositorySpy.clear()
         SecurityContextHolder.clearContext()
+        clearAllMocks()
     }
 
     describe("미팅팀 상세 조회") {
