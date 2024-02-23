@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.service.domain.impl
 
+import com.studentcenter.support.lock.distributedLock
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepository
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.user.entity.UserSil
@@ -19,12 +20,11 @@ class UserSilDomainServiceImpl(
             .also { userSilRepository.save(it) }
     }
 
-    @Transactional
     override fun incrementByUserId(
         userId: UUID,
         amount: Long
-    ): UserSil {
-        return userSilRepository
+    ): UserSil = distributedLock("UseSilDomainService.incrementByUserId:$userId") {
+        return@distributedLock userSilRepository
             .getByUserId(userId)
             .increment(amount)
             .also { userSilRepository.save(it) }

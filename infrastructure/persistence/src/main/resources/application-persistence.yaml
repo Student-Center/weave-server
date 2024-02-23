@@ -52,5 +52,8 @@ spring:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
   flyway:
     enabled: false
