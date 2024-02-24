@@ -57,7 +57,7 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket.values.toList()
     }
 
-    fun mapUserIdAndTeamId(userId: UUID, teamId: UUID) {
+    fun putUserToTeamMember(userId: UUID, teamId: UUID) {
         memberUserIdToTeamIdMap[userId] = teamId
     }
 

@@ -70,7 +70,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also {
                         SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, targetMeetingTeam.id)
+                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, targetMeetingTeam.id)
                     }
 
                 // act
@@ -104,7 +104,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also {
                         SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
                     }
 
 
@@ -136,7 +136,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also {
                         SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
                     }
 
                 // act
@@ -167,7 +167,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also {
                         SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
                     }
 
                 // act
