@@ -7,7 +7,7 @@ import java.util.*
 
 data class PendingMeetingInfo(
     val id: UUID,
-    val requesterTeam: MeetingTeamInfo,
+    val requestingTeam: MeetingTeamInfo,
     val receivingTeam: MeetingTeamInfo,
     val isRequestingTeam: Boolean,
     val status: MeetingStatus,

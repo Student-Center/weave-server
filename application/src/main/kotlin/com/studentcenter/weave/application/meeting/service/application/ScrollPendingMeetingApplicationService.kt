@@ -45,7 +45,7 @@ class ScrollPendingMeetingApplicationService(
                 ?: throw IllegalArgumentException()
             PendingMeetingInfo(
                 id = it.id,
-                requesterTeam = requestingTeamInfo,
+                requestingTeam = requestingTeamInfo,
                 receivingTeam = receivingTeamInfo,
                 isRequestingTeam = command.isRequester,
                 status = it.status,

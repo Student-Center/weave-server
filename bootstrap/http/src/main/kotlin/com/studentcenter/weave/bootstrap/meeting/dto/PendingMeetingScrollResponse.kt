@@ -30,7 +30,7 @@ data class PendingMeetingScrollResponse(
             fun from(meetingInfo: PendingMeetingInfo) : MeetingDto {
                 return MeetingDto(
                     id = meetingInfo.id,
-                    requestingTeam = MeetingTeamDto.from(meetingInfo.requesterTeam),
+                    requestingTeam = MeetingTeamDto.from(meetingInfo.requestingTeam),
                     receivingTeam = MeetingTeamDto.from(meetingInfo.receivingTeam),
                     isRequestingTeam = meetingInfo.isRequestingTeam,
                     status = meetingInfo.status,
