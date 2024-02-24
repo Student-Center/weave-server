@@ -22,6 +22,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
     @Transactional(readOnly = true)
     override fun invoke(ids: List<UUID>): List<MeetingTeamInfo> {
         val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
+        // TODO(cache): cache layer 도입 시 수정 필요
         val univCache: MutableMap<UUID, University> = HashMap()
         return meetingTeams.map {
             MeetingTeamInfo(team = it, memberInfos = createMemberInfos(it, univCache))
