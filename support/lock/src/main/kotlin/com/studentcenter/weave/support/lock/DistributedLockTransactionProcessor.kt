@@ -1,4 +1,4 @@
-package com.studentcenter.support.lock
+package com.studentcenter.weave.support.lock
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation

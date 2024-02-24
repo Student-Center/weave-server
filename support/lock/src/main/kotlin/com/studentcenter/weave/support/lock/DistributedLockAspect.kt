@@ -1,4 +1,4 @@
-package com.studentcenter.support.lock
+package com.studentcenter.weave.support.lock
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.redisson.api.RedissonClient

@@ -1,4 +1,4 @@
-package com.studentcenter.support.lock
+package com.studentcenter.weave.support.lock
 
 import org.redisson.api.RLock
 import java.util.concurrent.TimeUnit

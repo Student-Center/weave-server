@@ -1,4 +1,4 @@
-package com.studentcenter.support.lock
+package com.studentcenter.weave.support.lock
 
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-@ComponentScan(basePackages = ["com.studentcenter.support.lock"])
+@ComponentScan(basePackages = ["com.studentcenter.weave.support.lock"])
 class DistributedLockConfig (
     private val redisProperties: RedisProperties
 ){

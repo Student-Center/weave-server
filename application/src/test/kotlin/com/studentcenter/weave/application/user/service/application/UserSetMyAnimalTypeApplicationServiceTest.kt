@@ -1,11 +1,11 @@
 package com.studentcenter.weave.application.user.service.application
 
+import com.studentcenter.weave.support.lock.distributedLock
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -15,6 +15,9 @@ import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearStaticMockk
+import io.mockk.every
+import io.mockk.mockkStatic
 
 @DisplayName("UserSetMyAnimalTypeApplicationService")
 class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
@@ -28,10 +31,21 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
         userSilDomainService = userSilDomainService
     )
 
+    beforeTest {
+        mockkStatic("com.studentcenter.weave.support.lock.DistributedLockKt")
+        every {
+            distributedLock<Any?>(any(), any(), any(), any(), captureLambda())
+        } answers {
+            val lambda: () -> Any? = arg<(()-> Any?)>(4)
+            lambda()
+        }
+    }
+
     afterTest {
         userRepositorySpy.clear()
         userSilRepositorySpy.clear()
         SecurityContextHolder.clearContext()
+        clearStaticMockk()
     }
 
     describe("닮은 동물상 등록 유스케이스") {

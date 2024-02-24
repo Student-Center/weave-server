@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.domain.impl
 
-import com.studentcenter.support.lock.distributedLock
+import com.studentcenter.weave.support.lock.distributedLock
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepository
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.user.entity.UserSil
