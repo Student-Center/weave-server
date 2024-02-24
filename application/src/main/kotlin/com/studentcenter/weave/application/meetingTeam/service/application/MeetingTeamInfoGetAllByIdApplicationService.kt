@@ -23,13 +23,12 @@ class MeetingTeamInfoGetAllByIdApplicationService(
     @Transactional(readOnly = true)
     override fun invoke(ids: List<UUID>): MeetingTeamInfoGetAllByIdUseCase.Result {
         val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
-        val univCache = HashMap<UUID, University>(meetingTeams.size * MeetingTeam.MAX_MEMBER_COUNT)
         val meetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingTeamDomainService
                 .findAllMeetingMembersByMeetingTeamId(team.id)
                 .map {
                     val memberUser = userQueryUseCase.getById(it.userId)
-                    val university = getUniversityWithCache(univCache, memberUser)
+                    val university = universityGetByIdUsecase.invoke(memberUser.universityId)
                     MeetingTeamInfo.MemberInfo(
                         id = it.id,
                         user = memberUser,
@@ -45,21 +44,6 @@ class MeetingTeamInfoGetAllByIdApplicationService(
         }
 
         return MeetingTeamInfoGetAllByIdUseCase.Result(meetingTeamInfos)
-    }
-
-    /**
-     * 비슷한 학교가 많을 것으로 보여서 한번 조회한 뒤에 캐시처리하여 재활용
-     */
-    private fun getUniversityWithCache(
-        universityCache: HashMap<UUID, University>,
-        memberUser: User,
-    ): University {
-        if (universityCache.contains(memberUser.universityId).not()) {
-            val univ = universityGetByIdUsecase.invoke(memberUser.universityId)
-            universityCache[univ.id] = univ
-        }
-        val university = universityCache[memberUser.universityId]!!
-        return university
     }
 
 }

@@ -10,9 +10,15 @@ import java.util.*
 class UniversityGetByIdApplicationService(
     private val universityDomainService: UniversityDomainService,
 ) : UniversityGetByIdUsecase {
+    val univCache = HashMap<UUID, University>(128)
 
     override fun invoke(id: UUID): University {
-        return universityDomainService.getById(id)
+        if (univCache.contains(id).not()) {
+            val univ = universityDomainService.getById(id)
+            univCache[univ.id] = univ
+        }
+        val university = univCache[id]!!
+        return university
     }
 
 }
