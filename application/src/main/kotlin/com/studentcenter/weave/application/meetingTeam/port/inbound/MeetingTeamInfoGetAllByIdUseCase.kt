@@ -5,11 +5,6 @@ import java.util.*
 
 fun interface MeetingTeamInfoGetAllByIdUseCase {
 
-    fun invoke(ids: List<UUID>): Result
-
-
-    data class Result(
-        val teamInfos: List<MeetingTeamInfo>,
-    )
+    fun invoke(ids: List<UUID>): List<MeetingTeamInfo>
 
 }

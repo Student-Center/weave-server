@@ -80,7 +80,6 @@ class ScrollPendingMeetingApplicationService(
 
     private fun mapTeamIdToTeamInfo(teamIds: List<UUID>) =
         meetingTeamGetAllByIdsUseCase.invoke(teamIds)
-            .teamInfos
             .associateBy { it.team.id }
 
     private fun getUniqueTeamIds(items: List<Meeting>) = items

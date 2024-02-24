@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTea
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -17,29 +18,27 @@ class MeetingTeamInfoGetAllByIdApplicationService(
 ) : MeetingTeamInfoGetAllByIdUseCase {
 
     @Transactional(readOnly = true)
-    override fun invoke(ids: List<UUID>): MeetingTeamInfoGetAllByIdUseCase.Result {
+    override fun invoke(ids: List<UUID>): List<MeetingTeamInfo> {
         val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
-        val meetingTeamInfos = meetingTeams.map { team ->
-            val memberInfos = meetingTeamDomainService
-                .findAllMeetingMembersByMeetingTeamId(team.id)
-                .map {
-                    val memberUser = userQueryUseCase.getById(it.userId)
-                    val university = universityGetByIdUsecase.invoke(memberUser.universityId)
-                    MeetingTeamInfo.MemberInfo(
-                        id = it.id,
-                        user = memberUser,
-                        university = university,
-                        role = it.role,
-                    )
-                }
-
-            MeetingTeamInfo(
-                team = team,
-                memberInfos = memberInfos
+        return meetingTeams.map { MeetingTeamInfo(
+                team = it,
+                memberInfos = createMemberInfos(it)
             )
         }
-
-        return MeetingTeamInfoGetAllByIdUseCase.Result(meetingTeamInfos)
     }
+
+    private fun createMemberInfos(team: MeetingTeam) =
+        meetingTeamDomainService
+            .findAllMeetingMembersByMeetingTeamId(team.id)
+            .map {
+                val memberUser = userQueryUseCase.getById(it.userId)
+                val university = universityGetByIdUsecase.invoke(memberUser.universityId)
+                MeetingTeamInfo.MemberInfo(
+                    id = it.id,
+                    user = memberUser,
+                    university = university,
+                    role = it.role,
+                )
+            }
 
 }
