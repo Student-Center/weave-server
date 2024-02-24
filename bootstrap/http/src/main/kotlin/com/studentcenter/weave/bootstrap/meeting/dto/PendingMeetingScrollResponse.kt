@@ -3,6 +3,7 @@ package com.studentcenter.weave.bootstrap.meeting.dto
 import com.studentcenter.weave.application.meeting.vo.PendingMeetingInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
+import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.time.LocalDateTime
 import java.util.*
@@ -21,7 +22,7 @@ data class PendingMeetingScrollResponse(
         val id: UUID,
         val requestingTeam: MeetingTeamDto,
         val receivingTeam: MeetingTeamDto,
-        val isRequestingTeam: Boolean,
+        val teamType: TeamType,
         val status: MeetingStatus,
         val createdAt: LocalDateTime,
         val pendingEndAt: LocalDateTime,
@@ -32,7 +33,7 @@ data class PendingMeetingScrollResponse(
                     id = meetingInfo.id,
                     requestingTeam = MeetingTeamDto.from(meetingInfo.requestingTeam),
                     receivingTeam = MeetingTeamDto.from(meetingInfo.receivingTeam),
-                    isRequestingTeam = meetingInfo.isRequestingTeam,
+                    teamType = meetingInfo.teamType,
                     status = meetingInfo.status,
                     createdAt = meetingInfo.createdAt,
                     pendingEndAt = meetingInfo.pendingEndAt,
