@@ -51,7 +51,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             cache[universityId] = universityGetByIdUsecase.invoke(universityId)
         }
 
-        return cache[universityId]!!
+        return cache[universityId] ?: throw NoSuchElementException("학교를 찾을 수 없습니다.")
     }
 
 }
