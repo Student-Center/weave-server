@@ -79,7 +79,7 @@ class MeetingTeamJpaAdapter(
         meetingTeamJpaRepository.deleteById(id)
     }
 
-    override fun findAllByInIds(ids: List<UUID>): List<MeetingTeam> {
+    override fun findAllById(ids: List<UUID>): List<MeetingTeam> {
         return meetingTeamJpaRepository.findAllById(ids).map{ it.toDomain() }
     }
 

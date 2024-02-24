@@ -57,7 +57,7 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket.values.toList()
     }
 
-    override fun findAllByInIds(ids: List<UUID>): List<MeetingTeam> {
+    override fun findAllById(ids: List<UUID>): List<MeetingTeam> {
         return bucket.values.filter { it.id in ids }.toList()
     }
 
