@@ -17,7 +17,7 @@ data class MeetingTeam(
 ) {
 
     init {
-        require(memberCount in 2..MAX_MEMBER_COUNT) {
+        require(memberCount in 2..4) {
             "미팅할 팀원의 수는 최소 2명에서 최대 4명까지 가능해요"
         }
     }
@@ -43,7 +43,6 @@ data class MeetingTeam(
     }
 
     companion object {
-        const val MAX_MEMBER_COUNT = 4
 
         fun create(
             teamIntroduce: TeamIntroduce,
