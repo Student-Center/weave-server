@@ -5,7 +5,7 @@ import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-interface ScrollPendingMeetingUseCase {
+fun interface ScrollPendingMeetingUseCase {
 
     fun invoke(command: Command) :Result
 
