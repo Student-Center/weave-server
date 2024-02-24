@@ -68,7 +68,10 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 UserFixtureFactory
                     .create()
                     .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+                    .also {
+                        SecurityContextHolder.setContext(UserSecurityContext(it))
+                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, targetMeetingTeam.id)
+                    }
 
                 // act
                 val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
@@ -99,7 +102,11 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 UserFixtureFactory
                     .create()
                     .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+                    .also {
+                        SecurityContextHolder.setContext(UserSecurityContext(it))
+                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                    }
+
 
                 // act
                 val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
@@ -113,7 +120,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
         context("내 미팅팀이 아니고, 내팀(WAITING), 상대팀(PUBLISH) 상태인 경우") {
             it("미팅팀 정보를 조회한다 - 케미 점수(O)") {
                 // arrange
-                MeetingTeamFixtureFactory
+                val myMeetingTeam = MeetingTeamFixtureFactory
                     .create(status = MeetingTeamStatus.WAITING)
                     .also { meetingTeamRepositorySpy.save(it) }
                 val targetMeetingTeam = MeetingTeamFixtureFactory
@@ -127,7 +134,10 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 UserFixtureFactory
                     .create()
                     .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+                    .also {
+                        SecurityContextHolder.setContext(UserSecurityContext(it))
+                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                    }
 
                 // act
                 val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
@@ -155,7 +165,10 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 UserFixtureFactory
                     .create()
                     .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+                    .also {
+                        SecurityContextHolder.setContext(UserSecurityContext(it))
+                        meetingTeamRepositorySpy.mapUserIdAndTeamId(it.userId, myMeetingTeam.id)
+                    }
 
                 // act
                 val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
