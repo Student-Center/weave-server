@@ -2,6 +2,7 @@ package com.studentcenter.weave.infrastructure.persistence.meeting.adapter
 
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingRepository
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meeting.repository.MeetingJpaRepository
 import org.springframework.stereotype.Component
@@ -20,19 +21,23 @@ class MeetingJpaAdapter(
 
     override fun findAllPendingMeetingByTeamId(
         teamId: UUID,
-        isRequester: Boolean,
+        teamType: TeamType,
         next: UUID?,
         limit: Int,
     ): List<Meeting> {
-        val teamEntities = if (isRequester) meetingJpaRepository.findAllRequestingPendingMeeting(
-            teamId = teamId,
-            next = next,
-            limit = limit,
-        ) else meetingJpaRepository.findAllReceivingPendingMeeting(
-            teamId = teamId,
-            next = next,
-            limit = limit,
-        )
+        val teamEntities = if (teamType == TeamType.REQUESTING) {
+            meetingJpaRepository.findAllRequestingPendingMeeting(
+                teamId = teamId,
+                next = next,
+                limit = limit,
+            )
+        } else {
+            meetingJpaRepository.findAllReceivingPendingMeeting(
+                teamId = teamId,
+                next = next,
+                limit = limit,
+            )
+        }
 
         return teamEntities.map { it.toDomain() }
     }

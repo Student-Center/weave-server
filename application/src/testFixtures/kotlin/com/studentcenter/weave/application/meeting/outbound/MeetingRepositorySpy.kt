@@ -1,8 +1,8 @@
 package com.studentcenter.weave.application.meeting.outbound
 
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingRepository
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.enums.TeamType
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -16,11 +16,11 @@ class MeetingRepositorySpy : MeetingRepository {
 
     override fun findAllPendingMeetingByTeamId(
         teamId: UUID,
-        isRequester: Boolean,
+        teamType: TeamType,
         next: UUID?,
         limit: Int,
     ): List<Meeting> {
-        return if (isRequester) {
+        return if (teamType == TeamType.REQUESTING) {
             bucket.values.filter { it.requestingTeamId == teamId && (next == null || it.id < next) }
         } else {
             bucket.values.filter { it.receivingTeamId == teamId && (next == null || it.id < next) }

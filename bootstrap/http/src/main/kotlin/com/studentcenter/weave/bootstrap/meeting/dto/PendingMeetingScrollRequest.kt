@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
+import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.Parameter
 import org.springdoc.core.annotations.ParameterObject
@@ -21,19 +22,10 @@ data class PendingMeetingScrollRequest(
 
     fun toCommand(): ScrollPendingMeetingUseCase.Command {
         return ScrollPendingMeetingUseCase.Command(
-            isRequester = this.teamType == TeamType.REQUESTING,
+            teamType = this.teamType,
             next = this.next,
             limit = this.limit,
         )
-    }
-
-    /**
-     * Boolean 타입을 Query로 받기엔 다양한 형태(true, True, TRUE, 1등)가 생각될 수 있어
-     * Query에서만 TeamType을 이용하고 이를 Boolean 필드로 변환합니다.
-     */
-    enum class TeamType {
-        REQUESTING,
-        RECEIVING;
     }
 
 }

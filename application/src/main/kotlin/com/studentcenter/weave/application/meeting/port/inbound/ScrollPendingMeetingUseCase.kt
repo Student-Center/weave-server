@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.meeting.port.inbound
 
 import com.studentcenter.weave.application.meeting.vo.PendingMeetingInfo
+import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
@@ -9,7 +10,7 @@ interface ScrollPendingMeetingUseCase {
     fun invoke(command: Command) :Result
 
     data class Command(
-        val isRequester: Boolean,
+        val teamType: TeamType,
         val next: UUID?,
         val limit: Int,
     )
