@@ -20,11 +20,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
     @Transactional(readOnly = true)
     override fun invoke(ids: List<UUID>): List<MeetingTeamInfo> {
         val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
-        return meetingTeams.map { MeetingTeamInfo(
-                team = it,
-                memberInfos = createMemberInfos(it)
-            )
-        }
+        return meetingTeams.map { MeetingTeamInfo(team = it, memberInfos = createMemberInfos(it)) }
     }
 
     private fun createMemberInfos(team: MeetingTeam) =
