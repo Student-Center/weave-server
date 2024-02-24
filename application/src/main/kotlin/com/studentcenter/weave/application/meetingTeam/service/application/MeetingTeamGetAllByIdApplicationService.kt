@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetAllByIdsUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetAllByIdUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
@@ -14,15 +14,15 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Service
-class MeetingTeamGetAllByIdsApplicationService(
+class MeetingTeamGetAllByIdApplicationService(
     private val userQueryUseCase: UserQueryUseCase,
     private val universityGetByIdUsecase: UniversityGetByIdUsecase,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamGetAllByIdsUseCase {
+) : MeetingTeamGetAllByIdUseCase {
 
     @Transactional(readOnly = true)
-    override fun invoke(command: MeetingTeamGetAllByIdsUseCase.Command): MeetingTeamGetAllByIdsUseCase.Result {
-        val meetingTeams = meetingTeamDomainService.getAllByIds(command.ids)
+    override fun invoke(ids: List<UUID>): MeetingTeamGetAllByIdUseCase.Result {
+        val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
         val univCache = HashMap<UUID, University>(meetingTeams.size * MeetingTeam.MAX_MEMBER_COUNT)
         val meetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingTeamDomainService
@@ -44,7 +44,7 @@ class MeetingTeamGetAllByIdsApplicationService(
             )
         }
 
-        return MeetingTeamGetAllByIdsUseCase.Result(meetingTeamInfos)
+        return MeetingTeamGetAllByIdUseCase.Result(meetingTeamInfos)
     }
 
     /**
