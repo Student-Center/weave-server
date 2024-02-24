@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 class MeetingTeamRepositorySpy : MeetingTeamRepository {
 
     private val bucket = ConcurrentHashMap<UUID, MeetingTeam>()
+    private val memberUserIdToTeamIdMap = ConcurrentHashMap<UUID, UUID>()
 
     override fun save(meetingTeam: MeetingTeam) {
         bucket[meetingTeam.id] = meetingTeam
@@ -27,11 +28,13 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
     }
 
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
-        return bucket.values.first()
+        val meetingTeamId: UUID = memberUserIdToTeamIdMap[userId] ?: throw NoSuchElementException()
+        return bucket[meetingTeamId] ?: throw NoSuchElementException()
     }
 
     override fun findByMemberUserId(userId: UUID): MeetingTeam? {
-        return bucket.values.first()
+        val meetingTeamId: UUID = memberUserIdToTeamIdMap[userId] ?: return null
+        return bucket[meetingTeamId]
     }
 
     override fun scrollByMemberUserId(
@@ -52,6 +55,10 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         limit: Int
     ): List<MeetingTeam> {
         return bucket.values.toList()
+    }
+
+    fun putUserToTeamMember(userId: UUID, teamId: UUID) {
+        memberUserIdToTeamIdMap[userId] = teamId
     }
 
     fun findById(id: UUID): MeetingTeam? {
