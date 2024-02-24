@@ -5,13 +5,9 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTea
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.university.entity.University
-import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.collections.HashMap
 
 @Service
 class MeetingTeamInfoGetAllByIdApplicationService(

@@ -25,12 +25,14 @@ class MeetingRestController(
     override fun scrollPendingMeetings(
         request: PendingMeetingScrollRequest,
     ) : PendingMeetingScrollResponse {
-        val result = scrollPendingMeetingUseCase.invoke(request.toCommand())
-        return PendingMeetingScrollResponse(
-            items = result.items.map { PendingMeetingScrollResponse.MeetingDto.from(it) },
-            next = result.next,
-            total = result.total,
-        )
+        return scrollPendingMeetingUseCase.invoke(request.toCommand()).let {
+            PendingMeetingScrollResponse(
+                items = it.items.map(PendingMeetingScrollResponse.MeetingDto::from),
+                next = it.next,
+                total = it.total,
+            )
+        }
+
     }
 
 
