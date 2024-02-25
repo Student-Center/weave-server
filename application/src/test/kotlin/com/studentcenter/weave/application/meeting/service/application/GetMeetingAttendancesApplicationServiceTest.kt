@@ -32,7 +32,9 @@ class GetMeetingAttendancesApplicationServiceTest : DescribeSpec({
                 val expectedAttendanceSize = 2
                 val meeting = MeetingFixtureFactory.create()
                 repeat(expectedAttendanceSize) {
-                    MeetingAttendanceFixtureFactory.create(meetingId = meeting.id)
+                    meetingAttendanceRepositorySpy.save(
+                        MeetingAttendanceFixtureFactory.create(meetingId = meeting.id)
+                    )
                 }
 
                 // act
