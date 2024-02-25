@@ -34,9 +34,9 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
     beforeTest {
         mockkStatic("com.studentcenter.weave.support.lock.DistributedLockKt")
         every {
-            distributedLock<Any?>(any(), any(), any(), any(), captureLambda())
+            distributedLock<Any?>(any(), any(), any(), captureLambda())
         } answers {
-            val lambda: () -> Any? = arg<(()-> Any?)>(4)
+            val lambda: () -> Any? = arg<(()-> Any?)>(3)
             lambda()
         }
     }
