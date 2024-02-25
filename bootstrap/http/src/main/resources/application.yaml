@@ -10,6 +10,7 @@ spring:
       - persistence
       - redis
       - mail
+
 ---
 spring:
   config:
@@ -22,10 +23,6 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-
-swagger:
-  server:
-    url: http://localhost:8080
 
 ---
 spring:
