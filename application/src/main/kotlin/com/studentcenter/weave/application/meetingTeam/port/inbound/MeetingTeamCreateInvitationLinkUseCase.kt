@@ -7,6 +7,9 @@ fun interface MeetingTeamCreateInvitationLinkUseCase {
 
     fun invoke(meetingTeamId: UUID): Result
 
-    data class Result(val meetingTeamInvitationLink: Url)
+    data class Result(
+        val meetingTeamInvitationCode: UUID,
+        val meetingTeamInvitationLink: Url,
+    )
 
 }

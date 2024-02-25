@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 
 @DisplayName("MeetingTeamInvitationServiceImpl")
 class MeetingTeamInvitationServiceImplTest : DescribeSpec({
@@ -27,10 +27,11 @@ class MeetingTeamInvitationServiceImplTest : DescribeSpec({
 
             // act
             val actual: MeetingTeamInvitation = sut.create(meetingTeam.id)
+            val targetMeetingTeamInvitation =
+                meetingTeamInvitationRepository.getByInvitationLink(actual.invitationLink)
 
             // assert
-            // TODO 초대 링크 조회 API 작업 후 변경하기
-            actual.shouldNotBeNull()
+            actual shouldBe targetMeetingTeamInvitation
         }
     }
 

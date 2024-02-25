@@ -17,10 +17,12 @@ class MeetingTeamInvitationServiceImpl(
 ) : MeetingTeamInvitationService {
 
     override fun create(teamId: UUID): MeetingTeamInvitation {
-        val invitationLink = generateInvitationLink()
+        val invitationCode = generateInvitationCode()
+        val invitationLink = generateInvitationLink(invitationCode)
 
         val meetingTeamInvitation = MeetingTeamInvitation(
             teamId = teamId,
+            invitationCode = invitationCode,
             invitationLink = invitationLink,
             expirationDuration = meetingTeamInvitationProperties.expireSeconds.seconds,
         )
@@ -34,9 +36,11 @@ class MeetingTeamInvitationServiceImpl(
         return meetingTeamInvitationRepository.getByInvitationLink(invitationLink)
     }
 
-    private fun generateInvitationLink(): Url {
-        val invitationCode = UuidCreator.create()
+    private fun generateInvitationCode(): UUID {
+        return UuidCreator.create()
+    }
 
+    private fun generateInvitationLink(invitationCode: UUID): Url {
         return Url("${meetingTeamInvitationProperties.urlPrefix}$invitationCode")
     }
 

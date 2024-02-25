@@ -16,6 +16,7 @@ class MeetingTeamInvitationRedisAdapter(
     override fun save(meetingTeamInvitation: MeetingTeamInvitation) {
         val meetingTeamInvitationRedisHash = MeetingTeamInvitationRedisHash(
             invitationLink = meetingTeamInvitation.invitationLink,
+            invitationCode = meetingTeamInvitation.invitationCode,
             teamId = meetingTeamInvitation.teamId,
             expirationDuration = meetingTeamInvitation.expirationDuration.inWholeSeconds,
         )
@@ -28,6 +29,7 @@ class MeetingTeamInvitationRedisAdapter(
             .map {
                 MeetingTeamInvitation(
                     teamId = it.teamId,
+                    invitationCode = it.invitationCode,
                     invitationLink = it.invitationLink,
                     expirationDuration = it.expirationDuration.seconds
                 )

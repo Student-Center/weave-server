@@ -6,6 +6,7 @@ import kotlin.time.Duration
 
 data class MeetingTeamInvitation(
     val teamId: UUID,
+    val invitationCode: UUID,
     val invitationLink: Url,
     val expirationDuration: Duration,
 )

@@ -9,12 +9,16 @@ import java.util.*
 @RedisHash("meeting_team_invitation")
 class MeetingTeamInvitationRedisHash(
     teamId: UUID,
+    invitationCode: UUID,
     invitationLink: Url,
     expirationDuration: Long,
 ) {
 
     @Id
     var invitationLink: Url = invitationLink
+        private set
+
+    var invitationCode: UUID = invitationCode
         private set
 
     var teamId: UUID = teamId
