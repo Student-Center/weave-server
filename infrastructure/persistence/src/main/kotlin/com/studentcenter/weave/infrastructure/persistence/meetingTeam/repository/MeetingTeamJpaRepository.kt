@@ -4,6 +4,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.util.*
 
@@ -77,7 +78,8 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
         memberCount: Int?,
         youngestMemberBirthYear: Int,
         oldestMemberBirthYear: Int,
-        preferredLocations: List<String>?,
+        @Param("preferredLocations")
+        preferredLocations: Array<String>?,
         gender: String?,
         status: String?,
         next: UUID?,
