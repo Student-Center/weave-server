@@ -17,6 +17,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
 import io.mockk.mockk
 
 @DisplayName("MeetingTeamGetByInvitationLinkApplicationServiceTest")
@@ -53,6 +54,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepositorySpy.clear()
         meetingTeamInvitationRepositorySpy.clear()
         SecurityContextHolder.clearContext()
+        clearAllMocks()
     }
 
     describe("초대 링크를 이용한 미팅팀 상세 조회") {
