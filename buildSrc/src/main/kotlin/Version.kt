@@ -15,12 +15,15 @@ object Version {
     const val SPRING_MOCKK = "4.0.2"
     const val KOTEST = "5.6.0"
     const val KOTEST_EXTENSIONS_SPRING = "1.1.3"
+    const val KOTEST_EXTENSIONS_TESTCONTAINERS = "2.0.2"
+    const val TESTCONTAINERS = "1.19.6"
 
     const val JACKSON = "2.16.1"
     const val SPRINGDOC_OPENAPI = "2.3.0"
 
     const val MYSQL = "8.0.33"
     const val H2 = "2.2.224"
+    const val REDISSON = "3.17.7"
 
     const val AUTH0_JAVA_JWT = "4.4.0"
     const val AUTH0_JWKS_RSA = "0.22.1"

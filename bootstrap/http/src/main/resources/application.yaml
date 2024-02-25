@@ -44,3 +44,11 @@ spring:
 springdoc:
   swagger-ui:
     enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: integration-test
+  docker:
+    compose:
+      enabled: false
