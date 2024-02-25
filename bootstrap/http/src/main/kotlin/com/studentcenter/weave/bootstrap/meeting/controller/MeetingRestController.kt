@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.meeting.controller
 
-import com.studentcenter.weave.application.meeting.port.inbound.GetAttendanceTeamMembersUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttendancesUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.bootstrap.meeting.api.MeetingApi
@@ -15,7 +15,7 @@ import java.util.*
 class MeetingRestController(
     private val meetingRequestUseCase: MeetingRequestUseCase,
     private val scrollPendingMeetingUseCase: ScrollPendingMeetingUseCase,
-    private val getAttendanceTeamMembersUseCase: GetAttendanceTeamMembersUseCase,
+    private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
 ) : MeetingApi {
 
     override fun requestMeeting(request: MeetingRequestRequest) {
@@ -40,7 +40,7 @@ class MeetingRestController(
     }
 
     override fun getMeetingAttendances(meetingId: UUID): MeetingAttendancesResponse {
-        return getAttendanceTeamMembersUseCase.invoke(meetingId).let {
+        return getMeetingAttendancesUseCase.invoke(meetingId).let {
             MeetingAttendancesResponse.from(meetingAttendances = it)
         }
     }

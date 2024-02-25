@@ -5,6 +5,6 @@ import java.util.*
 
 interface MeetingAttendanceRepository {
 
-    fun findAllByMeetingId(teamId: UUID): List<MeetingAttendance>
+    fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendance>
 
 }
