@@ -34,7 +34,6 @@ class UserSilDomainServiceIntegrationTest(
                     }
                 }
 
-
                 // assert
                 val userSil: UserSil = userSilDomainService.getByUserId(userId)
                 userSil.amount shouldBe incrementAmount * threadCount
