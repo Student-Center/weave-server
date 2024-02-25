@@ -67,7 +67,8 @@ class MeetingAttendanceCreateApplicationService(
             return
         }
 
-        if (meetingAttendanceDomainService.countByMeetingIdAndAttend(meeting.id) == memberCount) {
+        val countAttend = meetingAttendanceDomainService.countByMeetingIdAndAttend(meeting.id)
+        if (countAttend == memberCount) {
             meetingDomainService.save(meeting.complete())
         }
     }

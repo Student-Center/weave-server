@@ -18,7 +18,7 @@ class MeetingRestController(
     private val meetingRequestUseCase: MeetingRequestUseCase,
     private val scrollPendingMeetingUseCase: ScrollPendingMeetingUseCase,
     private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
-    private val meetingAttedanceCreateUseCase: MeetingAttendanceCreateUseCase,
+    private val meetingAttendanceCreateUseCase: MeetingAttendanceCreateUseCase,
 ) : MeetingApi {
 
     override fun requestMeeting(request: MeetingRequestRequest) {
@@ -52,7 +52,7 @@ class MeetingRestController(
         meetingId: UUID,
         request: MeetingAttendanceCreateRequest,
     ) {
-        meetingAttedanceCreateUseCase.invoke(meetingId, request.attendance)
+        meetingAttendanceCreateUseCase.invoke(meetingId, request.attendance)
     }
 
 

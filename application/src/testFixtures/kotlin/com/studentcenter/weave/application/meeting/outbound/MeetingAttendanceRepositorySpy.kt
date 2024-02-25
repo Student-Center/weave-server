@@ -26,8 +26,8 @@ class MeetingAttendanceRepositorySpy : MeetingAttendanceRepository {
         return bucket.values.filter { it.meetingId == meetingId }
     }
 
-    override fun countByMeetingId(meetingId: UUID): Int {
-        return bucket.values.count { it.meetingId == meetingId }
+    override fun countByMeetingIdAndAttend(meetingId: UUID): Int {
+        return bucket.values.count { it.meetingId == meetingId && it.isAttend }
     }
 
     fun clear() {

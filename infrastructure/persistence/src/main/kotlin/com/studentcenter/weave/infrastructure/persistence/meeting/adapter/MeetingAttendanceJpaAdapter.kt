@@ -19,7 +19,7 @@ class MeetingAttendanceJpaAdapter(
     }
 
     override fun countByMeetingIdAndAttend(meetingId: UUID): Int {
-        return meetingAttendanceJpaRepository.countByMeetingIdAndAttendIsTrue(meetingId)
+        return meetingAttendanceJpaRepository.countByMeetingIdAndIsAttendIsTrue(meetingId)
     }
 
     override fun save(meetingAttendance: MeetingAttendance) {
