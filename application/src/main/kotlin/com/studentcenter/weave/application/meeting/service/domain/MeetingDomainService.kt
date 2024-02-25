@@ -15,4 +15,6 @@ interface MeetingDomainService {
         limit: Int,
     ): List<Meeting>
 
+    fun getById(meetingId: UUID): Meeting
+
 }

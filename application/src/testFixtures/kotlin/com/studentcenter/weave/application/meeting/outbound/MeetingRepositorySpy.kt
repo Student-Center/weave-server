@@ -33,6 +33,10 @@ class MeetingRepositorySpy : MeetingRepository {
         }
     }
 
+    override fun getById(id: UUID): Meeting {
+        return bucket[id] ?: throw NoSuchElementException()
+    }
+
     fun findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
         requestingTeamId: UUID,
         receivingTeamId: UUID,
