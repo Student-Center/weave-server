@@ -1,6 +1,5 @@
 package com.studentcenter.weave.application.university.service.application
 
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.university.service.domain.impl.UniversityDomainServiceImpl
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory

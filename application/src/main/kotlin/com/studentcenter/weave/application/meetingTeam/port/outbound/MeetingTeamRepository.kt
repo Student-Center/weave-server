@@ -35,4 +35,6 @@ interface MeetingTeamRepository {
         limit: Int
     ): List<MeetingTeam>
 
+    fun findAllById(ids: List<UUID>): List<MeetingTeam>
+
 }

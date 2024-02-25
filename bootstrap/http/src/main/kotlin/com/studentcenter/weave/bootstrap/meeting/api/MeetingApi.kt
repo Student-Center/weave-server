@@ -2,8 +2,12 @@ package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollResponse
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,5 +24,13 @@ interface MeetingApi {
         @RequestBody
         request: MeetingRequestRequest
     )
+
+    @Secured
+    @Operation(summary = "Scroll pending meetings for requested or received ")
+    @GetMapping("/status/pending")
+    @ResponseStatus(HttpStatus.OK)
+    fun scrollPendingMeetings(
+        request: PendingMeetingScrollRequest,
+    ) : PendingMeetingScrollResponse
 
 }
