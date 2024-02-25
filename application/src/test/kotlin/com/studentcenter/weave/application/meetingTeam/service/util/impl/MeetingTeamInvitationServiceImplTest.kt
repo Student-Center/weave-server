@@ -28,7 +28,7 @@ class MeetingTeamInvitationServiceImplTest : DescribeSpec({
             // act
             val actual: MeetingTeamInvitation = sut.create(meetingTeam.id)
             val targetMeetingTeamInvitation =
-                meetingTeamInvitationRepository.getByInvitationLink(actual.invitationLink)
+                meetingTeamInvitationRepository.findByInvitationCode(actual.invitationCode)
 
             // assert
             actual shouldBe targetMeetingTeamInvitation

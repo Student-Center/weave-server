@@ -42,7 +42,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = MeetingTeamGetByInvitationLinkApplicationService(
+    val sut = MeetingTeamGetByInvitationCodeApplicationService(
         meetingTeamDomainService = meetingTeamDomainService,
         meetingTeamInvitationService = meetingTeamInvitationService,
     )
@@ -69,7 +69,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
 
                 // act & assert
                 shouldThrow<NoSuchElementException> {
-                    sut.invoke(meetingTeamInvitation.invitationLink)
+                    sut.invoke(meetingTeamInvitation.invitationCode)
                 }
 
             }
@@ -88,7 +88,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
                 val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
 
                 // act
-                val result = sut.invoke(meetingTeamInvitation.invitationLink)
+                val result = sut.invoke(meetingTeamInvitation.invitationCode)
 
                 // assert
                 result shouldBe meetingTeam

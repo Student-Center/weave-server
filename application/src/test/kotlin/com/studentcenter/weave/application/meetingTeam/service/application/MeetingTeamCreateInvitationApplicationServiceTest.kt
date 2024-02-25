@@ -80,7 +80,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
                 // act
                 val result = sut.invoke(meetingTeamId = meetingTeam.id)
                 val targetMeetingTeamInvitation =
-                    meetingTeamInvitationRepositorySpy.getByInvitationLink(result.meetingTeamInvitationLink)
+                    meetingTeamInvitationRepositorySpy.findByInvitationCode(result.meetingTeamInvitationCode)
 
                 // assert
                 result.meetingTeamInvitationLink shouldBe targetMeetingTeamInvitation.invitationLink

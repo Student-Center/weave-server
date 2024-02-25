@@ -4,8 +4,8 @@ import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeam
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.entity.MeetingTeamInvitationRedisHash
 import com.studentcenter.weave.infrastructure.redis.meetingTeam.repository.MeetingTeamInvitationRedisRepository
-import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Component
+import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
 @Component
@@ -23,9 +23,9 @@ class MeetingTeamInvitationRedisAdapter(
         meetingTeamInvitationRedisRepository.save(meetingTeamInvitationRedisHash)
     }
 
-    override fun getByInvitationLink(invitationLink: Url): MeetingTeamInvitation? {
+    override fun findByInvitationCode(invitationCode: UUID): MeetingTeamInvitation? {
         return meetingTeamInvitationRedisRepository
-            .findById(invitationLink.toString())
+            .findById(invitationCode)
             .map {
                 MeetingTeamInvitation(
                     teamId = it.teamId,

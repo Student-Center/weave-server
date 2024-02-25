@@ -32,8 +32,8 @@ class MeetingTeamInvitationServiceImpl(
         return meetingTeamInvitation
     }
 
-    override fun getByInvitationLink(invitationLink: Url): MeetingTeamInvitation? {
-        return meetingTeamInvitationRepository.getByInvitationLink(invitationLink)
+    override fun findByInvitationCode(invitationCode: UUID): MeetingTeamInvitation? {
+        return meetingTeamInvitationRepository.findByInvitationCode(invitationCode)
     }
 
     private fun generateInvitationCode(): UUID {

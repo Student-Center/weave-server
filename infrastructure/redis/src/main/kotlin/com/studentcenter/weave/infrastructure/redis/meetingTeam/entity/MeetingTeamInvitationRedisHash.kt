@@ -15,13 +15,13 @@ class MeetingTeamInvitationRedisHash(
 ) {
 
     @Id
-    var invitationLink: Url = invitationLink
-        private set
-
     var invitationCode: UUID = invitationCode
         private set
 
     var teamId: UUID = teamId
+        private set
+
+    var invitationLink: Url = invitationLink
         private set
 
     @TimeToLive
