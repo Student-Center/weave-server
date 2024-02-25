@@ -13,6 +13,7 @@ data class Meeting(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val finishedAt: LocalDateTime? = null,
 ) {
+    val pendingEndAt: LocalDateTime = createdAt.plusDays(PENDING_DAYS)
 
     init {
         require(requestingTeamId != receivingTeamId) {
@@ -47,6 +48,7 @@ data class Meeting(
     }
 
     companion object {
+        const val PENDING_DAYS = 3L
 
         fun create(
             requestingTeamId: UUID,

@@ -7,6 +7,7 @@ bootJar.enabled = false
 jar.enabled = true
 
 dependencies {
+    implementation(project(":support:lock"))
     implementation(project(":support:common"))
     implementation(project(":support:security"))
     implementation(project(":domain"))

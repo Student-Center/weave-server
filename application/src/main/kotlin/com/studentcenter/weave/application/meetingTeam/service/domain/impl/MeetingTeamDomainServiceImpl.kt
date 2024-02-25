@@ -39,8 +39,19 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamRepository.getById(id)
     }
 
+    override fun getByIdAndStatus(
+        id: UUID,
+        status: MeetingTeamStatus
+    ): MeetingTeam {
+        return meetingTeamRepository.getByIdAndStatus(id, status)
+    }
+
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
         return meetingTeamRepository.getByMemberUserId(userId)
+    }
+
+    override fun findByMemberUserId(userId: UUID): MeetingTeam? {
+        return meetingTeamRepository.findByMemberUserId(userId)
     }
 
     override fun calculateTeamMbtiAffinityScore(
@@ -98,6 +109,13 @@ class MeetingTeamDomainServiceImpl(
             .findAllByMeetingTeamId(meetingTeamId)
             .firstOrNull { it.role == MeetingMemberRole.LEADER }
             ?: throw NoSuchElementException("미팅팀 팀장을 찾을 수 없어요!")
+    }
+
+    @Transactional(readOnly = true)
+    override fun getAllByIds(ids: List<UUID>): List<MeetingTeam> {
+        val meetingTeams = meetingTeamRepository.findAllById(ids)
+        require(meetingTeams.size == ids.size) { "미팅 팀을 찾을 수 없습니다." }
+        return meetingTeams
     }
 
     @Transactional
