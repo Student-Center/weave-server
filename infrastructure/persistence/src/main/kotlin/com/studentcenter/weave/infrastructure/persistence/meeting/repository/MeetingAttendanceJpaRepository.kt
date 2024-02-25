@@ -7,5 +7,7 @@ import java.util.*
 
 @Repository
 interface MeetingAttendanceJpaRepository : JpaRepository<MeetingAttendanceJpaEntity, UUID> {
+
     fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendanceJpaEntity>
+
 }
