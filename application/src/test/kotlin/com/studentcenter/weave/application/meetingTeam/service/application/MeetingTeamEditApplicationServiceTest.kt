@@ -12,6 +12,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
@@ -152,6 +153,38 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                             id = meetingTeam.id,
                             location = Location.INCHON,
                             memberCount = 2,
+                            teamIntroduce = TeamIntroduce("팀 소개")
+                        )
+                    )
+                }
+            }
+        }
+
+        context("현재 팀이 공개된 경우") {
+            it("예외가 발생한다") {
+                // arrange
+                val meetingTeam = MeetingTeamFixtureFactory.create(
+                    status = MeetingTeamStatus.PUBLISHED
+                )
+                val currentUser = UserFixtureFactory.create()
+                val leaderMember = MeetingMember.create(
+                    meetingTeamId = meetingTeam.id,
+                    userId = currentUser.id,
+                    role = MeetingMemberRole.LEADER
+                )
+                meetingMemberRepository.save(leaderMember)
+                meetingTeamRepository.save(meetingTeam)
+
+                val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
+                SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+
+                // act & assert
+                shouldThrow<IllegalArgumentException> {
+                    sut.invoke(
+                        MeetingTeamEditUseCase.Command(
+                            id = meetingTeam.id,
+                            location = Location.INCHON,
+                            memberCount = 4,
                             teamIntroduce = TeamIntroduce("팀 소개")
                         )
                     )
