@@ -17,7 +17,7 @@ class MeetingTeamGetByInvitationCodeApplicationService(
 ) : MeetingTeamGetByInvitationCodeUseCase {
 
     override fun invoke(invitationCode: UUID): MeetingTeam {
-        val meetingTeamInvitation =
+        val meetingTeamInvitation: MeetingTeamInvitation? =
             meetingTeamInvitationService.findByInvitationCode(invitationCode = invitationCode)
 
         validateInvitationCodeExists(meetingTeamInvitation)
