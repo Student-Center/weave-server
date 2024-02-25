@@ -15,4 +15,22 @@ class MeetingAttendanceDomainServiceImpl(
         return meetingAttendanceRepository.findAllByMeetingId(meetingId)
     }
 
+    override fun countByMeetingId(meetingId: UUID): Int {
+        return meetingAttendanceRepository.countByMeetingId(meetingId)
+    }
+
+    override fun save(meetingAttendance: MeetingAttendance) {
+        return meetingAttendanceRepository.save(meetingAttendance)
+    }
+
+    override fun existsByMeetingIdAndMeetingMemberId(
+        meetingId: UUID,
+        meetingMemberId: UUID,
+    ): Boolean {
+        return meetingAttendanceRepository.existsByMeetingIdAndMeetingMemberId(
+            meetingId,
+            meetingMemberId,
+        )
+    }
+
 }

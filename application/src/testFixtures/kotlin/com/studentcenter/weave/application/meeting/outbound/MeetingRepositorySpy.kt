@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.NoSuchElementException
 
 class MeetingRepositorySpy : MeetingRepository {
 
@@ -31,6 +32,10 @@ class MeetingRepositorySpy : MeetingRepository {
                 .filter { it.receivingTeamId == teamId && (next == null || it.id < next) }
                 .take(limit)
         }
+    }
+
+    override fun getById(id: UUID): Meeting {
+        return bucket[id] ?: throw NoSuchElementException()
     }
 
     fun findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(

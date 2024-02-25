@@ -32,4 +32,8 @@ class MeetingDomainServiceImpl(
         )
     }
 
+    override fun getById(id: UUID): Meeting {
+        return meetingRepository.getById(id)
+    }
+
 }
