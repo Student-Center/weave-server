@@ -20,16 +20,14 @@ class MeetingTeamInvitationServiceImpl(
         val invitationCode = generateInvitationCode()
         val invitationLink = generateInvitationLink(invitationCode)
 
-        val meetingTeamInvitation = MeetingTeamInvitation(
+        return MeetingTeamInvitation(
             teamId = teamId,
             invitationCode = invitationCode,
             invitationLink = invitationLink,
             expirationDuration = meetingTeamInvitationProperties.expireSeconds.seconds,
-        )
-
-        meetingTeamInvitationRepository.save(meetingTeamInvitation)
-
-        return meetingTeamInvitation
+        ).apply {
+            meetingTeamInvitationRepository.save(this)
+        }
     }
 
     override fun findByInvitationCode(invitationCode: UUID): MeetingTeamInvitation? {

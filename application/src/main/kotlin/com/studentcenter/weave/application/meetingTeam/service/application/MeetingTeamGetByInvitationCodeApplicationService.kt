@@ -28,7 +28,7 @@ class MeetingTeamGetByInvitationCodeApplicationService(
         if (meetingTeamInvitation == null) {
             throw CustomException(
                 type = MeetingTeamExceptionType.INVITATION_CODE_NOT_FOUND,
-                message = "초대 코드가 존재하지 않습니다."
+                message = "초대 링크가 만료되었어요! 새로운 초대 링크를 통해 입장해 주세요"
             )
         }
 
