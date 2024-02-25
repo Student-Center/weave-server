@@ -24,7 +24,7 @@ class MeetingAttendanceCreateApplicationService(
     override fun invoke(
         meetingId: UUID,
         attendance: Boolean,
-    ): Unit = distributedLock("MeetingAttendanceCreate") {
+    ): Unit = distributedLock("${this.javaClass.simpleName}:$meetingId") {
         val meeting = getByIdAndValidate(meetingId)
         val teamMembers = meetingTeamMemberQueryUseCase.findAllByTeamIds(
             teamIds = listOf(meeting.requestingTeamId, meeting.receivingTeamId),
