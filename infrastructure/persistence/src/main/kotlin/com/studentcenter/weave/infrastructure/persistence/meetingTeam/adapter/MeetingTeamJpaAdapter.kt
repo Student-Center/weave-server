@@ -93,7 +93,7 @@ class MeetingTeamJpaAdapter(
                 memberCount = filter.memberCount,
                 youngestMemberBirthYear = filter.youngestMemberBirthYear,
                 oldestMemberBirthYear = filter.oldestMemberBirthYear,
-                preferredLocations = filter.preferredLocations?.map { it.name },
+                preferredLocations = filter.preferredLocations?.map { it.name }?.toTypedArray(),
                 gender = filter.gender?.name,
                 status = filter.status.name,
                 next = next,
