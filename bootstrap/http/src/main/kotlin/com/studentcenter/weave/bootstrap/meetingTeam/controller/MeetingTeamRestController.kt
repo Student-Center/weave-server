@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamC
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationLinkUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
@@ -12,6 +13,7 @@ import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetByInvitationLinkResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
@@ -19,6 +21,7 @@ import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocations
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
+import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -32,6 +35,7 @@ class MeetingTeamRestController(
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val meetingTeamCreateInvitationLinkUseCase: MeetingTeamCreateInvitationLinkUseCase,
+    private val meetingTeamGetByInvitationLinkUseCase: MeetingTeamGetByInvitationLinkUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -111,6 +115,11 @@ class MeetingTeamRestController(
         val result = meetingTeamCreateInvitationLinkUseCase.invoke(meetingTeamId)
 
         return MeetingTeamCreateInvitationResponse(meetingTeamInvitationLink = result.meetingTeamInvitationLink)
+    }
+
+    override fun getMeetingTeamByInvitationLink(invitationLink: String): MeetingTeamGetByInvitationLinkResponse {
+        return meetingTeamGetByInvitationLinkUseCase.invoke(Url(invitationLink))
+            .let { MeetingTeamGetByInvitationLinkResponse.of(it) }
     }
 
 }
