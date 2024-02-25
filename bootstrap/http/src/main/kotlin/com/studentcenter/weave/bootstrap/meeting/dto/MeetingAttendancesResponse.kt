@@ -20,7 +20,7 @@ data class MeetingAttendancesResponse(
     }
 
     companion object {
-        fun from(meetingAttendances: List<MeetingAttendance>, ) : MeetingAttendancesResponse {
+        fun from(meetingAttendances: List<MeetingAttendance>) : MeetingAttendancesResponse {
             return MeetingAttendancesResponse(meetingAttendances.map(MemberAttendanceDto::from))
 
         }
