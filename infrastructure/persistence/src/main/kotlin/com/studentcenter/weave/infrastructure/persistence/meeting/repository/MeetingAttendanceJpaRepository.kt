@@ -10,6 +10,8 @@ interface MeetingAttendanceJpaRepository : JpaRepository<MeetingAttendanceJpaEnt
 
     fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendanceJpaEntity>
 
-    fun countByMeetingId(meetingId: UUID): Int
+    fun countByMeetingIdAndAttendIsTrue(meetingId: UUID): Int
+
+    fun existsByMeetingIdAndMeetingMemberId(meetingId: UUID, meetingMemberId: UUID) : Boolean
 
 }

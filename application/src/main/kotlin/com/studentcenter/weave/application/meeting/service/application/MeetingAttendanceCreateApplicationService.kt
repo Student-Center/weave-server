@@ -8,10 +8,9 @@ import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainS
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamMemberQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.lock.distributedLock
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 import java.util.*
 
@@ -22,13 +21,15 @@ class MeetingAttendanceCreateApplicationService(
     private val meetingTeamMemberQueryUseCase: MeetingTeamMemberQueryUseCase
 ) : MeetingAttendanceCreateUseCase {
 
-    @Transactional
-    override fun invoke(meetingId: UUID, attendance: Boolean) {
+    override fun invoke(
+        meetingId: UUID,
+        attendance: Boolean,
+    ): Unit = distributedLock("MeetingAttendanceCreate") {
         val meeting = getByIdAndValidate(meetingId)
-        val meetingMembers = meetingTeamMemberQueryUseCase.findAllByTeamIds(
+        val teamMembers = meetingTeamMemberQueryUseCase.findAllByTeamIds(
             teamIds = listOf(meeting.requestingTeamId, meeting.receivingTeamId),
         )
-        val teamMember = meetingMembers.firstOrNull {
+        val teamMemberMe = teamMembers.firstOrNull {
             it.userId == getCurrentUserAuthentication().userId
         } ?: throw CustomException(
             MeetingExceptionType.MEETING_NOT_JOINED_USER,
@@ -37,12 +38,12 @@ class MeetingAttendanceCreateApplicationService(
 
         validateAlreadyCreatedAttendance(
             meetingId = meeting.id,
-            meetingMemberId = teamMember.id
+            meetingMemberId = teamMemberMe.id
         )
 
         MeetingAttendance.create(
             meetingId = meeting.id,
-            meetingMemberId = teamMember.id,
+            meetingMemberId = teamMemberMe.id,
             isAttend = attendance,
         ).also {
             meetingAttendanceDomainService.save(it)
@@ -50,7 +51,7 @@ class MeetingAttendanceCreateApplicationService(
 
         meetingUpdateIfNeeded(
             meeting = meeting,
-            meetingMembers = meetingMembers,
+            memberCount = teamMembers.size,
             isAttendance = attendance,
         )
 
@@ -58,7 +59,7 @@ class MeetingAttendanceCreateApplicationService(
 
     private fun meetingUpdateIfNeeded(
         meeting: Meeting,
-        meetingMembers: List<MeetingMember>,
+        memberCount: Int,
         isAttendance: Boolean,
     ) {
         if (isAttendance.not()) {
@@ -66,7 +67,7 @@ class MeetingAttendanceCreateApplicationService(
             return
         }
 
-        if (meetingAttendanceDomainService.countByMeetingId(meeting.id) == meetingMembers.size) {
+        if (meetingAttendanceDomainService.countByMeetingIdAndAttend(meeting.id) == memberCount) {
             meetingDomainService.save(meeting.complete())
         }
     }

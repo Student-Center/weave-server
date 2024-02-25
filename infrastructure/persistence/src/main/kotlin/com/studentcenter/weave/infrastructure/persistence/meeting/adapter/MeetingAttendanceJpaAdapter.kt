@@ -18,13 +18,22 @@ class MeetingAttendanceJpaAdapter(
             .map { it.toDomain() }
     }
 
-    override fun countByMeetingId(meetingId: UUID): Int {
-        return meetingAttendanceJpaRepository
-            .countByMeetingId(meetingId)
+    override fun countByMeetingIdAndAttend(meetingId: UUID): Int {
+        return meetingAttendanceJpaRepository.countByMeetingIdAndAttendIsTrue(meetingId)
     }
 
     override fun save(meetingAttendance: MeetingAttendance) {
         meetingAttendanceJpaRepository.save(meetingAttendance.toJpaEntity())
+    }
+
+    override fun existsByMeetingIdAndMeetingMemberId(
+        meetingId: UUID,
+        meetingMemberId: UUID,
+    ): Boolean {
+        return meetingAttendanceJpaRepository.existsByMeetingIdAndMeetingMemberId(
+            meetingId = meetingId,
+            meetingMemberId = meetingMemberId,
+        )
     }
 
 }
