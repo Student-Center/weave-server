@@ -107,7 +107,7 @@ interface MeetingTeamApi {
 
     @Secured
     @Operation(summary = "Get meeting Team By Invitation Link")
-    @GetMapping("/invitation/{invitationLink:.+}")
+    @GetMapping("/invitation/{invitationLink}")
     @ResponseStatus(HttpStatus.OK)
     fun getMeetingTeamByInvitationLink(
         @PathVariable
