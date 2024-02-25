@@ -42,8 +42,4 @@ class MeetingJpaAdapter(
         return teamEntities.map { it.toDomain() }
     }
 
-    override fun getById(id: UUID): Meeting {
-        return meetingJpaRepository.getReferenceById(id).toDomain()
-    }
-
 }
