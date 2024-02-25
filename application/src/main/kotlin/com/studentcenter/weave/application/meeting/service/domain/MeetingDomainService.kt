@@ -6,6 +6,8 @@ import java.util.*
 
 interface MeetingDomainService {
 
+    fun save(meeting: Meeting)
+
     fun findAllPendingMeetingByTeamId(
         teamId: UUID,
         teamType: TeamType,

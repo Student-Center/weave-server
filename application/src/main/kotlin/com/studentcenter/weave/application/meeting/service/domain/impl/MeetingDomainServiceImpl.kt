@@ -5,12 +5,18 @@ import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainS
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
 class MeetingDomainServiceImpl(
     private val meetingRepository: MeetingRepository,
 ) : MeetingDomainService {
+
+    @Transactional
+    override fun save(meeting: Meeting) {
+        meetingRepository.save(meeting)
+    }
 
     override fun findAllPendingMeetingByTeamId(
         teamId: UUID,

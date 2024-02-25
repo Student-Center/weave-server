@@ -16,7 +16,7 @@ import java.util.*
 class ScrollPendingMeetingApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
-    private val meetingTeamGetAllByIdsUseCase: MeetingTeamInfoGetAllByIdUseCase,
+    private val meetingTeamInfoGetAllByIdsUseCase: MeetingTeamInfoGetAllByIdUseCase,
 ) : ScrollPendingMeetingUseCase {
 
     @Transactional(readOnly = true)
@@ -79,7 +79,7 @@ class ScrollPendingMeetingApplicationService(
     }
 
     private fun mapTeamIdToTeamInfo(teamIds: List<UUID>) =
-        meetingTeamGetAllByIdsUseCase.invoke(teamIds)
+        meetingTeamInfoGetAllByIdsUseCase.invoke(teamIds)
             .associateBy { it.team.id }
 
     private fun getUniqueTeamIds(items: List<Meeting>) = items

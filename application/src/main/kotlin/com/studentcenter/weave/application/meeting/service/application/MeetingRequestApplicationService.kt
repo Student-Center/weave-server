@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
-import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainService
+import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting

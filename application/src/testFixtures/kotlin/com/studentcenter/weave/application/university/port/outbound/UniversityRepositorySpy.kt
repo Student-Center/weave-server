@@ -13,8 +13,12 @@ class UniversityRepositorySpy: UniversityRepository {
         bucket.clear()
     }
 
-    fun saveAll(majors: List<University>) {
-        bucket.putAll(majors.associateBy { it.id })
+    fun saveAll(universities: List<University>) {
+        bucket.putAll(universities.associateBy { it.id })
+    }
+
+    fun save(university: University) {
+        bucket[university.id] = university
     }
 
     override fun findAll(): List<University> {

@@ -21,9 +21,15 @@ class MeetingRepositorySpy : MeetingRepository {
         limit: Int,
     ): List<Meeting> {
         return if (teamType == TeamType.REQUESTING) {
-            bucket.values.filter { it.requestingTeamId == teamId && (next == null || it.id < next) }
+            bucket
+                .values
+                .filter { it.requestingTeamId == teamId && (next == null || it.id < next) }
+                .take(limit)
         } else {
-            bucket.values.filter { it.receivingTeamId == teamId && (next == null || it.id < next) }
+            bucket
+                .values
+                .filter { it.receivingTeamId == teamId && (next == null || it.id < next) }
+                .take(limit)
         }
     }
 
