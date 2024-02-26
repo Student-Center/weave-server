@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamC
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
@@ -12,6 +13,7 @@ import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamEditRequest
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetByInvitationCodeResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetDetailResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListResponse
@@ -32,6 +34,7 @@ class MeetingTeamRestController(
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val meetingTeamCreateInvitationLinkUseCase: MeetingTeamCreateInvitationLinkUseCase,
+    private val meetingTeamGetByInvitationCodeUseCase: MeetingTeamGetByInvitationCodeUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -110,7 +113,15 @@ class MeetingTeamRestController(
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
         val result = meetingTeamCreateInvitationLinkUseCase.invoke(meetingTeamId)
 
-        return MeetingTeamCreateInvitationResponse(meetingTeamInvitationLink = result.meetingTeamInvitationLink)
+        return MeetingTeamCreateInvitationResponse(
+            meetingTeamInvitationLink = result.meetingTeamInvitationLink,
+            meetingTeamInvitationCode = result.meetingTeamInvitationCode,
+        )
+    }
+
+    override fun getMeetingTeamByInvitationCode(invitationCode: UUID): MeetingTeamGetByInvitationCodeResponse {
+        return meetingTeamGetByInvitationCodeUseCase.invoke(invitationCode)
+            .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
     }
 
 }

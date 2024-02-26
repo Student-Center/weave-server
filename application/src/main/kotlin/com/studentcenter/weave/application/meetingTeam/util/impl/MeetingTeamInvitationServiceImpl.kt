@@ -8,6 +8,7 @@ import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.time.Duration.Companion.seconds
 
 @Component
 class MeetingTeamInvitationServiceImpl(
@@ -16,23 +17,29 @@ class MeetingTeamInvitationServiceImpl(
 ) : MeetingTeamInvitationService {
 
     override fun create(teamId: UUID): MeetingTeamInvitation {
-        val invitationLink = generateInvitationLink()
+        val invitationCode = generateInvitationCode()
+        val invitationLink = generateInvitationLink(invitationCode)
 
-        val meetingTeamInvitation = MeetingTeamInvitation(
+        return MeetingTeamInvitation(
             teamId = teamId,
+            invitationCode = invitationCode,
             invitationLink = invitationLink,
-            expirationDuration = meetingTeamInvitationProperties.expireSeconds,
-        )
-
-        meetingTeamInvitationRepository.save(meetingTeamInvitation)
-
-        return meetingTeamInvitation
+            expirationDuration = meetingTeamInvitationProperties.expireSeconds.seconds,
+        ).also {
+            meetingTeamInvitationRepository.save(it)
+        }
     }
 
-    private fun generateInvitationLink(): Url {
-        val invitationCode = UuidCreator.create()
+    override fun findByInvitationCode(invitationCode: UUID): MeetingTeamInvitation? {
+        return meetingTeamInvitationRepository.findByInvitationCode(invitationCode)
+    }
 
-        return Url("${meetingTeamInvitationProperties.urlPrefix}/$invitationCode")
+    private fun generateInvitationCode(): UUID {
+        return UuidCreator.create()
+    }
+
+    private fun generateInvitationLink(invitationCode: UUID): Url {
+        return Url("${meetingTeamInvitationProperties.urlPrefix}$invitationCode")
     }
 
 }

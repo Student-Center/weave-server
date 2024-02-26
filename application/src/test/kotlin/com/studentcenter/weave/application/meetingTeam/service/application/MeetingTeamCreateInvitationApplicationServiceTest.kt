@@ -20,7 +20,7 @@ import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 
 @DisplayName("MeetingTeamCreateInvitationApplicationServiceTest")
 class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
@@ -77,11 +77,14 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
 
-                // act & assert
-                val meetingTeamInvitation = sut.invoke(meetingTeamId = meetingTeam.id)
+                // act
+                val result = sut.invoke(meetingTeamId = meetingTeam.id)
+                val targetMeetingTeamInvitation =
+                    meetingTeamInvitationRepositorySpy.findByInvitationCode(result.meetingTeamInvitationCode)
 
                 // assert
-                meetingTeamInvitation.meetingTeamInvitationLink.shouldNotBeNull()
+                result.meetingTeamInvitationLink shouldBe targetMeetingTeamInvitation.invitationLink
+                result.meetingTeamInvitationCode shouldBe targetMeetingTeamInvitation.invitationCode
             }
         }
 

@@ -7,4 +7,6 @@ interface MeetingTeamInvitationService {
 
     fun create(teamId: UUID): MeetingTeamInvitation
 
+    fun findByInvitationCode(invitationCode: UUID): MeetingTeamInvitation?
+
 }
