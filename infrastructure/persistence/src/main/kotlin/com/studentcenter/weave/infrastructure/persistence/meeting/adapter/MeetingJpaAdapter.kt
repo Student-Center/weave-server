@@ -7,6 +7,7 @@ import com.studentcenter.weave.infrastructure.persistence.meeting.entity.Meeting
 import com.studentcenter.weave.infrastructure.persistence.meeting.repository.MeetingJpaRepository
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Component
 class MeetingJpaAdapter(
@@ -44,6 +45,19 @@ class MeetingJpaAdapter(
 
     override fun getById(id: UUID): Meeting {
         return meetingJpaRepository.getReferenceById(id).toDomain()
+    }
+
+    override fun findByRequestingTeamIdAndReceivingTeamId(
+        requestingTeamId: UUID,
+        receivingTeamId: UUID,
+    ): Meeting? {
+        return meetingJpaRepository
+            .findByRequestingTeamIdAndReceivingTeamId(
+                requestingTeamId = requestingTeamId,
+                receivingTeamId = receivingTeamId,
+            )
+            .getOrNull()
+            ?.toDomain()
     }
 
 }
