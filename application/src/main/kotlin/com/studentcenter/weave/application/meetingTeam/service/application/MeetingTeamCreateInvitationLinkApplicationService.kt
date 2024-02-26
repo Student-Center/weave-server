@@ -32,7 +32,10 @@ class MeetingTeamCreateInvitationLinkApplicationService(
 
         val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
 
-        return MeetingTeamCreateInvitationLinkUseCase.Result(meetingTeamInvitationLink = meetingTeamInvitation.invitationLink)
+        return MeetingTeamCreateInvitationLinkUseCase.Result(
+            meetingTeamInvitationLink = meetingTeamInvitation.invitationLink,
+            meetingTeamInvitationCode = meetingTeamInvitation.invitationCode,
+        )
     }
 
     private fun validateCurrentUserIsLeader(

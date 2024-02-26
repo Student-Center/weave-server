@@ -6,7 +6,7 @@ class MeetingTeamInvitationPropertiesFixtureFactory {
 
     companion object {
         private const val INVITATION_URL_PREFIX = "https://api.dev.team-weave.me?code="
-        private val DEFAULT_EXPIRE_DURATION = 1.hours
+        private val DEFAULT_EXPIRE_DURATION = 1.hours.inWholeSeconds
 
         fun create(): MeetingTeamInvitationProperties {
             return MeetingTeamInvitationProperties(
