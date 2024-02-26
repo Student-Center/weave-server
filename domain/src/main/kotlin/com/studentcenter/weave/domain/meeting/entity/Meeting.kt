@@ -47,6 +47,10 @@ data class Meeting(
         require(isFinished().not()) { "이미 종료된 미팅은 상태 변경이 불가능합니다." }
     }
 
+    fun isEndPending(now: LocalDateTime): Boolean {
+        return now.isAfter(pendingEndAt)
+    }
+
     companion object {
         const val PENDING_DAYS = 3L
 

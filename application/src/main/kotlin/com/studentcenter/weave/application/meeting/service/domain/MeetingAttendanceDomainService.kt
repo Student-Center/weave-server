@@ -7,4 +7,10 @@ interface MeetingAttendanceDomainService {
 
     fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendance>
 
+    fun countByMeetingIdAndIsAttend(meetingId: UUID): Int
+
+    fun save(meetingAttendance: MeetingAttendance)
+
+    fun existsByMeetingIdAndMeetingMemberId(meetingId: UUID, meetingMemberId: UUID): Boolean
+
 }

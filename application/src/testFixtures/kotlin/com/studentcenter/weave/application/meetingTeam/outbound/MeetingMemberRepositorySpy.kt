@@ -36,6 +36,10 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         bucket.remove(id)
     }
 
+    override fun findAllByMeetingTeamIds(teamIds: List<UUID>): List<MeetingMember> {
+        return bucket.values.filter { it.meetingTeamId in teamIds }
+    }
+
     fun getByMeetingTeamIdAndUserId(
         meetingTeamId: UUID,
         userId: UUID

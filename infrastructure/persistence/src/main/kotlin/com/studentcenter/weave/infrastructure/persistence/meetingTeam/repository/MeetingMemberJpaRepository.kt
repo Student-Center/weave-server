@@ -30,4 +30,6 @@ interface MeetingMemberJpaRepository : JpaRepository<MeetingMemberJpaEntity, UUI
         teamId: UUID
     )
 
+    fun findAllByMeetingTeamIdIn(teamIds: List<UUID>): List<MeetingMemberJpaEntity>
+
 }

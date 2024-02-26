@@ -9,12 +9,25 @@ class MeetingAttendanceRepositorySpy : MeetingAttendanceRepository {
 
     private val bucket = ConcurrentHashMap<UUID, MeetingAttendance>()
 
-    fun save(meetingAttendance: MeetingAttendance) {
+    override fun save(meetingAttendance: MeetingAttendance) {
         bucket[meetingAttendance.id] = meetingAttendance
+    }
+
+    override fun existsByMeetingIdAndMeetingMemberId(
+        meetingId: UUID,
+        meetingMemberId: UUID,
+    ): Boolean {
+        return bucket.values.any {
+            it.meetingId == meetingId && it.meetingMemberId == meetingMemberId
+        }
     }
 
     override fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendance> {
         return bucket.values.filter { it.meetingId == meetingId }
+    }
+
+    override fun countByMeetingIdAndIsAttend(meetingId: UUID): Int {
+        return bucket.values.count { it.meetingId == meetingId && it.isAttend }
     }
 
     fun clear() {
