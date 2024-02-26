@@ -7,7 +7,7 @@ interface MeetingAttendanceRepository {
 
     fun findAllByMeetingId(meetingId: UUID): List<MeetingAttendance>
 
-    fun countByMeetingIdAndAttend(meetingId: UUID): Int
+    fun countByMeetingIdAndIsAttend(meetingId: UUID): Int
 
     fun save(meetingAttendance: MeetingAttendance)
 

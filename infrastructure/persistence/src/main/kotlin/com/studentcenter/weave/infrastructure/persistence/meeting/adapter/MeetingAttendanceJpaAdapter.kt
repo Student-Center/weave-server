@@ -18,7 +18,7 @@ class MeetingAttendanceJpaAdapter(
             .map { it.toDomain() }
     }
 
-    override fun countByMeetingIdAndAttend(meetingId: UUID): Int {
+    override fun countByMeetingIdAndIsAttend(meetingId: UUID): Int {
         return meetingAttendanceJpaRepository.countByMeetingIdAndIsAttendIsTrue(meetingId)
     }
 
