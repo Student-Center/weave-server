@@ -38,26 +38,28 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     fun createMeetingTeamAndMembers(
         memberCount: Int,
         gender: Gender,
-        isUserTeam: Boolean = false,
+        isUserTeam: Boolean = false
     ): Pair<MeetingTeam, List<MeetingMember>> {
-        return MeetingTeamFixtureFactory.create(
+        val team: MeetingTeam = MeetingTeamFixtureFactory.create(
             status = MeetingTeamStatus.PUBLISHED,
             memberCount = memberCount,
             gender = gender
-        ).let { team ->
-            meetingTeamDomainService.save(team)
-            if (isUserTeam) userTeam = team
-            val members = IntRange(0, memberCount - 1).map { i ->
-                val memberUser = if (isUserTeam && i == 0) user
-                else UserFixtureFactory.create(gender = gender)
-                val role = if (i == 0) MeetingMemberRole.LEADER else MeetingMemberRole.MEMBER
-                val member = meetingTeamDomainService.addMember(memberUser, team, role)
-                if (isUserTeam && i == 0) userTeamMember = member
-                member
-            }.toList()
-
-            team to members
+        ).also {
+            meetingTeamDomainService.save(it)
+            if (isUserTeam && userTeam == null) userTeam = it
         }
+
+        val teamMembers = List(memberCount) { idx ->
+            val isLeader = idx == 0
+            val memberUser =
+                if (isUserTeam && isLeader) user else UserFixtureFactory.create(gender = gender)
+            val role = if (isLeader) MeetingMemberRole.LEADER else MeetingMemberRole.MEMBER
+            meetingTeamDomainService
+                .addMember(memberUser, team, role)
+                .also { member -> if (member.userId == user.id) userTeamMember = member }
+        }
+
+        return team to teamMembers
     }
 
     beforeTest {
