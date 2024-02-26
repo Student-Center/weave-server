@@ -10,6 +10,7 @@ services:
       DEV_DB_PASSWORD: ${DEV_DB_PASSWORD}
       DEV_EMAIL_USERNAME: ${DEV_EMAIL_USERNAME}
       DEV_EMAIL_PASSWORD: ${DEV_EMAIL_PASSWORD}
+      DEV_SERVER_URL: ${DEV_SERVER_URL}
     depends_on:
       - mysql
     ports:
