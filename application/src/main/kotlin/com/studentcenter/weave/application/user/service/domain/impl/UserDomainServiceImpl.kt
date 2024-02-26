@@ -7,6 +7,7 @@ import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -22,6 +23,10 @@ class UserDomainServiceImpl(
 
     override fun getById(id: UUID): User {
         return userRepository.getById(id)
+    }
+
+    override fun findByKakaoId(kakaoId: KakaoId): User? {
+        return userRepository.findByKakaoId(kakaoId)
     }
 
     override fun create(
@@ -56,10 +61,11 @@ class UserDomainServiceImpl(
         animalType: UpdateParam<AnimalType?>?,
         avatar: UpdateParam<Url?>?,
         mbti: Mbti?,
+        kakaoId: UpdateParam<KakaoId?>?,
     ): User {
         return userRepository
             .getById(id)
-            .update(height, animalType, avatar, mbti)
+            .update(height, animalType, avatar, mbti, kakaoId)
             .also { userRepository.save(it) }
     }
 

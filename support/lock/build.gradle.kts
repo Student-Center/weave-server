@@ -8,4 +8,5 @@ jar.enabled = true
 
 dependencies {
     implementation("org.redisson:redisson-spring-boot-starter:${Version.REDISSON}")
+    testFixturesImplementation("io.mockk:mockk:${Version.MOCKK}")
 }

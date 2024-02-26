@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -32,6 +33,7 @@ class UserJpaEntity(
     avatar: String? = null,
     height: Int? = null,
     animalType: AnimalType? = null,
+    kakaoId: String? = null,
     isUnivVerified: Boolean = false,
     registeredAt: LocalDateTime,
     updatedAt: LocalDateTime,
@@ -84,6 +86,10 @@ class UserJpaEntity(
     var animalType: AnimalType? = animalType
         private set
 
+    @Column(nullable = true, updatable = true)
+    var kakaoId: String? = kakaoId
+        private set
+
     @Column(nullable = false, updatable = true)
     var isUnivVerified: Boolean = isUnivVerified
         private set
@@ -111,6 +117,7 @@ class UserJpaEntity(
                 avatar = avatar?.value,
                 height = height?.value,
                 animalType = animalType,
+                kakaoId = kakaoId?.value,
                 isUnivVerified = isUnivVerified,
                 registeredAt = registeredAt,
                 updatedAt = updatedAt,
@@ -131,6 +138,7 @@ class UserJpaEntity(
             avatar = avatar?.let { Url(it) },
             height = height?.let { Height(it) },
             animalType = animalType,
+            kakaoId = kakaoId?.let { KakaoId(it) },
             isUnivVerified = isUnivVerified,
             registeredAt = registeredAt,
             updatedAt = updatedAt,

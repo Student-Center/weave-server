@@ -6,8 +6,6 @@ import com.studentcenter.weave.application.university.service.domain.UniversityD
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
-import com.studentcenter.weave.domain.university.vo.MajorName
-import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -45,6 +43,7 @@ class UserGetMyProfileApplicationService(
             mbti = user.mbti,
             animalType = user.animalType,
             height = user.height,
+            kakaoId = user.kakaoId,
             isUniversityEmailVerified = user.isUnivVerified,
             sil = silAmount,
         )
