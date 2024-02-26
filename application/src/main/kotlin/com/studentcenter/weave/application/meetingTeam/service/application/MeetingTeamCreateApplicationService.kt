@@ -20,7 +20,10 @@ class MeetingTeamCreateApplicationService(
     @Transactional
     override fun invoke(command: MeetingTeamCreateUseCase.Command) {
         val userAuthentication: UserAuthentication = getCurrentUserAuthentication()
-        val user: User = userQueryUseCase.getById(userAuthentication.userId)
+        val user: User = userQueryUseCase
+            .getById(userAuthentication.userId)
+            .also { checkUserRegisterKakaoId(it) }
+
         val meetingTeam = MeetingTeam.create(
             teamIntroduce = command.teamIntroduce,
             memberCount = command.memberCount,
@@ -33,6 +36,12 @@ class MeetingTeamCreateApplicationService(
             user = user,
             role = MeetingMemberRole.LEADER,
         )
+    }
+
+    private fun checkUserRegisterKakaoId(user: User) {
+        require (user.kakaoId != null) {
+            "카카오 ID가 등록된 유저만 팀을 생성할 수 있어요. 카카오 ID를 등록해주세요!"
+        }
     }
 
 }
