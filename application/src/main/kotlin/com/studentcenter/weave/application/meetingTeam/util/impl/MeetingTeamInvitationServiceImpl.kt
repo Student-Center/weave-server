@@ -25,8 +25,8 @@ class MeetingTeamInvitationServiceImpl(
             invitationCode = invitationCode,
             invitationLink = invitationLink,
             expirationDuration = meetingTeamInvitationProperties.expireSeconds.seconds,
-        ).apply {
-            meetingTeamInvitationRepository.save(this)
+        ).also {
+            meetingTeamInvitationRepository.save(it)
         }
     }
 

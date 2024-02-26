@@ -4,7 +4,6 @@ import com.studentcenter.weave.application.common.exception.MeetingTeamException
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitation
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
@@ -17,22 +16,13 @@ class MeetingTeamGetByInvitationCodeApplicationService(
 ) : MeetingTeamGetByInvitationCodeUseCase {
 
     override fun invoke(invitationCode: UUID): MeetingTeam {
-        val meetingTeamInvitation: MeetingTeamInvitation? =
-            meetingTeamInvitationService.findByInvitationCode(invitationCode = invitationCode)
 
-        validateInvitationCodeExists(meetingTeamInvitation)
-            .let { return meetingTeamDomainService.getById(it.teamId) }
+        return meetingTeamInvitationService.findByInvitationCode(invitationCode = invitationCode)
+            ?.let {
+                meetingTeamDomainService.getById(it.teamId)
+            } ?: throw CustomException(
+            type = MeetingTeamExceptionType.INVITATION_CODE_NOT_FOUND,
+            message = "초대 링크를 찾을 수 없어요! 새로운 초대 링크를 통해 입장해 주세요!"
+        )
     }
-
-    private fun validateInvitationCodeExists(meetingTeamInvitation: MeetingTeamInvitation?): MeetingTeamInvitation {
-        if (meetingTeamInvitation == null) {
-            throw CustomException(
-                type = MeetingTeamExceptionType.INVITATION_CODE_NOT_FOUND,
-                message = "초대 링크가 만료되었어요! 새로운 초대 링크를 통해 입장해 주세요"
-            )
-        }
-
-        return meetingTeamInvitation
-    }
-
 }
