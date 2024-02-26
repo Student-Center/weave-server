@@ -9,6 +9,7 @@ import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.support.common.vo.toUpdateParam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class UserSetMyKakaoIdApplicationService(
@@ -18,33 +19,28 @@ class UserSetMyKakaoIdApplicationService(
 
     @Transactional
     override fun invoke(kakaoId: KakaoId) {
-        checkIfKakaoIdAlreadyRegistered(kakaoId)
-        getCurrentUserAuthentication()
+        val user: User = getCurrentUserAuthentication()
             .userId
+            .also { checkIfKakaoIdAlreadyRegistered(kakaoId, it) }
             .let { userDomainService.getById(it) }
-            .also {
-                checkIfUserAlreadyRegisteredKakaoId(it)
-                userDomainService.updateById(
-                    id = it.id,
-                    kakaoId = kakaoId.toUpdateParam()
-                )
-                userSilDomainService.incrementByUserId(
-                    userId = it.id,
-                    amount = 30
-                )
-            }
-    }
 
-    private fun checkIfKakaoIdAlreadyRegistered(kakaoId: KakaoId) {
-        require(userDomainService.findByKakaoId(kakaoId) == null) {
-            "이미 등록된 카카오 아이디에요!"
+        userDomainService.updateById(
+            id = user.id,
+            kakaoId = kakaoId.toUpdateParam()
+        )
+
+        if (user.kakaoId == null) {
+            userSilDomainService.incrementByUserId(user.id, 30)
         }
     }
 
-    private fun checkIfUserAlreadyRegisteredKakaoId(user: User) {
-        require(user.kakaoId == null) {
-            "이미 카카오 아이디를 등록했어요!"
-        }
+    private fun checkIfKakaoIdAlreadyRegistered(
+        kakaoId: KakaoId,
+        userId: UUID,
+    ) {
+        userDomainService.findByKakaoId(kakaoId)
+            ?.takeIf { it.id != userId }
+            ?.let { throw IllegalArgumentException("이미 등록된 카카오 아이디입니다.") }
     }
 
 }

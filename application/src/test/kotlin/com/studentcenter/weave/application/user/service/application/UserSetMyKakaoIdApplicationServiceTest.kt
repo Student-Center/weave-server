@@ -68,7 +68,7 @@ class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
         }
 
         context("이미 카카오 아이디를 등록한 경우") {
-            it("예외를 발생시킨다.") {
+            it("카카오 아이디를 변경하고 사용자의 SIL은 증가하지 않는다.") {
                 // arrange
                 val kakaoId = KakaoId("kakaoId")
                 val user: User = UserFixtureFactory
@@ -84,10 +84,15 @@ class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
                     .create(user.id)
                     .also { userSilRepositorySpy.save(it) }
 
-                // act, assert
-                shouldThrow<IllegalArgumentException> {
-                    sut.invoke(kakaoId)
-                }
+                // act
+                sut.invoke(kakaoId)
+
+                // assert
+                val userKakaoAuth = userDomainService.getById(user.id)
+                userKakaoAuth.kakaoId shouldBe kakaoId
+
+                val userSil = userSilDomainService.getByUserId(user.id)
+                userSil.amount shouldBe 0
             }
         }
 
