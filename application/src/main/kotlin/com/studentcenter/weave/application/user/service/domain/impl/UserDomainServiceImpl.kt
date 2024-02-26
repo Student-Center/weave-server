@@ -24,6 +24,10 @@ class UserDomainServiceImpl(
         return userRepository.getById(id)
     }
 
+    override fun findByKakaoId(kakaoId: String): User? {
+        return userRepository.findByKakaoId(kakaoId)
+    }
+
     override fun create(
         nickname: Nickname,
         email: Email,
@@ -56,10 +60,11 @@ class UserDomainServiceImpl(
         animalType: UpdateParam<AnimalType?>?,
         avatar: UpdateParam<Url?>?,
         mbti: Mbti?,
+        kakaoId: UpdateParam<String?>?,
     ): User {
         return userRepository
             .getById(id)
-            .update(height, animalType, avatar, mbti)
+            .update(height, animalType, avatar, mbti, kakaoId)
             .also { userRepository.save(it) }
     }
 

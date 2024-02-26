@@ -25,6 +25,7 @@ object UserFixtureFactory {
         avatar: Url? = null,
         height: Height? = null,
         animalType: AnimalType? = null,
+        kakaoId: String? = null,
     ): User {
         return User(
             id = id,
@@ -37,7 +38,8 @@ object UserFixtureFactory {
             majorId = majorId,
             avatar = avatar,
             height = height,
-            animalType = animalType
+            animalType = animalType,
+            kakaoId = kakaoId,
         )
     }
 

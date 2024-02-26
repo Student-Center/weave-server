@@ -10,6 +10,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserSetMyKakaoIdRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -93,6 +94,15 @@ interface UserApi {
     fun modifyMyMbti(
         @RequestBody
         request: UserModifyMyMbtiRequest
+    )
+
+    @Secured
+    @Operation(summary = "Set my kakao id")
+    @PatchMapping("/my/kakao-id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun setMyKakaoId(
+        @RequestBody
+        request: UserSetMyKakaoIdRequest
     )
 
     @Secured

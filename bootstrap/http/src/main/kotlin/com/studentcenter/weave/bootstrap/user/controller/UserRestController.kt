@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
@@ -17,6 +18,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyAnimalTypeRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserSetMyKakaoIdRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
 import com.studentcenter.weave.domain.user.vo.BirthYear
@@ -37,6 +39,7 @@ class UserRestController(
     private val userModifyMyMbtiUseCase: UserModifyMyMbtiUseCase,
     private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
+    private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
 ) : UserApi {
 
     override fun register(
@@ -106,6 +109,10 @@ class UserRestController(
     override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {
         Mbti(request.mbti)
             .let { userModifyMyMbtiUseCase.invoke(it) }
+    }
+
+    override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
+        userSetMyKakaoIdUseCase.invoke(request.kakaoId)
     }
 
     override fun sendEmailVerificationNumber(request: UserUnivVerificationSendRequest) {

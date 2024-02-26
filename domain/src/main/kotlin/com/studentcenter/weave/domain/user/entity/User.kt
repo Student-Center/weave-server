@@ -26,6 +26,7 @@ data class User(
     val avatar: Url? = null,
     val height: Height? = null,
     val animalType: AnimalType? = null,
+    val kakaoId: String? = null,
     val isUnivVerified: Boolean = false,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
@@ -36,11 +37,13 @@ data class User(
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
         mbti: Mbti? = null,
+        kakaoId: UpdateParam<String?>? = null,
     ): User {
         return copy(
             height = height.getUpdateValue(this.height),
             animalType = animalType.getUpdateValue(this.animalType),
             avatar = avatar.getUpdateValue(this.avatar),
+            kakaoId = kakaoId.getUpdateValue(this.kakaoId),
             mbti = mbti ?: this.mbti,
         )
     }

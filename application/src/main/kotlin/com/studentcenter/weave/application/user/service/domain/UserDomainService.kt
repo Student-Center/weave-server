@@ -17,6 +17,8 @@ interface UserDomainService {
 
     fun getById(id: UUID): User
 
+    fun findByKakaoId(kakaoId: String): User?
+
     fun create(
         nickname: Nickname,
         email: Email,
@@ -36,6 +38,7 @@ interface UserDomainService {
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
         mbti: Mbti? = null,
+        kakaoId: UpdateParam<String?>? = null,
     ): User
 
     fun save(user: User)

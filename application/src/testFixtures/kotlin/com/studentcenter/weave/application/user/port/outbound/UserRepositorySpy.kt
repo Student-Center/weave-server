@@ -20,6 +20,10 @@ class UserRepositorySpy : UserRepository {
         return bucket[id] ?: throw NoSuchElementException()
     }
 
+    override fun findByKakaoId(kakaoId: String): User? {
+        return bucket.values.find { it.kakaoId == kakaoId }
+    }
+
     override fun deleteById(id: UUID) {
         bucket.remove(id)
     }

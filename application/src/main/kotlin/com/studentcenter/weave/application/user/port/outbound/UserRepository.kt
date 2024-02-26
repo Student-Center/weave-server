@@ -9,6 +9,8 @@ interface UserRepository {
 
     fun getById(id: UUID): User
 
+    fun findByKakaoId(kakaoId: String): User?
+
     fun deleteById(id: UUID)
 
 }
