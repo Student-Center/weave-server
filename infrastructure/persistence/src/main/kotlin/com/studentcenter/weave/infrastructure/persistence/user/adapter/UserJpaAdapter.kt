@@ -2,6 +2,7 @@ package com.studentcenter.weave.infrastructure.persistence.user.adapter
 
 import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity.Companion.toJpaEntity
@@ -32,9 +33,9 @@ class UserJpaAdapter(
             .toDomain()
     }
 
-    override fun findByKakaoId(kakaoId: String): User? {
+    override fun findByKakaoId(kakaoId: KakaoId): User? {
         return userJpaRepository
-            .findByKakaoId(kakaoId)
+            .findByKakaoId(kakaoId.value)
             .orElse(null)
             ?.toDomain()
     }

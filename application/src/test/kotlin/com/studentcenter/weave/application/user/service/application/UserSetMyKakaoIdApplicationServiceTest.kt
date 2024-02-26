@@ -10,6 +10,7 @@ import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFact
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserSil
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import com.studentcetner.weave.support.lock.DistributedLockTestInitializer
 import io.kotest.assertions.throwables.shouldThrow
@@ -46,7 +47,7 @@ class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
         context("이미 등록된 카카오 아이디가 있는 경우") {
             it("예외를 발생시킨다.") {
                 // arrange
-                val kakaoId = "kakaoId"
+                val kakaoId = KakaoId("kakaoId")
                 UserFixtureFactory
                     .create(kakaoId = kakaoId)
                     .also { userRepository.save(it) }
@@ -69,7 +70,7 @@ class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
         context("이미 카카오 아이디를 등록한 경우") {
             it("예외를 발생시킨다.") {
                 // arrange
-                val kakaoId = "kakaoId"
+                val kakaoId = KakaoId("kakaoId")
                 val user: User = UserFixtureFactory
                     .create(kakaoId = kakaoId)
                     .also { userRepository.save(it) }
@@ -96,7 +97,7 @@ class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
                 val user: User = UserFixtureFactory
                     .create()
                     .also { userRepository.save(it) }
-                val kakaoId = "kakaoId"
+                val kakaoId = KakaoId("kakaoId")
 
                 val userAuthentication: UserAuthentication =
                     UserAuthenticationFixtureFactory.create(user)

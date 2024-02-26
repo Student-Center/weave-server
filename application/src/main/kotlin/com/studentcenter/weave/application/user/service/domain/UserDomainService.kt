@@ -6,6 +6,7 @@ import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.UpdateParam
@@ -17,7 +18,7 @@ interface UserDomainService {
 
     fun getById(id: UUID): User
 
-    fun findByKakaoId(kakaoId: String): User?
+    fun findByKakaoId(kakaoId: KakaoId): User?
 
     fun create(
         nickname: Nickname,
@@ -38,7 +39,7 @@ interface UserDomainService {
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
         mbti: Mbti? = null,
-        kakaoId: UpdateParam<String?>? = null,
+        kakaoId: UpdateParam<KakaoId?>? = null,
     ): User
 
     fun save(user: User)

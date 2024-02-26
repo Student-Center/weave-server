@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Url
@@ -24,6 +25,7 @@ fun interface UserGetMyProfileUseCase {
         val mbti: Mbti,
         val animalType: AnimalType?,
         val height: Height?,
+        val kakaoId: KakaoId?,
         val isUniversityEmailVerified: Boolean,
         val sil: Long,
     )

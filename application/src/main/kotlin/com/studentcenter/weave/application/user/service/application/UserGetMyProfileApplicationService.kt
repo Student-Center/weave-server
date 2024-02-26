@@ -43,6 +43,7 @@ class UserGetMyProfileApplicationService(
             mbti = user.mbti,
             animalType = user.animalType,
             height = user.height,
+            kakaoId = user.kakaoId,
             isUniversityEmailVerified = user.isUnivVerified,
             sil = silAmount,
         )

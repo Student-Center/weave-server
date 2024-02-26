@@ -4,6 +4,7 @@ import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
@@ -26,7 +27,7 @@ data class User(
     val avatar: Url? = null,
     val height: Height? = null,
     val animalType: AnimalType? = null,
-    val kakaoId: String? = null,
+    val kakaoId: KakaoId? = null,
     val isUnivVerified: Boolean = false,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
@@ -37,7 +38,7 @@ data class User(
         animalType: UpdateParam<AnimalType?>? = null,
         avatar: UpdateParam<Url?>? = null,
         mbti: Mbti? = null,
-        kakaoId: UpdateParam<String?>? = null,
+        kakaoId: UpdateParam<KakaoId?>? = null,
     ): User {
         return copy(
             height = height.getUpdateValue(this.height),

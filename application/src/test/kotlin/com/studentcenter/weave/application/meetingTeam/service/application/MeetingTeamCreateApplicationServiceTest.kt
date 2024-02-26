@@ -7,12 +7,12 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepos
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCaseStub
-import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -84,7 +84,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
                     location = location
                 )
 
-                val leaderUserFixture: User = UserFixtureFactory.create(kakaoId = "test")
+                val leaderUserFixture: User = UserFixtureFactory.create(kakaoId = KakaoId(("test")))
                 UserAuthenticationFixtureFactory
                     .create(leaderUserFixture)
                     .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }

@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.user.port.outbound
 
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import java.util.*
 
 interface UserRepository {
@@ -9,7 +10,7 @@ interface UserRepository {
 
     fun getById(id: UUID): User
 
-    fun findByKakaoId(kakaoId: String): User?
+    fun findByKakaoId(kakaoId: KakaoId): User?
 
     fun deleteById(id: UUID)
 

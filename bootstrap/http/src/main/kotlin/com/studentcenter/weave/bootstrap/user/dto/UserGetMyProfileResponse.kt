@@ -24,6 +24,8 @@ data class UserGetMyProfileResponse(
     val animalType: AnimalType?,
     @Schema(description = "키")
     val height: Int?,
+    @Schema(description = "카카오 아이디")
+    val kakaoId: String?,
     @Schema(description = "대학교 이메일 인증 여부")
     val isUniversityEmailVerified: Boolean,
     @Schema(description = "실(포인트)")

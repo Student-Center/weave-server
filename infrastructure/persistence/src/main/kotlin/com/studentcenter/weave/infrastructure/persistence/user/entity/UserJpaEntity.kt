@@ -5,6 +5,7 @@ import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
@@ -116,7 +117,7 @@ class UserJpaEntity(
                 avatar = avatar?.value,
                 height = height?.value,
                 animalType = animalType,
-                kakaoId = kakaoId,
+                kakaoId = kakaoId?.value,
                 isUnivVerified = isUnivVerified,
                 registeredAt = registeredAt,
                 updatedAt = updatedAt,
@@ -137,7 +138,7 @@ class UserJpaEntity(
             avatar = avatar?.let { Url(it) },
             height = height?.let { Height(it) },
             animalType = animalType,
-            kakaoId = kakaoId,
+            kakaoId = kakaoId?.let { KakaoId(it) },
             isUnivVerified = isUnivVerified,
             registeredAt = registeredAt,
             updatedAt = updatedAt,

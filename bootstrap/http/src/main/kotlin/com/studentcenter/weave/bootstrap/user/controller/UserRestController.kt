@@ -23,6 +23,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendReques
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.http.HttpStatus
@@ -89,6 +90,7 @@ class UserRestController(
                     mbti = it.mbti.value,
                     animalType = it.animalType,
                     height = it.height?.value,
+                    kakaoId = it.kakaoId?.value,
                     isUniversityEmailVerified = it.isUniversityEmailVerified,
                     sil = it.sil,
                 )
@@ -112,7 +114,7 @@ class UserRestController(
     }
 
     override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
-        userSetMyKakaoIdUseCase.invoke(request.kakaoId)
+        userSetMyKakaoIdUseCase.invoke(KakaoId(request.kakaoId))
     }
 
     override fun sendEmailVerificationNumber(request: UserUnivVerificationSendRequest) {

@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUse
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.support.common.vo.toUpdateParam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +17,7 @@ class UserSetMyKakaoIdApplicationService(
 ) : UserSetMyKakaoIdUseCase {
 
     @Transactional
-    override fun invoke(kakaoId: String) {
+    override fun invoke(kakaoId: KakaoId) {
         checkIfKakaoIdAlreadyRegistered(kakaoId)
         getCurrentUserAuthentication()
             .userId
@@ -34,7 +35,7 @@ class UserSetMyKakaoIdApplicationService(
             }
     }
 
-    private fun checkIfKakaoIdAlreadyRegistered(kakaoId: String) {
+    private fun checkIfKakaoIdAlreadyRegistered(kakaoId: KakaoId) {
         require(userDomainService.findByKakaoId(kakaoId) == null) {
             "이미 등록된 카카오 아이디에요!"
         }
