@@ -9,6 +9,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcetner.weave.support.lock.DistributedLockTestInitializer
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -31,6 +32,10 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
         userQueryUseCase = userQueryUseCase,
     )
+
+    beforeTest {
+        DistributedLockTestInitializer.mockExecutionByStatic()
+    }
 
     afterEach {
         meetingTeamRepositorySpy.clear()

@@ -76,4 +76,6 @@ interface MeetingTeamDomainService {
 
     fun getAllByIds(ids: List<UUID>): List<MeetingTeam>
 
+    fun countByMeetingTeamId(meetingTeamId: UUID): Int
+
 }

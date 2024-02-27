@@ -77,7 +77,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
             }
         }
 
-        context("초대 링크가 존재하는 경우") {
+        context("초대 링크가 유효한 경우") {
             it("미팅팀 상세 조회가 정상적으로 이루어진다.") {
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()

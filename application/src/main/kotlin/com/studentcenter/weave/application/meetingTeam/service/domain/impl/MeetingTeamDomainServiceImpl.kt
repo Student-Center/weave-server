@@ -18,6 +18,7 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore.Companion.getAffinityScore
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.lock.distributedLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -29,7 +30,6 @@ class MeetingTeamDomainServiceImpl(
     private val meetingTeamMemberSummaryRepository: MeetingTeamMemberSummaryRepository,
     private val userQueryUseCase: UserQueryUseCase,
 ) : MeetingTeamDomainService {
-
     override fun save(meetingTeam: MeetingTeam) {
         meetingTeamRepository.save(meetingTeam)
     }
@@ -61,19 +61,15 @@ class MeetingTeamDomainServiceImpl(
         if (meetingTeam.status != MeetingTeamStatus.PUBLISHED || targetMeetingTeam.status != MeetingTeamStatus.PUBLISHED) {
             return null
         }
-
         if (meetingTeam.id == targetMeetingTeam.id) {
             return null
         }
-
         val mbti = meetingTeamMemberSummaryRepository
             .getByMeetingTeamId(meetingTeam.id)
             .teamMbti
-
         val targetMbti = meetingTeamMemberSummaryRepository
             .getByMeetingTeamId(targetMeetingTeam.id)
             .teamMbti
-
         return mbti.getAffinityScore(targetMbti)
     }
 
@@ -118,20 +114,18 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeams
     }
 
-    @Transactional
     override fun addMember(
         user: User,
         meetingTeam: MeetingTeam,
         role: MeetingMemberRole,
-    ): MeetingMember {
-        // TODO: 동시성 문제 해결
+    ): MeetingMember = distributedLock("${this.javaClass.simpleName}:${meetingTeam.id}") {
         checkMemberCount(meetingTeam)
         val existingMember = meetingMemberRepository.findByMeetingTeamIdAndUserId(
             meetingTeam.id,
             user.id
         )
 
-        return existingMember ?: run {
+        return@distributedLock existingMember ?: run {
             MeetingMember.create(
                 meetingTeamId = meetingTeam.id,
                 userId = user.id,
@@ -150,7 +144,6 @@ class MeetingTeamDomainServiceImpl(
         teamIntroduce: TeamIntroduce?,
     ): MeetingTeam {
         memberCount?.let { checkMemberCountUpdatable(id, it) }
-
         return meetingTeamRepository
             .getById(id)
             .update(teamIntroduce, memberCount, location)
@@ -197,6 +190,10 @@ class MeetingTeamDomainServiceImpl(
             }
     }
 
+    override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
+        return meetingMemberRepository.countByMeetingTeamId(meetingTeamId)
+    }
+
     private fun getTeamMember(
         teamId: UUID,
         userId: UUID
@@ -228,11 +225,9 @@ class MeetingTeamDomainServiceImpl(
         val meetingMemberUsers: List<User> = meetingMemberRepository
             .findAllByMeetingTeamId(meetingTeam.id)
             .map { userQueryUseCase.getById(it.userId) }
-
         require(meetingMemberUsers.size == meetingTeam.memberCount) {
             "설정된 팀원의 수와 실제 팀원의 수가 일치해야 팀을 공개할 수 있어요!"
         }
-
         return MeetingTeamMemberSummary.create(
             meetingTeamId = meetingTeam.id,
             members = meetingMemberUsers

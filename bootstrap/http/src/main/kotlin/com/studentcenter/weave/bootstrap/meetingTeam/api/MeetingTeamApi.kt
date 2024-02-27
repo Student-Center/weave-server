@@ -114,4 +114,13 @@ interface MeetingTeamApi {
         invitationCode: UUID
     ): MeetingTeamGetByInvitationCodeResponse
 
+    @Secured
+    @Operation(summary = "Enter meeting team")
+    @PostMapping("/invitation/{invitationCode}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun enterMeetingTeam(
+        @PathVariable
+        invitationCode: UUID
+    )
+
 }
