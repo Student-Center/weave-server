@@ -36,4 +36,14 @@ class MeetingDomainServiceImpl(
         return meetingRepository.getById(id)
     }
 
+    override fun findByRequestingTeamIdAndReceivingTeamId(
+        requestingTeamId: UUID,
+        receivingTeamId: UUID,
+    ): Meeting? {
+        return meetingRepository.findByRequestingTeamIdAndReceivingTeamId(
+            requestingTeamId = requestingTeamId,
+            receivingTeamId = receivingTeamId,
+        )
+    }
+
 }
