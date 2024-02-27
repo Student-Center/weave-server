@@ -17,4 +17,9 @@ interface MeetingDomainService {
 
     fun getById(id: UUID): Meeting
 
+    fun findByRequestingTeamIdAndReceivingTeamId(
+        requestingTeamId: UUID,
+        receivingTeamId: UUID,
+    ): Meeting?
+
 }

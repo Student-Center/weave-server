@@ -45,4 +45,9 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         @Param("limit") limit: Int,
     ): List<MeetingJpaEntity>
 
+    fun findByRequestingTeamIdAndReceivingTeamId(
+        requestingTeamId: UUID,
+        receivingTeamId: UUID,
+    ): Optional<MeetingJpaEntity>
+
 }
