@@ -1,10 +1,12 @@
 package com.studentcenter.weave.bootstrap.user.api
 
+import com.studentcenter.weave.application.user.vo.ImageFileExtension
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
@@ -163,5 +165,14 @@ interface UserApi {
         @RequestBody
         request: UserUnivVerificationVerifyRequest
     )
+
+    @Secured
+    @Operation(summary = "Get Profile Image Upload URL")
+    @GetMapping("/my/profile-image-upload-url")
+    @ResponseStatus(HttpStatus.OK)
+    fun getProfileImageUploadUrl(
+        @Parameter(required = true)
+        imageFileExtension: ImageFileExtension,
+    ): UserGetProfileImageUploadUrlResponse
 
 }

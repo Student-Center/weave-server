@@ -10,7 +10,7 @@ spring:
       - persistence
       - redis
       - mail
-
+      - aws
 ---
 spring:
   config:

@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+aws-bucket:
+  user-profile-image:
+    bucket-name: weave-server-dev-bucket
+    key-prefix: user/profile-img/
+    presigned-url-expiration-min: 5
