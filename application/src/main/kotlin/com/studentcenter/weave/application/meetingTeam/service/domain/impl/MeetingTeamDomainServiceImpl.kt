@@ -118,7 +118,7 @@ class MeetingTeamDomainServiceImpl(
         user: User,
         meetingTeam: MeetingTeam,
         role: MeetingMemberRole,
-    ): MeetingMember = distributedLock("${this.javaClass.simpleName}:${meetingTeam.id}") {
+    ): MeetingMember = distributedLock("${this::addMember.name}:${meetingTeam.id}") {
         checkMemberCount(meetingTeam)
         val existingMember = meetingMemberRepository.findByMeetingTeamIdAndUserId(
             meetingTeam.id,

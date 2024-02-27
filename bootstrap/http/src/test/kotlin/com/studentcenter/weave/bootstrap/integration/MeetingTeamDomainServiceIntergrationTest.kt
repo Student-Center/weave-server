@@ -17,8 +17,8 @@ class MeetingTeamDomainServiceIntegrationTest(
 ) : IntegrationTestDescribeSpec({
 
     describe("미팅 팀 입장 요청 동시성 테스트") {
-        context("분산락 적용") {
-            it("두 명이 동시에 입장 요청") {
+        context("잔여 티오가 하나인 미팅팀에 두 유저가 동시에 입장 요청을 하는 경우") {
+            it("에러가 발생한다.") {
                 // arrange
                 val memberCount = 2
                 val leaderUser = UserFixtureFactory.create()
