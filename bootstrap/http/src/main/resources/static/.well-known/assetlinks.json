@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.studentcenter.weave",
+    "sha256_cert_fingerprints":
+    ["4C:9E:7E:3C:3F:E8:B7:41:B3:3B:5B:02:F3:26:22:95:DA:F5:94:64:EB:C8:67:13:1D:DB:60:34:8F:94:58:BA"]
+  }
+}]
