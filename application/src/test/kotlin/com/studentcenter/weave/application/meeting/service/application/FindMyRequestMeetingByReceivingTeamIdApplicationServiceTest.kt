@@ -22,7 +22,7 @@ import io.mockk.mockk
 import java.util.*
 
 @DisplayName("GetMeetingAttendancesApplicationServiceTest")
-class FindByRequestingTeamIdAndReceivingTeamIdApplicationServiceTest : DescribeSpec({
+class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
@@ -54,7 +54,7 @@ class FindByRequestingTeamIdAndReceivingTeamIdApplicationServiceTest : DescribeS
                 every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<NoSuchElementException> { sut.invoke(UUID.randomUUID()) }
+                shouldThrow<IllegalArgumentException> { sut.invoke(UUID.randomUUID()) }
             }
         }
 

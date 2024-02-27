@@ -19,7 +19,7 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationService(
         val userId = getCurrentUserAuthentication().userId
         val myTeam = meetingTeamQueryUseCase.findByMemberUserId(userId).let {
             if (it == null || it.isPublished().not()) {
-                throw NoSuchElementException("내가 속한 공개된 미팅 팀이 없어요!")
+                throw IllegalArgumentException("내가 속한 공개된 미팅 팀이 없어요!")
             }
             it
         }
