@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -125,10 +124,8 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                 result shouldBe meetingMember
             }
         }
-    }
 
-    describe("publish") {
-        context("미팅 팀에 소속된 멤버 수가 설정된 멤버수와 동일할 경우") {
+        context("미팅팀에 마지막 멤버가 합류하는 경우") {
             it("팀 멤버 요약정보를 생성하고, 미팅 팀을 공개한다.") {
                 // arrange
                 val memberCount = 2
@@ -140,24 +137,21 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                     userId = user1.id,
                     role = MeetingMemberRole.LEADER
                 )
-                val meetingMember2 = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = user2.id,
-                    role = MeetingMemberRole.MEMBER
-                )
 
                 every { userQueryUseCase.getById(user1.id) } returns user1
                 every { userQueryUseCase.getById(user2.id) } returns user2
 
                 meetingMemberRepositorySpy.save(meetingMember1)
-                meetingMemberRepositorySpy.save(meetingMember2)
                 meetingTeamRepositorySpy.save(meetingTeam)
 
                 // act
-                val result: MeetingTeam = sut.publishById(meetingTeam.id)
+                sut.addMember(
+                    user = user2,
+                    meetingTeam = meetingTeam,
+                    role = MeetingMemberRole.MEMBER,
+                )
 
                 // assert
-                result.isPublished() shouldBe true
                 meetingTeamRepositorySpy.getById(meetingTeam.id).isPublished() shouldBe true
                 shouldNotThrowAny {
                     meetingTeamMemberSummaryRepositorySpy.getByMeetingTeamId(
@@ -166,64 +160,82 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                 }
             }
         }
-
-        context("미팅팀에 소속된 멤버 수가 설정된 멤버수보다 작을 경우") {
-            it("예외를 발생시킨다.") {
-                // arrange
-                val memberCount = 2
-                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
-                val user = UserFixtureFactory.create()
-                val meetingMember = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = user.id,
-                    role = MeetingMemberRole.LEADER
-                )
-
-                every { userQueryUseCase.getById(user.id) } returns user
-                meetingMemberRepositorySpy.save(meetingMember)
-                meetingTeamRepositorySpy.save(meetingTeam)
-
-                // act, assert
-                shouldThrow<IllegalArgumentException> {
-                    sut.publishById(meetingTeam.id)
-                }
-            }
-        }
-
-        context("미팅팀이 이미 공개된 상태인 경우") {
-            it("미팅팀을 반환한다") {
-                // arrange
-                val memberCount = 2
-                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
-                val user1 = UserFixtureFactory.create()
-                val user2 = UserFixtureFactory.create()
-                val meetingMember1 = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = user1.id,
-                    role = MeetingMemberRole.LEADER
-                )
-                val meetingMember2 = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = user2.id,
-                    role = MeetingMemberRole.MEMBER
-                )
-
-                every { userQueryUseCase.getById(user1.id) } returns user1
-                every { userQueryUseCase.getById(user2.id) } returns user2
-
-                meetingMemberRepositorySpy.save(meetingMember1)
-                meetingMemberRepositorySpy.save(meetingMember2)
-                meetingTeamRepositorySpy.save(meetingTeam)
-
-                sut.publishById(meetingTeam.id)
-
-                // act
-                val result: MeetingTeam = sut.publishById(meetingTeam.id)
-
-                // assert
-                result.isPublished() shouldBe true
-            }
-        }
     }
+
+//    describe("publish") {
+//        context("미팅 팀에 소속된 멤버 수가 설정된 멤버수와 동일할 경우") {
+//            it("팀 멤버 요약정보를 생성하고, 미팅 팀을 공개한다.") {
+//                // arrange
+//                val memberCount = 2
+//                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
+//                val user1 = UserFixtureFactory.create()
+//                val user2 = UserFixtureFactory.create()
+//                val meetingMember1 = MeetingMember.create(
+//                    meetingTeamId = meetingTeam.id,
+//                    userId = user1.id,
+//                    role = MeetingMemberRole.LEADER
+//                )
+//                val meetingMember2 = MeetingMember.create(
+//                    meetingTeamId = meetingTeam.id,
+//                    userId = user2.id,
+//                    role = MeetingMemberRole.MEMBER
+//                )
+//
+//                every { userQueryUseCase.getById(user1.id) } returns user1
+//                every { userQueryUseCase.getById(user2.id) } returns user2
+//
+//                meetingMemberRepositorySpy.save(meetingMember1)
+//                meetingMemberRepositorySpy.save(meetingMember2)
+//                meetingTeamRepositorySpy.save(meetingTeam)
+//
+//                // act
+//                val result: MeetingTeam = sut.publishById(meetingTeam.id)
+//
+//                // assert
+//                result.isPublished() shouldBe true
+//                meetingTeamRepositorySpy.getById(meetingTeam.id).isPublished() shouldBe true
+//                shouldNotThrowAny {
+//                    meetingTeamMemberSummaryRepositorySpy.getByMeetingTeamId(
+//                        meetingTeam.id
+//                    )
+//                }
+//            }
+//        }
+//
+//        context("미팅팀이 이미 공개된 상태인 경우") {
+//            it("미팅팀을 반환한다") {
+//                // arrange
+//                val memberCount = 2
+//                val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
+//                val user1 = UserFixtureFactory.create()
+//                val user2 = UserFixtureFactory.create()
+//                val meetingMember1 = MeetingMember.create(
+//                    meetingTeamId = meetingTeam.id,
+//                    userId = user1.id,
+//                    role = MeetingMemberRole.LEADER
+//                )
+//                val meetingMember2 = MeetingMember.create(
+//                    meetingTeamId = meetingTeam.id,
+//                    userId = user2.id,
+//                    role = MeetingMemberRole.MEMBER
+//                )
+//
+//                every { userQueryUseCase.getById(user1.id) } returns user1
+//                every { userQueryUseCase.getById(user2.id) } returns user2
+//
+//                meetingMemberRepositorySpy.save(meetingMember1)
+//                meetingMemberRepositorySpy.save(meetingMember2)
+//                meetingTeamRepositorySpy.save(meetingTeam)
+//
+//                sut.publishById(meetingTeam.id)
+//
+//                // act
+//                val result: MeetingTeam = sut.publishById(meetingTeam.id)
+//
+//                // assert
+//                result.isPublished() shouldBe true
+//            }
+//        }
+//    }
 
 })

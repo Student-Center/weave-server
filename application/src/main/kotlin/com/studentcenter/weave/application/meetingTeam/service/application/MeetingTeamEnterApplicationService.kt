@@ -6,7 +6,6 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamE
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
@@ -36,13 +35,7 @@ class MeetingTeamEnterApplicationService(
             meetingTeam = meetingTeam,
             user = currentUser,
             role = MeetingMemberRole.MEMBER,
-        ).takeIf { isMeetingTeamFull(meetingTeam) }
-            ?.let { meetingTeamDomainService.publishById(meetingTeam.id) }
-
-    }
-
-    private fun isMeetingTeamFull(meetingTeam: MeetingTeam): Boolean {
-        return meetingTeamDomainService.countByMeetingTeamId(meetingTeamId = meetingTeam.id) == meetingTeam.memberCount
+        )
     }
 
 }

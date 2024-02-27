@@ -130,8 +130,16 @@ class MeetingTeamDomainServiceImpl(
                 meetingTeamId = meetingTeam.id,
                 userId = user.id,
                 role = role,
-            ).also {
-                meetingMemberRepository.save(it)
+            ).also { newMember ->
+                meetingMemberRepository.save(newMember)
+
+                val isFull = isMeetingTeamFull(meetingTeam)
+                if (isFull && !meetingTeam.isPublished()) {
+                    createMeetingTeamMemberSummary(meetingTeam)
+                        .also { meetingTeamMemberSummaryRepository.save(it) }
+                        .let { meetingTeam.publish() }
+                        .also { meetingTeamRepository.save(it) }
+                }
             }
         }
     }
@@ -163,19 +171,6 @@ class MeetingTeamDomainServiceImpl(
     override fun deleteById(id: UUID) {
         meetingMemberRepository.deleteAllByMeetingTeamId(id)
         meetingTeamRepository.deleteById(id)
-    }
-
-    @Transactional
-    override fun publishById(id: UUID): MeetingTeam {
-        val meetingTeam = meetingTeamRepository.getById(id)
-        return if (meetingTeam.isPublished()) {
-            meetingTeam
-        } else {
-            createMeetingTeamMemberSummary(meetingTeam)
-                .also { meetingTeamMemberSummaryRepository.save(it) }
-                .let { meetingTeam.publish() }
-                .also { meetingTeamRepository.save(it) }
-        }
     }
 
     @Transactional
@@ -219,6 +214,11 @@ class MeetingTeamDomainServiceImpl(
         require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
             "팀원의 수가 초과되었습니다"
         }
+    }
+
+    fun isMeetingTeamFull(meetingTeam: MeetingTeam): Boolean {
+        val count = meetingMemberRepository.countByMeetingTeamId(meetingTeam.id)
+        return count == meetingTeam.memberCount
     }
 
     private fun createMeetingTeamMemberSummary(meetingTeam: MeetingTeam): MeetingTeamMemberSummary {
