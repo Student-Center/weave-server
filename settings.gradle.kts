@@ -37,6 +37,9 @@ project(":infrastructure:redis").projectDir = file("infrastructure/redis")
 include(":infrastructure:mail")
 project(":infrastructure:mail").projectDir = file("infrastructure/mail")
 
+include(":infrastructure:aws")
+project(":infrastructure:aws").projectDir = file("infrastructure/aws")
+
 // bootstrap
 include(":bootstrap:http")
 project(":bootstrap:http").projectDir = file("bootstrap/http")

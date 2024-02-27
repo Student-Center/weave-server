@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
+import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
@@ -9,10 +10,12 @@ import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseC
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
+import com.studentcenter.weave.application.user.vo.ImageFileExtension
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
+import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserRegisterResponse
@@ -41,6 +44,7 @@ class UserRestController(
     private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
+    private val userGetProfileImageUploadUrlUseCase: UserGetProfileImageUploadUrlUseCase,
 ) : UserApi {
 
     override fun register(
@@ -128,6 +132,14 @@ class UserRestController(
                 verificationNumber = UserUniversityVerificationNumber(request.verificationNumber),
             )
         )
+    }
+
+    override fun getProfileImageUploadUrl(
+        imageFileExtension: String,
+    ): UserGetProfileImageUploadUrlResponse {
+        return ImageFileExtension(imageFileExtension)
+            .let { userGetProfileImageUploadUrlUseCase.invoke(it) }
+            .let { UserGetProfileImageUploadUrlResponse.from(it) }
     }
 
 }

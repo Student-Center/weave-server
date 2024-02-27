@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":infrastructure:persistence"))
     implementation(project(":infrastructure:redis"))
     implementation(project(":infrastructure:mail"))
+    implementation(project(":infrastructure:aws"))
 
     implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRINGDOC_OPENAPI}")
