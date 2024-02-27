@@ -18,6 +18,7 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore.Companion.getAffinityScore
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.lock.distributedLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -118,20 +119,18 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeams
     }
 
-    @Transactional
     override fun addMember(
         user: User,
         meetingTeam: MeetingTeam,
         role: MeetingMemberRole,
-    ): MeetingMember {
-        // TODO: 동시성 문제 해결
+    ): MeetingMember = distributedLock("${this.javaClass.simpleName}:${meetingTeam.id}") {
         checkMemberCount(meetingTeam)
         val existingMember = meetingMemberRepository.findByMeetingTeamIdAndUserId(
             meetingTeam.id,
             user.id
         )
 
-        return existingMember ?: run {
+        return@distributedLock existingMember ?: run {
             MeetingMember.create(
                 meetingTeamId = meetingTeam.id,
                 userId = user.id,
@@ -195,6 +194,10 @@ class MeetingTeamDomainServiceImpl(
                 verifyIsNotTeamLeader(it)
                 meetingMemberRepository.deleteById(it.id)
             }
+    }
+
+    override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
+        return meetingMemberRepository.countByMeetingTeamId(meetingTeamId)
     }
 
     private fun getTeamMember(
