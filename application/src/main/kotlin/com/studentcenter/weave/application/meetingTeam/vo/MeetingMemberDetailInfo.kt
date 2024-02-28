@@ -21,6 +21,7 @@ data class MeetingMemberDetailInfo (
     val role: MeetingMemberRole,
     val animalType: AnimalType?,
     val height: Height?,
+    val isUnivVerified: Boolean,
 ) {
 
     companion object {
@@ -39,6 +40,7 @@ data class MeetingMemberDetailInfo (
                 role = role,
                 animalType = user.animalType,
                 height = user.height,
+                isUnivVerified = user.isUnivVerified
             )
         }
     }
