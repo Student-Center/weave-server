@@ -33,6 +33,7 @@ data class MeetingTeamGetDetailResponse(
         val role: MeetingMemberRole,
         val animalType: AnimalType?,
         val height: Int?,
+        val isUnivVerified: Boolean,
     ) {
         companion object {
             fun from(meetingMemberDetailInfo: MeetingMemberDetailInfo) : MeetingMemberDto {
@@ -45,6 +46,7 @@ data class MeetingTeamGetDetailResponse(
                     role = meetingMemberDetailInfo.role,
                     animalType = meetingMemberDetailInfo.animalType,
                     height = meetingMemberDetailInfo.height?.value,
+                    isUnivVerified = meetingMemberDetailInfo.isUnivVerified,
                 )
             }
         }
