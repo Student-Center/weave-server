@@ -133,8 +133,7 @@ class MeetingTeamDomainServiceImpl(
             ).also { newMember ->
                 meetingMemberRepository.save(newMember)
 
-                val isFull = isMeetingTeamFull(meetingTeam)
-                if (isFull && !meetingTeam.isPublished()) {
+                if (isMeetingTeamFull(meetingTeam) && !meetingTeam.isPublished()) {
                     createMeetingTeamMemberSummary(meetingTeam)
                         .also { meetingTeamMemberSummaryRepository.save(it) }
                         .let { meetingTeam.publish() }
