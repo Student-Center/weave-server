@@ -114,7 +114,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
             }
         }
 
-        context("팀의 정원이 가득 찬 경우에 새로운 팀원을 초대하려는 경우") {
+        context("팀의 정원이 가득 찼을 때, 새로운 초대 링크를 발급하려는 경우") {
             it("에러가 발생한다.") {
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()

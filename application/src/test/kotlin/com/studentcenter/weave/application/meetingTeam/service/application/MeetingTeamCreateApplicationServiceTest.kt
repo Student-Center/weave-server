@@ -14,6 +14,7 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
+import com.studentcetner.weave.support.lock.DistributedLockTestInitializer
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -39,6 +40,10 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
         meetingTeamDomainService,
         userQueryUseCaseMock,
     )
+
+    beforeTest {
+        DistributedLockTestInitializer.mockExecutionByStatic()
+    }
 
     afterTest {
         SecurityContextHolder.clearContext()

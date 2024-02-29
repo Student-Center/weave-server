@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamC
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
@@ -35,6 +36,7 @@ class MeetingTeamRestController(
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val meetingTeamCreateInvitationLinkUseCase: MeetingTeamCreateInvitationLinkUseCase,
     private val meetingTeamGetByInvitationCodeUseCase: MeetingTeamGetByInvitationCodeUseCase,
+    private val meetingTeamEnterUseCase: MeetingTeamEnterUseCase,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -122,6 +124,10 @@ class MeetingTeamRestController(
     override fun getMeetingTeamByInvitationCode(invitationCode: UUID): MeetingTeamGetByInvitationCodeResponse {
         return meetingTeamGetByInvitationCodeUseCase.invoke(invitationCode)
             .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
+    }
+
+    override fun enterMeetingTeam(invitationCode: UUID) {
+        meetingTeamEnterUseCase.invoke(invitationCode)
     }
 
 }

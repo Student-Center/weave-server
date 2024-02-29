@@ -35,8 +35,6 @@ interface MeetingTeamDomainService {
         teamId: UUID
     )
 
-    fun publishById(id: UUID): MeetingTeam
-
     fun getById(id: UUID): MeetingTeam
 
     fun getByIdAndStatus(
@@ -75,5 +73,7 @@ interface MeetingTeamDomainService {
     fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember
 
     fun getAllByIds(ids: List<UUID>): List<MeetingTeam>
+
+    fun countByMeetingTeamId(meetingTeamId: UUID): Int
 
 }
