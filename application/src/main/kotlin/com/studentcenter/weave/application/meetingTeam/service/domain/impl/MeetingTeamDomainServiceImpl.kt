@@ -133,10 +133,11 @@ class MeetingTeamDomainServiceImpl(
             ).also { newMember ->
                 meetingMemberRepository.save(newMember)
 
-                if (isMeetingTeamFull(meetingTeam) && !meetingTeam.isPublished()) {
+                if (isMeetingTeamFull(meetingTeam) && meetingTeam.isPublished().not()) {
                     createMeetingTeamMemberSummary(meetingTeam)
                         .also { meetingTeamMemberSummaryRepository.save(it) }
-                        .let { meetingTeam.publish() }
+
+                    meetingTeam.publish()
                         .also { meetingTeamRepository.save(it) }
                 }
             }
@@ -216,8 +217,7 @@ class MeetingTeamDomainServiceImpl(
     }
 
     fun isMeetingTeamFull(meetingTeam: MeetingTeam): Boolean {
-        val count = meetingMemberRepository.countByMeetingTeamId(meetingTeam.id)
-        return count == meetingTeam.memberCount
+        return meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) == meetingTeam.memberCount
     }
 
     private fun createMeetingTeamMemberSummary(meetingTeam: MeetingTeam): MeetingTeamMemberSummary {
