@@ -51,13 +51,17 @@ class MeetingRestController(
         }
     }
 
-    override fun createAttendance(
-        meetingId: UUID,
-        request: MeetingAttendanceCreateRequest,
-    ) {
+    override fun createAttendanceForAttend(meetingId: UUID) {
         meetingAttendanceCreateUseCase.invoke(
             meetingId = meetingId,
-            attendance = request.attendanceExpression.isAttendance(),
+            attendance = true,
+        )
+    }
+
+    override fun createAttendanceForPass(meetingId: UUID) {
+        meetingAttendanceCreateUseCase.invoke(
+            meetingId = meetingId,
+            attendance = false,
         )
     }
 

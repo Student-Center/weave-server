@@ -50,12 +50,19 @@ interface MeetingApi {
     ) : MeetingAttendancesResponse
 
     @Secured
-    @Operation(summary = "Create meeting attendance")
-    @PostMapping("{id}/attendance")
+    @Operation(summary = "Create meeting attendance for attend")
+    @PostMapping("{id}/attendance:attend")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createAttendance(
+    fun createAttendanceForAttend(
         @PathVariable("id") meetingId: UUID,
-        request: MeetingAttendanceCreateRequest,
+    )
+
+    @Secured
+    @Operation(summary = "Create meeting attendance for pass")
+    @PostMapping("{id}/attendance:pass")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createAttendanceForPass(
+        @PathVariable("id") meetingId: UUID,
     )
 
     @Secured
