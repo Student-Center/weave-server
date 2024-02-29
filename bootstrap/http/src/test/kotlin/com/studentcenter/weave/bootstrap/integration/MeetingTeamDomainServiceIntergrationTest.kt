@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
@@ -42,7 +41,7 @@ class MeetingTeamDomainServiceIntegrationTest(
                 )
 
                 // act
-                shouldThrow<CustomException> {
+                shouldThrow<IllegalArgumentException> {
                     runBlocking {
                         launch(Dispatchers.Default) {
                             meetingTeamDomainService.addMember(
