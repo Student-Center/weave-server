@@ -1,7 +1,6 @@
 package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
-import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendanceCreateRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendancesResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
