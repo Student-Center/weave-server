@@ -1,9 +1,11 @@
 package com.studentcenter.weave.bootstrap.integration
 
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.support.common.exception.CustomException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
@@ -14,6 +16,7 @@ import kotlinx.coroutines.runBlocking
 @DisplayName("MeetingTeamDomainService 통합 테스트")
 class MeetingTeamDomainServiceIntegrationTest(
     private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val userRepository: UserRepository,
 ) : IntegrationTestDescribeSpec({
 
     describe("미팅 팀 입장 요청 동시성 테스트") {
@@ -25,6 +28,10 @@ class MeetingTeamDomainServiceIntegrationTest(
                 val user1 = UserFixtureFactory.create()
                 val user2 = UserFixtureFactory.create()
 
+                userRepository.save(leaderUser)
+                userRepository.save(user1)
+                userRepository.save(user2)
+
                 val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
                 meetingTeamDomainService.save(meetingTeam)
 
@@ -35,7 +42,7 @@ class MeetingTeamDomainServiceIntegrationTest(
                 )
 
                 // act
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<CustomException> {
                     runBlocking {
                         launch(Dispatchers.Default) {
                             meetingTeamDomainService.addMember(
