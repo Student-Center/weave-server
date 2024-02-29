@@ -55,7 +55,10 @@ class MeetingRestController(
         meetingId: UUID,
         request: MeetingAttendanceCreateRequest,
     ) {
-        meetingAttendanceCreateUseCase.invoke(meetingId, request.attendance)
+        meetingAttendanceCreateUseCase.invoke(
+            meetingId = meetingId,
+            attendance = request.attendanceExpression.isAttendance(),
+        )
     }
 
     override fun findMyRequestMeetingByReceivingTeamId(receivingTeamId: UUID) : MeetingResponse {
