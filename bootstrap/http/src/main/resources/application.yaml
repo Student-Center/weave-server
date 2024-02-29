@@ -19,6 +19,7 @@ spring:
   docker:
     compose:
       file: ./bootstrap/http/compose-local.yaml
+
 springdoc:
   swagger-ui:
     enabled: true

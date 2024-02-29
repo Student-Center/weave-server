@@ -13,6 +13,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFacto
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -58,7 +59,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns null
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
                         MeetingRequestUseCase.Command(receivingMeetingTeamId)
                     )
@@ -85,7 +86,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                     // act, assert
-                    shouldThrow<IllegalArgumentException> {
+                    shouldThrow<CustomException> {
                         meetingRequestApplicationService.invoke(
                             MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                         )
@@ -110,7 +111,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
                         MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                     )
@@ -135,7 +136,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
                         MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                     )
@@ -157,7 +158,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns false
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
                         MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                     )
