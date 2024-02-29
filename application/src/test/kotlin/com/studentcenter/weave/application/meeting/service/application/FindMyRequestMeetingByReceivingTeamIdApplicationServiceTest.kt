@@ -10,6 +10,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFacto
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -54,7 +55,7 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec
                 every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> { sut.invoke(UUID.randomUUID()) }
+                shouldThrow<CustomException> { sut.invoke(UUID.randomUUID()) }
             }
         }
 

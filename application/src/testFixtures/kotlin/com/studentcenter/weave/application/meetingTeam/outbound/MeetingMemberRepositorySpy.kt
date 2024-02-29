@@ -48,11 +48,6 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
             ?: throw NoSuchElementException("MeetingMember not found")
     }
 
-    fun getByUserId(userId: UUID) : MeetingMember {
-        return bucket.values.firstOrNull { it.userId == userId }
-            ?: throw NoSuchElementException("MeetingMember not found")
-    }
-
     fun clear() {
         bucket.clear()
     }
