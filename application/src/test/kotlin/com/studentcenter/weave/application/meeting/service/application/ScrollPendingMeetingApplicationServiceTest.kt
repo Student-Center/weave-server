@@ -19,6 +19,7 @@ import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -69,7 +70,7 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                 every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<IllegalArgumentException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(command) }
             }
         }
 

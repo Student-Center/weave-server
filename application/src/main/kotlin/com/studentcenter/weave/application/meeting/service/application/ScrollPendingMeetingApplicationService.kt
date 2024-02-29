@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meeting.service.application
 
+import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
@@ -8,6 +9,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamI
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
+import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -22,7 +24,10 @@ class ScrollPendingMeetingApplicationService(
     @Transactional(readOnly = true)
     override fun invoke(command: ScrollPendingMeetingUseCase.Command): ScrollPendingMeetingUseCase.Result {
         val myTeam = meetingTeamQueryUseCase.findByMemberUserId(getCurrentUserAuthentication().userId)
-            ?: throw IllegalArgumentException("내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!")
+            ?: throw CustomException(
+                MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
+                "내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!",
+            )
 
         val (items, next) = scrollByPendingMeetingByTeamId(
             teamId = myTeam.id,
