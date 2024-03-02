@@ -73,4 +73,10 @@ interface MeetingApi {
         receivingTeamId: UUID,
     ) : MeetingResponse
 
+    @Secured
+    @Operation(summary = "Get other team member's kakao id by meeting id")
+    @GetMapping("{id}/kakao-id")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAllKakaoIds(@PathVariable("id") meetingId: UUID) : KakaoIdResponse
+
 }
