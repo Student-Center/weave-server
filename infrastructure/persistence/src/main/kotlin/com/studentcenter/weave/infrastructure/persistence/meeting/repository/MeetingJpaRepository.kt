@@ -55,12 +55,15 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
 
 
     @Modifying
-    @Query(value = """
+    @Query(value =
+        """
         UPDATE meeting
         SET status = 'CANCELED', finished_at = now()
         WHERE (requesting_team_id = :teamId or receiving_team_id = :teamId)
         AND status NOT IN ('COMPLETED', 'CANCELED') 
-    """, nativeQuery = true)
+        """,
+        nativeQuery = true
+    )
     fun cancelAllNotFinishedMeetingByTeamId(@Param("teamId") teamId: UUID)
 
 }
