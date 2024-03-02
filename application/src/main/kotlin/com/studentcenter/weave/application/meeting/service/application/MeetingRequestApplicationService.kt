@@ -12,6 +12,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class MeetingRequestApplicationService(
@@ -25,7 +26,11 @@ class MeetingRequestApplicationService(
         validateMyUniversityEmailVerified()
 
         val myMeetingTeam: MeetingTeam = getMyMeetingTeam()
-            .also { validateMyMeetingTeamStatus(it) }
+            .also {
+                validateMyMeetingTeamStatus(it)
+                validateDuplicatedRequest(it, command.receivingMeetingTeamId)
+            }
+
 
         val receivingMeetingTeam: MeetingTeam =
             meetingTeamQueryUseCase.getById(command.receivingMeetingTeamId)
@@ -36,6 +41,15 @@ class MeetingRequestApplicationService(
             requestingTeamId = myMeetingTeam.id,
             receivingTeamId = receivingMeetingTeam.id,
         ).also { meetingDomainService.save(it) }
+    }
+
+    private fun validateDuplicatedRequest(myTeam: MeetingTeam, receivingTeamId: UUID) {
+        if(meetingDomainService.existsMeetingRequest(myTeam.id, receivingTeamId)) {
+            throw CustomException(
+                MeetingExceptionType.ALREADY_REQUEST_MEETING,
+                "이미 상대팀에게 미팅을 신청했어요!",
+            )
+        }
     }
 
     private fun validateMyUniversityEmailVerified() {

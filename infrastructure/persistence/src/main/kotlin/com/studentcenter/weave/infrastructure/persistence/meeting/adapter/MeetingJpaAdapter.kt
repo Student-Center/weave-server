@@ -64,4 +64,14 @@ class MeetingJpaAdapter(
         return meetingJpaRepository.cancelAllNotFinishedMeetingByTeamId(teamId)
     }
 
+    override fun existsMeetingRequest(
+        requestingTeamId: UUID,
+        receivingMeetingTeamId: UUID,
+    ): Boolean {
+        return meetingJpaRepository.existsByRequestingTeamIdAndReceivingTeamId(
+            requestingTeamId,
+            receivingMeetingTeamId,
+        )
+    }
+
 }

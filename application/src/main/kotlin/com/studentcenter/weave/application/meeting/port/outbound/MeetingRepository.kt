@@ -24,4 +24,6 @@ interface MeetingRepository {
 
     fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID)
 
+    fun existsMeetingRequest(requestingTeamId: UUID, receivingMeetingTeamId: UUID) : Boolean
+
 }

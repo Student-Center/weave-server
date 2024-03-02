@@ -66,4 +66,9 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
     )
     fun cancelAllNotFinishedMeetingByTeamId(@Param("teamId") teamId: UUID)
 
+    fun existsByRequestingTeamIdAndReceivingTeamId(
+        requestingTeamId: UUID,
+        receivingMeetingTeamId: UUID,
+    ): Boolean
+
 }
