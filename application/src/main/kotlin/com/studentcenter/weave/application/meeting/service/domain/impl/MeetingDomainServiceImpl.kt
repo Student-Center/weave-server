@@ -46,4 +46,8 @@ class MeetingDomainServiceImpl(
         )
     }
 
+    override fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID) {
+        meetingRepository.cancelAllNotFinishedMeetingByTeamId(teamId)
+    }
+
 }
