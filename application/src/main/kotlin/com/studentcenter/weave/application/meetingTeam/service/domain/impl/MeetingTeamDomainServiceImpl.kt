@@ -162,7 +162,7 @@ class MeetingTeamDomainServiceImpl(
         meetingTeamId: UUID,
         memberCount: Int,
     ) {
-        require(meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId).size < memberCount) {
+        require(meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId).size <= memberCount) {
             "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
         }
     }
