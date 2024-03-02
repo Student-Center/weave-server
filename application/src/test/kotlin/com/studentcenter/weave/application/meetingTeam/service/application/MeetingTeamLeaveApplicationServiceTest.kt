@@ -20,6 +20,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
 import io.mockk.mockk
 
 @DisplayName("MeetingTeamLeaveApplicationService")
@@ -45,6 +46,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
         meetingMemberRepository.clear()
         meetingTeamRepository.clear()
         SecurityContextHolder.clearContext()
+        clearAllMocks()
     }
 
     describe("미팅팀 나가기 유스케이스") {
