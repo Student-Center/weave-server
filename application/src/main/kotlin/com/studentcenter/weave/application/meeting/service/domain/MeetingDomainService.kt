@@ -22,4 +22,6 @@ interface MeetingDomainService {
         receivingTeamId: UUID,
     ): Meeting?
 
+    fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID)
+
 }

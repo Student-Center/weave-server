@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
@@ -19,6 +20,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
 import io.mockk.mockk
 
 @DisplayName("MeetingTeamLeaveApplicationService")
@@ -34,12 +36,17 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
         userQueryUseCase = userQueryUseCase,
     )
-    val sut = MeetingTeamLeaveApplicationService(meetingTeamDomainService)
+    val cancelAllMeetingUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
+    val sut = MeetingTeamLeaveApplicationService(
+        meetingTeamDomainService = meetingTeamDomainService,
+        cancelAllMeetingUseCase = cancelAllMeetingUseCase,
+    )
 
     afterEach {
         meetingMemberRepository.clear()
         meetingTeamRepository.clear()
         SecurityContextHolder.clearContext()
+        clearAllMocks()
     }
 
     describe("미팅팀 나가기 유스케이스") {

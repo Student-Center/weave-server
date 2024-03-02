@@ -1,7 +1,10 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.repository
 
+import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -49,5 +52,18 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         requestingTeamId: UUID,
         receivingTeamId: UUID,
     ): Optional<MeetingJpaEntity>
+
+
+    @Modifying
+    @Query(value =
+        """
+        UPDATE meeting
+        SET status = 'CANCELED', finished_at = now()
+        WHERE (requesting_team_id = :teamId or receiving_team_id = :teamId)
+        AND status NOT IN ('COMPLETED', 'CANCELED') 
+        """,
+        nativeQuery = true
+    )
+    fun cancelAllNotFinishedMeetingByTeamId(@Param("teamId") teamId: UUID)
 
 }
