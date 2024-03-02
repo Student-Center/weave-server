@@ -132,14 +132,10 @@ class MeetingTeamDomainServiceImpl(
                 role = role,
             ).also { newMember ->
                 meetingMemberRepository.save(newMember)
-
-                if (isMeetingTeamFull(meetingTeam) && meetingTeam.isPublished().not()) {
-                    createMeetingTeamMemberSummary(meetingTeam)
-                        .also { meetingTeamMemberSummaryRepository.save(it) }
-
-                    meetingTeam.publish()
-                        .also { meetingTeamRepository.save(it) }
-                }
+                publishTeamIfNeeded(
+                    meetingTeam,
+                    meetingMemberRepository.countByMeetingTeamId(meetingTeam.id)
+                )
             }
         }
     }
@@ -151,20 +147,15 @@ class MeetingTeamDomainServiceImpl(
         memberCount: Int?,
         teamIntroduce: TeamIntroduce?,
     ): MeetingTeam {
-        memberCount?.let { checkMemberCountUpdatable(id, it) }
+        val currentMemberCount = meetingMemberRepository.countByMeetingTeamId(id)
+        memberCount?.let { checkMemberCountUpdatable(currentMemberCount, it) }
         return meetingTeamRepository
             .getById(id)
             .update(teamIntroduce, memberCount, location)
-            .also { meetingTeamRepository.save(it) }
-    }
-
-    private fun checkMemberCountUpdatable(
-        meetingTeamId: UUID,
-        memberCount: Int,
-    ) {
-        require(meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId).size < memberCount) {
-            "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
-        }
+            .also {
+                meetingTeamRepository.save(it)
+                publishTeamIfNeeded(it, currentMemberCount)
+            }
     }
 
     @Transactional
@@ -185,8 +176,14 @@ class MeetingTeamDomainServiceImpl(
             }
     }
 
-    override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
-        return meetingMemberRepository.countByMeetingTeamId(meetingTeamId)
+    private fun publishTeamIfNeeded(meetingTeam: MeetingTeam, currentMemberCount: Int) {
+        if (meetingTeam.memberCount == currentMemberCount && meetingTeam.isPublished().not()) {
+            createMeetingTeamMemberSummary(meetingTeam)
+                .also { meetingTeamMemberSummaryRepository.save(it) }
+
+            meetingTeam.publish()
+                .also { meetingTeamRepository.save(it) }
+        }
     }
 
     private fun getTeamMember(
@@ -210,14 +207,19 @@ class MeetingTeamDomainServiceImpl(
         }
     }
 
+    private fun checkMemberCountUpdatable(
+        currentMemberCount: Int,
+        updateMemberCount: Int,
+    ) {
+        require(currentMemberCount <= updateMemberCount) {
+            "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
+        }
+    }
+
     private fun checkMemberCount(meetingTeam: MeetingTeam) {
         require(meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) < meetingTeam.memberCount) {
             "팀원의 수가 초과되었습니다"
         }
-    }
-
-    fun isMeetingTeamFull(meetingTeam: MeetingTeam): Boolean {
-        return meetingMemberRepository.countByMeetingTeamId(meetingTeam.id) == meetingTeam.memberCount
     }
 
     private fun createMeetingTeamMemberSummary(meetingTeam: MeetingTeam): MeetingTeamMemberSummary {
