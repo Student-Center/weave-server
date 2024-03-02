@@ -1,11 +1,13 @@
 package com.studentcenter.weave.bootstrap.meeting.api
 
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
+import com.studentcenter.weave.bootstrap.meeting.dto.KakaoIdResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendancesResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollResponse
+import com.studentcenter.weave.domain.user.vo.KakaoId
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -75,8 +77,8 @@ interface MeetingApi {
 
     @Secured
     @Operation(summary = "Get other team member's kakao id by meeting id")
-    @GetMapping("{id}/kakao-id")
+    @GetMapping("{id}/other-team/kakao-id")
     @ResponseStatus(HttpStatus.OK)
-    fun getAllKakaoIds(@PathVariable("id") meetingId: UUID) : KakaoIdResponse
+    fun getOtherTeamKakaoIds(@PathVariable("id") meetingId: UUID) : KakaoIdResponse
 
 }

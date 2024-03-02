@@ -1,11 +1,13 @@
 package com.studentcenter.weave.bootstrap.meeting.controller
 
 import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamIdUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfoUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttendancesUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanceCreateUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.bootstrap.meeting.api.MeetingApi
+import com.studentcenter.weave.bootstrap.meeting.dto.KakaoIdResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendancesResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
@@ -21,6 +23,7 @@ class MeetingRestController(
     private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
     private val meetingAttendanceCreateUseCase: MeetingAttendanceCreateUseCase,
     private val findMyRequestMeetingByReceivingTeamIdUseCase: FindMyRequestMeetingByReceivingTeamIdUseCase,
+    private val getAllOtherTeamMemberInfoUseCase: GetAllOtherTeamMemberInfoUseCase,
 ) : MeetingApi {
 
     override fun requestMeeting(request: MeetingRequestRequest) {
@@ -67,6 +70,12 @@ class MeetingRestController(
     override fun findMyRequestMeetingByReceivingTeamId(receivingTeamId: UUID) : MeetingResponse {
         return findMyRequestMeetingByReceivingTeamIdUseCase.invoke(receivingTeamId).let {
             MeetingResponse.from(it)
+        }
+    }
+
+    override fun getOtherTeamKakaoIds(meetingId: UUID): KakaoIdResponse {
+        return getAllOtherTeamMemberInfoUseCase.invoke(meetingId).let {
+            KakaoIdResponse.from(it)
         }
     }
 
