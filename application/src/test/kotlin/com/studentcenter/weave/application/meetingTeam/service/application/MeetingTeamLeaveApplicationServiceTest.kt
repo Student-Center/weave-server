@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
@@ -34,7 +35,11 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
         userQueryUseCase = userQueryUseCase,
     )
-    val sut = MeetingTeamLeaveApplicationService(meetingTeamDomainService)
+    val cancelAllMeetingUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
+    val sut = MeetingTeamLeaveApplicationService(
+        meetingTeamDomainService = meetingTeamDomainService,
+        cancelAllMeetingUseCase = cancelAllMeetingUseCase,
+    )
 
     afterEach {
         meetingMemberRepository.clear()
