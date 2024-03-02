@@ -54,6 +54,17 @@ class MeetingRepositorySpy : MeetingRepository {
             .map { it.cancel() }
     }
 
+    override fun existsMeetingRequest(
+        requestingTeamId: UUID,
+        receivingMeetingTeamId: UUID,
+    ): Boolean {
+        return bucket
+            .values
+            .any {
+                it.requestingTeamId == requestingTeamId && it.receivingTeamId == receivingMeetingTeamId
+            }
+    }
+
     fun findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
         requestingTeamId: UUID,
         receivingTeamId: UUID,

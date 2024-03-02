@@ -50,4 +50,11 @@ class MeetingDomainServiceImpl(
         meetingRepository.cancelAllNotFinishedMeetingByTeamId(teamId)
     }
 
+    override fun existsMeetingRequest(
+        requestingTeamId: UUID,
+        receivingMeetingTeamId: UUID,
+    ): Boolean {
+        return meetingRepository.existsMeetingRequest(requestingTeamId, receivingMeetingTeamId)
+    }
+
 }
