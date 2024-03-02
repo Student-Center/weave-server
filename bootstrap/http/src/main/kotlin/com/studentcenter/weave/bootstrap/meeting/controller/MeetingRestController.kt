@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttend
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanceCreateUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
 import com.studentcenter.weave.bootstrap.meeting.api.MeetingApi
 import com.studentcenter.weave.bootstrap.meeting.dto.KakaoIdResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendancesResponse
@@ -13,6 +14,8 @@ import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollResponse
+import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollResponse
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -20,6 +23,7 @@ import java.util.*
 class MeetingRestController(
     private val meetingRequestUseCase: MeetingRequestUseCase,
     private val scrollPendingMeetingUseCase: ScrollPendingMeetingUseCase,
+    private val scrollPreparedMeetingUseCase: ScrollPreparedMeetingUseCase,
     private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
     private val meetingAttendanceCreateUseCase: MeetingAttendanceCreateUseCase,
     private val findMyRequestMeetingByReceivingTeamIdUseCase: FindMyRequestMeetingByReceivingTeamIdUseCase,
@@ -70,6 +74,16 @@ class MeetingRestController(
     override fun findMyRequestMeetingByReceivingTeamId(receivingTeamId: UUID) : MeetingResponse {
         return findMyRequestMeetingByReceivingTeamIdUseCase.invoke(receivingTeamId).let {
             MeetingResponse.from(it)
+        }
+    }
+
+    override fun scrollPreparedMeetings(request: PreparedMeetingScrollRequest): PreparedMeetingScrollResponse {
+        return scrollPreparedMeetingUseCase.invoke(request.toCommand()).let {
+            PreparedMeetingScrollResponse(
+                items = it.items.map(PreparedMeetingScrollResponse.MeetingDto::from),
+                next = it.next,
+                total = it.total
+            )
         }
     }
 

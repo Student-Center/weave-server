@@ -26,4 +26,6 @@ interface MeetingRepository {
 
     fun existsMeetingRequest(requestingTeamId: UUID, receivingMeetingTeamId: UUID) : Boolean
 
+    fun findAllPreparedMeetingByTeamId(teamId: UUID, next: UUID?, limit: Int): List<Meeting>
+
 }

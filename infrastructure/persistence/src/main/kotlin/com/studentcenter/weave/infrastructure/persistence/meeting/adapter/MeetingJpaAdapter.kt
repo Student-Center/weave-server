@@ -74,4 +74,16 @@ class MeetingJpaAdapter(
         )
     }
 
+    override fun findAllPreparedMeetingByTeamId(
+        teamId: UUID,
+        next: UUID?,
+        limit: Int,
+    ): List<Meeting> {
+        return meetingJpaRepository.findAllPreparedMeetings(
+            teamId = teamId,
+            next = next,
+            limit = limit,
+        ).map { it.toDomain() }
+    }
+
 }

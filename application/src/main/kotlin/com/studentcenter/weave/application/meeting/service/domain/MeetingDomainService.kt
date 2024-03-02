@@ -15,6 +15,12 @@ interface MeetingDomainService {
         limit: Int,
     ): List<Meeting>
 
+    fun findAllPreparedMeetingByTeamId(
+        teamId: UUID,
+        next: UUID?,
+        limit: Int,
+    ): List<Meeting>
+
     fun getById(id: UUID): Meeting
 
     fun findByRequestingTeamIdAndReceivingTeamId(

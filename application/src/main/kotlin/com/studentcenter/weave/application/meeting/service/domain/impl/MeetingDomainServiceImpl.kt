@@ -32,6 +32,18 @@ class MeetingDomainServiceImpl(
         )
     }
 
+    override fun findAllPreparedMeetingByTeamId(
+        teamId: UUID,
+        next: UUID?,
+        limit: Int,
+    ): List<Meeting> {
+        return meetingRepository.findAllPreparedMeetingByTeamId(
+            teamId = teamId,
+            next = next,
+            limit = limit,
+        )
+    }
+
     override fun getById(id: UUID): Meeting {
         return meetingRepository.getById(id)
     }

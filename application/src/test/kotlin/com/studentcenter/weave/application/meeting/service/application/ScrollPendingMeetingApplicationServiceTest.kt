@@ -8,6 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamI
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfoCreator
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
@@ -22,7 +23,6 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -32,8 +32,6 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.random.Random
-import kotlin.random.nextUInt
 
 @DisplayName("ScrollPendingMeetingApplicationServiceTest")
 class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
@@ -50,8 +48,6 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
         meetingTeamInfoGetAllByIdsUseCase = meetingTeamInfoGetAllByIdsUseCase,
     )
-
-    val univRepo = UniversityRepositorySpy()
 
     afterEach {
         meetingRepositorySpy.clear()
@@ -112,10 +108,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                         limit = limit,
                     )
 
-                    val myTeamInfo = createMeetingTeamInfo(users = listOf(user), memberCount = 2)
+                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(limit + 1) {
-                        val teamInfo = createMeetingTeamInfo(gender = Gender.WOMAN)
+                        val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
                         teamInfos.add(teamInfo)
                         meetingRepositorySpy.save(
                             if (teamType == TeamType.REQUESTING) {
@@ -166,10 +162,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                         limit = limit,
                     )
 
-                    val myTeamInfo = createMeetingTeamInfo(users = listOf(user), memberCount = 2)
+                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(count) {
-                        val teamInfo = createMeetingTeamInfo(gender = Gender.WOMAN)
+                        val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
                         teamInfos.add(teamInfo)
                         meetingRepositorySpy.save(
                             if (teamType == TeamType.REQUESTING) {

@@ -8,6 +8,8 @@ import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollResponse
 import com.studentcenter.weave.domain.user.vo.KakaoId
+import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollRequest
+import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -74,6 +76,14 @@ interface MeetingApi {
         @Parameter(description = "receiving team id", required = true, `in` = ParameterIn.QUERY)
         receivingTeamId: UUID,
     ) : MeetingResponse
+
+    @Secured
+    @Operation(summary = "Scroll prepared meetings")
+    @GetMapping("/status/prepared")
+    @ResponseStatus(HttpStatus.OK)
+    fun scrollPreparedMeetings(
+        request: PreparedMeetingScrollRequest,
+    ) : PreparedMeetingScrollResponse
 
     @Secured
     @Operation(summary = "Get other team member's kakao id by meeting id")
