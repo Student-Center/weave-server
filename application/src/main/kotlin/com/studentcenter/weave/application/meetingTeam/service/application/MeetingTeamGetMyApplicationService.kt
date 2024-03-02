@@ -26,6 +26,7 @@ class MeetingTeamGetMyApplicationService(
         val myMeetingTeamInfos = meetingTeams.map { team ->
             val memberInfos = meetingDomainService
                 .findAllMeetingMembersByMeetingTeamId(team.id)
+                .sortedBy { it.id }
                 .map { createMemberInfo(it, currentUser.id) }
 
             MyMeetingTeamInfo(
