@@ -47,6 +47,13 @@ class MeetingRepositorySpy : MeetingRepository {
         }
     }
 
+    override fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID) {
+        bucket
+            .values
+            .filter { it.requestingTeamId == teamId || it.receivingTeamId == teamId }
+            .map { it.cancel() }
+    }
+
     fun findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
         requestingTeamId: UUID,
         receivingTeamId: UUID,

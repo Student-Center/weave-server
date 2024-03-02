@@ -60,4 +60,8 @@ class MeetingJpaAdapter(
             ?.toDomain()
     }
 
+    override fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID) {
+        return meetingJpaRepository.cancelAllNotFinishedMeetingByTeamId(teamId)
+    }
+
 }
