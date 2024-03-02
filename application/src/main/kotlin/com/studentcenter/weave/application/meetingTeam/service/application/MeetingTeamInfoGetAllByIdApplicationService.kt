@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -10,7 +11,6 @@ import com.studentcenter.weave.domain.university.entity.University
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.collections.HashMap
 
 @Service
 class MeetingTeamInfoGetAllByIdApplicationService(
@@ -32,13 +32,13 @@ class MeetingTeamInfoGetAllByIdApplicationService(
     private fun createMemberInfos(
         team: MeetingTeam,
         univCache: MutableMap<UUID, University>
-    ) : List<MeetingTeamInfo.MemberInfo> {
+    ) : List<MemberInfo> {
         return meetingTeamDomainService
             .findAllMeetingMembersByMeetingTeamId(team.id)
             .map {
                 val memberUser = userQueryUseCase.getById(it.userId)
                 val university = getUniversityById(memberUser.universityId, univCache)
-                MeetingTeamInfo.MemberInfo(
+                MemberInfo(
                     id = it.id,
                     user = memberUser,
                     university = university,

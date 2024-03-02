@@ -7,12 +7,14 @@ import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole.*
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole.LEADER
+import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole.MEMBER
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
@@ -222,7 +224,7 @@ private fun createMeetingTeamInfo(
         gender = gender
     )
     val members = MutableList(users.size) { i ->
-        MeetingTeamInfo.MemberInfo(
+        MemberInfo(
             id = UuidCreator.create(),
             user = users[i],
             university = UniversityFixtureFactory.create(
@@ -237,7 +239,7 @@ private fun createMeetingTeamInfo(
         repeat(memberCount - users.size) { i ->
             val user = UserFixtureFactory.create(gender = gender)
             members.add(
-                MeetingTeamInfo.MemberInfo(
+                MemberInfo(
                     id = UuidCreator.create(),
                     user = user,
                     university = UniversityFixtureFactory.create(
