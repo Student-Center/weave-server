@@ -140,16 +140,6 @@ class MeetingTeamDomainServiceImpl(
         }
     }
 
-    private fun publishTeamIfNeeded(meetingTeam: MeetingTeam, currentMemberCount: Int) {
-        if (meetingTeam.memberCount == currentMemberCount && meetingTeam.isPublished().not()) {
-            createMeetingTeamMemberSummary(meetingTeam)
-                .also { meetingTeamMemberSummaryRepository.save(it) }
-
-            meetingTeam.publish()
-                .also { meetingTeamRepository.save(it) }
-        }
-    }
-
     @Transactional
     override fun updateById(
         id: UUID,
@@ -166,15 +156,6 @@ class MeetingTeamDomainServiceImpl(
                 meetingTeamRepository.save(it)
                 publishTeamIfNeeded(it, currentMemberCount)
             }
-    }
-
-    private fun checkMemberCountUpdatable(
-        currentMemberCount: Int,
-        updateMemberCount: Int,
-    ) {
-        require(currentMemberCount <= updateMemberCount) {
-            "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
-        }
     }
 
     @Transactional
@@ -195,8 +176,14 @@ class MeetingTeamDomainServiceImpl(
             }
     }
 
-    override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
-        return meetingMemberRepository.countByMeetingTeamId(meetingTeamId)
+    private fun publishTeamIfNeeded(meetingTeam: MeetingTeam, currentMemberCount: Int) {
+        if (meetingTeam.memberCount == currentMemberCount && meetingTeam.isPublished().not()) {
+            createMeetingTeamMemberSummary(meetingTeam)
+                .also { meetingTeamMemberSummaryRepository.save(it) }
+
+            meetingTeam.publish()
+                .also { meetingTeamRepository.save(it) }
+        }
     }
 
     private fun getTeamMember(
@@ -217,6 +204,15 @@ class MeetingTeamDomainServiceImpl(
                 type = MeetingTeamExceptionType.LEADER_CANNOT_LEAVE_TEAM,
                 message = "팀장은 팀을 나갈 수 없어요! - 팀을 삭제해주세요!"
             )
+        }
+    }
+
+    private fun checkMemberCountUpdatable(
+        currentMemberCount: Int,
+        updateMemberCount: Int,
+    ) {
+        require(currentMemberCount <= updateMemberCount) {
+            "이미 참여한 팀원 수보다 적은 수로 업데이트 할 수 없어요!"
         }
     }
 

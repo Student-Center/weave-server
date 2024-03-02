@@ -60,7 +60,10 @@ class MeetingTeamDomainServiceIntegrationTest(
                     }
                 }
 
-                meetingTeamDomainService.countByMeetingTeamId(meetingTeam.id) shouldBe 2
+                val currentMemberCount = meetingTeamDomainService
+                    .findAllMeetingMembersByMeetingTeamId(meetingTeam.id)
+                    .size
+                currentMemberCount shouldBe 2
             }
         }
     }
