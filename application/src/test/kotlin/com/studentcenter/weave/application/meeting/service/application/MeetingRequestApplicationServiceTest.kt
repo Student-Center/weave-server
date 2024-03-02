@@ -167,6 +167,35 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
         }
 
+        context("이미 신청한 경우") {
+            it("예외를 던진다") {
+                // arrange
+                val myMeetingTeam = MeetingTeamFixtureFactory.create(
+                    status = MeetingTeamStatus.PUBLISHED
+                )
+                val receivingMeetingTeam = MeetingTeamFixtureFactory.create(
+                    gender = Gender.WOMAN,
+                    status = MeetingTeamStatus.PUBLISHED
+                )
+
+                val userAuthentication: UserAuthentication = UserFixtureFactory
+                    .create()
+                    .let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
+                every { userQueryUseCase.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                meetingRequestApplicationService.invoke(command)
+
+                // act, assert
+                shouldThrow<CustomException> {
+                    meetingRequestApplicationService.invoke(command)
+                }
+            }
+        }
+
         context("요청이 유효할 경우") {
             it("미팅이 생성된다") {
                 // arrange
