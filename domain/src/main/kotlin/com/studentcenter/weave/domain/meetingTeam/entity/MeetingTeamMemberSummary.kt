@@ -18,7 +18,7 @@ data class MeetingTeamMemberSummary(
 
     init {
         require(youngestMemberBirthYear.value >= oldestMemberBirthYear.value) {
-            "가장 나이가 어린 멤버의 년생은 가장 나이가 많은 멤버의 년생보다 작아야 합니다."
+            "가장 나이가 어린 멤버의 년생은 가장 나이가 많은 멤버의 년생보다 작거나 같아야 합니다."
         }
     }
 
@@ -47,15 +47,17 @@ data class MeetingTeamMemberSummary(
         }
 
         private fun getYoungestMemberBirthYear(members: List<User>): BirthYear {
-            return members
-                .map { it.birthYear }
-                .minBy { it.value }
-        }
-
-        private fun getOldestMemberBirthYear(members: List<User>): BirthYear {
+            // 가장 어린 멤버는 태어난 해가 가장 느리다(max)
             return members
                 .map { it.birthYear }
                 .maxBy { it.value }
+        }
+
+        private fun getOldestMemberBirthYear(members: List<User>): BirthYear {
+            // 가장 나이든 멤버는 태어난 해가 가장 빠르다(min)
+            return members
+                .map { it.birthYear }
+                .minBy { it.value }
         }
     }
 
