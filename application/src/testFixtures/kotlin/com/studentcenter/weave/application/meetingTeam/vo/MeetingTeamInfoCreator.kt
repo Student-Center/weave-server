@@ -27,7 +27,7 @@ object MeetingTeamInfoCreator {
             gender = gender
         )
         val members = MutableList(users.size) { i ->
-            MeetingTeamInfo.MemberInfo(
+            MemberInfo(
                 id = UuidCreator.create(),
                 user = users[i],
                 university = UniversityFixtureFactory.create(
@@ -42,7 +42,7 @@ object MeetingTeamInfoCreator {
             repeat(memberCount - users.size) { i ->
                 val user = UserFixtureFactory.create(gender = gender)
                 members.add(
-                    MeetingTeamInfo.MemberInfo(
+                    MemberInfo(
                         id = UuidCreator.create(),
                         user = user,
                         university = UniversityFixtureFactory.create(
