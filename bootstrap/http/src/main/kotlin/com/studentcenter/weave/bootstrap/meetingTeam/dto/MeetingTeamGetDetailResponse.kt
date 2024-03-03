@@ -39,7 +39,7 @@ data class MeetingTeamGetDetailResponse(
             fun from(meetingMemberDetailInfo: MeetingMemberDetailInfo) : MeetingMemberDto {
                 return MeetingMemberDto(
                     userId = meetingMemberDetailInfo.userId,
-                    universityName = meetingMemberDetailInfo.universityName.value,
+                    universityName = meetingMemberDetailInfo.universityName,
                     majorName = meetingMemberDetailInfo.majorName.value,
                     mbti = meetingMemberDetailInfo.mbti.value,
                     birthYear = meetingMemberDetailInfo.birthYear.value,
