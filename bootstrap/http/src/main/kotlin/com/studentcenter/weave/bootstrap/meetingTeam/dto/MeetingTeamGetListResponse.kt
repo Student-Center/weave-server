@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.dto
 
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
@@ -52,7 +53,7 @@ data class MeetingTeamGetListResponse(
         companion object {
 
             fun from(
-                memberInfo: MeetingTeamInfo.MemberInfo,
+                memberInfo: MemberInfo,
             ): MeetingMemberDto {
                 return MeetingMemberDto(
                     id = memberInfo.user.id,
