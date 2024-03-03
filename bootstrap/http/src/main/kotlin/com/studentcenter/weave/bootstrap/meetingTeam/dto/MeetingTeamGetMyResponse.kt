@@ -57,7 +57,7 @@ data class MeetingTeamGetMyResponse(
             ): MeetingMemberDto {
                 return MeetingMemberDto(
                     id = memberInfo.user.id,
-                    universityName = memberInfo.university.name.value,
+                    universityName = memberInfo.university.displayName,
                     mbti = memberInfo.user.mbti.value,
                     birthYear = memberInfo.user.birthYear.value,
                     role = memberInfo.role,

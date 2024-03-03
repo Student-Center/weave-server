@@ -14,7 +14,7 @@ import java.util.*
 
 data class MeetingMemberDetailInfo (
     val userId: UUID,
-    val universityName: UniversityName,
+    val universityName: String,
     val majorName: MajorName,
     val mbti: Mbti,
     val birthYear: BirthYear,
@@ -33,7 +33,7 @@ data class MeetingMemberDetailInfo (
         ): MeetingMemberDetailInfo {
             return MeetingMemberDetailInfo(
                 userId = user.id,
-                universityName = university.name,
+                universityName = university.displayName,
                 majorName = major.name,
                 mbti = user.mbti,
                 birthYear = user.birthYear,
