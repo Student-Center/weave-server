@@ -5,6 +5,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
+import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
@@ -58,10 +59,10 @@ class MeetingTeamGetListApplicationService(
 
     private fun createMemberInfo(
         member: MeetingMember
-    ): MeetingTeamInfo.MemberInfo {
+    ): MemberInfo {
         val memberUser = userQueryUseCase.getById(member.userId)
         val university = universityGetByIdUsecase.invoke(memberUser.universityId)
-        return MeetingTeamInfo.MemberInfo(
+        return MemberInfo(
             id = member.id,
             user = memberUser,
             university = university,

@@ -21,6 +21,10 @@ data class Meeting(
         }
     }
 
+    fun isCompleted(): Boolean {
+        return status == MeetingStatus.COMPLETED
+    }
+
     fun isFinished(): Boolean {
         return status == MeetingStatus.CANCELED || status == MeetingStatus.COMPLETED
     }
