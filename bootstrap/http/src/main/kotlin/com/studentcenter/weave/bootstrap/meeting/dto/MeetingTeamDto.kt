@@ -22,7 +22,7 @@ data class MeetingTeamDto(
                     MeetingMemberDto(
                         id = it.id,
                         userId = it.user.id,
-                        universityName = it.university.name.value,
+                        universityName = it.university.displayName,
                         mbti = it.user.mbti.value,
                         birthYear = it.user.birthYear.value,
                         animalType = it.user.animalType?.name,

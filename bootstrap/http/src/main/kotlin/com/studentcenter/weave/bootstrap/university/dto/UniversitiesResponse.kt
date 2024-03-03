@@ -16,6 +16,7 @@ data class UniversitiesResponse(
     data class UniversityDto(
         val id: UUID,
         val name: String,
+        val displayName: String,
         val domainAddress: String,
         val logoAddress: String?,
     )
@@ -23,7 +24,15 @@ data class UniversitiesResponse(
     companion object {
 
         fun from(domains: List<University>) = UniversitiesResponse(
-            domains.map { UniversityDto(it.id, it.name.value, it.domainAddress, it.logoAddress) }
+            domains.map {
+                UniversityDto(
+                    id = it.id,
+                    name = it.name.value,
+                    displayName = it.displayName,
+                    domainAddress = it.domainAddress,
+                    logoAddress = it.logoAddress
+                )
+            }
         )
     }
 }

@@ -12,6 +12,7 @@ import java.util.*
 data class UniversityResponse(
     val id: UUID,
     val name: String,
+    val displayName: String,
     val domainAddress: String,
     val logoAddress: String?,
 ) {
@@ -21,6 +22,7 @@ data class UniversityResponse(
         fun from(domain: University) = UniversityResponse(
             id = domain.id,
             name = domain.name.value,
+            displayName = domain.displayName,
             domainAddress = domain.domainAddress,
             logoAddress = domain.logoAddress,
         )
