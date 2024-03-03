@@ -1,6 +1,5 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
 import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.Parameter
