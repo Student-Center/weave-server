@@ -7,8 +7,8 @@ import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfoCreator
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
-import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.TeamType
@@ -50,8 +50,6 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
         meetingTeamInfoGetAllByIdsUseCase = meetingTeamInfoGetAllByIdsUseCase,
     )
-
-    val univRepo = UniversityRepositorySpy()
 
     afterEach {
         meetingRepositorySpy.clear()
@@ -112,10 +110,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                         limit = limit,
                     )
 
-                    val myTeamInfo = createMeetingTeamInfo(users = listOf(user), memberCount = 2)
+                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(limit + 1) {
-                        val teamInfo = createMeetingTeamInfo(gender = Gender.WOMAN)
+                        val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
                         teamInfos.add(teamInfo)
                         meetingRepositorySpy.save(
                             if (teamType == TeamType.REQUESTING) {
@@ -166,10 +164,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                         limit = limit,
                     )
 
-                    val myTeamInfo = createMeetingTeamInfo(users = listOf(user), memberCount = 2)
+                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(count) {
-                        val teamInfo = createMeetingTeamInfo(gender = Gender.WOMAN)
+                        val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
                         teamInfos.add(teamInfo)
                         meetingRepositorySpy.save(
                             if (teamType == TeamType.REQUESTING) {

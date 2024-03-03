@@ -71,4 +71,22 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         receivingMeetingTeamId: UUID,
     ): Boolean
 
+
+    // FIXME(prepared): 추후에 상태가 추가되면 Completed -> Prepared
+    @Query(
+        value = """
+            SELECT m.*
+            FROM meeting as m
+            WHERE (m.requesting_team_id = :teamId or m.receiving_team_id = :teamId)
+            AND (:next is null or id < :next)
+            AND m.status = 'COMPLETED'
+            LIMIT :limit
+        """,
+        nativeQuery = true
+    )
+    fun findAllPreparedMeetings(
+        @Param("teamId") teamId: UUID,
+        @Param("next") next: UUID?,
+        @Param("limit") limit: Int,
+    ): List<MeetingJpaEntity>
 }

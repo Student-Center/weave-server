@@ -1,17 +1,16 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
-import com.studentcenter.weave.application.meeting.vo.PendingMeetingInfo
+import com.studentcenter.weave.application.meeting.vo.PreparedMeetingInfo
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
-import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.time.LocalDateTime
 import java.util.*
 
-data class PendingMeetingScrollResponse(
+data class PreparedMeetingScrollResponse(
     override val items: List<MeetingDto>,
     override val next: UUID?,
     override val total: Int,
-) : ScrollResponse<PendingMeetingScrollResponse.MeetingDto, UUID?>(
+) : ScrollResponse<PreparedMeetingScrollResponse.MeetingDto, UUID?>(
     items = items,
     next = next,
     total = items.size,
@@ -19,23 +18,19 @@ data class PendingMeetingScrollResponse(
 
     data class MeetingDto(
         val id: UUID,
-        val requestingTeam: MeetingTeamDto,
-        val receivingTeam: MeetingTeamDto,
-        val teamType: TeamType,
+        val memberCount: Int,
+        val otherTeam: MeetingTeamDto,
         val status: MeetingStatus,
         val createdAt: LocalDateTime,
-        val pendingEndAt: LocalDateTime,
     ) {
         companion object {
-            fun from(meetingInfo: PendingMeetingInfo) : MeetingDto {
+            fun from(meetingInfo: PreparedMeetingInfo) : MeetingDto {
                 return MeetingDto(
                     id = meetingInfo.id,
-                    requestingTeam = MeetingTeamDto.from(meetingInfo.requestingTeam),
-                    receivingTeam = MeetingTeamDto.from(meetingInfo.receivingTeam),
-                    teamType = meetingInfo.teamType,
+                    memberCount = meetingInfo.memberCount,
+                    otherTeam = MeetingTeamDto.from(meetingInfo.otherTeam),
                     status = meetingInfo.status,
                     createdAt = meetingInfo.createdAt,
-                    pendingEndAt = meetingInfo.pendingEndAt,
                 )
             }
         }
