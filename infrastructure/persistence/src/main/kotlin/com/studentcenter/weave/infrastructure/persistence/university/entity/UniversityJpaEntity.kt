@@ -14,6 +14,7 @@ import java.util.*
 class UniversityJpaEntity(
     id: UUID,
     name: String,
+    displayName: String,
     domainAddress: String,
     logoAddress: String?,
     createdAt: LocalDateTime,
@@ -26,6 +27,10 @@ class UniversityJpaEntity(
 
     @Column(unique = true, nullable = false)
     var name: String = name
+        private set
+
+    @Column(nullable = false)
+    var displayName: String = displayName
         private set
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
@@ -48,6 +53,7 @@ class UniversityJpaEntity(
         return University(
             id = this.id,
             name = UniversityName(value = this.name),
+            displayName = displayName,
             domainAddress = this.domainAddress,
             logoAddress = this.logoAddress,
             createdAt = this.createdAt,

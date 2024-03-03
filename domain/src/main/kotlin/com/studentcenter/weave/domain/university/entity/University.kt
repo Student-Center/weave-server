@@ -8,6 +8,7 @@ import java.util.*
 data class University(
     val id: UUID = UuidCreator.create(),
     val name: UniversityName,
+    val displayName: String,
     val domainAddress: String,
     val logoAddress: String?,
     val createdAt: LocalDateTime = LocalDateTime.now(),
@@ -25,6 +26,7 @@ data class University(
                 name = name,
                 domainAddress = domainAddress,
                 logoAddress = logoAddress,
+                displayName = name.value
             )
         }
     }
