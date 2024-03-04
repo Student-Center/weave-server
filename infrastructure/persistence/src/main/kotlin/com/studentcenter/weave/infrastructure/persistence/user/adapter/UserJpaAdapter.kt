@@ -34,10 +34,7 @@ class UserJpaAdapter(
     }
 
     override fun findByKakaoId(kakaoId: KakaoId): User? {
-        return userJpaRepository
-            .findByKakaoId(kakaoId.value)
-            .orElse(null)
-            ?.toDomain()
+        return userJpaRepository.findByKakaoId(kakaoId.value)?.toDomain()
     }
 
     override fun deleteById(id: UUID) {

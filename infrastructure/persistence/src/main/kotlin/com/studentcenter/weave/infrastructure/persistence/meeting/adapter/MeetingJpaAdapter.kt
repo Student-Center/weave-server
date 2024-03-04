@@ -3,11 +3,13 @@ package com.studentcenter.weave.infrastructure.persistence.meeting.adapter
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingRepository
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
+import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meeting.repository.MeetingJpaRepository
+import com.studentcenter.weave.support.common.exception.CustomException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*
-import kotlin.jvm.optionals.getOrNull
 
 @Component
 class MeetingJpaAdapter(
@@ -44,7 +46,11 @@ class MeetingJpaAdapter(
     }
 
     override fun getById(id: UUID): Meeting {
-        return meetingJpaRepository.getReferenceById(id).toDomain()
+        return meetingJpaRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "Meeting(id=$id)를 찾을 수 없습니다"
+            )
     }
 
     override fun findByRequestingTeamIdAndReceivingTeamId(
@@ -55,9 +61,7 @@ class MeetingJpaAdapter(
             .findByRequestingTeamIdAndReceivingTeamId(
                 requestingTeamId = requestingTeamId,
                 receivingTeamId = receivingTeamId,
-            )
-            .getOrNull()
-            ?.toDomain()
+            )?.toDomain()
     }
 
     override fun cancelAllNotFinishedMeetingByTeamId(teamId: UUID) {

@@ -43,7 +43,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             .map {
                 val memberUser = userQueryUseCase.getById(it.userId)
                 val university = getUniversityById(memberUser.universityId, univCache)
-                val major = getMajorById(memberUser.universityId, majorCache)
+                val major = getMajorById(memberUser.majorId, majorCache)
                 MemberInfo(
                     id = it.id,
                     user = memberUser,
@@ -59,7 +59,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             cache[universityId] = universityGetByIdUseCase.invoke(universityId)
         }
 
-        return cache[universityId] ?: throw NoSuchElementException("학교를 찾을 수 없습니다.")
+        return cache[universityId] ?: throw NoSuchElementException("No university with id $universityId")
     }
 
     private fun getMajorById(majorId: UUID, cache: MutableMap<UUID, Major>) : Major {
@@ -67,7 +67,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             cache[majorId] = majorGetByIdUseCase.invoke(majorId)
         }
 
-        return cache[majorId] ?: throw NoSuchElementException("학과를 찾을 수 없습니다.")
+        return cache[majorId] ?: throw NoSuchElementException("No major found for $majorId")
     }
 
 }
