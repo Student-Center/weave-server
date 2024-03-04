@@ -178,6 +178,28 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 result.affinityScore shouldBe null
             }
         }
+
+        context("내 미팅팀이 없는 경우") {
+            it("미팅팀 정보를 조회한다 - 케미 점수(X)") {
+                // arrange
+                val targetMeetingTeam = MeetingTeamFixtureFactory
+                    .create(status = MeetingTeamStatus.PUBLISHED)
+                    .also { meetingTeamRepositorySpy.save(it) }
+
+                UserFixtureFactory
+                    .create()
+                    .let {
+                        SecurityContextHolder.setContext(UserSecurityContext(UserAuthenticationFixtureFactory.create(it)))
+                    }
+
+                // act
+                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+
+                // assert
+                result.meetingTeam shouldBe targetMeetingTeam
+                result.affinityScore shouldBe null
+            }
+        }
     }
 
 

@@ -8,7 +8,6 @@ import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdU
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserGetByIdUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -23,14 +22,12 @@ class MeetingTeamGetDetailApplicationService(
 
     @Transactional(readOnly = true)
     override fun invoke(command: MeetingTeamGetDetailUseCase.Command): MeetingTeamGetDetailUseCase.Result {
-        val myMeetingTeam: MeetingTeam = getMyMeetingTeam()
+        val targetMeetingTeam = meetingTeamDomainService.getById(command.meetingId)
 
-        val targetMeetingTeam: MeetingTeam = if (command.meetingId == myMeetingTeam.id) {
-            myMeetingTeam
-        } else meetingTeamDomainService.getById(command.meetingId)
+        val affinityScore = findMyMeetingTeam()?.let {
+            meetingTeamDomainService.calculateTeamMbtiAffinityScore(it, targetMeetingTeam)
+        }
 
-        val affinityScore: MbtiAffinityScore? =
-            meetingTeamDomainService.calculateTeamMbtiAffinityScore(myMeetingTeam, targetMeetingTeam)
 
         return MeetingTeamGetDetailUseCase.Result(
             meetingTeam = targetMeetingTeam,
@@ -53,9 +50,9 @@ class MeetingTeamGetDetailApplicationService(
             }
     }
 
-    private fun getMyMeetingTeam(): MeetingTeam {
+    private fun findMyMeetingTeam(): MeetingTeam? {
         return getCurrentUserAuthentication()
-            .let { meetingTeamDomainService.getByMemberUserId(it.userId) }
+            .let { meetingTeamDomainService.findByMemberUserId(it.userId) }
 
     }
 }
