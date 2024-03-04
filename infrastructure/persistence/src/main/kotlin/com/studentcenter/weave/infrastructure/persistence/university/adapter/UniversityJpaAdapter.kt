@@ -6,6 +6,7 @@ import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.university.repository.UniversityJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -20,8 +21,8 @@ class UniversityJpaAdapter(
     }
 
     override fun getById(id: UUID): University {
-        return universityJpaRepository.getReferenceById(id)
-            .toDomain()
+        return universityJpaRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw NoSuchElementException("학교를 찾을 수 없습니다.")
     }
 
     override fun getByName(name: UniversityName): University {

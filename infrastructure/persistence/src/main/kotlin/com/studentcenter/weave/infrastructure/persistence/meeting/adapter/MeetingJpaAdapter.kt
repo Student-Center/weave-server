@@ -5,8 +5,10 @@ import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meeting.repository.MeetingJpaRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.NoSuchElementException
 import kotlin.jvm.optionals.getOrNull
 
 @Component
@@ -44,7 +46,8 @@ class MeetingJpaAdapter(
     }
 
     override fun getById(id: UUID): Meeting {
-        return meetingJpaRepository.getReferenceById(id).toDomain()
+        return meetingJpaRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw NoSuchElementException("미팅을 찾을 수 없습니다.")
     }
 
     override fun findByRequestingTeamIdAndReceivingTeamId(
