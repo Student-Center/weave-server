@@ -22,7 +22,10 @@ class UniversityJpaAdapter(
 
     override fun getById(id: UUID): University {
         return universityJpaRepository.findByIdOrNull(id)?.toDomain()
-            ?: throw NoSuchElementException("학교를 찾을 수 없습니다.")
+            ?: throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "University(id=$id)를 찾을 수 없습니다"
+            )
     }
 
     override fun getByName(name: UniversityName): University {

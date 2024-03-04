@@ -51,7 +51,7 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
     fun findByRequestingTeamIdAndReceivingTeamId(
         requestingTeamId: UUID,
         receivingTeamId: UUID,
-    ): Optional<MeetingJpaEntity>
+    ): MeetingJpaEntity?
 
 
     @Modifying

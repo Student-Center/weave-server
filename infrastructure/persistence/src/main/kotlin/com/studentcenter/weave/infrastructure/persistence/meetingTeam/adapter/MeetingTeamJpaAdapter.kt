@@ -8,6 +8,7 @@ import com.studentcenter.weave.infrastructure.persistence.common.exception.Persi
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingTeamJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -23,46 +24,34 @@ class MeetingTeamJpaAdapter(
     }
 
     override fun getById(id: UUID): MeetingTeam {
-        return meetingTeamJpaRepository
-            .findById(id)
-            .orElseThrow() {
-                CustomException(
-                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
-                    message = "MeetingTeam(id=$id)를 찾을 수 없습니다"
-                )
-            }.toDomain()
+        return meetingTeamJpaRepository.findByIdOrNull(id)?.toDomain()
+            ?: throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "MeetingTeam(id=$id)를 찾을 수 없습니다"
+            )
     }
 
     override fun getByIdAndStatus(
         id: UUID,
         status: MeetingTeamStatus
     ): MeetingTeam {
-        return meetingTeamJpaRepository
-            .findByIdAndStatus(id, status)
-            .orElseThrow {
-                CustomException(
-                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
-                    message = "MeetingTeam(id=$id, status=$status)를 찾을 수 없습니다"
-                )
-            }.toDomain()
+        return meetingTeamJpaRepository.findByIdAndStatus(id, status)?.toDomain()
+            ?: throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "MeetingTeam(id=$id, status=$status)를 찾을 수 없습니다"
+            )
     }
 
     override fun getByMemberUserId(userId: UUID): MeetingTeam {
-        return meetingTeamJpaRepository
-            .findByMemberUserId(userId)
-            .orElseThrow {
-                CustomException(
-                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
-                    message = "MeetingTeam(memberUserId=$userId)를 찾을 수 없습니다"
-                )
-            }.toDomain()
+        return meetingTeamJpaRepository.findByMemberUserId(userId)?.toDomain()
+            ?: throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "MeetingTeam(memberUserId=$userId)를 찾을 수 없습니다"
+            )
     }
 
     override fun findByMemberUserId(userId: UUID): MeetingTeam? {
-        return meetingTeamJpaRepository
-            .findByMemberUserId(userId)
-            .map { it.toDomain() }
-            .orElse(null)
+        return meetingTeamJpaRepository.findByMemberUserId(userId)?.toDomain()
     }
 
     override fun scrollByMemberUserId(

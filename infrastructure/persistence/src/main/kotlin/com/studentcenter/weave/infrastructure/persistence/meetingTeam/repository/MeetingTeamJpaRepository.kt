@@ -14,7 +14,7 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
     fun findByIdAndStatus(
         id: UUID,
         status: MeetingTeamStatus
-    ): Optional<MeetingTeamJpaEntity>
+    ): MeetingTeamJpaEntity?
 
     // TODO : JOOQ 설정 이후 변경 필요
     // 멤버는 하나의 팀에만 소속될 수 있음 - MVP 기준
@@ -29,7 +29,7 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
         """,
         nativeQuery = true,
     )
-    fun findByMemberUserId(memberUserId: UUID): Optional<MeetingTeamJpaEntity>
+    fun findByMemberUserId(memberUserId: UUID): MeetingTeamJpaEntity?
 
     // TODO : JOOQ 설정 이후 변경 필요
     @Query(
