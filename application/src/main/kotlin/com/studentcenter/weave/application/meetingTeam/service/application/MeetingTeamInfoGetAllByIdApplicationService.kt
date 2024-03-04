@@ -43,7 +43,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             .map {
                 val memberUser = userQueryUseCase.getById(it.userId)
                 val university = getUniversityById(memberUser.universityId, univCache)
-                val major = getMajorById(memberUser.universityId, majorCache)
+                val major = getMajorById(memberUser.majorId, majorCache)
                 MemberInfo(
                     id = it.id,
                     user = memberUser,
