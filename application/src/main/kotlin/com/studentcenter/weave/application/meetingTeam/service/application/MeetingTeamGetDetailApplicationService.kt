@@ -8,7 +8,6 @@ import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdU
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
 import com.studentcenter.weave.application.user.port.inbound.UserGetByIdUseCase
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
