@@ -58,7 +58,7 @@ data class PreparedMeetingScrollResponse(
                         MeetingMemberDto(
                             id = it.id,
                             userId = it.user.id,
-                            universityName = it.university.name.value,
+                            universityName = it.university.displayName,
                             majorName = it.major?.name?.value ?: throw NoSuchElementException("학과 정보를 조회할 수 없습니다."),
                             mbti = it.user.mbti.value,
                             birthYear = it.user.birthYear.value,
