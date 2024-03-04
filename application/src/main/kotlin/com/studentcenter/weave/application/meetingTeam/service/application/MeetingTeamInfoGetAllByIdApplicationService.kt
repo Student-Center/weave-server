@@ -59,7 +59,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             cache[universityId] = universityGetByIdUseCase.invoke(universityId)
         }
 
-        return cache[universityId]!!
+        return cache[universityId] ?: throw NoSuchElementException("No university with id $universityId")
     }
 
     private fun getMajorById(majorId: UUID, cache: MutableMap<UUID, Major>) : Major {
@@ -67,7 +67,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             cache[majorId] = majorGetByIdUseCase.invoke(majorId)
         }
 
-        return cache[majorId]!!
+        return cache[majorId] ?: throw NoSuchElementException("No major found for $majorId")
     }
 
 }
