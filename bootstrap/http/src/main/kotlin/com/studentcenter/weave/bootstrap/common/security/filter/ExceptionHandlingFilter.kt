@@ -7,11 +7,13 @@ import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class ExceptionHandlerFilter(
+class ExceptionHandlingFilter(
     private val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
 
@@ -23,10 +25,9 @@ class ExceptionHandlerFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (e: CustomException) {
-            if (e.type == JwtExceptionType.JWT_EXPIRED_EXCEPTION) {
-                handleJwtExpiredException(response)
-            } else {
-                throw e
+            when(e.type) {
+                JwtExceptionType.JWT_EXPIRED_EXCEPTION -> handleJwtExpiredException(response)
+                else -> throw e
             }
         }
     }
@@ -36,8 +37,8 @@ class ExceptionHandlerFilter(
             exceptionCode = JwtExceptionType.JWT_EXPIRED_EXCEPTION.code,
             message = "토큰이 만료되었습니다.",
         )
-        response.status = 400
-        response.contentType = "application/json;charset=UTF-8"
+        response.status = HttpStatus.BAD_REQUEST.value()
+        response.contentType = "${MediaType.APPLICATION_JSON_VALUE};charset=${Charsets.UTF_8.name()}"
         response.writer.write(objectMapper.writeValueAsString(errorResponse))
     }
 
