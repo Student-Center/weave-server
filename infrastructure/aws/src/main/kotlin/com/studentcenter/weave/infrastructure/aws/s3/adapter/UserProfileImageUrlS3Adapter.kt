@@ -29,7 +29,7 @@ class UserProfileImageUrlS3Adapter(
 
         val preSignRequest = PutObjectPresignRequest
             .builder()
-            .signatureDuration(Duration.ofMinutes(s3BucketProperties.userProfileImage.presignedUrlExpirationMin.toLong()))
+            .signatureDuration(getExpiredDuration())
             .putObjectRequest(putObjectRequest)
             .build()
 
@@ -40,11 +40,15 @@ class UserProfileImageUrlS3Adapter(
             .let { Url(it) }
     }
 
-    fun getObjectKey(
+    private fun getObjectKey(
         userId: UUID,
         imageFileExtension: ImageFileExtension,
     ): String {
         return "${s3BucketProperties.userProfileImage.keyPrefix}${userId}.${imageFileExtension.value}"
+    }
+
+    private fun getExpiredDuration(): Duration {
+        return Duration.ofMinutes(s3BucketProperties.userProfileImage.presignedUrlExpirationMin)
     }
 
 }

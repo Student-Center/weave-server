@@ -10,7 +10,7 @@ data class S3BucketProperties(
     data class UserProfileImage(
         val bucketName: String,
         val keyPrefix: String,
-        val presignedUrlExpirationMin: String,
+        val presignedUrlExpirationMin: Long,
     )
 
 }
