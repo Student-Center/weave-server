@@ -4,7 +4,7 @@ object Version {
 
     // plugins
     const val SPRING = "6.1.2"
-    const val SPRING_BOOT = "3.2.1"
+    const val SPRING_BOOT = "3.2.2"
     const val SPRING_BOOT_DEPENDENCY_MANAGEMENT = "1.1.4"
     const val KOTLIN = "1.9.21"
     const val SONAR_CLOUD = "4.4.1.3373"
@@ -24,6 +24,7 @@ object Version {
     const val MYSQL = "8.0.33"
     const val H2 = "2.2.224"
     const val REDISSON = "3.17.7"
+    const val SPRING_CLOUD_AWS_S3 = "3.1.0"
 
     const val AUTH0_JAVA_JWT = "4.4.0"
     const val AUTH0_JWKS_RSA = "0.22.1"
