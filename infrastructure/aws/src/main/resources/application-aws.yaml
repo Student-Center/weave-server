@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_S3_ACCESS_KEY}
+        secret-key: ${AWS_S3_SECRET_KEY}
+      region:
+        static: ${AWS_REGION:ap-northeast-2}
+aws-bucket:
+  user-profile-image:
+    bucket-name: ${AWS_S3_BUCKET_NAME:weave-server-dev-bucket}
+    key-prefix: ${AWS_S3_PROFILE_IMAGE_BUCKET_KEY_PREFIX:user/profile-img/}
+    presigned-url-expiration-min: 5

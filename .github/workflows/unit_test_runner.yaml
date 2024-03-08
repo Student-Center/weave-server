@@ -34,4 +34,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: ./gradlew clean test testCodeCoverageReport sonar --info
