@@ -13,6 +13,7 @@ interface UserProfileImageUrlPort {
 
     fun findAllByUserId(userId: UUID): List<Url>
 
+    // TODO : Asynchronous
     fun deleteByUrl(url: Url)
 
 }
