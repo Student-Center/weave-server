@@ -13,4 +13,12 @@ open class UserProfileImageUrlPortStub: UserProfileImageUrlPort {
         TODO("Not yet implemented")
     }
 
+    override fun findAllByUserId(userId: UUID): List<Url> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteByUrl(url: Url) {
+        TODO("Not yet implemented")
+    }
+
 }

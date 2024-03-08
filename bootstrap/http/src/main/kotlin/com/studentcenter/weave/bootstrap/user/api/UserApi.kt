@@ -175,4 +175,11 @@ interface UserApi {
         imageFileExtension: ImageFileExtension,
     ): UserGetProfileImageUploadUrlResponse
 
+    @Secured
+    @Operation(summary = "Profile Image Upload Complete Callback")
+    @PostMapping("/my/profile-image-upload-callback")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun completeUserProfileImageUpload()
+
+
 }
