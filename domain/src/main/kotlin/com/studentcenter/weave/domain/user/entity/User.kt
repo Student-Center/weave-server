@@ -33,6 +33,12 @@ data class User(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
+    fun updateAvatar(avatar: Url?): User {
+        return copy(
+            avatar = avatar,
+        )
+    }
+
     fun update(
         height: UpdateParam<Height?>? = null,
         animalType: UpdateParam<AnimalType?>? = null,

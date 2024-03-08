@@ -11,4 +11,9 @@ interface UserProfileImageUrlPort {
         imageFileExtension: ImageFileExtension,
     ): Url
 
+    fun findAllByUserId(userId: UUID): List<Url>
+
+    // TODO : Asynchronous
+    fun deleteByUrl(url: Url)
+
 }

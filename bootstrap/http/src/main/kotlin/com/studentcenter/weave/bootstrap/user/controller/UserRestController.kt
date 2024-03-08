@@ -1,5 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
+import com.studentcenter.weave.application.user.port.inbound.UserCompleteProfileImageUploadUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
@@ -45,6 +46,7 @@ class UserRestController(
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
     private val userGetProfileImageUploadUrlUseCase: UserGetProfileImageUploadUrlUseCase,
+    private val userCompleteProfileImageUploadUseCase: UserCompleteProfileImageUploadUseCase,
 ) : UserApi {
 
     override fun register(
@@ -138,6 +140,10 @@ class UserRestController(
         return userGetProfileImageUploadUrlUseCase
             .invoke(imageFileExtension)
             .let { UserGetProfileImageUploadUrlResponse.from(it) }
+    }
+
+    override fun completeUserProfileImageUpload() {
+        userCompleteProfileImageUploadUseCase.invoke()
     }
 
 }
