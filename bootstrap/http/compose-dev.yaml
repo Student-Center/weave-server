@@ -13,6 +13,8 @@ services:
       DEV_SERVER_URL: ${DEV_SERVER_URL}
       AWS_S3_ACCESS_KEY: ${AWS_S3_ACCESS_KEY}
       AWS_S3_SECRET_KEY: ${AWS_S3_SECRET_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     depends_on:
       - mysql
     ports:
