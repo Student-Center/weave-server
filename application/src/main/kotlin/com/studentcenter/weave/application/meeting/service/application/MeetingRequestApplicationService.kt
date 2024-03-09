@@ -45,20 +45,23 @@ class MeetingRequestApplicationService(
             receivingTeamId = receivingMeetingTeam.id,
         ).also {
             meetingDomainService.save(it)
-            val teamMember = meetingTeamQueryUseCase
-                .findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
-                .first { meetingMember ->
-                    meetingMember.userId == getCurrentUserAuthentication().userId
-                }
-            val meetingAttendance = MeetingAttendance.create(
-                meetingId = it.id,
-                meetingMemberId = teamMember.id,
-                isAttend = true
-            )
-            meetingAttendanceDomainService.save(meetingAttendance)
+            meetingAttendanceDomainService.save(createMeetingAttendance(it, myMeetingTeam.id))
         }
 
 
+    }
+
+    private fun createMeetingAttendance(meeting: Meeting, myTeamId: UUID): MeetingAttendance {
+        val teamMember = meetingTeamQueryUseCase
+            .findAllMeetingMembersByMeetingTeamId(myTeamId)
+            .first { meetingMember ->
+                meetingMember.userId == getCurrentUserAuthentication().userId
+            }
+        return MeetingAttendance.create(
+            meetingId = meeting.id,
+            meetingMemberId = teamMember.id,
+            isAttend = true
+        )
     }
 
     private fun validateDuplicatedRequest(myTeam: MeetingTeam, receivingTeamId: UUID) {
