@@ -3,10 +3,12 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
+import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -19,6 +21,7 @@ class MeetingRequestApplicationService(
     private val userQueryUseCase: UserQueryUseCase,
     private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
     private val meetingDomainService: MeetingDomainService,
+    private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
 ) : MeetingRequestUseCase {
 
     @Transactional
@@ -40,7 +43,22 @@ class MeetingRequestApplicationService(
         Meeting.create(
             requestingTeamId = myMeetingTeam.id,
             receivingTeamId = receivingMeetingTeam.id,
-        ).also { meetingDomainService.save(it) }
+        ).also {
+            meetingDomainService.save(it)
+            val teamMember = meetingTeamQueryUseCase
+                .findAllMeetingMembersByMeetingTeamId(myMeetingTeam.id)
+                .first { meetingMember ->
+                    meetingMember.userId == getCurrentUserAuthentication().userId
+                }
+            val meetingAttendance = MeetingAttendance.create(
+                meetingId = it.id,
+                meetingMemberId = teamMember.id,
+                isAttend = true
+            )
+            meetingAttendanceDomainService.save(meetingAttendance)
+        }
+
+
     }
 
     private fun validateDuplicatedRequest(myTeam: MeetingTeam, receivingTeamId: UUID) {

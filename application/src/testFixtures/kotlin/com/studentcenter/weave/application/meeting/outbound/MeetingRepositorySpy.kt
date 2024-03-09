@@ -80,15 +80,6 @@ class MeetingRepositorySpy : MeetingRepository {
             }.take(limit)
     }
 
-    fun findByRequestingMeetingTeamIdAndReceivingMeetingTeamId(
-        requestingTeamId: UUID,
-        receivingTeamId: UUID,
-    ): Meeting? {
-        return bucket.values.find {
-            it.requestingTeamId == requestingTeamId && it.receivingTeamId == receivingTeamId
-        }
-    }
-
     fun clear() {
         bucket.clear()
     }
