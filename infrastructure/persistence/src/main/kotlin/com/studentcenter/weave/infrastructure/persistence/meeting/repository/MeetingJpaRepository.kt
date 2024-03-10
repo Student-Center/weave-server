@@ -78,8 +78,9 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
             SELECT m.*
             FROM meeting as m
             WHERE (m.requesting_team_id = :teamId or m.receiving_team_id = :teamId)
-            AND (:next is null or id < :next)
+            AND (:next is null or id <= :next)
             AND m.status = 'COMPLETED'
+            ORDER BY m.id DESC
             LIMIT :limit
         """,
         nativeQuery = true
