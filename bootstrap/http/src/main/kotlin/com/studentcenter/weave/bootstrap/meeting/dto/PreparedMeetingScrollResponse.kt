@@ -64,7 +64,8 @@ data class PreparedMeetingScrollResponse(
                             birthYear = it.user.birthYear.value,
                             animalType = it.user.animalType?.name,
                             height = it.user.height?.value,
-                            isUnivVerified = it.user.isUnivVerified
+                            isUnivVerified = it.user.isUnivVerified,
+                            avatar = it.user.avatar?.value
                         )
                     }
                 )
@@ -81,6 +82,7 @@ data class PreparedMeetingScrollResponse(
             val animalType: String?,
             val height: Int?,
             val isUnivVerified: Boolean,
+            val avatar: String?,
         )
 
     }
