@@ -1,8 +1,6 @@
 package com.studentcenter.weave.infrastructure.persistence.meeting.repository
 
-import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -16,13 +14,14 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
     @Query(
         value = """
             SELECT m.*
-            FROM meeting as m
+            FROM meeting m
             where m.requesting_team_id = :teamId 
-            AND (:next is null or id < :next)
+            AND (:next IS NULL or id <= :next)
             AND m.status = 'PENDING'
+            ORDER BY m.id DESC
             LIMIT :limit
         """,
-        nativeQuery = true,
+        nativeQuery = true
     )
     fun findAllRequestingPendingMeeting(
         @Param("teamId") teamId: UUID,
@@ -34,10 +33,11 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
     @Query(
         value = """
             SELECT m.*
-            FROM meeting as m
+            FROM meeting m
             where m.receiving_team_id = :teamId 
-            AND (:next is null or id < :next)
+            AND (:next IS NULL or id <= :next)
             AND m.status = 'PENDING'
+            ORDER BY m.id DESC
             LIMIT :limit
         """,
         nativeQuery = true,
@@ -78,8 +78,9 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
             SELECT m.*
             FROM meeting as m
             WHERE (m.requesting_team_id = :teamId or m.receiving_team_id = :teamId)
-            AND (:next is null or id < :next)
+            AND (:next is null or id <= :next)
             AND m.status = 'COMPLETED'
+            ORDER BY m.id DESC
             LIMIT :limit
         """,
         nativeQuery = true
