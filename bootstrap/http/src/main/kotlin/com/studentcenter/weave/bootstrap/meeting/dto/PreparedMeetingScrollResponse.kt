@@ -65,7 +65,7 @@ data class PreparedMeetingScrollResponse(
                             animalType = it.user.animalType?.name,
                             height = it.user.height?.value,
                             isUnivVerified = it.user.isUnivVerified,
-                            avatar = it.user.avatar?.value
+                            avatar = it.user.avatar?.value,
                         )
                     }
                 )
