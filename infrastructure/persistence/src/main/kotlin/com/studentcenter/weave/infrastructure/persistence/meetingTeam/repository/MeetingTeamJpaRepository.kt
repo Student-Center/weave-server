@@ -61,7 +61,7 @@ interface MeetingTeamJpaRepository : JpaRepository<MeetingTeamJpaEntity, UUID> {
                 SELECT *
                 FROM meeting_team
                 WHERE (:memberCount IS NULL OR member_count = :memberCount)
-                  AND (:next IS NULL OR id > :next)
+                  AND (:next IS NULL OR id <= :next)
                   AND (:status IS NULL OR status = :status)
                   AND (:gender IS NULL OR gender = :gender)
                   AND (:preferredLocations IS NULL OR location IN (:preferredLocations))

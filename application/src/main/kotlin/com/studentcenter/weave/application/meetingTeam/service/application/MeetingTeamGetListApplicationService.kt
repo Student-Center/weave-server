@@ -36,11 +36,15 @@ class MeetingTeamGetListApplicationService(
             meetingTeamDomainService.scrollByFilter(
                 filter = it,
                 next = command.next,
-                limit = command.limit
+                limit = command.limit + 1
             )
         }
 
-        val meetingTeamInfos = meetingTeams.map { team ->
+        val hasNext = meetingTeams.size > command.limit
+        val next = if (hasNext) meetingTeams.last().id else null
+        val items = if (hasNext) meetingTeams.take(command.limit) else meetingTeams
+
+        val meetingTeamInfos = items.map { team ->
             val memberInfos = meetingTeamDomainService
                 .findAllMeetingMembersByMeetingTeamId(team.id)
                 .map { createMemberInfo(it) }
@@ -53,7 +57,7 @@ class MeetingTeamGetListApplicationService(
 
         return MeetingTeamGetListUseCase.Result(
             items = meetingTeamInfos,
-            next = meetingTeamInfos.lastOrNull()?.team?.id,
+            next = next,
         )
     }
 
