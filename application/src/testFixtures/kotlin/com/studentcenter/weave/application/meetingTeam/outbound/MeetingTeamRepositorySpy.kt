@@ -3,9 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.outbound
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.user.enums.Gender
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
