@@ -54,7 +54,12 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         next: UUID?,
         limit: Int
     ): List<MeetingTeam> {
-        return bucket.values.toList()
+        return bucket.values.filter {
+            (filter.memberCount == null || it.memberCount == filter.memberCount)
+                    && (filter.gender == null || it.gender == filter.gender)
+                    && it.status == filter.status
+                    && (next == null || it.id <= next)
+        }.take(limit)
     }
 
     override fun findAllById(ids: List<UUID>): List<MeetingTeam> {
