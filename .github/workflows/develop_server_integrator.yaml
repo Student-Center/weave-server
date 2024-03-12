@@ -25,15 +25,52 @@ jobs:
         with:
           registry-type: public
 
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          # Get the latest tag
+          latest_tag=$(git describe --tags --abbrev=0)
+          
+          # If there is no tag, start with 0.0.0
+          if [ -z "$latest_tag" ]; then
+            latest_tag="0.0.0"
+          fi
+          
+          # Output the latest tag
+          echo "::set-output name=latest_tag::$latest_tag"
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          # Parse the latest tag
+          IFS='.' read -ra version_parts <<< "${{ steps.get_tag.outputs.latest_tag }}"
+          major=${version_parts[0]}
+          minor=${version_parts[1]}
+          patch=${version_parts[2]}
+          
+          # Increment the patch version
+          ((patch++))
+          
+          # Join the version parts back together
+          new_version="$major.$minor.$patch"
+          
+          # Output the new version
+          echo "::set-output name=new_version::$new_version"
+
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: ${{ secrets.ECR_REGISTRY_ALIAS }}
           REPOSITORY: weave_server_dev_cr
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ steps.bump_version.outputs.new_version }}
         run: |
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+      - name: Create Git tag
+        run: |
+          git tag ${{ steps.bump_version.outputs.new_version }}
+          git push origin ${{ steps.bump_version.outputs.new_version }}
 
       - name: Logout of Amazon ECR
         run: docker logout ${{ env.ECR_REGISTRY }}
