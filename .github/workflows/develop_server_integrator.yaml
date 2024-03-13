@@ -49,6 +49,9 @@ jobs:
           build=${{ github.run_number }}
           version="${head}.${yearweek}.${build}"
           echo "::set-output name=version::$version"
+          echo "::set-output name=head::$head"
+          echo "::set-output name=yearweek::$yearweek"
+          echo "::set-output name=build::$build"
 
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:
@@ -69,9 +72,9 @@ jobs:
           release_name: Release ${{ steps.generate_version.outputs.version }}
           body: |
             HeadVer 버전: ${{ steps.generate_version.outputs.version }}
-            - head: ${{ github.event.inputs.head }}
-            - yearweek: ${{ steps.generate_version.outputs.version.split('.')[1] }}
-            - build: ${{ steps.generate_version.outputs.version.split('.')[2] }}
+            - head: ${{ steps.generate_version.outputs.head }}
+            - yearweek: ${{ steps.generate_version.outputs.yearweek }}
+            - build: ${{ steps.generate_version.outputs.build }}
 
             ## 📝변경 사항
             ${{ steps.generate_changelog.outputs.changelog }}
