@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      head:
+        description: 'Head version number'
+        required: true
+        default: '0'
 
 jobs:
   build_and_push:
@@ -28,49 +34,36 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          # Get the latest tag
-          latest_tag=$(git describe --tags --abbrev=0)
-          
-          # If there is no tag, start with 0.0.0
-          if [ -z "$latest_tag" ]; then
-            latest_tag="0.0.0"
-          fi
-          
-          # Output the latest tag
+          latest_tag=$(git describe --tags --abbrev=0 --match "[0-9]*.[0-9]*.[0-9]*" 2>/dev/null || echo "0.0.0")
           echo "::set-output name=latest_tag::$latest_tag"
 
-      - name: Bump version
-        id: bump_version
+      - name: Generate HeadVer version
+        id: generate_version
         run: |
-          # Parse the latest tag
           IFS='.' read -ra version_parts <<< "${{ steps.get_tag.outputs.latest_tag }}"
-          major=${version_parts[0]}
-          minor=${version_parts[1]}
-          patch=${version_parts[2]}
-          
-          # Increment the patch version
-          ((patch++))
-          
-          # Join the version parts back together
-          new_version="$major.$minor.$patch"
-          
-          # Output the new version
-          echo "::set-output name=new_version::$new_version"
+          head=${{ github.event.inputs.head }}
+          if [ -z "$head" ]; then
+            head=${version_parts[0]}
+          fi
+          yearweek=$(date +%y%W)
+          build=${{ github.run_number }}
+          version="${head}.${yearweek}.${build}"
+          echo "::set-output name=version::$version"
 
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: ${{ secrets.ECR_REGISTRY_ALIAS }}
           REPOSITORY: weave_server_dev_cr
-          IMAGE_TAG: ${{ steps.bump_version.outputs.new_version }}
+          IMAGE_TAG: ${{ steps.generate_version.outputs.version }}
         run: |
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
       - name: Create Git tag
         run: |
-          git tag ${{ steps.bump_version.outputs.new_version }}
-          git push origin ${{ steps.bump_version.outputs.new_version }}
+          git tag ${{ steps.generate_version.outputs.version }}
+          git push origin ${{ steps.generate_version.outputs.version }}
 
       - name: Logout of Amazon ECR
         run: docker logout ${{ env.ECR_REGISTRY }}
