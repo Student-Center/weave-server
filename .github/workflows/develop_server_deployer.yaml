@@ -1,9 +1,16 @@
 name: Develop Server Deployer (CD)
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version tag (e.g., 0.2411.135 or latest)'
+        required: true
+        default: 'latest'
 
 jobs:
   deploy:
+    needs: validate_version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -79,6 +86,31 @@ jobs:
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
 
+      - name: Get deployed image version
+        id: get_version
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_INSTANCE_HOST }}
+          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
+          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          script: |
+            version=$(sudo docker inspect --format='{{index .Config.Labels "version"}}' weave_server_dev_cr)
+            echo "::set-output name=version::$version"
+
+      - name: Create tag
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = '${{ steps.get_version.outputs.version }}';
+            const tag = `dev-${version}`;
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag}`,
+              sha: context.sha
+            });
+
       - name: Send discord notification (develop server deploy complete)
         uses: appleboy/discord-action@master
         with:
@@ -91,3 +123,15 @@ jobs:
             🎋 Branch      : ${{ github.ref }}
             🔁 Run Attempt : ${{ github.run_attempt }}
             🤗 Actor       : ${{ github.triggering_actor }}
+
+  validate_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate version format
+        run: |
+          if [[ "${{ github.event.inputs.version }}" =~ ^(latest|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "Version format is valid"
+          else
+            echo "Invalid version format. Use 'latest' or semver format (e.g., 0.2411.135)"
+            exit 1
+          fi
