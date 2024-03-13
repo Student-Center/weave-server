@@ -101,7 +101,7 @@ jobs:
       - name: Create tag
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.RELEASE_TOKEN }}
           script: |
             const version = '${{ steps.get_version.outputs.version }}';
             const tag = `dev-${version}`;
