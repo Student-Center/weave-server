@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      head:
+        description: 'Head version number'
+        required: true
+        default: '0'
 
 jobs:
   build_and_push:
@@ -25,15 +31,39 @@ jobs:
         with:
           registry-type: public
 
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 --match "[0-9]*.[0-9]*.[0-9]*" 2>/dev/null || echo "0.0.0")
+          echo "::set-output name=latest_tag::$latest_tag"
+
+      - name: Generate HeadVer version
+        id: generate_version
+        run: |
+          IFS='.' read -ra version_parts <<< "${{ steps.get_tag.outputs.latest_tag }}"
+          head=${{ github.event.inputs.head }}
+          if [ -z "$head" ]; then
+            head=${version_parts[0]}
+          fi
+          yearweek=$(date +%y%W)
+          build=${{ github.run_number }}
+          version="${head}.${yearweek}.${build}"
+          echo "::set-output name=version::$version"
+
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: ${{ secrets.ECR_REGISTRY_ALIAS }}
           REPOSITORY: weave_server_dev_cr
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ steps.generate_version.outputs.version }}
         run: |
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+      - name: Create Git tag
+        run: |
+          git tag ${{ steps.generate_version.outputs.version }}
+          git push origin ${{ steps.generate_version.outputs.version }}
 
       - name: Logout of Amazon ECR
         run: docker logout ${{ env.ECR_REGISTRY }}
