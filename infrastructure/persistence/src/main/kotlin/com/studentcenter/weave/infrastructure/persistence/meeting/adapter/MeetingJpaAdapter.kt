@@ -90,4 +90,6 @@ class MeetingJpaAdapter(
         ).map { it.toDomain() }
     }
 
+    override fun cancelEndedPendingMeeting() = meetingJpaRepository.cancelEndedPendingMeeting()
+
 }

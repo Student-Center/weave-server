@@ -102,5 +102,5 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         AND m.status = 'PENDING' 
     """,
     nativeQuery = true)
-    fun expiredMeeting()
+    fun cancelEndedPendingMeeting()
 }
