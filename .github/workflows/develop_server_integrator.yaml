@@ -60,10 +60,23 @@ jobs:
           docker build -f Dockerfile-http -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
-      - name: Create Git tag
-        run: |
-          git tag ${{ steps.generate_version.outputs.version }}
-          git push origin ${{ steps.generate_version.outputs.version }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.generate_version.outputs.version }}
+          release_name: Release ${{ steps.generate_version.outputs.version }}
+          body: |
+            HeadVer 버전: ${{ steps.generate_version.outputs.version }}
+            - head: ${{ github.event.inputs.head }}
+            - yearweek: ${{ steps.generate_version.outputs.version.split('.')[1] }}
+            - build: ${{ steps.generate_version.outputs.version.split('.')[2] }}
+
+            ## 📝변경 사항
+            ${{ steps.generate_changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
 
       - name: Logout of Amazon ECR
         run: docker logout ${{ env.ECR_REGISTRY }}
