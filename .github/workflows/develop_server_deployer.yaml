@@ -26,6 +26,7 @@ jobs:
             
             🛢️ Repository  : ${{ github.repository }}
             🎋 Branch      : ${{ github.ref }}
+            📐 Version     : ${{ github.event.inputs.version }}
             🔁 Run Attempt : ${{ github.run_attempt }}
             🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -84,7 +85,7 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
-            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
+            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate --env VERSION=${{ github.event.inputs.version }}
 
       - name: Get deployed image version
         id: get_version
@@ -121,6 +122,7 @@ jobs:
             
             🛢️ Repository  : ${{ github.repository }}
             🎋 Branch      : ${{ github.ref }}
+            📐 Version     : ${{ github.event.inputs.version }}
             🔁 Run Attempt : ${{ github.run_attempt }}
             🤗 Actor       : ${{ github.triggering_actor }}
 
