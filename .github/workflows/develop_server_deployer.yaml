@@ -98,12 +98,21 @@ jobs:
           script: |
             const version = '${{ steps.set_version.outputs.version }}';
             const tag = `dev-${version}`;
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${tag}`,
-              sha: context.sha
-            });
+            try {
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/tags/${tag}`,
+                sha: context.sha
+              });
+              console.log(`Tag ${tag} created successfully.`);
+            } catch (error) {
+              if (error.status === 422) {
+                console.log(`Tag ${tag} already exists. Skipping tag creation.`);
+              } else {
+                throw error;
+              }
+            }
 
       - name: Send discord notification (develop server deploy complete)
         uses: appleboy/discord-action@master
