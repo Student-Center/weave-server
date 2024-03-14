@@ -76,6 +76,10 @@ jobs:
             cd ~/app/bootstrap/http
             jq -r 'to_entries | map(select(.key != "DEV_INSTANCE_PEM_KEY") | "\(.key)=\(.value)") | .[]' <<< "$SECRETS_CONTEXT" > .env
 
+      - name: Set deployed image version
+        id: set_version
+        run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+
       - name: Run Docker Compose up
         uses: appleboy/ssh-action@master
         with:
@@ -87,23 +91,12 @@ jobs:
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate --env VERSION=${{ github.event.inputs.version }}
 
-      - name: Get deployed image version
-        id: get_version
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DEV_INSTANCE_HOST }}
-          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
-          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
-          script: |
-            version=$(sudo docker inspect --format='{{index .Config.Labels "version"}}' weave_server_dev_cr)
-            echo "::set-output name=version::$version"
-
       - name: Create tag
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.RELEASE_TOKEN }}
           script: |
-            const version = '${{ steps.get_version.outputs.version }}';
+            const version = '${{ steps.set_version.outputs.version }}';
             const tag = `dev-${version}`;
             github.rest.git.createRef({
               owner: context.repo.owner,
