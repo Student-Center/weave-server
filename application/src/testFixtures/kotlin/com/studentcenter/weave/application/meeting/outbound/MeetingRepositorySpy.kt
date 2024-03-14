@@ -82,11 +82,13 @@ class MeetingRepositorySpy : MeetingRepository {
     }
 
     override fun cancelEndedPendingMeeting() {
-        bucket.values.filter {
-            it.status == MeetingStatus.PENDING && it.pendingEndAt <= LocalDateTime.now()
-        }.map {
-            it.cancel()
-        }
+        bucket
+            .values
+            .filter {
+                it.status == MeetingStatus.PENDING && it.pendingEndAt <= LocalDateTime.now()
+            }.forEach {
+                it.cancel()
+            }
     }
 
     fun clear() {
