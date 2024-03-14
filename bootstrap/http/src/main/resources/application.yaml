@@ -11,6 +11,9 @@ spring:
       - redis
       - mail
       - aws
+  web:
+    resources:
+      add-mappings: false
 ---
 spring:
   config:
