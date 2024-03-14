@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.servlet.NoHandlerFoundException
+import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @Hidden
 @RestControllerAdvice
@@ -20,14 +20,20 @@ class UnknownExceptionHandler {
     private val logger = KotlinLogging.logger { }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoHandlerFoundException::class)
+    @ExceptionHandler(NoResourceFoundException::class)
     fun handleNoHandlerFoundException(
-        e: NoHandlerFoundException,
+        e: NoResourceFoundException,
         request: HttpServletRequest
     ): ErrorResponse {
+        val requestMethod: String = request.method
+        val requestUrl: String = request.requestURI
+        val clientIp: String = request.getHeader("X-Forwarded-For") ?: request.remoteAddr
+
+        logger.warn { "NoResourceFoundException: $requestMethod $requestUrl from $clientIp" }
+
         return ErrorResponse(
             exceptionCode = SystemExceptionType.NOT_FOUND.code,
-            message = "No handler found for ${e.httpMethod} ${e.requestURL}"
+            message = "Not Found"
         )
     }
 
