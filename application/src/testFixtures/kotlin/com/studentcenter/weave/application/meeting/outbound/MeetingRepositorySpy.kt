@@ -85,9 +85,9 @@ class MeetingRepositorySpy : MeetingRepository {
         bucket
             .values
             .filter {
-                it.status == MeetingStatus.PENDING && it.pendingEndAt <= LocalDateTime.now()
+                it.status == MeetingStatus.PENDING && it.pendingEndAt.isBefore(LocalDateTime.now())
             }.forEach {
-                it.cancel()
+                bucket[it.id] = it.cancel()
             }
     }
 
