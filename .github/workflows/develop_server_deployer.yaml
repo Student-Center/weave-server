@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Image version tag (e.g., 0.2411.135 or latest)'
-        required: true
-        default: 'latest'
+        description: 'Image version tag (e.g., 0.2411.135 or blank)'
+        required: false
 
 jobs:
   deploy:
@@ -93,6 +92,7 @@ jobs:
 
       - name: Create tag
         uses: actions/github-script@v6
+        if: ${{ github.event.inputs.version != '' }}
         with:
           github-token: ${{ secrets.RELEASE_TOKEN }}
           script: |
@@ -105,17 +105,17 @@ jobs:
               sha: context.sha
             });
 
-      - name: Send discord notification (develop server deploy complete)
+      - name: Send discord notification (develop server deploy start)
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_ID }}
           webhook_token: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
-            🛰️ Server Deployment Complete (Dev)
-            
+            🛰️ Server Deployment Start (Dev)
+
             🛢️ Repository  : ${{ github.repository }}
             🎋 Branch      : ${{ github.ref }}
-            📐 Version     : ${{ github.event.inputs.version }}
+            📐 Version     : ${{ github.event.inputs.version || 'Latest' }}
             🔁 Run Attempt : ${{ github.run_attempt }}
             🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -124,9 +124,9 @@ jobs:
     steps:
       - name: Validate version format
         run: |
-          if [[ "${{ github.event.inputs.version }}" =~ ^(latest|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          if [[ "${{ github.event.inputs.version }}" =~ ^(|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             echo "Version format is valid"
           else
-            echo "Invalid version format. Use 'latest' or semver format (e.g., 0.2411.135)"
+            echo "Invalid version format. Use semver format (e.g., 0.2411.135) or leave it blank"
             exit 1
           fi
