@@ -89,7 +89,7 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
-            sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate --env VERSION=${{ github.event.inputs.version }}
+            sudo VERSION=${{ github.event.inputs.version }} docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
 
       - name: Create tag
         uses: actions/github-script@v6
