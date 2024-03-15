@@ -12,6 +12,7 @@ jobs:
   deploy:
     needs: validate_version
     runs-on: ubuntu-latest
+    environment: DEV
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -19,8 +20,8 @@ jobs:
       - name: Send discord notification (develop server deploy start)
         uses: appleboy/discord-action@master
         with:
-          webhook_id: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
+          webhook_token: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Start (Dev)
             
@@ -33,9 +34,9 @@ jobs:
       - name: Copy Docker Compose file to server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.DEV_INSTANCE_HOST }}
-          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
-          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          host: ${{ vars.INSTANCE_HOST }}
+          username: ${{ vars.INSTANCE_USERNAME }}
+          key: ${{ vars.INSTANCE_PEM_KEY }}
           source: "./bootstrap/http/compose-dev.yaml"
           target: "~/app"
           overwrite: true
@@ -43,9 +44,9 @@ jobs:
       - name: Install Docker if not present
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.DEV_INSTANCE_HOST }}
-          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
-          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          host: ${{ vars.INSTANCE_HOST }}
+          username: ${{ vars.INSTANCE_USERNAME }}
+          key: ${{ vars.INSTANCE_PEM_KEY }}
           script: |
             if ! command -v docker >/dev/null 2>&1; then
               echo "Installing Docker..."
@@ -66,15 +67,15 @@ jobs:
       - name: Configuration Env file
         uses: appleboy/ssh-action@master
         env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          SECRETS_CONTEXT: ${{ toJson(vars) }}
         with:
-          host: ${{ secrets.DEV_INSTANCE_HOST }}
-          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
-          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          host: ${{ vars.INSTANCE_HOST }}
+          username: ${{ vars.INSTANCE_USERNAME }}
+          key: ${{ vars.INSTANCE_PEM_KEY }}
           envs: SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
-            jq -r 'to_entries | map(select(.key != "DEV_INSTANCE_PEM_KEY") | "\(.key)=\(.value)") | .[]' <<< "$SECRETS_CONTEXT" > .env
+            jq -r 'to_entries | map(select(.key != "INSTANCE_PEM_KEY") | "\(.key)=\(.value)") | .[]' <<< "$SECRETS_CONTEXT" > .env
 
       - name: Set deployed image version
         id: set_version
@@ -83,11 +84,11 @@ jobs:
       - name: Run Docker Compose up
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEV_INSTANCE_HOST }}
-          username: ${{ secrets.DEV_INSTANCE_USERNAME }}
-          key: ${{ secrets.DEV_INSTANCE_PEM_KEY }}
+          host: ${{ vars.INSTANCE_HOST }}
+          username: ${{ vars.INSTANCE_USERNAME }}
+          key: ${{ vars.INSTANCE_PEM_KEY }}
           script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secret.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
             sudo VERSION=${{ github.event.inputs.version }} docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
 
@@ -117,12 +118,12 @@ jobs:
       - name: Send discord notification (develop server deploy complete)
         uses: appleboy/discord-action@master
         with:
-          webhook_id: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ secrets.DEVELOP_SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
+          webhook_token: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Complete (Dev)
             
-            🛢️ Repository  : ${{ github.repository }}
+            🛢️ Repository  : ${{ github.repository }} 
             🎋 Branch      : ${{ github.ref }}
             📐 Version     : ${{ github.event.inputs.version }}
             🔁 Run Attempt : ${{ github.run_attempt }}

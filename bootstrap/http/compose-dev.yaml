@@ -15,7 +15,7 @@ services:
     image: mysql:8.0.33
     environment:
       MYSQL_DATABASE: weave
-      MYSQL_ROOT_PASSWORD: ${DEV_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
   redis:
