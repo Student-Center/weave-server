@@ -67,15 +67,17 @@ jobs:
       - name: Configuration Env file
         uses: appleboy/ssh-action@master
         env:
-          SECRETS_CONTEXT: ${{ toJson(merge(vars, secrets)) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
           key: ${{ secrets.INSTANCE_PEM_KEY }}
-          envs: SECRETS_CONTEXT
+          envs: VARS_CONTEXT,SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
-            jq -r 'to_entries | map(select(.key != "INSTANCE_PEM_KEY") | "\(.key)=\(.value)") | .[]' <<< "$SECRETS_CONTEXT" > .env
+            jq -s '.[0] * .[1]' <(echo "$VARS_CONTEXT") <(echo "$SECRETS_CONTEXT") \
+              | jq -r 'to_entries | map("\(.key)=\(.value)") | .[]' > .env
 
       - name: Set deployed image version
         id: set_version
