@@ -2,6 +2,8 @@ version: '3.8'
 services:
   spring:
     image: public.ecr.aws/${ECR_REGISTRY_ALIAS}/weave_server_dev_cr:${VERSION:-latest}
+    environment:
+      - VERSION=${VERSION:-latest}
     pull_policy: always
     env_file:
       - .env
