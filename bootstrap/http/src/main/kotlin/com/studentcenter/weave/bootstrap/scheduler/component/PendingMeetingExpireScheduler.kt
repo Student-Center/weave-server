@@ -10,6 +10,6 @@ class PendingMeetingExpireScheduler(
 ) {
 
     // 매일 1시
-    @Scheduled(cron = "0 1 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
     fun expireMeeting() = useCase.invoke()
 }
