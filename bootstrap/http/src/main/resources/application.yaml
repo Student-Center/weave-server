@@ -11,6 +11,9 @@ spring:
       - redis
       - mail
       - aws
+swagger:
+  server:
+    url: ${SERVER_URL:http://localhost:8080}
 ---
 spring:
   config:
@@ -36,10 +39,6 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
-swagger:
-  server:
-    url: ${DEV_SERVER_URL}
-
 ---
 spring:
   config:
@@ -51,9 +50,6 @@ spring:
 springdoc:
   swagger-ui:
     enabled: false
-swagger:
-  server:
-    url: ${PROD_SERVER_URL}
 ---
 spring:
   config:
