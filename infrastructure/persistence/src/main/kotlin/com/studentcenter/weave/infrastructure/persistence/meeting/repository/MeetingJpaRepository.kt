@@ -18,6 +18,7 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
             where m.requesting_team_id = :teamId 
             AND (:next IS NULL or id <= :next)
             AND m.status = 'PENDING'
+            AND DATE_SUB(now(), INTERVAL 3 DAY) < m.created_at 
             ORDER BY m.id DESC
             LIMIT :limit
         """,
@@ -37,6 +38,7 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
             where m.receiving_team_id = :teamId 
             AND (:next IS NULL or id <= :next)
             AND m.status = 'PENDING'
+            AND DATE_SUB(now(), INTERVAL 3 DAY) < m.created_at
             ORDER BY m.id DESC
             LIMIT :limit
         """,
@@ -90,4 +92,15 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
         @Param("next") next: UUID?,
         @Param("limit") limit: Int,
     ): List<MeetingJpaEntity>
+
+    @Modifying
+    @Query("""
+        UPDATE meeting m
+        SET m.status = 'CANCELED', m.finished_at = DATE_ADD(m.created_at, INTERVAL 3 DAY) 
+        WHERE DATE_SUB(now(), INTERVAL 4 DAY) < m.created_at 
+        AND m.created_at <= DATE_SUB(now(), INTERVAL 3 DAY) 
+        AND m.status = 'PENDING' 
+    """,
+    nativeQuery = true)
+    fun cancelEndedPendingMeeting()
 }

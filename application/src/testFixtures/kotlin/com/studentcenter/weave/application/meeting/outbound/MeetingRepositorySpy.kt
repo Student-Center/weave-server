@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.meeting.port.outbound.MeetingReposito
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meeting.enums.TeamType
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.NoSuchElementException
@@ -78,6 +79,16 @@ class MeetingRepositorySpy : MeetingRepository {
                 (it.requestingTeamId == teamId || it.receivingTeamId == teamId)
                         && it.status == MeetingStatus.COMPLETED
             }.take(limit)
+    }
+
+    override fun cancelEndedPendingMeeting() {
+        bucket
+            .values
+            .filter {
+                it.status == MeetingStatus.PENDING && it.pendingEndAt.isBefore(LocalDateTime.now())
+            }.forEach {
+                bucket[it.id] = it.cancel()
+            }
     }
 
     fun clear() {

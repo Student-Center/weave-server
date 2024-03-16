@@ -28,4 +28,6 @@ interface MeetingRepository {
 
     fun findAllPreparedMeetingByTeamId(teamId: UUID, next: UUID?, limit: Int): List<Meeting>
 
+    fun cancelEndedPendingMeeting()
+
 }
