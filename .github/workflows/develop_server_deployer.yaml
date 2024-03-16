@@ -21,7 +21,7 @@ jobs:
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ secret.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_token: ${{ secrets.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Start (Dev)
             
@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ secret.INSTANCE_PEM_KEY }}
+          key: ${{ secrets.INSTANCE_PEM_KEY }}
           source: "./bootstrap/http/compose-dev.yaml"
           target: "~/app"
           overwrite: true
@@ -46,7 +46,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ secret.INSTANCE_PEM_KEY }}
+          key: ${{ secrets.INSTANCE_PEM_KEY }}
           script: |
             if ! command -v docker >/dev/null 2>&1; then
               echo "Installing Docker..."
@@ -71,7 +71,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ secret.INSTANCE_PEM_KEY }}
+          key: ${{ secrets.INSTANCE_PEM_KEY }}
           envs: SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
@@ -86,9 +86,9 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ secret.INSTANCE_PEM_KEY }}
+          key: ${{ secrets.INSTANCE_PEM_KEY }}
           script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secret.DOCKER_PASSWORD }}
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
             sudo VERSION=${{ github.event.inputs.version }} docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
 
@@ -119,7 +119,7 @@ jobs:
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ secret.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_token: ${{ secrets.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Complete (Dev)
             
