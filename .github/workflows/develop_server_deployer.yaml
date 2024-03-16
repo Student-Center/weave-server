@@ -21,7 +21,7 @@ jobs:
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_token: ${{ secret.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Start (Dev)
             
@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ vars.INSTANCE_PEM_KEY }}
+          key: ${{ secret.INSTANCE_PEM_KEY }}
           source: "./bootstrap/http/compose-dev.yaml"
           target: "~/app"
           overwrite: true
@@ -46,7 +46,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ vars.INSTANCE_PEM_KEY }}
+          key: ${{ secret.INSTANCE_PEM_KEY }}
           script: |
             if ! command -v docker >/dev/null 2>&1; then
               echo "Installing Docker..."
@@ -67,11 +67,11 @@ jobs:
       - name: Configuration Env file
         uses: appleboy/ssh-action@master
         env:
-          SECRETS_CONTEXT: ${{ toJson(vars) }}
+          SECRETS_CONTEXT: ${{ toJson(merge(vars, secrets)) }}
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ vars.INSTANCE_PEM_KEY }}
+          key: ${{ secret.INSTANCE_PEM_KEY }}
           envs: SECRETS_CONTEXT
           script: |
             cd ~/app/bootstrap/http
@@ -86,7 +86,7 @@ jobs:
         with:
           host: ${{ vars.INSTANCE_HOST }}
           username: ${{ vars.INSTANCE_USERNAME }}
-          key: ${{ vars.INSTANCE_PEM_KEY }}
+          key: ${{ secret.INSTANCE_PEM_KEY }}
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secret.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
@@ -119,7 +119,7 @@ jobs:
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_ID }}
-          webhook_token: ${{ vars.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
+          webhook_token: ${{ secret.SERVER_RELEASE_DISCORD_NOTI_TOKEN_SECRET }}
           message: |
             🛰️ Server Deployment Complete (Dev)
             
