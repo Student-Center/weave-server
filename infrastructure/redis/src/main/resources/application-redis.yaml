@@ -1,7 +1,4 @@
 spring:
-  config:
-    activate:
-      on-profile: local
   data:
     redis:
       host: ${REDIS_HOST:localhost}
