@@ -58,7 +58,7 @@ jobs:
           envs: VARS_CONTEXT,SECRETS_CONTEXT
           script: |
             cd ~
-            jq -s '.[0] * .[1]' <(echo "$VARS_CONTEXT") <(echo "$SECRETS_CONTEXT") \
+            jq -s '.[0] * .[1] | del(.INSTANCE_PEM_KEY)' <(echo "$VARS_CONTEXT") <(echo "$SECRETS_CONTEXT") \
               | jq -r 'to_entries | map("\(.key)=\(.value)") | .[]' > .env
 
       - name: Set deployed image version
@@ -75,9 +75,9 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull public.ecr.aws/u1i8r6z9/weave_server_dev_cr:${{ github.event.inputs.version }}
-            sudo docker stop weave_server_dev_cr || true
-            sudo docker rm weave_server_dev_cr || true
-            sudo docker run --env-file ./.env -d -p 8080:8080 public.ecr.aws/u1i8r6z9/weave_server_dev_cr:${{ github.event.inputs.version }}
+            sudo docker stop weave_server_prod || true
+            sudo docker rm weave_server_prod || true
+            sudo docker run --name weave_server_prod --env-file ./.env -d -p 8080:8080 public.ecr.aws/u1i8r6z9/weave_server_dev_cr:${{ github.event.inputs.version }}
 
       - name: Send discord notification (production server deploy failed)
         if: failure() && steps.deploy.outcome == 'failure'
