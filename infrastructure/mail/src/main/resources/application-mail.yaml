@@ -9,32 +9,15 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${DEV_EMAIL_USERNAME}
-    password: ${DEV_EMAIL_PASSWORD}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls.enable: true
-
-
 # TODO(SES Sandbox): SES Sandbox 해제시 적용
 #aws:
 #  ses:
 #    access-key: ${AWS_SES_ACCESS_KEY}
 #    secret-key: ${AWS_SES_SECRET_KEY}
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${DEV_EMAIL_USERNAME}
-    password: ${DEV_EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls.enable: true
