@@ -49,7 +49,7 @@ spring:
       enabled: false
 springdoc:
   swagger-ui:
-    enabled: false
+    enabled: true
 ---
 spring:
   config:
