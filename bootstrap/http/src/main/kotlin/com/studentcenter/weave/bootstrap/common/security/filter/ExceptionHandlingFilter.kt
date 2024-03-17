@@ -7,12 +7,15 @@ import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 class ExceptionHandlingFilter(
     private val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
