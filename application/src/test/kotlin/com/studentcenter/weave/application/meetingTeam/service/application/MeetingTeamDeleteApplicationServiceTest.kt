@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
@@ -29,7 +30,12 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepository,
         userQueryUseCase,
     )
-    val sut = MeetingTeamDeleteApplicationService(meetingTeamDomainService)
+    val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
+    val sut = MeetingTeamDeleteApplicationService(
+        meetingTeamDomainService = meetingTeamDomainService,
+        cancelAllMeetingUseCase = cancelMeetingTeamUseCase,
+
+    )
 
     describe("미팅 팀 삭제 유스케이스") {
         it("해당 미팀팀과 미팅 멤버 정보를 삭제한다") {

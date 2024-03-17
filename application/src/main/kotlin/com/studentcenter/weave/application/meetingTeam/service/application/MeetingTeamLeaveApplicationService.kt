@@ -1,9 +1,11 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
+import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,17 +17,18 @@ class MeetingTeamLeaveApplicationService(
 
     @Transactional
     override fun invoke(command: MeetingTeamLeaveUseCase.Command) {
-        val team = meetingTeamDomainService.getById(command.meetingTeamId)
-        if (team.isPublished().not()) {
-            meetingTeamDomainService.deleteMember(getCurrentUserAuthentication().userId, command.meetingTeamId)
+        val myTeam = meetingTeamDomainService.getById(getCurrentUserAuthentication().userId)
+        if (myTeam.id != command.meetingTeamId) {
+            throw CustomException(MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER, "팀의 멤버가 아닙니다.")
+        }
+
+        if (myTeam.isPublished()) {
+            cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(myTeam.id))
+            meetingTeamDomainService.deleteById(myTeam.id)
             return
         }
 
-        // 팀이 공개된 상태라면
-        // 1. 연결된 모든 미팅 상태 취소 처리
-        // 2. 팀 삭제
-        cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(team.id))
-        meetingTeamDomainService.deleteById(team.id)
+        meetingTeamDomainService.deleteMember(getCurrentUserAuthentication().userId, myTeam.id)
     }
 
 }
