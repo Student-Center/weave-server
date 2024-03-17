@@ -64,9 +64,9 @@ class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
                     sut.invoke(animalType)
 
                     // assert
-                    val user = userRepositorySpy.findById(userFixture.id)
+                    val user = userRepositorySpy.getById(userFixture.id)
                     val expected = userFixture.copy(animalType = animalType)
-                    user shouldBe expected
+                    user.animalType shouldBe expected.animalType
                 }
             }
         }

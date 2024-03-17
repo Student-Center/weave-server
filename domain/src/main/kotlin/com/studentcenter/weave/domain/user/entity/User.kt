@@ -52,6 +52,7 @@ data class User(
             avatar = avatar.getUpdateValue(this.avatar),
             kakaoId = kakaoId.getUpdateValue(this.kakaoId),
             mbti = mbti ?: this.mbti,
+            updatedAt = LocalDateTime.now(),
         )
     }
 
