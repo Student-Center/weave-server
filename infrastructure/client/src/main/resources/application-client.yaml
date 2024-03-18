@@ -1,0 +1,5 @@
+discord:
+  events:
+    user-registration:
+      url: https://discord.com/api/webhooks/1213778520308719616/4zdO_b1KFwivuM6kfpj3luzFmeAZVEehNoH-qoQOygYWsHUrv7IlsZoj2f42A67USr4R
+
