@@ -22,7 +22,7 @@ class UserEventDiscordAdaptor(
         userCount: Int,
     ) {
         val discordUri =
-            URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).uri)
+            URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).url)
         val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
 
         runCatching {

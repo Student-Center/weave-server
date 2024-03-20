@@ -8,6 +8,6 @@ class ClientProperties(
     val events: Map<ClientEventType, Properties>
 ) {
     data class Properties(
-        val uri: String,
+        val url: String,
     )
 }
