@@ -15,17 +15,13 @@ class MeetingTeamLeaveApplicationService(
 
     @Transactional
     override fun invoke(command: MeetingTeamLeaveUseCase.Command) {
-        val team = meetingTeamDomainService.getById(command.meetingTeamId)
-        if (team.isPublished().not()) {
-            meetingTeamDomainService.deleteMember(getCurrentUserAuthentication().userId, command.meetingTeamId)
-            return
+        meetingTeamDomainService.getById(command.meetingTeamId).let {
+            meetingTeamDomainService.deleteMember(getCurrentUserAuthentication().userId, it.id)
+            if (it.isPublished()) {
+                cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(it.id))
+                meetingTeamDomainService.deleteById(it.id)
+            }
         }
-
-        // 팀이 공개된 상태라면
-        // 1. 연결된 모든 미팅 상태 취소 처리
-        // 2. 팀 삭제
-        cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(team.id))
-        meetingTeamDomainService.deleteById(team.id)
     }
 
 }
