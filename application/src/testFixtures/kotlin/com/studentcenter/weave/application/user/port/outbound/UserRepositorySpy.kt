@@ -29,6 +29,10 @@ class UserRepositorySpy : UserRepository {
         bucket.remove(id)
     }
 
+    override fun countAll(): Int {
+        return bucket.keys.size
+    }
+
     fun clear() {
         bucket.clear()
     }

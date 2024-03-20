@@ -2,7 +2,7 @@ package com.studentcenter.weave.bootstrap
 
 import com.studentcenter.weave.application.common.config.ApplicationConfig
 import com.studentcenter.weave.infrastructure.aws.config.AwsConfig
-import com.studentcenter.weave.infrastructure.client.discord.common.config.DiscordConfig
+import com.studentcenter.weave.infrastructure.client.common.config.ClientConfig
 import com.studentcenter.weave.infrastructure.mail.common.config.MailConfig
 import com.studentcenter.weave.infrastructure.persistence.common.config.PersistenceConfig
 import com.studentcenter.weave.infrastructure.redis.common.config.RedisConfig
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import
         MailConfig::class,
         AwsConfig::class,
         DistributedLockConfig::class,
-        DiscordConfig::class,
+        ClientConfig::class,
     ]
 )
 class WeaveHttpApplication

@@ -1,4 +1,4 @@
-package com.studentcenter.weave.infrastructure.client.discord.common.enums.exception
+package com.studentcenter.weave.infrastructure.client.discord.common.exception
 
 import com.studentcenter.weave.support.common.exception.CustomExceptionType
 

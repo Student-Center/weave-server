@@ -2,20 +2,34 @@ package com.studentcenter.weave.infrastructure.client.discord.user.adaptor
 
 import com.studentcenter.weave.application.user.port.outbound.UserEventPort
 import com.studentcenter.weave.domain.user.entity.User
-import com.studentcenter.weave.infrastructure.client.discord.common.enums.exception.DiscordExceptionType
-import com.studentcenter.weave.infrastructure.client.discord.util.DiscordClient
+import com.studentcenter.weave.infrastructure.client.common.event.ClientEventType
+import com.studentcenter.weave.infrastructure.client.common.properties.ClientProperties
+import com.studentcenter.weave.infrastructure.client.discord.common.exception.DiscordExceptionType
+import com.studentcenter.weave.infrastructure.client.discord.common.vo.DiscordMessage
+import com.studentcenter.weave.infrastructure.client.discord.util.UserRegistrationDiscordClient
 import com.studentcenter.weave.support.common.exception.CustomException
+import org.springframework.stereotype.Component
+import java.net.URI
 
 @Component
 class UserEventDiscordAdaptor(
-    private val discordClient: DiscordClient,
+    val userRegistrationDiscordClient: UserRegistrationDiscordClient,
+    val clientProperties: ClientProperties,
 ) : UserEventPort {
 
-    override fun sendRegistrationMessage(user: User) {
-        val discordMessage = "${user.nickname} 님의 신규 가입을 환영해요!"
+    override fun sendRegistrationMessage(
+        user: User,
+        userCount: Int,
+    ) {
+        val discordUri =
+            URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).uri)
+        val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
 
         runCatching {
-            discordClient.send(discordMessage)
+            userRegistrationDiscordClient.send(
+                uri = discordUri,
+                message = DiscordMessage(message),
+            )
         }.onFailure {
             throw CustomException(
                 type = DiscordExceptionType.DISCORD_CLIENT_EXCEPTION,

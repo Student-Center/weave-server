@@ -73,4 +73,8 @@ class UserDomainServiceImpl(
         userRepository.save(user)
     }
 
+    override fun countAll(): Int {
+        return userRepository.countAll()
+    }
+
 }

@@ -41,4 +41,7 @@ class UserJpaAdapter(
         userJpaRepository.deleteById(id)
     }
 
+    override fun countAll(): Int {
+        return userJpaRepository.count().toInt()
+    }
 }

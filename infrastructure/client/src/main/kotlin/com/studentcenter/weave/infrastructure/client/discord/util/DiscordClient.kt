@@ -1,7 +1,15 @@
 package com.studentcenter.weave.infrastructure.client.discord.util
 
-interface DiscordClient {
+import com.studentcenter.weave.infrastructure.client.discord.common.vo.DiscordMessage
+import org.springframework.stereotype.Component
+import java.net.URI
 
-    fun send(message: String)
+@Component
+fun interface DiscordClient {
+
+    fun send(
+        uri: URI,
+        message: DiscordMessage
+    )
 
 }

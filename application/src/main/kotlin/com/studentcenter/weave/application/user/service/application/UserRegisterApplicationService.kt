@@ -7,8 +7,9 @@ import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.application.user.service.util.UserTokenService
 import com.studentcenter.weave.domain.user.entity.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -39,20 +40,31 @@ class UserRegisterApplicationService(
         )
         userSilDomainService.create(user.id)
 
-        runBlocking {
-            launch {
-                sendRegistrationMessage(user)
-            }
-        }
-
-        return UserRegisterUseCase.Result.Success(
+        val result = UserRegisterUseCase.Result.Success(
             accessToken = userTokenService.generateAccessToken(user),
             refreshToken = userTokenService.generateRefreshToken(user),
         )
+
+        val userCount = userDomainService.countAll()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            sendRegistrationMessage(
+                user = user,
+                userCount = userCount,
+            )
+        }
+
+        return result
     }
 
-    fun sendRegistrationMessage(user: User) {
-        userEventPort.sendRegistrationMessage(user)
+    private fun sendRegistrationMessage(
+        user: User,
+        userCount: Int,
+    ) {
+        userEventPort.sendRegistrationMessage(
+            user = user,
+            userCount = userCount,
+        )
     }
 
 }
