@@ -97,9 +97,8 @@ interface MeetingJpaRepository : JpaRepository<MeetingJpaEntity, UUID> {
     @Query("""
         UPDATE meeting m
         SET m.status = 'CANCELED', m.finished_at = DATE_ADD(m.created_at, INTERVAL 3 DAY) 
-        WHERE DATE_SUB(now(), INTERVAL 4 DAY) < m.created_at 
-        AND m.created_at <= DATE_SUB(now(), INTERVAL 3 DAY) 
-        AND m.status = 'PENDING' 
+        WHERE m.created_at <= DATE_SUB(now(), INTERVAL 3 DAY)
+        AND m.status = 'PENDING';
     """,
     nativeQuery = true)
     fun cancelEndedPendingMeeting()
