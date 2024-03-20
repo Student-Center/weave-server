@@ -9,7 +9,7 @@ class PendingMeetingExpireScheduler(
     private val useCase: CancelEndedPendingMeetingUseCase
 ) {
 
-    // 매일 1시
-    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
+    // 1분마다 돌아감
+    @Scheduled(cron = "0 * * * * *", zone = "Asia/Seoul")
     fun expireMeeting() = useCase.invoke()
 }
