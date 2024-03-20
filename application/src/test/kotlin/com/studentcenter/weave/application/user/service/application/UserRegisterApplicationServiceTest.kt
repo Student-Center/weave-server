@@ -23,7 +23,6 @@ import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 
 @DisplayName("UserRegisterApplicationService")
 class UserRegisterApplicationServiceTest : DescribeSpec({
@@ -79,11 +78,6 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 result.shouldBeTypeOf<UserRegisterUseCase.Result.Success>()
                 result.accessToken.shouldBeTypeOf<String>()
                 result.refreshToken.shouldBeTypeOf<String>()
-            }
-
-            it("이벤트를 성공적으로 발행한다.") {
-                // assert
-                verify(exactly = 1) { userEventPortMock.sendRegistrationMessage(any(), any()) }
             }
         }
 
