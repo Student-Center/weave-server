@@ -7,9 +7,12 @@ import com.studentcenter.weave.infrastructure.mail.common.config.MailConfig
 import com.studentcenter.weave.infrastructure.persistence.common.config.PersistenceConfig
 import com.studentcenter.weave.infrastructure.redis.common.config.RedisConfig
 import com.studentcenter.weave.support.lock.DistributedLockConfig
+import jakarta.annotation.PostConstruct
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
+import java.util.*
+
 
 @SpringBootApplication
 @Import(
@@ -23,7 +26,14 @@ import org.springframework.context.annotation.Import
         ClientConfig::class,
     ]
 )
-class WeaveHttpApplication
+class WeaveHttpApplication {
+
+    @PostConstruct
+    fun started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"))
+    }
+
+}
 
 fun main(args: Array<String>) {
     runApplication<WeaveHttpApplication>(*args)
