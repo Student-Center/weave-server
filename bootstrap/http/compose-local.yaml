@@ -2,12 +2,17 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0.33
+    volumes:
+      - mysql-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: weave
       MYSQL_ROOT_PASSWORD: secret
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
   redis:
     image: redis:7.2.4
     ports:
       - "6379:6379"
+volumes:
+  mysql-data:

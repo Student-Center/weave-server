@@ -2,6 +2,8 @@ version: '3.8'
 services:
   spring:
     image: public.ecr.aws/${ECR_REGISTRY_ALIAS}/weave_server_dev_cr:${VERSION:-latest}
+    volumes:
+      - mysql-data:/var/lib/mysql
     environment:
       - VERSION=${VERSION:-latest}
     pull_policy: always
@@ -22,3 +24,5 @@ services:
     image: redis:7.2.4
     ports:
       - "6379:6379"
+volumes:
+  mysql-data:
