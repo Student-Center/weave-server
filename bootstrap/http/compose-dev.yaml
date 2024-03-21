@@ -18,6 +18,7 @@ services:
     environment:
       MYSQL_DATABASE: weave
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
   redis:
