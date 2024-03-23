@@ -33,6 +33,6 @@ jobs:
             const titlePattern = /^\[WEAV-\d+\]/
 
             if (!titlePattern.test(pull.title)) {
-              core.setFailed('PR 제목이 `[WEAV-번호]` 형식을 따르지 않습니다.')
+              core.setFailed('PR 제목이 `[WEAV-번호]` 형식을 따르지 않습니다.\nPR Title: ${pull.title}')
               return 
             }
