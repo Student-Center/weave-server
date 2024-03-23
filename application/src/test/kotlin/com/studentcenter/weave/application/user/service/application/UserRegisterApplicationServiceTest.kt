@@ -20,7 +20,6 @@ import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
-import io.mockk.clearAllMocks
 import java.util.*
 
 @DisplayName("UserRegisterApplicationService")
@@ -57,7 +56,6 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
         userAuthInfoRepositorySpy.clear()
         userSilRepositorySpy.clear()
         SecurityContextHolder.clearContext()
-        clearAllMocks()
     }
 
     describe("회원가입 유스케이스") {
