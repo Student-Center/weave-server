@@ -53,7 +53,7 @@ data class PreparedMeetingScrollResponse(
                     teamIntroduce = info.team.teamIntroduce.value,
                     memberCount = info.team.memberCount,
                     gender = info.team.gender.name,
-                    location = info.team.location.name,
+                    location = info.team.location.value,
                     memberInfos = info.memberInfos.map {
                         MeetingMemberDto(
                             id = it.id,
