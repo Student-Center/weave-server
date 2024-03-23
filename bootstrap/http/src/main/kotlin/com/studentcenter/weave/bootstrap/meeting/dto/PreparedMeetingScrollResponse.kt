@@ -42,8 +42,8 @@ data class PreparedMeetingScrollResponse(
         val id: UUID,
         val teamIntroduce: String,
         val memberCount: Int,
-        val gender: String,
         val location: String,
+        val gender: String,
         val memberInfos: List<MeetingMemberDto>,
     ) {
         companion object {
