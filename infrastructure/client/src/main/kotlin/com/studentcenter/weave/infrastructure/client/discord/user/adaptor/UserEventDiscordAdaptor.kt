@@ -4,10 +4,8 @@ import com.studentcenter.weave.application.user.port.outbound.UserEventPort
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.infrastructure.client.common.event.ClientEventType
 import com.studentcenter.weave.infrastructure.client.common.properties.ClientProperties
-import com.studentcenter.weave.infrastructure.client.discord.common.exception.DiscordExceptionType
 import com.studentcenter.weave.infrastructure.client.discord.common.vo.DiscordMessage
 import com.studentcenter.weave.infrastructure.client.discord.util.UserRegistrationDiscordClient
-import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Component
 import java.net.URI
 
@@ -31,10 +29,7 @@ class UserEventDiscordAdaptor(
                 message = DiscordMessage(message),
             )
         }.onFailure {
-            throw CustomException(
-                type = DiscordExceptionType.DISCORD_CLIENT_EXCEPTION,
-                message = "디스코드 Client 이슈가 발생하였습니다."
-            )
+            // TODO: 로깅 시스템 도입 시 로그 추가.
         }
     }
 

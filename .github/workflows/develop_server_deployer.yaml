@@ -50,7 +50,7 @@ jobs:
           script: |
             if ! command -v docker >/dev/null 2>&1; then
               echo "Installing Docker..."
-              sudo apt-get update
+              sudo apt-get updatefail
               sudo apt-get install -y docker.io
             else
               echo "Docker already installed."

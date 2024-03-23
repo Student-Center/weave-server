@@ -48,23 +48,13 @@ class UserRegisterApplicationService(
         val userCount = userDomainService.countAll()
 
         CoroutineScope(Dispatchers.IO).launch {
-            sendRegistrationMessage(
+            userEventPort.sendRegistrationMessage(
                 user = user,
                 userCount = userCount,
             )
         }
 
         return result
-    }
-
-    private fun sendRegistrationMessage(
-        user: User,
-        userCount: Int,
-    ) {
-        userEventPort.sendRegistrationMessage(
-            user = user,
-            userCount = userCount,
-        )
     }
 
 }

@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.properties.JwtTokenProperties
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
-import com.studentcenter.weave.application.user.port.outbound.UserEventPort
+import com.studentcenter.weave.application.user.port.outbound.UserEventPortStub
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
@@ -21,8 +21,7 @@ import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
+import java.util.*
 
 @DisplayName("UserRegisterApplicationService")
 class UserRegisterApplicationServiceTest : DescribeSpec({
@@ -32,7 +31,14 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
     val userSilRepositorySpy = UserSilRepositorySpy()
     val jwtTokenProperties: JwtTokenProperties = JwtTokenPropertiesFixtureFactory.create()
 
-    val userEventPortMock = mockk<UserEventPort>(relaxed = true)
+    val userEventPortStub: UserEventPortStub = object : UserEventPortStub() {
+        override fun sendRegistrationMessage(
+            user: User,
+            userCount: Int,
+        ) {
+            throw RuntimeException("이벤트 에러 발생")
+        }
+    }
 
     val sut = UserRegisterApplicationService(
         userTokenService = UserTokenServiceImpl(
@@ -43,7 +49,7 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
         userDomainService = UserDomainServiceImpl(userRepositorySpy),
         userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
         userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
-        userEventPort = userEventPortMock,
+        userEventPort = userEventPortStub,
     )
 
     afterEach {
@@ -96,16 +102,6 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                     universityId = user.universityId,
                     majorId = user.majorId
                 )
-                val userCount = 1
-
-                every {
-                    userEventPortMock.sendRegistrationMessage(
-                        user,
-                        userCount,
-                    )
-                } answers {
-                    throw RuntimeException("이벤트 에러 발생")
-                }
 
                 // act
                 val result: UserRegisterUseCase.Result = sut.invoke(command)
