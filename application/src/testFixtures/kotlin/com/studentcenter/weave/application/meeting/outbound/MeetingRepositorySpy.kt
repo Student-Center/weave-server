@@ -7,7 +7,6 @@ import com.studentcenter.weave.domain.meeting.enums.TeamType
 import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.NoSuchElementException
 
 class MeetingRepositorySpy : MeetingRepository {
 
@@ -88,6 +87,14 @@ class MeetingRepositorySpy : MeetingRepository {
                 it.status == MeetingStatus.PENDING && it.pendingEndAt.isBefore(LocalDateTime.now())
             }.forEach {
                 bucket[it.id] = it.cancel()
+            }
+    }
+
+    override fun countByStatus(meetingStatus: MeetingStatus): Int {
+        return bucket
+            .values
+            .count {
+                it.status == MeetingStatus.COMPLETED
             }
     }
 
