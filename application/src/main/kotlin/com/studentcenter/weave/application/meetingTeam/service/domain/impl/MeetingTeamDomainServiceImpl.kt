@@ -176,6 +176,10 @@ class MeetingTeamDomainServiceImpl(
             }
     }
 
+    override fun getMeetingTeamMemberSummaryByMeetingTeamId(meetingTeamId: UUID): MeetingTeamMemberSummary {
+        return meetingTeamMemberSummaryRepository.getByMeetingTeamId(meetingTeamId)
+    }
+
     private fun publishTeamIfNeeded(meetingTeam: MeetingTeam, currentMemberCount: Int) {
         if (meetingTeam.memberCount == currentMemberCount && meetingTeam.isPublished().not()) {
             createMeetingTeamMemberSummary(meetingTeam)

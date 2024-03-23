@@ -2,6 +2,7 @@ package com.studentcenter.weave.infrastructure.persistence.meeting.adapter
 
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingRepository
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.meeting.entity.MeetingJpaEntity.Companion.toJpaEntity
@@ -91,5 +92,9 @@ class MeetingJpaAdapter(
     }
 
     override fun cancelEndedPendingMeeting() = meetingJpaRepository.cancelEndedPendingMeeting()
+
+    override fun countByStatus(meetingStatus: MeetingStatus): Int {
+        return meetingJpaRepository.countByStatus(meetingStatus)
+    }
 
 }

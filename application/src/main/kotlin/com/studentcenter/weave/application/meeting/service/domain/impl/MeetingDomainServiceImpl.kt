@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.meeting.service.domain.impl
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingRepository
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -67,6 +68,10 @@ class MeetingDomainServiceImpl(
         receivingMeetingTeamId: UUID,
     ): Boolean {
         return meetingRepository.existsMeetingRequest(requestingTeamId, receivingMeetingTeamId)
+    }
+
+    override fun countByStatusIsCompleted(): Int {
+        return meetingRepository.countByStatus(MeetingStatus.COMPLETED)
     }
 
 }
