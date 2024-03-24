@@ -19,17 +19,19 @@ class UserEventDiscordAdaptor(
         user: User,
         userCount: Int,
     ) {
-        val discordUri =
-            URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).url)
-        val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
+        if (this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).active) {
+            val discordUri =
+                URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).url)
+            val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
 
-        runCatching {
-            discordClient.send(
-                uri = discordUri,
-                message = DiscordMessage(message),
-            )
-        }.onFailure {
-            // TODO: 로깅 시스템 도입 시 로그 추가.
+            runCatching {
+                discordClient.send(
+                    uri = discordUri,
+                    message = DiscordMessage(message),
+                )
+            }.onFailure {
+                // TODO: 로깅 시스템 도입 시 로그 추가.
+            }
         }
     }
 

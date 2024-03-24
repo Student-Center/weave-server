@@ -1,6 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
 client:
   events:
     user-registration:
+      active: false
       url: https://discord.com/api/webhooks/1219520018413260840/kUkwhG0DDTBTShr6-Cggr_0ShH8TUVMiYBRCXy0y8GMYNkmdQQ-JsOU31yH4QL7AQMhT
     meeting-matching:
+      active: false
+      url: https://discord.com/api/webhooks/1221026767246987274/49ptH5t5-skHUDlbb40qbquA26a06jueTdcFO-PePggdObegukLwB97uJ9FM-zerlfr0
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+client:
+  events:
+    user-registration:
+      active: true
+      url: https://discord.com/api/webhooks/1219520018413260840/kUkwhG0DDTBTShr6-Cggr_0ShH8TUVMiYBRCXy0y8GMYNkmdQQ-JsOU31yH4QL7AQMhT
+    meeting-matching:
+      active: true
       url: https://discord.com/api/webhooks/1221026767246987274/49ptH5t5-skHUDlbb40qbquA26a06jueTdcFO-PePggdObegukLwB97uJ9FM-zerlfr0

@@ -23,19 +23,21 @@ class MeetingEventDiscordAdaptor(
         requestingMeetingTeamMbti: Mbti,
         receivingMeetingTeamMbti: Mbti,
     ) {
-        val meetingTeamMemberCount: Int = memberCount / 2
-        val discordUri =
-            URI(this.clientProperties.events.getValue(ClientEventType.MEETING_MATCHING).url)
-        val message =
-            "${matchedMeetingCount}번째 미팅 ${meeting.requestingTeamId}(${requestingMeetingTeamMbti.value})와 ${meeting.receivingTeamId}(${receivingMeetingTeamMbti.value})의 ${meetingTeamMemberCount}:${meetingTeamMemberCount} 미팅이 성사되었어요!"
+        if (this.clientProperties.events.getValue(ClientEventType.MEETING_MATCHING).active) {
+            val meetingTeamMemberCount: Int = memberCount / 2
+            val discordUri =
+                URI(this.clientProperties.events.getValue(ClientEventType.MEETING_MATCHING).url)
+            val message =
+                "${matchedMeetingCount}번째 미팅 ${meeting.requestingTeamId}(${requestingMeetingTeamMbti.value})와 ${meeting.receivingTeamId}(${receivingMeetingTeamMbti.value})의 ${meetingTeamMemberCount}:${meetingTeamMemberCount} 미팅이 성사되었어요!"
 
-        runCatching {
-            discordClient.send(
-                uri = discordUri,
-                message = DiscordMessage(message),
-            )
-        }.onFailure {
-            // TODO: 로깅 시스템 도입 시 로그 추가.
+            runCatching {
+                discordClient.send(
+                    uri = discordUri,
+                    message = DiscordMessage(message),
+                )
+            }.onFailure {
+                // TODO: 로깅 시스템 도입 시 로그 추가.
+            }
         }
     }
 }
