@@ -20,14 +20,13 @@ class UserCompleteProfileImageUploadApplicationService(
             .userId
             .let { userRepository.getById(it) }
 
-        user
-            .updateProfileImage(
-                imageId = command.imageId,
-                extension = command.extension,
-                getProfileImageSourceAction = userProfileImageUrlPort::findByIdAndExtension,
-            ).also {
-                userRepository.save(it)
-            }
+        user.updateProfileImage(
+            imageId = command.imageId,
+            extension = command.extension,
+            getProfileImageSourceAction = userProfileImageUrlPort::findByIdAndExtension,
+        ).also {
+            userRepository.save(it)
+        }
     }
 
 }
