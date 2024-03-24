@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "8GXC7Q5W68.com.studentcenter.weaveios",
+        "paths": [
+          "/team/*",
+          "/invitation/*"
+        ]
+      }
+    ]
+  }
+}
