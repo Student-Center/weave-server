@@ -30,7 +30,6 @@ class UserDomainServiceImplTest : DescribeSpec({
                 birthYear = userInfo.birthYear,
                 universityId = userInfo.universityId,
                 majorId = userInfo.majorId,
-                avatar = userInfo.avatar,
             )
 
             // assert

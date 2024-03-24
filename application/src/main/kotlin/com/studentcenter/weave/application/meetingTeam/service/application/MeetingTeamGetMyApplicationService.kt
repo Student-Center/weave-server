@@ -20,10 +20,17 @@ class MeetingTeamGetMyApplicationService(
     override fun invoke(command: MeetingTeamGetMyUseCase.Command): MeetingTeamGetMyUseCase.Result {
         val currentUser = getCurrentUserAuthentication().let { userQueryUseCase.getById(it.userId) }
 
-        val meetingTeams =
-            meetingDomainService.scrollByMemberUserId(currentUser.id, command.next, command.limit)
+        val meetingTeams = meetingDomainService.scrollByMemberUserId(
+            userId = currentUser.id,
+            next = command.next,
+            limit = command.limit + 1
+        )
 
-        val myMeetingTeamInfos = meetingTeams.map { team ->
+        val hasNext = meetingTeams.size > command.limit
+        val next = if (hasNext) meetingTeams.last().id else null
+        val items = if (hasNext) meetingTeams.take(command.limit) else meetingTeams
+
+        val myMeetingTeamInfos = items.map { team ->
             val memberInfos = meetingDomainService
                 .findAllMeetingMembersByMeetingTeamId(team.id)
                 .sortedBy { it.id }
@@ -37,7 +44,7 @@ class MeetingTeamGetMyApplicationService(
 
         return MeetingTeamGetMyUseCase.Result(
             items = myMeetingTeamInfos,
-            next = myMeetingTeamInfos.lastOrNull()?.team?.id,
+            next = next
         )
     }
 
