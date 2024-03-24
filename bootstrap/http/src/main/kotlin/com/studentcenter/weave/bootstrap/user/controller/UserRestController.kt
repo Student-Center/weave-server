@@ -11,10 +11,10 @@ import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseC
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
-import com.studentcenter.weave.application.user.vo.ImageFileExtension
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
+import com.studentcenter.weave.bootstrap.user.dto.UserCompleteProfileImageUploadRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
@@ -25,6 +25,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyKakaoIdRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
+import com.studentcenter.weave.domain.user.entity.UserProfileImage
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.KakaoId
@@ -136,14 +137,18 @@ class UserRestController(
         )
     }
 
-    override fun getProfileImageUploadUrl(imageFileExtension: ImageFileExtension): UserGetProfileImageUploadUrlResponse {
-        return userGetProfileImageUploadUrlUseCase
-            .invoke(imageFileExtension)
+    override fun getProfileImageUploadUrl(extension: UserProfileImage.Extension): UserGetProfileImageUploadUrlResponse {
+        return userGetProfileImageUploadUrlUseCase.invoke(extension)
             .let { UserGetProfileImageUploadUrlResponse.from(it) }
     }
 
-    override fun completeUserProfileImageUpload() {
-        userCompleteProfileImageUploadUseCase.invoke()
+    override fun completeUserProfileImageUpload(request: UserCompleteProfileImageUploadRequest) {
+        userCompleteProfileImageUploadUseCase.invoke(
+            UserCompleteProfileImageUploadUseCase.Command(
+                imageId = request.imageId,
+                extension = request.extension,
+            )
+        )
     }
 
 }

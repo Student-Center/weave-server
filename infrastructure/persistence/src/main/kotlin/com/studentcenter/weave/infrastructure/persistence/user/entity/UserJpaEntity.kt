@@ -8,13 +8,17 @@ import com.studentcenter.weave.domain.user.vo.Height
 import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
+import com.studentcenter.weave.infrastructure.persistence.user.entity.UserProfileImageJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.common.vo.Url
+import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 import java.util.*
@@ -30,7 +34,7 @@ class UserJpaEntity(
     birthYear: Int,
     universityId: UUID,
     majorId: UUID,
-    avatar: String? = null,
+    profileImages: List<UserProfileImageJpaEntity> = emptyList(),
     height: Int? = null,
     animalType: AnimalType? = null,
     kakaoId: String? = null,
@@ -77,8 +81,12 @@ class UserJpaEntity(
     var majorId: UUID = majorId
         private set
 
-    @Column(nullable = true)
-    var avatar: String? = avatar
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "user_profile_image",
+        joinColumns = [JoinColumn(name = "user_id")]
+    )
+    var profileImages: List<UserProfileImageJpaEntity> = profileImages
         private set
 
     @Column(nullable = true, updatable = true, columnDefinition = "varchar(255)")
@@ -114,7 +122,7 @@ class UserJpaEntity(
                 birthYear = birthYear.value,
                 universityId = universityId,
                 majorId = majorId,
-                avatar = avatar?.value,
+                profileImages = profileImages.map { it.toJpaEntity() },
                 height = height?.value,
                 animalType = animalType,
                 kakaoId = kakaoId?.value,
@@ -135,7 +143,7 @@ class UserJpaEntity(
             birthYear = BirthYear(birthYear),
             universityId = universityId,
             majorId = majorId,
-            avatar = avatar?.let { Url(it) },
+            profileImages = profileImages.map { it.toDomain() },
             height = height?.let { Height(it) },
             animalType = animalType,
             kakaoId = kakaoId?.let { KakaoId(it) },

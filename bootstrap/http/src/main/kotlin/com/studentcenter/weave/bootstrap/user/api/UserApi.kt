@@ -1,10 +1,10 @@
 package com.studentcenter.weave.bootstrap.user.api
 
-import com.studentcenter.weave.application.user.vo.ImageFileExtension
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
+import com.studentcenter.weave.bootstrap.user.dto.UserCompleteProfileImageUploadRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
@@ -15,6 +15,7 @@ import com.studentcenter.weave.bootstrap.user.dto.UserSetMyHeightRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserSetMyKakaoIdRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationSendRequest
 import com.studentcenter.weave.bootstrap.user.dto.UserUnivVerificationVerifyRequest
+import com.studentcenter.weave.domain.user.entity.UserProfileImage
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
@@ -168,18 +169,21 @@ interface UserApi {
 
     @Secured
     @Operation(summary = "Get Profile Image Upload URL")
-    @GetMapping("/my/profile-image-upload-url")
+    @GetMapping("/my/profile-image/upload-url")
     @ResponseStatus(HttpStatus.OK)
     fun getProfileImageUploadUrl(
         @Parameter(required = true)
-        imageFileExtension: ImageFileExtension,
+        extension: UserProfileImage.Extension
     ): UserGetProfileImageUploadUrlResponse
 
     @Secured
     @Operation(summary = "Profile Image Upload Complete Callback")
-    @PostMapping("/my/profile-image-upload-callback")
+    @PostMapping("/my/profile-image/upload-callback")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun completeUserProfileImageUpload()
+    fun completeUserProfileImageUpload(
+        @RequestBody
+        request: UserCompleteProfileImageUploadRequest
+    )
 
 
 }

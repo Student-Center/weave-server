@@ -9,7 +9,6 @@ import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.common.vo.Email
-import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
 object UserFixtureFactory {
@@ -23,7 +22,6 @@ object UserFixtureFactory {
         birthYear: BirthYear = BirthYear(1999),
         universityId: UUID = UuidCreator.create(),
         majorId: UUID = UuidCreator.create(),
-        avatar: Url? = null,
         height: Height? = null,
         animalType: AnimalType? = null,
         kakaoId: KakaoId? = null,
@@ -37,7 +35,6 @@ object UserFixtureFactory {
             birthYear = birthYear,
             universityId = universityId,
             majorId = majorId,
-            avatar = avatar,
             height = height,
             animalType = animalType,
             kakaoId = kakaoId,

@@ -24,7 +24,7 @@ data class User(
     val birthYear: BirthYear,
     val universityId: UUID,
     val majorId: UUID,
-    val avatar: Url? = null,
+    val profileImages: List<UserProfileImage> = emptyList(),
     val height: Height? = null,
     val animalType: AnimalType? = null,
     val kakaoId: KakaoId? = null,
@@ -33,23 +33,31 @@ data class User(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
-    fun updateAvatar(avatar: Url?): User {
+    val avatar: Url?
+        get() = profileImages.firstOrNull()?.imageUrl
+
+    fun updateProfileImage(
+        imageId: UUID,
+        extension: UserProfileImage.Extension,
+        getProfileImageSourceAction: (UUID, UserProfileImage.Extension) -> Url,
+    ): User {
+        val image = UserProfileImage.create(imageId, extension, getProfileImageSourceAction)
+
         return copy(
-            avatar = avatar,
+            profileImages = listOf(image),
+            updatedAt = LocalDateTime.now(),
         )
     }
 
     fun update(
         height: UpdateParam<Height?>? = null,
         animalType: UpdateParam<AnimalType?>? = null,
-        avatar: UpdateParam<Url?>? = null,
         mbti: Mbti? = null,
         kakaoId: UpdateParam<KakaoId?>? = null,
     ): User {
         return copy(
             height = height.getUpdateValue(this.height),
             animalType = animalType.getUpdateValue(this.animalType),
-            avatar = avatar.getUpdateValue(this.avatar),
             kakaoId = kakaoId.getUpdateValue(this.kakaoId),
             mbti = mbti ?: this.mbti,
             updatedAt = LocalDateTime.now(),
@@ -72,7 +80,6 @@ data class User(
             birthYear: BirthYear,
             universityId: UUID,
             majorId: UUID,
-            avatar: Url? = null,
         ): User {
             return User(
                 nickname = nickname,
@@ -82,7 +89,6 @@ data class User(
                 birthYear = birthYear,
                 universityId = universityId,
                 majorId = majorId,
-                avatar = avatar,
             )
         }
     }
