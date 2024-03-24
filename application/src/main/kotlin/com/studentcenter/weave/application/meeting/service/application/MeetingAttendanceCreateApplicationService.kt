@@ -64,7 +64,7 @@ class MeetingAttendanceCreateApplicationService(
 
     }
 
-    private fun meetingUpdateIfNeeded(
+    fun meetingUpdateIfNeeded(
         meeting: Meeting,
         memberCount: Int,
         isAttendance: Boolean,
