@@ -6,8 +6,8 @@ import java.util.*
 
 open class UserProfileImageUrlPortStub: UserProfileImageUrlPort {
 
-    override fun getUploadUrlByUserId(
-        userId: UUID,
+    override fun getUploadImageUrl(
+        imageId: UUID,
         imageFileExtension: ImageFileExtension
     ): Url {
         TODO("Not yet implemented")

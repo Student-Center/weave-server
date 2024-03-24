@@ -6,8 +6,8 @@ import java.util.*
 
 interface UserProfileImageUrlPort {
 
-    fun getUploadUrlByUserId(
-        userId: UUID,
+    fun getUploadImageUrl(
+        imageId: UUID,
         imageFileExtension: ImageFileExtension,
     ): Url
 

@@ -23,7 +23,7 @@ class UserProfileImageUrlS3Adapter(
     private val s3BucketProperties: S3BucketProperties,
 ) : UserProfileImageUrlPort {
 
-    override fun getUploadUrlByUserId(
+    override fun getUploadImageUrl(
         userId: UUID,
         imageFileExtension: ImageFileExtension,
     ): Url {
