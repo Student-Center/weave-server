@@ -147,7 +147,6 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
                     birthYear = userFixture.birthYear,
                     universityId = userFixture.universityId,
                     majorId = userFixture.majorId,
-                    avatar = userFixture.avatar,
                 )
                 userSilDomainService.create(user.id)
                 val userAuthentication = UserAuthentication(

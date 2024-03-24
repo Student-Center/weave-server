@@ -12,7 +12,6 @@ import com.studentcenter.weave.domain.user.vo.Mbti
 import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.common.vo.UpdateParam
-import com.studentcenter.weave.support.common.vo.Url
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -37,7 +36,6 @@ class UserDomainServiceImpl(
         birthYear: BirthYear,
         universityId: UUID,
         majorId: UUID,
-        avatar: Url?,
     ): User {
         return User.create(
             nickname = nickname,
@@ -47,7 +45,6 @@ class UserDomainServiceImpl(
             birthYear = birthYear,
             universityId = universityId,
             majorId = majorId,
-            avatar = avatar,
         ).also { userRepository.save(it) }
     }
 
@@ -59,13 +56,12 @@ class UserDomainServiceImpl(
         id: UUID,
         height: UpdateParam<Height?>?,
         animalType: UpdateParam<AnimalType?>?,
-        avatar: UpdateParam<Url?>?,
         mbti: Mbti?,
         kakaoId: UpdateParam<KakaoId?>?,
     ): User {
         return userRepository
             .getById(id)
-            .update(height, animalType, avatar, mbti, kakaoId)
+            .update(height, animalType, mbti, kakaoId)
             .also { userRepository.save(it) }
     }
 
