@@ -1,4 +1,4 @@
-package com.studentcenter.weave.application.common.exception
+package com.studentcenter.weave.domain.user.exception
 
 import com.studentcenter.weave.support.common.exception.CustomExceptionType
 
