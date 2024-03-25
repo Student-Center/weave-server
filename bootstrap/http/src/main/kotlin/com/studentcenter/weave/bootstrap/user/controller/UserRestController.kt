@@ -96,7 +96,7 @@ class UserRestController(
                     majorName = it.majorName.value,
                     avatar = it.avatar?.value,
                     mbti = it.mbti.value,
-                    animalType = it.animalType,
+                    animalType = it.animalType?.description,
                     height = it.height?.value,
                     kakaoId = it.kakaoId?.value,
                     isUniversityEmailVerified = it.isUniversityEmailVerified,
