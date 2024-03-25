@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanc
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
+import com.studentcenter.weave.application.meeting.vo.MeetingMatchingInfo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamMemberQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
@@ -56,7 +57,7 @@ class MeetingAttendanceCreateApplicationService(
             meetingAttendanceDomainService.save(it)
         }
 
-        meetingUpdateIfNeeded(
+        updateMeetingIfNeeded(
             meeting = meeting,
             memberCount = teamMembers.size,
             isAttendance = attendance,
@@ -64,36 +65,53 @@ class MeetingAttendanceCreateApplicationService(
 
     }
 
-    fun meetingUpdateIfNeeded(
+    private fun updateMeetingIfNeeded(
         meeting: Meeting,
         memberCount: Int,
         isAttendance: Boolean,
     ) {
         if (isAttendance.not()) {
-            meetingDomainService.save(meeting.cancel())
+            updateMeetingStateToCancel(meeting)
             return
         }
 
         val countAttend = meetingAttendanceDomainService.countByMeetingIdAndIsAttend(meeting.id)
+
         if (countAttend == memberCount) {
-            meetingDomainService.save(meeting.complete())
+            updateMeetingStateToComplete(
+                meeting = meeting,
+                memberCount = memberCount,
+            )
+        }
+    }
 
-            val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
+    private fun updateMeetingStateToCancel(meeting: Meeting) {
+        meetingDomainService.save(meeting.cancel())
+    }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val requestingMeetingTeamMemberSummary =
-                    meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.requestingTeamId)
-                val receivingMeetingTeamMemberSummary =
-                    meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.receivingTeamId)
+    private fun updateMeetingStateToComplete(
+        meeting: Meeting,
+        memberCount: Int,
+    ) {
+        meetingDomainService.save(meeting.complete())
 
-                meetingEventPort.sendMeetingIsMatchedMessage(
+        val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val requestingMeetingTeamMemberSummary =
+                meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.requestingTeamId)
+            val receivingMeetingTeamMemberSummary =
+                meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.receivingTeamId)
+
+            meetingEventPort.sendMeetingIsMatchedMessage(
+                MeetingMatchingInfo(
                     meeting = meeting,
                     memberCount = memberCount,
                     matchedMeetingCount = matchedMeetingCount,
                     requestingMeetingTeamMbti = requestingMeetingTeamMemberSummary.teamMbti,
                     receivingMeetingTeamMbti = receivingMeetingTeamMemberSummary.teamMbti,
                 )
-            }
+            )
         }
     }
 

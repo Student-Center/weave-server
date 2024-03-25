@@ -30,27 +30,6 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
     val userSilRepositorySpy = UserSilRepositorySpy()
     val jwtTokenProperties: JwtTokenProperties = JwtTokenPropertiesFixtureFactory.create()
 
-    val userEventPortStub: UserEventPortStub = object : UserEventPortStub() {
-        override fun sendRegistrationMessage(
-            user: User,
-            userCount: Int,
-        ) {
-            throw RuntimeException("이벤트 에러 발생")
-        }
-    }
-
-    val sut = UserRegisterApplicationService(
-        userTokenService = UserTokenServiceImpl(
-            jwtTokenProperties = jwtTokenProperties,
-            userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
-            openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
-        ),
-        userDomainService = UserDomainServiceImpl(userRepositorySpy),
-        userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
-        userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
-        userEventPort = userEventPortStub,
-    )
-
     afterEach {
         userRepositorySpy.clear()
         userAuthInfoRepositorySpy.clear()
@@ -72,6 +51,18 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 birthYear = user.birthYear,
                 universityId = user.universityId,
                 majorId = user.majorId
+            )
+
+            val sut = UserRegisterApplicationService(
+                userTokenService = UserTokenServiceImpl(
+                    jwtTokenProperties = jwtTokenProperties,
+                    userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+                    openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+                ),
+                userDomainService = UserDomainServiceImpl(userRepositorySpy),
+                userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
+                userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
+                userEventPort = UserEventPortStub(),
             )
 
             // act
@@ -99,6 +90,29 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                     birthYear = user.birthYear,
                     universityId = user.universityId,
                     majorId = user.majorId
+                )
+
+                val userEventPortStub: UserEventPortStub = object : UserEventPortStub() {
+                    override fun sendRegistrationMessage(
+                        user: User,
+                        userCount: Int,
+                    ) {
+                        throw RuntimeException("이벤트 에러 발생")
+                    }
+                }
+
+                val sut = UserRegisterApplicationService(
+                    userTokenService = UserTokenServiceImpl(
+                        jwtTokenProperties = jwtTokenProperties,
+                        userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+                        openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+                    ),
+                    userDomainService = UserDomainServiceImpl(userRepositorySpy),
+                    userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(
+                        userAuthInfoRepositorySpy
+                    ),
+                    userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
+                    userEventPort = userEventPortStub,
                 )
 
                 // act
