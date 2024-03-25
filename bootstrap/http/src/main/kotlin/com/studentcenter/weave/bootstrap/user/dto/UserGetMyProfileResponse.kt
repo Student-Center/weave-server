@@ -1,6 +1,5 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
-import com.studentcenter.weave.domain.user.enums.AnimalType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
@@ -21,7 +20,7 @@ data class UserGetMyProfileResponse(
     @Schema(description = "MBTI")
     val mbti: String,
     @Schema(description = "닮은 동물")
-    val animalType: AnimalType?,
+    val animalType: String?,
     @Schema(description = "키")
     val height: Int?,
     @Schema(description = "카카오 아이디")
