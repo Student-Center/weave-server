@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.user.port.inbound.UserCompleteProfileImageUploadUseCase
+import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
 import com.studentcenter.weave.application.user.port.outbound.UserProfileImageUrlPortStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 import java.util.*
 
 @DisplayName("UserCompleteProfileImageUploadApplicationServiceTest")
-class UserCompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
+class CompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
 
@@ -47,14 +47,14 @@ class UserCompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
                     }
                 }
 
-                val sut = UserCompleteProfileImageUploadApplicationService(
+                val sut = CompleteProfileImageUploadApplicationService(
                     userProfileImageUrlPortStub,
                     userRepository
                 )
 
                 // act
                 sut.invoke(
-                    UserCompleteProfileImageUploadUseCase.Command(
+                    CompleteProfileImageUpload.Command(
                         imageId = UUID.randomUUID(),
                         extension = UserProfileImage.Extension.JPEG
                     )
@@ -69,7 +69,7 @@ class UserCompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
         context("[실패] 로그인 한 상태가 아닌 경우") {
             it("CustomException(type=AUTH-002)이 발생한다") {
                 // arrange
-                val sut = UserCompleteProfileImageUploadApplicationService(
+                val sut = CompleteProfileImageUploadApplicationService(
                     UserProfileImageUrlPortStub(),
                     userRepository
                 )
@@ -77,7 +77,7 @@ class UserCompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
                 // act & assert
                 val exception = shouldThrow<CustomException> {
                     sut.invoke(
-                        UserCompleteProfileImageUploadUseCase.Command(
+                        CompleteProfileImageUpload.Command(
                             imageId = UUID.randomUUID(),
                             extension = UserProfileImage.Extension.JPEG
                         )
