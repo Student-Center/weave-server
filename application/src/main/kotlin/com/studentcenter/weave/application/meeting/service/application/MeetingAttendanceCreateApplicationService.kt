@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanc
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meeting.vo.MeetingMatchingInfo
+import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamMemberQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
@@ -104,7 +104,7 @@ class MeetingAttendanceCreateApplicationService(
                 meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.receivingTeamId)
 
             meetingEventPort.sendMeetingIsMatchedMessage(
-                MeetingMatchingInfo(
+                MeetingMatchingEvent(
                     meeting = meeting,
                     memberCount = memberCount,
                     matchedMeetingCount = matchedMeetingCount,

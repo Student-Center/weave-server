@@ -1,11 +1,9 @@
 package com.studentcenter.weave.application.meeting.port.outbound
 
-import com.studentcenter.weave.application.meeting.vo.MeetingMatchingInfo
+import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 
 fun interface MeetingEventPort {
 
-    fun sendMeetingIsMatchedMessage(
-        meetingMatchingInfo: MeetingMatchingInfo,
-    )
+    fun sendMeetingIsMatchedMessage(meetingMatchingEvent: MeetingMatchingEvent)
 
 }

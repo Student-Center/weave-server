@@ -1,6 +1,6 @@
 package com.studentcenter.weave.infrastructure.client.common.event
 
-enum class ClientEventType {
+enum class EventType {
     USER_REGISTRATION,
     MEETING_MATCHING,
 }

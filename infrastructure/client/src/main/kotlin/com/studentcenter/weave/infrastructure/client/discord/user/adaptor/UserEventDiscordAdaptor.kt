@@ -2,7 +2,7 @@ package com.studentcenter.weave.infrastructure.client.discord.user.adaptor
 
 import com.studentcenter.weave.application.user.port.outbound.UserEventPort
 import com.studentcenter.weave.domain.user.entity.User
-import com.studentcenter.weave.infrastructure.client.common.event.ClientEventType
+import com.studentcenter.weave.infrastructure.client.common.event.EventType
 import com.studentcenter.weave.infrastructure.client.common.properties.ClientProperties
 import com.studentcenter.weave.infrastructure.client.discord.common.vo.DiscordMessage
 import com.studentcenter.weave.infrastructure.client.discord.util.DiscordClient
@@ -19,9 +19,9 @@ class UserEventDiscordAdaptor(
         user: User,
         userCount: Int,
     ) {
-        if (this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).active) {
+        if (this.clientProperties.events.getValue(EventType.USER_REGISTRATION).active) {
             val discordUri =
-                URI(this.clientProperties.events.getValue(ClientEventType.USER_REGISTRATION).url)
+                URI(this.clientProperties.events.getValue(EventType.USER_REGISTRATION).url)
             val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
 
             runCatching {
