@@ -5,7 +5,6 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import io.swagger.v3.oas.annotations.media.Schema
@@ -31,12 +30,14 @@ data class MeetingTeamGetDetailResponse(
         val mbti: String,
         val birthYear: Int,
         val role: MeetingMemberRole,
-        val animalType: AnimalType?,
+        val animalType: String?,
         val height: Int?,
         val isUnivVerified: Boolean,
     ) {
+
         companion object {
-            fun from(meetingMemberDetailInfo: MeetingMemberDetailInfo) : MeetingMemberDto {
+
+            fun from(meetingMemberDetailInfo: MeetingMemberDetailInfo): MeetingMemberDto {
                 return MeetingMemberDto(
                     userId = meetingMemberDetailInfo.userId,
                     universityName = meetingMemberDetailInfo.universityName,
@@ -44,7 +45,7 @@ data class MeetingTeamGetDetailResponse(
                     mbti = meetingMemberDetailInfo.mbti.value,
                     birthYear = meetingMemberDetailInfo.birthYear.value,
                     role = meetingMemberDetailInfo.role,
-                    animalType = meetingMemberDetailInfo.animalType,
+                    animalType = meetingMemberDetailInfo.animalType?.description,
                     height = meetingMemberDetailInfo.height?.value,
                     isUnivVerified = meetingMemberDetailInfo.isUnivVerified,
                 )
@@ -53,6 +54,7 @@ data class MeetingTeamGetDetailResponse(
     }
 
     companion object {
+
         fun of(
             team: MeetingTeam,
             members: List<MeetingMemberDetailInfo>,

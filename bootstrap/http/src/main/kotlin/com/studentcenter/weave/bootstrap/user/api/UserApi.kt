@@ -5,6 +5,7 @@ import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
 import com.studentcenter.weave.bootstrap.common.security.annotation.RegisterTokenClaim
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.bootstrap.user.dto.UserCompleteProfileImageUploadRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserGetAvailableAnimalTypesResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
@@ -184,6 +185,11 @@ interface UserApi {
         @RequestBody
         request: UserCompleteProfileImageUploadRequest
     )
+
+    @Operation(summary = "Get available animal types")
+    @GetMapping("/animal-types")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAnimalTypes(): UserGetAvailableAnimalTypesResponse
 
 
 }

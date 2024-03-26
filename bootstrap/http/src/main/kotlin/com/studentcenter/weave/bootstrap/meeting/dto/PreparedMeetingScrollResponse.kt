@@ -6,7 +6,6 @@ import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.NoSuchElementException
 
 data class PreparedMeetingScrollResponse(
     override val items: List<MeetingDto>,
@@ -25,8 +24,10 @@ data class PreparedMeetingScrollResponse(
         val status: MeetingStatus,
         val createdAt: LocalDateTime,
     ) {
+
         companion object {
-            fun from(meetingInfo: PreparedMeetingInfo) : MeetingDto {
+
+            fun from(meetingInfo: PreparedMeetingInfo): MeetingDto {
                 return MeetingDto(
                     id = meetingInfo.id,
                     memberCount = meetingInfo.memberCount,
@@ -46,7 +47,9 @@ data class PreparedMeetingScrollResponse(
         val location: String,
         val memberInfos: List<MeetingMemberDto>,
     ) {
+
         companion object {
+
             fun from(info: MeetingTeamInfo): MeetingTeamDto {
                 return MeetingTeamDto(
                     id = info.team.id,
@@ -62,7 +65,7 @@ data class PreparedMeetingScrollResponse(
                             majorName = it.major?.name?.value ?: throw NoSuchElementException("학과 정보를 조회할 수 없습니다."),
                             mbti = it.user.mbti.value,
                             birthYear = it.user.birthYear.value,
-                            animalType = it.user.animalType?.name,
+                            animalType = it.user.animalType?.description,
                             height = it.user.height?.value,
                             isUnivVerified = it.user.isUnivVerified,
                             avatar = it.user.avatar?.value,
@@ -87,4 +90,3 @@ data class PreparedMeetingScrollResponse(
 
     }
 }
-

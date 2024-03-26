@@ -15,6 +15,7 @@ import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
 import com.studentcenter.weave.bootstrap.user.dto.UserCompleteProfileImageUploadRequest
+import com.studentcenter.weave.bootstrap.user.dto.UserGetAvailableAnimalTypesResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetMyProfileResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserGetProfileImageUploadUrlResponse
 import com.studentcenter.weave.bootstrap.user.dto.UserModifyMyMbtiRequest
@@ -95,7 +96,7 @@ class UserRestController(
                     majorName = it.majorName.value,
                     avatar = it.avatar?.value,
                     mbti = it.mbti.value,
-                    animalType = it.animalType,
+                    animalType = it.animalType?.description,
                     height = it.height?.value,
                     kakaoId = it.kakaoId?.value,
                     isUniversityEmailVerified = it.isUniversityEmailVerified,
@@ -149,6 +150,10 @@ class UserRestController(
                 extension = request.extension,
             )
         )
+    }
+
+    override fun getAnimalTypes(): UserGetAvailableAnimalTypesResponse {
+        return UserGetAvailableAnimalTypesResponse.create()
     }
 
 }
