@@ -10,5 +10,5 @@ dependencies {
     implementation(project(":support:common"))
     implementation(project(":domain"))
     implementation(project(":application"))
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:${Version.SPRING_BOOT}")
+    implementation(libs.spring.boot.starter.data.redis)
 }

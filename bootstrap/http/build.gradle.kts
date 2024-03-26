@@ -11,11 +11,11 @@ dependencies {
     implementation(project(":infrastructure:mail"))
     implementation(project(":infrastructure:aws"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRINGDOC_OPENAPI}")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools:${Version.SPRING_BOOT}")
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose:${Version.SPRING_BOOT}")
+    developmentOnly(libs.spring.boot.devtools)
+    developmentOnly(libs.spring.boot.docker.compose)
 
     testImplementation(testFixtures(project(":application")))
     testImplementation(testFixtures(project(":domain")))
