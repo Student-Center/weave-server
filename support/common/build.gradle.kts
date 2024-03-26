@@ -7,5 +7,5 @@ bootJar.enabled = false
 jar.enabled = true
 
 dependencies {
-    implementation("com.github.f4b6a3:uuid-creator:${Version.UUID_CREATOR}")
+    implementation(libs.uuid.creator)
 }

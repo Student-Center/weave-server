@@ -8,12 +8,11 @@ jar.enabled = true
 
 dependencies {
     implementation(project(":support:common"))
-
     implementation(project(":application"))
 
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation(libs.spring.boot.starter.thymeleaf)
+    implementation(libs.spring.boot.starter.mail)
 
     // TODO(SES Sandbox): SES Sandbox 해제시 적용
-    // implementation("aws.sdk.kotlin:ses:${Version.AWS_SDK_KOTLIN_SES}")
+    // implementation(libs.aws.sdk.kotlin.ses)
 }

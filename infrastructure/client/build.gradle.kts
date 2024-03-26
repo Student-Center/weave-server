@@ -11,5 +11,5 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:${Version.SPRING_CLOUD_OPENFEIGN}")
+    implementation(libs.spring.cloud.starter.openfeign)
 }
