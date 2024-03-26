@@ -4,6 +4,7 @@ import com.studentcenter.weave.application.common.properties.JwtTokenProperties
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
+import com.studentcenter.weave.application.user.port.outbound.UserEventPortStub
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
@@ -15,9 +16,11 @@ import com.studentcenter.weave.application.user.service.util.impl.strategy.OpenI
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
+import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
+import java.util.*
 
 @DisplayName("UserRegisterApplicationService")
 class UserRegisterApplicationServiceTest : DescribeSpec({
@@ -27,16 +30,12 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
     val userSilRepositorySpy = UserSilRepositorySpy()
     val jwtTokenProperties: JwtTokenProperties = JwtTokenPropertiesFixtureFactory.create()
 
-    val sut = UserRegisterApplicationService(
-            userTokenService = UserTokenServiceImpl(
-                jwtTokenProperties = jwtTokenProperties,
-                userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
-                openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
-            ),
-            userDomainService = UserDomainServiceImpl(userRepositorySpy),
-            userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
-            userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
-        )
+    afterEach {
+        userRepositorySpy.clear()
+        userAuthInfoRepositorySpy.clear()
+        userSilRepositorySpy.clear()
+        SecurityContextHolder.clearContext()
+    }
 
     describe("회원가입 유스케이스") {
         context("요청이 유효하면") {
@@ -54,6 +53,18 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 majorId = user.majorId
             )
 
+            val sut = UserRegisterApplicationService(
+                userTokenService = UserTokenServiceImpl(
+                    jwtTokenProperties = jwtTokenProperties,
+                    userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+                    openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+                ),
+                userDomainService = UserDomainServiceImpl(userRepositorySpy),
+                userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy),
+                userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
+                userEventPort = UserEventPortStub(),
+            )
+
             // act
             val result: UserRegisterUseCase.Result = sut.invoke(command)
 
@@ -64,6 +75,56 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 result.refreshToken.shouldBeTypeOf<String>()
             }
         }
+
+        context("이벤트 발행 과정에서 에러가 발생하여도") {
+            it("회원가입은 정상적으로 진행되어야 한다.") {
+                // arrange
+                val user: User = UserFixtureFactory.create()
+                val socialLoginProvider = SocialLoginProvider.KAKAO
+                val command = UserRegisterUseCase.Command(
+                    nickname = user.nickname,
+                    email = user.email,
+                    socialLoginProvider = socialLoginProvider,
+                    gender = user.gender,
+                    mbti = user.mbti,
+                    birthYear = user.birthYear,
+                    universityId = user.universityId,
+                    majorId = user.majorId
+                )
+
+                val userEventPortStub: UserEventPortStub = object : UserEventPortStub() {
+                    override fun sendRegistrationMessage(
+                        user: User,
+                        userCount: Int,
+                    ) {
+                        throw RuntimeException("이벤트 에러 발생")
+                    }
+                }
+
+                val sut = UserRegisterApplicationService(
+                    userTokenService = UserTokenServiceImpl(
+                        jwtTokenProperties = jwtTokenProperties,
+                        userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
+                        openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
+                    ),
+                    userDomainService = UserDomainServiceImpl(userRepositorySpy),
+                    userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(
+                        userAuthInfoRepositorySpy
+                    ),
+                    userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy),
+                    userEventPort = userEventPortStub,
+                )
+
+                // act
+                val result: UserRegisterUseCase.Result = sut.invoke(command)
+
+                // assert
+                result.shouldBeTypeOf<UserRegisterUseCase.Result.Success>()
+                result.accessToken.shouldBeTypeOf<String>()
+                result.refreshToken.shouldBeTypeOf<String>()
+            }
+        }
+
     }
 
 })

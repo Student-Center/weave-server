@@ -25,6 +25,7 @@ object Version {
     const val H2 = "2.2.224"
     const val REDISSON = "3.17.7"
     const val SPRING_CLOUD_AWS_S3 = "3.1.0"
+    const val SPRING_CLOUD_OPENFEIGN = "4.1.0"
 
     const val AUTH0_JAVA_JWT = "4.4.0"
     const val AUTH0_JWKS_RSA = "0.22.1"
@@ -32,6 +33,8 @@ object Version {
     const val FLYWAY = "10.6.0"
 
     const val KOTLIN_LOGGING = "5.1.0"
+
+    const val KOTLIN_COROUTINES = "1.8.0"
 
     // TODO(SES Sandbox): SES Sandbox 해제시 적용
     // const val AWS_SDK_KOTLIN_SES = "1.0.53"

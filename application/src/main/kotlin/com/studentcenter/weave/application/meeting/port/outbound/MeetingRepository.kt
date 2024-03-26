@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.meeting.port.outbound
 
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import java.util.*
 
@@ -29,5 +30,7 @@ interface MeetingRepository {
     fun findAllPreparedMeetingByTeamId(teamId: UUID, next: UUID?, limit: Int): List<Meeting>
 
     fun cancelEndedPendingMeeting()
+
+    fun countByStatus(meetingStatus: MeetingStatus): Int
 
 }

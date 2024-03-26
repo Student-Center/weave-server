@@ -3,13 +3,19 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanceCreateUseCase
+import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
+import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamMemberQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.lock.distributedLock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
@@ -18,7 +24,9 @@ import java.util.*
 class MeetingAttendanceCreateApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
-    private val meetingTeamMemberQueryUseCase: MeetingTeamMemberQueryUseCase
+    private val meetingTeamMemberQueryUseCase: MeetingTeamMemberQueryUseCase,
+    private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
+    private val meetingEventPort: MeetingEventPort,
 ) : MeetingAttendanceCreateUseCase {
 
     override fun invoke(
@@ -49,7 +57,7 @@ class MeetingAttendanceCreateApplicationService(
             meetingAttendanceDomainService.save(it)
         }
 
-        meetingUpdateIfNeeded(
+        updateMeetingIfNeeded(
             meeting = meeting,
             memberCount = teamMembers.size,
             isAttendance = attendance,
@@ -57,19 +65,53 @@ class MeetingAttendanceCreateApplicationService(
 
     }
 
-    private fun meetingUpdateIfNeeded(
+    private fun updateMeetingIfNeeded(
         meeting: Meeting,
         memberCount: Int,
         isAttendance: Boolean,
     ) {
         if (isAttendance.not()) {
-            meetingDomainService.save(meeting.cancel())
+            updateMeetingStateToCancel(meeting)
             return
         }
 
         val countAttend = meetingAttendanceDomainService.countByMeetingIdAndIsAttend(meeting.id)
+
         if (countAttend == memberCount) {
-            meetingDomainService.save(meeting.complete())
+            updateMeetingStateToComplete(
+                meeting = meeting,
+                memberCount = memberCount,
+            )
+        }
+    }
+
+    private fun updateMeetingStateToCancel(meeting: Meeting) {
+        meetingDomainService.save(meeting.cancel())
+    }
+
+    private fun updateMeetingStateToComplete(
+        meeting: Meeting,
+        memberCount: Int,
+    ) {
+        meetingDomainService.save(meeting.complete())
+
+        val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val requestingMeetingTeamMemberSummary =
+                meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.requestingTeamId)
+            val receivingMeetingTeamMemberSummary =
+                meetingTeamQueryUseCase.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.receivingTeamId)
+
+            meetingEventPort.sendMeetingIsMatchedMessage(
+                MeetingMatchingEvent(
+                    meeting = meeting,
+                    memberCount = memberCount,
+                    matchedMeetingCount = matchedMeetingCount,
+                    requestingMeetingTeamMbti = requestingMeetingTeamMemberSummary.teamMbti,
+                    receivingMeetingTeamMbti = receivingMeetingTeamMemberSummary.teamMbti,
+                )
+            )
         }
     }
 
@@ -86,9 +128,10 @@ class MeetingAttendanceCreateApplicationService(
 
     private fun validateAlreadyCreatedAttendance(meetingId: UUID, meetingMemberId: UUID) {
         if (meetingAttendanceDomainService.existsByMeetingIdAndMeetingMemberId(
-            meetingId = meetingId,
-            meetingMemberId = meetingMemberId,
-        )) {
+                meetingId = meetingId,
+                meetingMemberId = meetingMemberId,
+            )
+        ) {
             throw CustomException(
                 MeetingExceptionType.ALREADY_ATTENDANCE_CREATED,
                 "이미 미팅 참여 의사를 결정했습니다.",

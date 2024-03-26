@@ -14,4 +14,6 @@ interface UserRepository {
 
     fun deleteById(id: UUID)
 
+    fun countAll(): Int
+
 }

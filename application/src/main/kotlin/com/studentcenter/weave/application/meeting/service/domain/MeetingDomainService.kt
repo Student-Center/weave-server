@@ -32,4 +32,6 @@ interface MeetingDomainService {
 
     fun existsMeetingRequest(requestingTeamId: UUID, receivingMeetingTeamId: UUID): Boolean
 
+    fun countByStatusIsCompleted(): Int
+
 }

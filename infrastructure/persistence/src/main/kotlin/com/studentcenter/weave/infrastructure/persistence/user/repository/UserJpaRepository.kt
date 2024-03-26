@@ -10,4 +10,6 @@ interface UserJpaRepository : JpaRepository<UserJpaEntity, UUID> {
 
     fun findByKakaoId(kakaoId: String): UserJpaEntity?
 
+    override fun count(): Long
+
 }

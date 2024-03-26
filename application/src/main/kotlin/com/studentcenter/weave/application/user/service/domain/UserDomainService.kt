@@ -41,4 +41,6 @@ interface UserDomainService {
 
     fun save(user: User)
 
+    fun countAll(): Int
+
 }

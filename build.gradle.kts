@@ -40,6 +40,7 @@ subprojects {
 
         implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.KOTLIN}")
         implementation("org.jetbrains.kotlin:kotlin-reflect:${Version.KOTLIN}")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.KOTLIN_COROUTINES}")
 
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Version.JACKSON}")
         implementation("com.fasterxml.jackson.core:jackson-databind:${Version.JACKSON}")

@@ -3,6 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.domain
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -73,5 +74,7 @@ interface MeetingTeamDomainService {
     fun getLeaderMemberByMeetingTeamId(meetingTeamId: UUID): MeetingMember
 
     fun getAllByIds(ids: List<UUID>): List<MeetingTeam>
+
+    fun getMeetingTeamMemberSummaryByMeetingTeamId(meetingTeamId: UUID): MeetingTeamMemberSummary
 
 }
