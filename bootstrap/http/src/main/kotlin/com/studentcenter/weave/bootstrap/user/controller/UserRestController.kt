@@ -1,16 +1,16 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
-import com.studentcenter.weave.application.user.port.inbound.UserCompleteProfileImageUploadUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
+import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
+import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
+import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyMbti
+import com.studentcenter.weave.application.user.port.inbound.RegisterUser
+import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyAnimalType
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyHeight
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyKakaoId
+import com.studentcenter.weave.application.user.port.inbound.UnregisterUser
+import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
@@ -38,25 +38,25 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserRestController(
-    private val userRegisterUseCase: UserRegisterUseCase,
-    private val userUnregisterUseCase: UserUnregisterUseCase,
-    private val userGetMyProfileUseCase: UserGetMyProfileUseCase,
-    private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
-    private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
-    private val userModifyMyMbtiUseCase: UserModifyMyMbtiUseCase,
-    private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
-    private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
-    private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
-    private val userGetProfileImageUploadUrlUseCase: UserGetProfileImageUploadUrlUseCase,
-    private val userCompleteProfileImageUploadUseCase: UserCompleteProfileImageUploadUseCase,
+    private val registerUser: RegisterUser,
+    private val unregisterUser: UnregisterUser,
+    private val getMyProfileUseCase: GetMyProfile,
+    private val updateMyHeight: UpdateMyHeight,
+    private val userUpdateMyAnimalTypeUseCase: UpdateMyAnimalType,
+    private val userUpdateMyMbtiUseCase: UpdateMyMbti,
+    private val sendVerificationEmail: SendVerificationEmail,
+    private val verifyUniversityVerificationNumber: VerifyUniversityVerificationNumber,
+    private val updateMyKakaoId: UpdateMyKakaoId,
+    private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
+    private val completeProfileImageUpload: CompleteProfileImageUpload,
 ) : UserApi {
 
     override fun register(
         registerTokenClaim: UserTokenClaims.RegisterToken,
         request: UserRegisterRequest
     ): ResponseEntity<UserRegisterResponse> {
-        val command: UserRegisterUseCase.Command =
-            UserRegisterUseCase.Command(
+        val command: RegisterUser.Command =
+            RegisterUser.Command(
                 nickname = registerTokenClaim.nickname,
                 email = registerTokenClaim.email,
                 socialLoginProvider = registerTokenClaim.socialLoginProvider,
@@ -67,9 +67,9 @@ class UserRestController(
                 majorId = request.majorId,
             )
 
-        return when (val result: UserRegisterUseCase.Result =
-            userRegisterUseCase.invoke(command)) {
-            is UserRegisterUseCase.Result.Success -> {
+        return when (val result: RegisterUser.Result =
+            registerUser.invoke(command)) {
+            is RegisterUser.Result.Success -> {
                 val body = UserRegisterResponse.Success(
                     accessToken = result.accessToken,
                     refreshToken = result.refreshToken,
@@ -80,12 +80,12 @@ class UserRestController(
     }
 
     override fun unregister() {
-        UserUnregisterUseCase.Command()
-            .let { userUnregisterUseCase.invoke(it) }
+        UnregisterUser.Command()
+            .let { unregisterUser.invoke(it) }
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {
-        return userGetMyProfileUseCase
+        return getMyProfileUseCase
             .invoke()
             .let {
                 UserGetMyProfileResponse(
@@ -108,30 +108,30 @@ class UserRestController(
     override fun setHeight(request: UserSetMyHeightRequest) {
         request.height
             .let { Height(it) }
-            .let { userSetMyHeightUseCase.invoke(it) }
+            .let { updateMyHeight.invoke(it) }
     }
 
     override fun setMyAnimalType(request: UserSetMyAnimalTypeRequest) {
         request.animalType
-            .let { userSetMyAnimalTypeUseCase.invoke(it) }
+            .let { userUpdateMyAnimalTypeUseCase.invoke(it) }
     }
 
     override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {
         Mbti(request.mbti)
-            .let { userModifyMyMbtiUseCase.invoke(it) }
+            .let { userUpdateMyMbtiUseCase.invoke(it) }
     }
 
     override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
-        userSetMyKakaoIdUseCase.invoke(KakaoId(request.kakaoId))
+        updateMyKakaoId.invoke(KakaoId(request.kakaoId))
     }
 
     override fun sendEmailVerificationNumber(request: UserUnivVerificationSendRequest) {
-        userSendVerificationNumberEmailUseCase.invoke(Email(request.universityEmail))
+        sendVerificationEmail.invoke(Email(request.universityEmail))
     }
 
     override fun verifyVerificationNumber(request: UserUnivVerificationVerifyRequest) {
-        userVerifyVerificationNumberUseCase.invoke(
-            command = UserVerifyVerificationNumberUseCase.Command(
+        verifyUniversityVerificationNumber.invoke(
+            command = VerifyUniversityVerificationNumber.Command(
                 universityEmail = Email(request.universityEmail),
                 verificationNumber = UserUniversityVerificationNumber(request.verificationNumber),
             )
@@ -144,8 +144,8 @@ class UserRestController(
     }
 
     override fun completeUserProfileImageUpload(request: UserCompleteProfileImageUploadRequest) {
-        userCompleteProfileImageUploadUseCase.invoke(
-            UserCompleteProfileImageUploadUseCase.Command(
+        completeProfileImageUpload.invoke(
+            CompleteProfileImageUpload.Command(
                 imageId = request.imageId,
                 extension = request.extension,
             )

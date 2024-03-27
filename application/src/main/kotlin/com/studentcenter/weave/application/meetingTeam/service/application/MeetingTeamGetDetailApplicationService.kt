@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTea
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetailInfo
 import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.UserGetByIdUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +17,7 @@ class MeetingTeamGetDetailApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val majorGetByIdUsecase: MajorGetByIdUseCase,
     private val universityGetByIdUsecase: UniversityGetByIdUsecase,
-    private val userGetByIdUseCase: UserGetByIdUseCase,
+    private val getUser: GetUser,
 ) : MeetingTeamGetDetailUseCase {
 
     @Transactional(readOnly = true)
@@ -40,7 +40,7 @@ class MeetingTeamGetDetailApplicationService(
         return meetingTeamDomainService
             .findAllMeetingMembersByMeetingTeamId(meetingTeamId)
             .map { member ->
-                val user = userGetByIdUseCase.invoke(member.userId)
+                val user = getUser.getById(member.userId)
                 MeetingMemberDetailInfo.of(
                     user = user,
                     major = majorGetByIdUsecase.invoke(user.majorId),

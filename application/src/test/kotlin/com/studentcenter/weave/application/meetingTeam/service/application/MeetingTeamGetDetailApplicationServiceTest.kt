@@ -8,8 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.UserGetByIdUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummaryFixtureFactory
@@ -29,25 +28,24 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
 
     val majorGetByIdUsecase = mockk<MajorGetByIdUseCase>()
     val universityGetByIdUsecase = mockk<UniversityGetByIdUsecase>()
-    val userGetByIdUseCase = mockk<UserGetByIdUseCase>()
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = mockk<UserQueryUseCase>()
+    val getUser = mockk<GetUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository = meetingTeamRepositorySpy,
         meetingMemberRepository = meetingMemberRepositorySpy,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        userQueryUseCase = userQueryUseCase,
+        getUser = getUser,
     )
 
     val sut = MeetingTeamGetDetailApplicationService(
         meetingTeamDomainService = meetingTeamDomainService,
         majorGetByIdUsecase = majorGetByIdUsecase,
         universityGetByIdUsecase = universityGetByIdUsecase,
-        userGetByIdUseCase = userGetByIdUseCase,
+        getUser = getUser,
     )
 
     afterEach {
@@ -70,7 +68,10 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also {
                         SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, targetMeetingTeam.id)
+                        meetingTeamRepositorySpy.putUserToTeamMember(
+                            it.userId,
+                            targetMeetingTeam.id
+                        )
                     }
 
                 // act
@@ -189,7 +190,11 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                 UserFixtureFactory
                     .create()
                     .let {
-                        SecurityContextHolder.setContext(UserSecurityContext(UserAuthenticationFixtureFactory.create(it)))
+                        SecurityContextHolder.setContext(
+                            UserSecurityContext(
+                                UserAuthenticationFixtureFactory.create(it)
+                            )
+                        )
                     }
 
                 // act

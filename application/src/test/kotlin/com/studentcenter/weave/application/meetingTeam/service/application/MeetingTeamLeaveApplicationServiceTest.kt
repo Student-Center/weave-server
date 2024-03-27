@@ -8,7 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -29,12 +29,12 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = mockk<UserQueryUseCase>()
+    val getUser = mockk<GetUser>()
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingMemberRepository = meetingMemberRepository,
         meetingTeamRepository = meetingTeamRepository,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
-        userQueryUseCase = userQueryUseCase,
+        getUser = getUser,
     )
     val cancelAllMeetingUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
     val sut = MeetingTeamLeaveApplicationService(

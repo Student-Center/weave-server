@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MeetingTeamCreateApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
-    private val userQueryUseCase: UserQueryUseCase,
+    private val getUser: GetUser,
 ) : MeetingTeamCreateUseCase {
 
     @Transactional
     override fun invoke(command: MeetingTeamCreateUseCase.Command) {
         val userAuthentication: UserAuthentication = getCurrentUserAuthentication()
-        val user: User = userQueryUseCase
+        val user: User = getUser
             .getById(userAuthentication.userId)
             .also { checkUserRegisterKakaoId(it) }
 

@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class MeetingTeamGetListApplicationService(
-    private val userQueryUseCase: UserQueryUseCase,
+    private val getUser: GetUser,
     private val universityGetByIdUsecase: UniversityGetByIdUsecase,
     private val meetingTeamDomainService: MeetingTeamDomainService,
 ) : MeetingTeamGetListUseCase {
@@ -64,7 +64,7 @@ class MeetingTeamGetListApplicationService(
     private fun createMemberInfo(
         member: MeetingMember
     ): MemberInfo {
-        val memberUser = userQueryUseCase.getById(member.userId)
+        val memberUser = getUser.getById(member.userId)
         val university = universityGetByIdUsecase.invoke(memberUser.universityId)
         return MemberInfo(
             id = member.id,
