@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.outbound.UserEventPort
 import com.studentcenter.weave.application.user.service.domain.UserAuthInfoDomainService
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
@@ -14,16 +14,16 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserRegisterApplicationService(
+class RegisterApplicationService(
     private val userTokenService: UserTokenService,
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
     private val userAuthInfoDomainService: UserAuthInfoDomainService,
     private val userEventPort: UserEventPort,
-) : UserRegisterUseCase {
+) : RegisterUser {
 
     @Transactional
-    override fun invoke(command: UserRegisterUseCase.Command): UserRegisterUseCase.Result {
+    override fun invoke(command: RegisterUser.Command): RegisterUser.Result {
         val user: User = userDomainService.create(
             nickname = command.nickname,
             email = command.email,
@@ -40,7 +40,7 @@ class UserRegisterApplicationService(
         )
         userSilDomainService.create(user.id)
 
-        val result = UserRegisterUseCase.Result.Success(
+        val result = RegisterUser.Result.Success(
             accessToken = userTokenService.generateAccessToken(user),
             refreshToken = userTokenService.generateRefreshToken(user),
         )

@@ -8,7 +8,7 @@ import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Email
 import java.util.*
 
-fun interface UserRegisterUseCase {
+fun interface RegisterUser {
 
     fun invoke(command: Command): Result
 

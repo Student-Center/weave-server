@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImag
 import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
 import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
 import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
-import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserRestController(
-    private val userRegisterUseCase: UserRegisterUseCase,
+    private val registerUser: RegisterUser,
     private val userUnregisterUseCase: UserUnregisterUseCase,
     private val getMyProfileUseCase: GetMyProfile,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
@@ -55,8 +55,8 @@ class UserRestController(
         registerTokenClaim: UserTokenClaims.RegisterToken,
         request: UserRegisterRequest
     ): ResponseEntity<UserRegisterResponse> {
-        val command: UserRegisterUseCase.Command =
-            UserRegisterUseCase.Command(
+        val command: RegisterUser.Command =
+            RegisterUser.Command(
                 nickname = registerTokenClaim.nickname,
                 email = registerTokenClaim.email,
                 socialLoginProvider = registerTokenClaim.socialLoginProvider,
@@ -67,9 +67,9 @@ class UserRestController(
                 majorId = request.majorId,
             )
 
-        return when (val result: UserRegisterUseCase.Result =
-            userRegisterUseCase.invoke(command)) {
-            is UserRegisterUseCase.Result.Success -> {
+        return when (val result: RegisterUser.Result =
+            registerUser.invoke(command)) {
+            is RegisterUser.Result.Success -> {
                 val body = UserRegisterResponse.Success(
                     accessToken = result.accessToken,
                     refreshToken = result.refreshToken,

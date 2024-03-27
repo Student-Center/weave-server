@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.properties.JwtTokenProperties
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
-import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserEventPortStub
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
@@ -22,8 +22,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import java.util.*
 
-@DisplayName("UserRegisterApplicationService")
-class UserRegisterApplicationServiceTest : DescribeSpec({
+@DisplayName("RegisterUserApplicationService")
+class RegisterUserApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
@@ -42,7 +42,7 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
             // arrange
             val user: User = UserFixtureFactory.create()
             val socialLoginProvider = SocialLoginProvider.KAKAO
-            val command = UserRegisterUseCase.Command(
+            val command = RegisterUser.Command(
                 nickname = user.nickname,
                 email = user.email,
                 socialLoginProvider = socialLoginProvider,
@@ -53,7 +53,7 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 majorId = user.majorId
             )
 
-            val sut = UserRegisterApplicationService(
+            val sut = RegisterApplicationService(
                 userTokenService = UserTokenServiceImpl(
                     jwtTokenProperties = jwtTokenProperties,
                     userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
@@ -66,11 +66,11 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
             )
 
             // act
-            val result: UserRegisterUseCase.Result = sut.invoke(command)
+            val result: RegisterUser.Result = sut.invoke(command)
 
             it("로그인 토큰을 반환한다") {
                 // assert
-                result.shouldBeTypeOf<UserRegisterUseCase.Result.Success>()
+                result.shouldBeTypeOf<RegisterUser.Result.Success>()
                 result.accessToken.shouldBeTypeOf<String>()
                 result.refreshToken.shouldBeTypeOf<String>()
             }
@@ -81,7 +81,7 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 // arrange
                 val user: User = UserFixtureFactory.create()
                 val socialLoginProvider = SocialLoginProvider.KAKAO
-                val command = UserRegisterUseCase.Command(
+                val command = RegisterUser.Command(
                     nickname = user.nickname,
                     email = user.email,
                     socialLoginProvider = socialLoginProvider,
@@ -101,7 +101,7 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                     }
                 }
 
-                val sut = UserRegisterApplicationService(
+                val sut = RegisterApplicationService(
                     userTokenService = UserTokenServiceImpl(
                         jwtTokenProperties = jwtTokenProperties,
                         userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
@@ -116,10 +116,10 @@ class UserRegisterApplicationServiceTest : DescribeSpec({
                 )
 
                 // act
-                val result: UserRegisterUseCase.Result = sut.invoke(command)
+                val result: RegisterUser.Result = sut.invoke(command)
 
                 // assert
-                result.shouldBeTypeOf<UserRegisterUseCase.Result.Success>()
+                result.shouldBeTypeOf<RegisterUser.Result.Success>()
                 result.accessToken.shouldBeTypeOf<String>()
                 result.refreshToken.shouldBeTypeOf<String>()
             }
