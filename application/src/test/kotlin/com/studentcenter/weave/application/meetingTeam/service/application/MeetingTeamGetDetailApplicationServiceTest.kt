@@ -6,8 +6,8 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetMajor
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -26,8 +26,8 @@ import io.mockk.mockk
 class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
 
 
-    val majorGetByIdUsecase = mockk<MajorGetByIdUseCase>()
-    val universityGetByIdUsecase = mockk<UniversityGetByIdUsecase>()
+    val getByIdUsecase = mockk<GetMajor>()
+    val getUniversity = mockk<GetUniversity>()
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
@@ -43,9 +43,9 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
 
     val sut = MeetingTeamGetDetailApplicationService(
         meetingTeamDomainService = meetingTeamDomainService,
-        majorGetByIdUsecase = majorGetByIdUsecase,
-        universityGetByIdUsecase = universityGetByIdUsecase,
+        getMajor = getByIdUsecase,
         getUser = getUser,
+        getUniversity = getUniversity
     )
 
     afterEach {

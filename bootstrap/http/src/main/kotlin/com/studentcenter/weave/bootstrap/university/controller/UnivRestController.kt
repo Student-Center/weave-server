@@ -1,9 +1,7 @@
 package com.studentcenter.weave.bootstrap.university.controller
 
-import com.studentcenter.weave.application.university.port.inbound.MajorFindAllByUniversityUsecase
-import com.studentcenter.weave.application.university.port.inbound.UniversityFindAllUsecase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByNameUsecase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetMajor
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.bootstrap.university.api.UnivApi
 import com.studentcenter.weave.bootstrap.university.dto.MajorsResponse
 import com.studentcenter.weave.bootstrap.university.dto.UniversitiesResponse
@@ -15,35 +13,32 @@ import java.util.*
 
 @RestController
 class UnivRestController(
-    private val universityFindAllUsecase: UniversityFindAllUsecase,
-    private val majorFindAllByUniversityUsecase: MajorFindAllByUniversityUsecase,
-    private val universityGetByIdUsecase: UniversityGetByIdUsecase,
-    private val universityGetByNameUsecase: UniversityGetByNameUsecase,
+    private val getUniversity: GetUniversity,
+    private val getMajor: GetMajor,
 ) : UnivApi {
 
     override fun findAll(): UniversitiesResponse {
-        val result = universityFindAllUsecase.invoke()
-        return UniversitiesResponse.from(result.universities)
+        return getUniversity
+            .findAll()
+            .let { UniversitiesResponse.from(it) }
     }
 
     override fun getAllMajorByUniv(@PathVariable univId: UUID): MajorsResponse {
-        val result = majorFindAllByUniversityUsecase.invoke(
-            MajorFindAllByUniversityUsecase.Command(univId)
-        )
-        return MajorsResponse.from(result.majors)
+        return getMajor
+            .findAllByUniversityId(univId)
+            .let { MajorsResponse.from(it) }
     }
 
     override fun get(id: UUID): UniversityResponse {
-        return universityGetByIdUsecase
-            .invoke(id)
+        return getUniversity
+            .getById(id)
             .let { UniversityResponse.from(it) }
     }
 
     override fun getByName(name: String): UniversityResponse {
-        val result = universityGetByNameUsecase.invoke(
-            UniversityGetByNameUsecase.Command(UniversityName(name))
-        )
-        return UniversityResponse.from(result.university)
+        return getUniversity
+            .getByName(UniversityName(name))
+            .let { UniversityResponse.from(it) }
     }
 
 }

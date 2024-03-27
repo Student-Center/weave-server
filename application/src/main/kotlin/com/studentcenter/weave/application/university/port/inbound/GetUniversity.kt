@@ -2,12 +2,14 @@ package com.studentcenter.weave.application.university.port.inbound
 
 import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.university.vo.UniversityName
+import java.util.*
 
-fun interface UniversityGetByNameUsecase {
+interface GetUniversity {
 
-    fun invoke(command: Command): Result
+    fun findAll(): List<University>
 
-    data class Command(val name: UniversityName)
+    fun getById(id: UUID): University
 
-    data class Result(val university: University)
+    fun getByName(name: UniversityName): University
+
 }
