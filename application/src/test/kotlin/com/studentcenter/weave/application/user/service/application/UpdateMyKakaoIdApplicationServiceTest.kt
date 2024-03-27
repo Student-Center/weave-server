@@ -19,15 +19,15 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearStaticMockk
 
-@DisplayName("UserSetMyKakaoIdApplicationServiceTest")
-class UserSetMyKakaoIdApplicationServiceTest : DescribeSpec({
+@DisplayName("UpdateMyKakaoIdApplicationServiceTest")
+class UpdateMyKakaoIdApplicationServiceTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepository)
 
     val userSilRepositorySpy = UserSilRepositorySpy()
     val userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy)
-    val sut = UserSetMyKakaoIdApplicationService(
+    val sut = UpdateMyKakaoIdApplicationService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService
     )

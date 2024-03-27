@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyKakaoId
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.domain.user.entity.User
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserSetMyKakaoIdApplicationService(
+class UpdateMyKakaoIdApplicationService(
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
-) : UserSetMyKakaoIdUseCase {
+) : UpdateMyKakaoId {
 
     @Transactional
     override fun invoke(kakaoId: KakaoId) {

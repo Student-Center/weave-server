@@ -8,7 +8,7 @@ import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyAnimalType
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyHeight
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyKakaoId
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
@@ -46,7 +46,7 @@ class UserRestController(
     private val userUpdateMyMbtiUseCase: UpdateMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
-    private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
+    private val updateMyKakaoId: UpdateMyKakaoId,
     private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
     private val completeProfileImageUpload: CompleteProfileImageUpload,
 ) : UserApi {
@@ -122,7 +122,7 @@ class UserRestController(
     }
 
     override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
-        userSetMyKakaoIdUseCase.invoke(KakaoId(request.kakaoId))
+        updateMyKakaoId.invoke(KakaoId(request.kakaoId))
     }
 
     override fun sendEmailVerificationNumber(request: UserUnivVerificationSendRequest) {
