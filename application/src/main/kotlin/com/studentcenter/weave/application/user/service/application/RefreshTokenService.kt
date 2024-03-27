@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class RefreshTokenApplicationService(
+class RefreshTokenService(
     private val userDomainService: UserDomainService,
     private val userTokenService: UserTokenService,
     private val userRefreshTokenRepository: UserRefreshTokenRepository,

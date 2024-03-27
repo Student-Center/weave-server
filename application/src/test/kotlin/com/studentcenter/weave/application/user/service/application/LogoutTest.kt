@@ -10,11 +10,11 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("LogoutApplicationService")
-class LogoutApplicationServiceTest : DescribeSpec({
+@DisplayName("LogoutTest")
+class LogoutTest : DescribeSpec({
 
     val userRefreshTokenRepositorySpy = UserRefreshTokenRepositorySpy()
-    val sut = LogoutApplicationService(userRefreshTokenRepositorySpy)
+    val sut = LogoutService(userRefreshTokenRepositorySpy)
 
     afterTest {
         userRefreshTokenRepositorySpy.clear()

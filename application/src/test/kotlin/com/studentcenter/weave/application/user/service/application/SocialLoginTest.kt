@@ -17,13 +17,13 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 
-@DisplayName("SocialLoginApplicationServiceTest")
-class SocialLoginApplicationServiceTest : DescribeSpec({
+@DisplayName("SocialLoginTest")
+class SocialLoginTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
 
-    val sut = SocialLoginApplicationService(
+    val sut = SocialLoginService(
         userTokenService = UserTokenServiceImpl(
             jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
             userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),

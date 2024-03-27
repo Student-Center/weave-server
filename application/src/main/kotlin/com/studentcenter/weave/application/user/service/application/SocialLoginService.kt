@@ -10,7 +10,7 @@ import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import org.springframework.stereotype.Service
 
 @Service
-class SocialLoginApplicationService(
+class SocialLoginService(
     private val userTokenService: UserTokenService,
     private val userDomainService: UserDomainService,
     private val userAuthInfoDomainService: UserAuthInfoDomainService,

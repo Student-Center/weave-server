@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UnregisterApplicationService(
+class UnregisterUserService(
     private val userDomainService: UserDomainService,
     private val userAuthInfoDomainService: UserAuthInfoDomainService,
     private val deletedUserInfoDomainService: DeletedUserInfoService,

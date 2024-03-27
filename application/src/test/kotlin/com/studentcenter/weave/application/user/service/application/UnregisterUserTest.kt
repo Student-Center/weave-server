@@ -22,8 +22,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-@DisplayName("UnregisterUserApplicationServiceTest")
-class UnregisterUserApplicationServiceTest : DescribeSpec({
+@DisplayName("UnregisterUserTest")
+class UnregisterUserTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
@@ -33,7 +33,7 @@ class UnregisterUserApplicationServiceTest : DescribeSpec({
     val userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy)
     val deletedUserInfoDomainService = DeletedUserInfoServiceImpl(deletedUserInfoRepositorySpy)
 
-    val sut = UnregisterApplicationService(
+    val sut = UnregisterUserService(
         userDomainService = userDomainService,
         userAuthInfoDomainService = userAuthInfoDomainService,
         deletedUserInfoDomainService = deletedUserInfoDomainService,

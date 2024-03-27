@@ -7,7 +7,7 @@ import com.studentcenter.weave.domain.user.vo.Mbti
 import org.springframework.stereotype.Service
 
 @Service
-class UpdateMyMbtiApplicationService (
+class UpdateMyMbtiService (
     private val userDomainService: UserDomainService,
 ): UpdateMyMbti {
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CompleteProfileImageUploadApplicationService(
+class CompleteProfileImageUploadService(
     private val userProfileImageUrlPort: UserProfileImageUrlPort,
     private val userRepository: UserRepository,
 ) : CompleteProfileImageUpload {

@@ -18,8 +18,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
 
-@DisplayName("RefreshTokenApplicationService")
-class RefreshTokenApplicationServiceTest : DescribeSpec({
+@DisplayName("RefreshTokenTest")
+class RefreshTokenTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userRefreshTokenRepositorySpy = UserRefreshTokenRepositorySpy()
@@ -29,7 +29,7 @@ class RefreshTokenApplicationServiceTest : DescribeSpec({
         userRefreshTokenRepository = userRefreshTokenRepositorySpy,
         openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
     )
-    val sut = RefreshTokenApplicationService(
+    val sut = RefreshTokenService(
         userDomainService = userDomainServiceImpl,
         userTokenService = userTokenServiceImpl,
         userRefreshTokenRepository = userRefreshTokenRepositorySpy,

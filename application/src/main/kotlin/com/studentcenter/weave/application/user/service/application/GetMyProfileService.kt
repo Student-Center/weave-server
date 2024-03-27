@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class GetMyProfileApplicationService(
+class GetMyProfileService(
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
     private val universityDomainService: UniversityDomainService,

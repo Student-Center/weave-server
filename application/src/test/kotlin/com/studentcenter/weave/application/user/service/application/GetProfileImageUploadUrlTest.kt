@@ -11,8 +11,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
 
-@DisplayName("유저 프로필 이미지 업로드 URL 생성 테스트")
-class GetProfileImageUploadUrlApplicationServiceTest : DescribeSpec({
+@DisplayName("GetProfileImageUploadUrlTest")
+class GetProfileImageUploadUrlTest : DescribeSpec({
 
     afterEach {
         SecurityContextHolder.clearContext()
@@ -34,7 +34,7 @@ class GetProfileImageUploadUrlApplicationServiceTest : DescribeSpec({
                     return imageUrl
                 }
             }
-            val sut = GetProfileImageUploadUrlApplicationService(stub)
+            val sut = GetProfileImageUploadUrlService(stub)
 
 
             // act

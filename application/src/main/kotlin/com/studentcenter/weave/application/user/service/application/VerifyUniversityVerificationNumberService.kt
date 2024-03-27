@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class VerifyUniversityVerificationNumberApplicationService(
+class VerifyUniversityVerificationNumberService(
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
     private val userVerificationInfoDomainService: UserUniversityVerificationInfoDomainService,

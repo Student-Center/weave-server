@@ -21,8 +21,8 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("UserGetMyProfileApplicationService")
-class GetMyProfileApplicationServiceTest : DescribeSpec({
+@DisplayName("GetMyProfileTest")
+class GetMyProfileTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
@@ -36,7 +36,7 @@ class GetMyProfileApplicationServiceTest : DescribeSpec({
     val majorRepository = MajorRepositorySpy()
     val majorDomainService = MajorDomainServiceImpl(majorRepository)
 
-    val sut = GetMyProfileApplicationService(
+    val sut = GetMyProfileService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
         universityDomainService = universityDomainService,

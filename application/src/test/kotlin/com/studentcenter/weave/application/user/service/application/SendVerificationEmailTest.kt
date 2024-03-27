@@ -20,8 +20,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.*
 
-@DisplayName("SendVerificationEmailApplicationService")
-class SendVerificationEmailApplicationServiceTest : DescribeSpec({
+@DisplayName("SendVerificationEmailTest")
+class SendVerificationEmailTest : DescribeSpec({
 
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
     val userVerificationNumberRepository = UserVerificationNumberRepositorySpy()
@@ -29,7 +29,7 @@ class SendVerificationEmailApplicationServiceTest : DescribeSpec({
     val userVerificationInfoDomainService = UserUniversityVerificationInfoDomainServiceImpl(
         userUniversityVerificationInfoRepository
     )
-    val sut = SendVerificationEmailApplicationService(
+    val sut = SendVerificationEmailService(
         verificationNumberMailer = verificationNumberMailer,
         userVerificationNumberRepository = userVerificationNumberRepository,
         verificationInfoDomainService = userVerificationInfoDomainService,

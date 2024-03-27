@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class GetProfileImageUploadUrlApplicationService(
+class GetProfileImageUploadUrlService(
     private val userProfileImageUrlPort: UserProfileImageUrlPort,
 ) : GetProfileImageUploadUrl {
 

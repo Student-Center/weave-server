@@ -27,8 +27,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import java.util.*
 
-@DisplayName("VerifyUniversityVerificationNumberApplicationServiceTest")
-class VerifyUniversityVerificationNumberApplicationServiceTest : DescribeSpec({
+@DisplayName("VerifyUniversityVerificationNumberTest")
+class VerifyUniversityVerificationNumberTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
     val userSilRepository = UserSilRepositorySpy()
@@ -42,12 +42,12 @@ class VerifyUniversityVerificationNumberApplicationServiceTest : DescribeSpec({
     )
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
     val userSendVerificationNumberEmailApplicationService =
-        SendVerificationEmailApplicationService(
+        SendVerificationEmailService(
             verificationNumberMailer = verificationNumberMailer,
             verificationInfoDomainService = userVerificationInfoDomainService,
             userVerificationNumberRepository = userVerificationNumberRepository,
         )
-    val sut = VerifyUniversityVerificationNumberApplicationService(
+    val sut = VerifyUniversityVerificationNumberService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
         userVerificationInfoDomainService = userVerificationInfoDomainService,

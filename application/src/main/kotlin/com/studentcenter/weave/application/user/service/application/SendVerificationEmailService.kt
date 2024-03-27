@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 import kotlin.time.Duration.Companion.minutes
 
 @Service
-class SendVerificationEmailApplicationService(
+class SendVerificationEmailService(
     private val verificationNumberMailer: VerificationNumberMailer,
     private val userVerificationNumberRepository: UserVerificationNumberRepository,
     private val verificationInfoDomainService: UserUniversityVerificationInfoDomainService,

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class RegisterApplicationService(
+class RegisterUserService(
     private val userTokenService: UserTokenService,
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,

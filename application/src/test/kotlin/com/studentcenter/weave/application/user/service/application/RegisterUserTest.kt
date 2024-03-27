@@ -22,8 +22,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import java.util.*
 
-@DisplayName("RegisterUserApplicationService")
-class RegisterUserApplicationServiceTest : DescribeSpec({
+@DisplayName("RegisterUserTest")
+class RegisterUserTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
@@ -53,7 +53,7 @@ class RegisterUserApplicationServiceTest : DescribeSpec({
                 majorId = user.majorId
             )
 
-            val sut = RegisterApplicationService(
+            val sut = RegisterUserService(
                 userTokenService = UserTokenServiceImpl(
                     jwtTokenProperties = jwtTokenProperties,
                     userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
@@ -101,7 +101,7 @@ class RegisterUserApplicationServiceTest : DescribeSpec({
                     }
                 }
 
-                val sut = RegisterApplicationService(
+                val sut = RegisterUserService(
                     userTokenService = UserTokenServiceImpl(
                         jwtTokenProperties = jwtTokenProperties,
                         userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),

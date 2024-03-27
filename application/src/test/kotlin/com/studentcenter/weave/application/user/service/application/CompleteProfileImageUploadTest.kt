@@ -16,8 +16,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import java.util.*
 
-@DisplayName("UserCompleteProfileImageUploadApplicationServiceTest")
-class CompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
+@DisplayName("CompleteProfileImageUploadTest")
+class CompleteProfileImageUploadTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
 
@@ -47,7 +47,7 @@ class CompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
                     }
                 }
 
-                val sut = CompleteProfileImageUploadApplicationService(
+                val sut = CompleteProfileImageUploadService(
                     userProfileImageUrlPortStub,
                     userRepository
                 )
@@ -69,7 +69,7 @@ class CompleteProfileImageUploadApplicationServiceTest : DescribeSpec({
         context("[실패] 로그인 한 상태가 아닌 경우") {
             it("CustomException(type=AUTH-002)이 발생한다") {
                 // arrange
-                val sut = CompleteProfileImageUploadApplicationService(
+                val sut = CompleteProfileImageUploadService(
                     UserProfileImageUrlPortStub(),
                     userRepository
                 )

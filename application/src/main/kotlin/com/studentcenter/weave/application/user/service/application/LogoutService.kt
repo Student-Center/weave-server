@@ -9,7 +9,7 @@ import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class LogoutApplicationService(
+class LogoutService(
     private val userRefreshTokenRepository: UserRefreshTokenRepository,
 ) : Logout {
 

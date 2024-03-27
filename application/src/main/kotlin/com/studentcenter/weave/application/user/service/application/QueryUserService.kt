@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class QueryUserApplicationService(
+class QueryUserService(
     private val userDomainService: UserDomainService,
     private val userUniversityVerificationInfoDomainService: UserUniversityVerificationInfoDomainService,
 ) : QueryUser {
