@@ -6,8 +6,8 @@ import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUplo
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyMbti
 import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
-import com.studentcenter.weave.application.user.port.inbound.SetMyAnimalType
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyAnimalType
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyHeight
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
@@ -41,8 +41,8 @@ class UserRestController(
     private val registerUser: RegisterUser,
     private val userUnregisterUseCase: UserUnregisterUseCase,
     private val getMyProfileUseCase: GetMyProfile,
-    private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
-    private val userSetMyAnimalTypeUseCase: SetMyAnimalType,
+    private val updateMyHeight: UpdateMyHeight,
+    private val userUpdateMyAnimalTypeUseCase: UpdateMyAnimalType,
     private val userUpdateMyMbtiUseCase: UpdateMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
@@ -108,12 +108,12 @@ class UserRestController(
     override fun setHeight(request: UserSetMyHeightRequest) {
         request.height
             .let { Height(it) }
-            .let { userSetMyHeightUseCase.invoke(it) }
+            .let { updateMyHeight.invoke(it) }
     }
 
     override fun setMyAnimalType(request: UserSetMyAnimalTypeRequest) {
         request.animalType
-            .let { userSetMyAnimalTypeUseCase.invoke(it) }
+            .let { userUpdateMyAnimalTypeUseCase.invoke(it) }
     }
 
     override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {

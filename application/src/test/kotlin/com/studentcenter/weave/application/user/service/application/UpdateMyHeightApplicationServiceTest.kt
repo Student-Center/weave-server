@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -16,15 +15,15 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("UserSetMyHeightApplicationService")
-class UserSetMyHeightApplicationServiceTest : DescribeSpec({
+@DisplayName("UpdateMyHeightApplicationServiceTest")
+class UpdateMyHeightApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userSilRepositorySpy = UserSilRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
     val userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy)
 
-    val sut = UserSetMyHeightApplicationService(
+    val sut = UpdateMyHeightApplicationService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
     )
