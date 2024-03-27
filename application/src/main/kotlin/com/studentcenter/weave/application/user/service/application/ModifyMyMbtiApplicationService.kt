@@ -1,15 +1,15 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
+import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.domain.user.vo.Mbti
 import org.springframework.stereotype.Service
 
 @Service
-class UserModifyMyMbtiApplicationService (
+class ModifyMyMbtiApplicationService (
     private val userDomainService: UserDomainService,
-): UserModifyMyMbtiUseCase {
+): ModifyMyMbti {
 
     override fun invoke(mbti: Mbti) {
         getCurrentUserAuthentication()

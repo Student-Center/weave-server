@@ -3,7 +3,7 @@ package com.studentcenter.weave.bootstrap.user.controller
 import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
 import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
 import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
-import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
+import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
@@ -43,7 +43,7 @@ class UserRestController(
     private val getMyProfileUseCase: GetMyProfile,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
     private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
-    private val userModifyMyMbtiUseCase: UserModifyMyMbtiUseCase,
+    private val userModifyMyMbtiUseCase: ModifyMyMbti,
     private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,

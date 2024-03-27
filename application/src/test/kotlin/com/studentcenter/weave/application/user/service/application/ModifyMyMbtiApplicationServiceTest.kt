@@ -3,7 +3,6 @@ package com.studentcenter.weave.application.user.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.vo.Mbti
@@ -12,12 +11,12 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("UserModifyMyMbtiApplicationService")
-class UserModifyMyMbtiApplicationServiceTest : DescribeSpec({
+@DisplayName("ModifyMyMbtiApplicationService")
+class ModifyMyMbtiApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
-    val sut = UserModifyMyMbtiApplicationService(userDomainService)
+    val sut = ModifyMyMbtiApplicationService(userDomainService)
 
     describe("유저 MBTI 수정 유스케이스") {
         context("로그인 되어 있으면") {
