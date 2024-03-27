@@ -9,7 +9,7 @@ import com.studentcenter.weave.application.user.port.inbound.SendVerificationEma
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyAnimalType
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyHeight
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyKakaoId
-import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.UnregisterUser
 import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserRestController(
     private val registerUser: RegisterUser,
-    private val userUnregisterUseCase: UserUnregisterUseCase,
+    private val unregisterUser: UnregisterUser,
     private val getMyProfileUseCase: GetMyProfile,
     private val updateMyHeight: UpdateMyHeight,
     private val userUpdateMyAnimalTypeUseCase: UpdateMyAnimalType,
@@ -80,8 +80,8 @@ class UserRestController(
     }
 
     override fun unregister() {
-        UserUnregisterUseCase.Command()
-            .let { userUnregisterUseCase.invoke(it) }
+        UnregisterUser.Command()
+            .let { unregisterUser.invoke(it) }
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {

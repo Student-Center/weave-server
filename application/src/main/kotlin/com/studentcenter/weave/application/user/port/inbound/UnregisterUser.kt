@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.port.inbound
 
-interface UserUnregisterUseCase {
+fun interface UnregisterUser {
 
     fun invoke(command: Command)
 

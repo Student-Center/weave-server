@@ -2,14 +2,13 @@ package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.exception.AuthExceptionType
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
+import com.studentcenter.weave.application.user.port.inbound.UnregisterUser
 import com.studentcenter.weave.application.user.port.outbound.DeletedUserInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.DeletedUserInfoServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserAuthInfoDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserAuthInfo
@@ -23,8 +22,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-@DisplayName("UserUnregisterApplicationService")
-class UserUnregisterApplicationServiceTest : DescribeSpec({
+@DisplayName("UnregisterUserApplicationServiceTest")
+class UnregisterUserApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
@@ -34,7 +33,7 @@ class UserUnregisterApplicationServiceTest : DescribeSpec({
     val userAuthInfoDomainService = UserAuthInfoDomainServiceImpl(userAuthInfoRepositorySpy)
     val deletedUserInfoDomainService = DeletedUserInfoServiceImpl(deletedUserInfoRepositorySpy)
 
-    val sut = UserUnregisterApplicationService(
+    val sut = UnregisterApplicationService(
         userDomainService = userDomainService,
         userAuthInfoDomainService = userAuthInfoDomainService,
         deletedUserInfoDomainService = deletedUserInfoDomainService,
@@ -59,7 +58,7 @@ class UserUnregisterApplicationServiceTest : DescribeSpec({
                 val loginAuthentication = UserAuthenticationFixtureFactory.create(user)
                 SecurityContextHolder.setContext(UserSecurityContext(loginAuthentication))
 
-                val command = UserUnregisterUseCase.Command()
+                val command = UnregisterUser.Command()
 
                 // act
                 sut.invoke(command)
@@ -77,7 +76,7 @@ class UserUnregisterApplicationServiceTest : DescribeSpec({
         context("로그인 되어있지 않으면") {
             it("인증되지 않은 사용자 예외를 발생시킨다.") {
                 // arrange
-                val command = UserUnregisterUseCase.Command()
+                val command = UnregisterUser.Command()
 
                 // act & assert
                 val exception = shouldThrow<CustomException> {
