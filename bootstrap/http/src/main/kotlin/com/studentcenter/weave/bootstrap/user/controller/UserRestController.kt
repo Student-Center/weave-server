@@ -10,7 +10,7 @@ import com.studentcenter.weave.application.user.port.inbound.UpdateMyAnimalType
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyHeight
 import com.studentcenter.weave.application.user.port.inbound.UpdateMyKakaoId
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
+import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.bootstrap.user.api.UserApi
@@ -45,7 +45,7 @@ class UserRestController(
     private val userUpdateMyAnimalTypeUseCase: UpdateMyAnimalType,
     private val userUpdateMyMbtiUseCase: UpdateMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
-    private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
+    private val verifyUniversityVerificationNumber: VerifyUniversityVerificationNumber,
     private val updateMyKakaoId: UpdateMyKakaoId,
     private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
     private val completeProfileImageUpload: CompleteProfileImageUpload,
@@ -130,8 +130,8 @@ class UserRestController(
     }
 
     override fun verifyVerificationNumber(request: UserUnivVerificationVerifyRequest) {
-        userVerifyVerificationNumberUseCase.invoke(
-            command = UserVerifyVerificationNumberUseCase.Command(
+        verifyUniversityVerificationNumber.invoke(
+            command = VerifyUniversityVerificationNumber.Command(
                 universityEmail = Email(request.universityEmail),
                 verificationNumber = UserUniversityVerificationNumber(request.verificationNumber),
             )

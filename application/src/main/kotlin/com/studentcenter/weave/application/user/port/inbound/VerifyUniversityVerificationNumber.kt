@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.user.port.inbound
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.support.common.vo.Email
 
-fun interface UserVerifyVerificationNumberUseCase {
+fun interface VerifyUniversityVerificationNumber {
 
     fun invoke(command: Command)
 

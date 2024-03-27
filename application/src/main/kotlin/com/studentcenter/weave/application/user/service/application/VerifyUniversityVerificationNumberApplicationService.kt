@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.user.port.inbound.UserVerifyVerificationNumberUseCase
+import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserVerifyVerificationNumberApplicationService(
+class VerifyUniversityVerificationNumberApplicationService(
     private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
     private val userVerificationInfoDomainService: UserUniversityVerificationInfoDomainService,
     private val verificationNumberRepository: UserVerificationNumberRepository,
-): UserVerifyVerificationNumberUseCase {
+): VerifyUniversityVerificationNumber {
 
     @Transactional
-    override fun invoke(command: UserVerifyVerificationNumberUseCase.Command) {
+    override fun invoke(command: VerifyUniversityVerificationNumber.Command) {
         val currentUserId = getCurrentUserAuthentication().userId
         if (userVerificationInfoDomainService.existsByUserId(currentUserId)) {
             throw CustomException(
