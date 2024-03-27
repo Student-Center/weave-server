@@ -10,8 +10,4 @@ class GetUserStub : GetUser {
         return UserFixtureFactory.create(id = id)
     }
 
-    override fun isUserUniversityVerified(userId: UUID): Boolean {
-        return true
-    }
-
 }

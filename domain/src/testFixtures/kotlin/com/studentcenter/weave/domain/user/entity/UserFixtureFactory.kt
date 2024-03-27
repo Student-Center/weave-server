@@ -25,6 +25,7 @@ object UserFixtureFactory {
         height: Height? = null,
         animalType: AnimalType? = null,
         kakaoId: KakaoId? = null,
+        isUnivVerified: Boolean = false,
     ): User {
         return User(
             id = id,
@@ -38,6 +39,7 @@ object UserFixtureFactory {
             height = height,
             animalType = animalType,
             kakaoId = kakaoId,
+            isUnivVerified = isUnivVerified,
         )
     }
 
