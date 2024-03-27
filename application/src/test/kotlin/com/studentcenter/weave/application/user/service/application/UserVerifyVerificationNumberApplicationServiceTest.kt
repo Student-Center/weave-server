@@ -42,7 +42,7 @@ class UserVerifyVerificationNumberApplicationServiceTest : DescribeSpec({
     )
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
     val userSendVerificationNumberEmailApplicationService =
-        UserSendVerificationNumberEmailApplicationService(
+        SendVerificationEmailApplicationService(
             verificationNumberMailer = verificationNumberMailer,
             verificationInfoDomainService = userVerificationInfoDomainService,
             userVerificationNumberRepository = userVerificationNumberRepository,

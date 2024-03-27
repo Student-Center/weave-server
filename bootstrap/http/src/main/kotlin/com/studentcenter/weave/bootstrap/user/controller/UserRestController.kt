@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
 import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
 import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
 import com.studentcenter.weave.application.user.port.inbound.RegisterUser
-import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
+import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
@@ -44,7 +44,7 @@ class UserRestController(
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
     private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
     private val userModifyMyMbtiUseCase: ModifyMyMbti,
-    private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
+    private val sendVerificationEmail: SendVerificationEmail,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
     private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
@@ -126,7 +126,7 @@ class UserRestController(
     }
 
     override fun sendEmailVerificationNumber(request: UserUnivVerificationSendRequest) {
-        userSendVerificationNumberEmailUseCase.invoke(Email(request.universityEmail))
+        sendVerificationEmail.invoke(Email(request.universityEmail))
     }
 
     override fun verifyVerificationNumber(request: UserUnivVerificationVerifyRequest) {

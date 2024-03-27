@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
+import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
 import com.studentcenter.weave.application.user.service.domain.UserUniversityVerificationInfoDomainService
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service
 import kotlin.time.Duration.Companion.minutes
 
 @Service
-class UserSendVerificationNumberEmailApplicationService(
+class SendVerificationEmailApplicationService(
     private val verificationNumberMailer: VerificationNumberMailer,
     private val userVerificationNumberRepository: UserVerificationNumberRepository,
     private val verificationInfoDomainService: UserUniversityVerificationInfoDomainService,
-): UserSendVerificationNumberEmailUseCase {
+): SendVerificationEmail {
 
     override fun invoke(universityEmail: Email) {
         if (verificationInfoDomainService.existsByEmail(universityEmail)) {

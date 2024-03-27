@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.user.port.outbound.UserUniversityVeri
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
 import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
@@ -21,8 +20,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.*
 
-@DisplayName("UseSendVerificationNumberEmailApplicationService")
-class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
+@DisplayName("SendVerificationEmailApplicationService")
+class SendVerificationEmailApplicationServiceTest : DescribeSpec({
 
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
     val userVerificationNumberRepository = UserVerificationNumberRepositorySpy()
@@ -30,7 +29,7 @@ class UserSendVerificationNumberEmailApplicationServiceTest : DescribeSpec({
     val userVerificationInfoDomainService = UserUniversityVerificationInfoDomainServiceImpl(
         userUniversityVerificationInfoRepository
     )
-    val sut = UserSendVerificationNumberEmailApplicationService(
+    val sut = SendVerificationEmailApplicationService(
         verificationNumberMailer = verificationNumberMailer,
         userVerificationNumberRepository = userVerificationNumberRepository,
         verificationInfoDomainService = userVerificationInfoDomainService,
