@@ -2,7 +2,7 @@ package com.studentcenter.weave.bootstrap.auth.controller
 
 import com.studentcenter.weave.application.user.port.inbound.Logout
 import com.studentcenter.weave.application.user.port.inbound.RefreshToken
-import com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase
+import com.studentcenter.weave.application.user.port.inbound.SocialLogin
 import com.studentcenter.weave.bootstrap.auth.api.AuthApi
 import com.studentcenter.weave.bootstrap.auth.dto.RefreshLoginTokenResponse
 import com.studentcenter.weave.bootstrap.auth.dto.RefreshTokenRequest
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AuthRestController(
-    private val socialLoginUseCase: UserSocialLoginUseCase,
+    private val socialLoginUseCase: SocialLogin,
     private val refreshToken: RefreshToken,
     private val logoutUser: Logout,
 ) : AuthApi {
@@ -24,14 +24,14 @@ class AuthRestController(
         provider: SocialLoginProvider,
         request: SocialLoginRequest,
     ): ResponseEntity<SocialLoginResponse> {
-        val command: UserSocialLoginUseCase.Command = UserSocialLoginUseCase.Command(
+        val command: SocialLogin.Command = SocialLogin.Command(
             socialLoginProvider = provider,
             idToken = request.idToken,
         )
         return when (
-            val result: UserSocialLoginUseCase.Result = socialLoginUseCase.invoke(command)
+            val result: SocialLogin.Result = socialLoginUseCase.invoke(command)
         ) {
-            is UserSocialLoginUseCase.Result.Success -> {
+            is SocialLogin.Result.Success -> {
                 val body = SocialLoginResponse.Success(
                     accessToken = result.accessToken,
                     refreshToken = result.refreshToken,
@@ -40,7 +40,7 @@ class AuthRestController(
                     .ok(body)
             }
 
-            is UserSocialLoginUseCase.Result.NotRegistered -> {
+            is SocialLogin.Result.NotRegistered -> {
                 val body = SocialLoginResponse.UserNotRegistered(
                     registerToken = result.registerToken,
                 )

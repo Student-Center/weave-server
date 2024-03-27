@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
-import com.studentcenter.weave.application.user.port.inbound.UserSocialLoginUseCase
+import com.studentcenter.weave.application.user.port.inbound.SocialLogin
 import com.studentcenter.weave.application.user.port.outbound.UserAuthInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
@@ -17,13 +17,13 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 
-@DisplayName("UserSocialLoginApplicationService")
-class UserSocialLoginApplicationServiceTest : DescribeSpec({
+@DisplayName("SocialLoginApplicationServiceTest")
+class SocialLoginApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userAuthInfoRepositorySpy = UserAuthInfoRepositorySpy()
 
-    val sut = UserSocialLoginApplicationService(
+    val sut = SocialLoginApplicationService(
         userTokenService = UserTokenServiceImpl(
             jwtTokenProperties = JwtTokenPropertiesFixtureFactory.create(),
             userRefreshTokenRepository = UserRefreshTokenRepositorySpy(),
@@ -49,16 +49,16 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
                         .let { userAuthInfoRepositorySpy.save(it) }
 
                     val idToken = "idToken"
-                    val command = UserSocialLoginUseCase.Command(
+                    val command = SocialLogin.Command(
                         socialLoginProvider = socialLoginProvider,
                         idToken = idToken,
                     )
 
                     // act
-                    val result: UserSocialLoginUseCase.Result = sut.invoke(command)
+                    val result: SocialLogin.Result = sut.invoke(command)
 
                     // assert
-                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.Success>()
+                    result.shouldBeTypeOf<SocialLogin.Result.Success>()
                     result.accessToken.shouldBeTypeOf<String>()
                     result.refreshToken.shouldBeTypeOf<String>()
                 }
@@ -71,17 +71,17 @@ class UserSocialLoginApplicationServiceTest : DescribeSpec({
                     // arrange
                     val idToken = "idToken"
                     val command =
-                        UserSocialLoginUseCase.Command(
+                        SocialLogin.Command(
                             socialLoginProvider = socialLoginProvider,
                             idToken = idToken,
                         )
 
                     // act
-                    val result: UserSocialLoginUseCase.Result =
+                    val result: SocialLogin.Result =
                         sut.invoke(command)
 
                     // assert
-                    result.shouldBeTypeOf<UserSocialLoginUseCase.Result.NotRegistered>()
+                    result.shouldBeTypeOf<SocialLogin.Result.NotRegistered>()
                     result.registerToken.shouldBeTypeOf<String>()
                 }
             }

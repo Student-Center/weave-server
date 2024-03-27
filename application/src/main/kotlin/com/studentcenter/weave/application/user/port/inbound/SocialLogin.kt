@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.user.port.inbound
 
 import com.studentcenter.weave.domain.user.enums.SocialLoginProvider
 
-fun interface UserSocialLoginUseCase {
+fun interface SocialLogin {
 
     fun invoke(command: Command): Result
 
