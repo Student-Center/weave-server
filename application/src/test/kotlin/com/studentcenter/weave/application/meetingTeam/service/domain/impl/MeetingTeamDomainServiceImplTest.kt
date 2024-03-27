@@ -8,6 +8,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
+import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcetner.weave.support.lock.DistributedLockTestInitializer
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
@@ -100,8 +101,8 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
             }
         }
 
-        context("미팅 멤버가 이미 존재하는 경우") {
-            it("해당 멤버를 반환한다.") {
+        context("미팅 팀에 속해 있는 멤버의 경우") {
+            it("이미 미팅 팀에 소속되어 있다는 예외를 던진다") {
                 // arrange
                 val memberCount = 2
                 val meetingTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
@@ -113,15 +114,14 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                 )
                 meetingMemberRepositorySpy.save(meetingMember)
 
-                // act
-                val result = sut.addMember(
-                    user = user,
-                    meetingTeam = meetingTeam,
-                    role = MeetingMemberRole.MEMBER
-                )
-
-                // assert
-                result shouldBe meetingMember
+                // act & assert
+                shouldThrow<CustomException> {
+                    sut.addMember(
+                        user = user,
+                        meetingTeam = meetingTeam,
+                        role = MeetingMemberRole.MEMBER
+                    )
+                }
             }
         }
 
