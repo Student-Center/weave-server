@@ -8,12 +8,12 @@ import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingAt
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.user.port.inbound.GetUser
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -60,13 +60,12 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
             it("예외가 발생한다") {
                 // arrange
                 val receivingMeetingTeamId: UUID = UuidCreator.create()
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns null
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -86,13 +85,12 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     val receivingMeetingTeam: MeetingTeam =
                         MeetingTeamFixtureFactory.create(gender = gender)
 
-                    val userAuthentication: UserAuthentication = UserFixtureFactory
-                        .create()
-                        .let { UserAuthenticationFixtureFactory.create(it) }
+                    val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                    user.let { UserAuthenticationFixtureFactory.create(it) }
                         .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                    every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                    every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                    every { getUser.getById(user.id) } returns user
+                    every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                     every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                     // act, assert
@@ -111,13 +109,12 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 val myMeetingTeam = MeetingTeamFixtureFactory.create(memberCount = 2)
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create(memberCount = 3)
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
@@ -136,13 +133,12 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     MeetingTeamFixtureFactory.create(status = MeetingTeamStatus.WAITING)
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create()
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
@@ -160,12 +156,11 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 val myMeetingTeam = MeetingTeamFixtureFactory.create()
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create()
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = false)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns false
+                every { getUser.getById(user.id) } returns user
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -188,16 +183,15 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = userAuthentication.userId))
+                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                 meetingRequestApplicationService.invoke(command)
@@ -220,16 +214,15 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = userAuthentication.userId))
+                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
                 MeetingRequestUseCase.Command(receivingMeetingTeam.id)
@@ -254,16 +247,15 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val userAuthentication: UserAuthentication = UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
-                every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
+                every { getUser.getById(user.id) } returns user
+                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = userAuthentication.userId))
+                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
                 MeetingRequestUseCase.Command(receivingMeetingTeam.id)
