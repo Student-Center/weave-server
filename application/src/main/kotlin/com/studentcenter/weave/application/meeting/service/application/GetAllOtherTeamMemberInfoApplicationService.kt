@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainS
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -18,7 +18,7 @@ import java.util.*
 class GetAllOtherTeamMemberInfoApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
-    private val queryUser: QueryUser,
+    private val getUser: GetUser,
     private val universityGetByIdUseCase: UniversityGetByIdUsecase,
 ) : GetAllOtherTeamMemberInfoUseCase {
 
@@ -34,7 +34,7 @@ class GetAllOtherTeamMemberInfoApplicationService(
         return meetingTeamQueryUseCase
             .findAllMeetingMembersByMeetingTeamId(otherTeamId)
             .map {
-                val user = queryUser.getById(it.userId)
+                val user = getUser.getById(it.userId)
                 val university = universityGetByIdUseCase.invoke(user.universityId)
                 MemberInfo(
                     id = it.id,

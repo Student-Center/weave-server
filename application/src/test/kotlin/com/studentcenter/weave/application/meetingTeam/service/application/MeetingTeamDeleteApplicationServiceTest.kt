@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -27,13 +27,13 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository,
         meetingMemberRepository,
         meetingTeamMemberSummaryRepository,
-        queryUser,
+        getUser,
     )
     val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
     val sut = MeetingTeamDeleteApplicationService(

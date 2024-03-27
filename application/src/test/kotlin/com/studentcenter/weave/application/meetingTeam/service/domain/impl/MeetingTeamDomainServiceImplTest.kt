@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.domain.impl
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
@@ -23,13 +23,13 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
 
     val sut = MeetingTeamDomainServiceImpl(
         meetingTeamRepository = meetingTeamRepositorySpy,
         meetingMemberRepository = meetingMemberRepositorySpy,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        queryUser = queryUser,
+        getUser = getUser,
     )
 
     beforeTest {
@@ -138,8 +138,8 @@ class MeetingTeamDomainServiceImplTest : DescribeSpec({
                     role = MeetingMemberRole.LEADER
                 )
 
-                every { queryUser.getById(user1.id) } returns user1
-                every { queryUser.getById(user2.id) } returns user2
+                every { getUser.getById(user1.id) } returns user1
+                every { getUser.getById(user2.id) } returns user2
 
                 meetingMemberRepositorySpy.save(meetingMember1)
                 meetingTeamRepositorySpy.save(meetingTeam)

@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.QueryUserStub
+import com.studentcenter.weave.application.user.port.inbound.GetUserStub
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
@@ -29,7 +29,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCaseMock = mockk<QueryUserStub>()
+    val userQueryUseCaseMock = mockk<GetUserStub>()
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepositorySpy,
         meetingMemberRepositorySpy,

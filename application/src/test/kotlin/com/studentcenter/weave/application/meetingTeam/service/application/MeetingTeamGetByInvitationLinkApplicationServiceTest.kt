@@ -8,7 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvitationServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -29,13 +29,13 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository = meetingTeamRepositorySpy,
         meetingMemberRepository = meetingMemberRepositorySpy,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        queryUser = queryUser,
+        getUser = getUser,
     )
 
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(

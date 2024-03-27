@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUs
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingAttendanceDomainServiceImpl
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
@@ -40,13 +40,13 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
         meetingAttendanceRepository = meetingAttendanceRepositorySpy,
     )
     val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
 
     val meetingRequestApplicationService = MeetingRequestApplicationService(
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
         meetingDomainService = meetingDomainService,
         meetingAttendanceDomainService = meetingAttendanceDomainService,
-        queryUser = queryUser,
+        getUser = getUser,
     )
 
     afterEach {
@@ -65,7 +65,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns null
 
                 // act, assert
@@ -91,7 +91,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                         .let { UserAuthenticationFixtureFactory.create(it) }
                         .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                    every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                    every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                     every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                     every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
@@ -116,7 +116,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
@@ -141,7 +141,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
@@ -165,7 +165,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns false
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns false
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -193,7 +193,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
@@ -225,7 +225,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
@@ -259,7 +259,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { queryUser.isUserUniversityVerified(userAuthentication.userId) } returns true
+                every { getUser.isUserUniversityVerified(userAuthentication.userId) } returns true
                 every { meetingTeamQueryUseCase.findByMemberUserId(userAuthentication.userId) } returns myMeetingTeam
                 every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns

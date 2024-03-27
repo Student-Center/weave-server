@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
@@ -34,12 +34,12 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
         meetingRepository = meetingRepositorySpy
     )
     val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
     val universityGetByIdUseCase = mockk<UniversityGetByIdUsecase>()
     val sut = GetAllOtherTeamMemberInfoApplicationService(
         meetingDomainService = meetingDomainService,
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
-        queryUser = queryUser,
+        getUser = getUser,
         universityGetByIdUseCase = universityGetByIdUseCase,
     )
 
@@ -113,7 +113,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
 
                 every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns myTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
-                every { queryUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
+                every { getUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
                 every { universityGetByIdUseCase.invoke(any()) } returns UniversityFixtureFactory.create()
 
 

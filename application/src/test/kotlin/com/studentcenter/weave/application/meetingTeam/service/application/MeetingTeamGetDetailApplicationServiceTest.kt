@@ -8,7 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.QueryUser
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummaryFixtureFactory
@@ -32,20 +32,20 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val queryUser = mockk<QueryUser>()
+    val getUser = mockk<GetUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository = meetingTeamRepositorySpy,
         meetingMemberRepository = meetingMemberRepositorySpy,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        queryUser = queryUser,
+        getUser = getUser,
     )
 
     val sut = MeetingTeamGetDetailApplicationService(
         meetingTeamDomainService = meetingTeamDomainService,
         majorGetByIdUsecase = majorGetByIdUsecase,
         universityGetByIdUsecase = universityGetByIdUsecase,
-        queryUser = queryUser,
+        getUser = getUser,
     )
 
     afterEach {
