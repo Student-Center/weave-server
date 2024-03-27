@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUplo
 import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
 import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
-import com.studentcenter.weave.application.user.port.inbound.UserSetMyAnimalTypeUseCase
+import com.studentcenter.weave.application.user.port.inbound.SetMyAnimalType
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyHeightUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSetMyKakaoIdUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserUnregisterUseCase
@@ -42,7 +42,7 @@ class UserRestController(
     private val userUnregisterUseCase: UserUnregisterUseCase,
     private val getMyProfileUseCase: GetMyProfile,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
-    private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
+    private val userSetMyAnimalTypeUseCase: SetMyAnimalType,
     private val userModifyMyMbtiUseCase: ModifyMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,

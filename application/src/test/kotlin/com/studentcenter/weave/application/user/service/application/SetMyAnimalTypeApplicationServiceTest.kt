@@ -20,13 +20,13 @@ import io.mockk.every
 import io.mockk.mockkStatic
 
 @DisplayName("UserSetMyAnimalTypeApplicationService")
-class UserSetMyAnimalTypeApplicationServiceTest : DescribeSpec({
+class SetMyAnimalTypeApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userSilRepositorySpy = UserSilRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
     val userSilDomainService = UserSilDomainServiceImpl(userSilRepositorySpy)
-    val sut = UserSetMyAnimalTypeApplicationService(
+    val sut = SetMyAnimalTypeApplicationService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService
     )
