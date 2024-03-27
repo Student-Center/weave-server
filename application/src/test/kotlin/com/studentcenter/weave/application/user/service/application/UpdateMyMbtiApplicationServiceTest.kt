@@ -11,12 +11,12 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("ModifyMyMbtiApplicationService")
-class ModifyMyMbtiApplicationServiceTest : DescribeSpec({
+@DisplayName("UpdateMyMbtiApplicationService")
+class UpdateMyMbtiApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
-    val sut = ModifyMyMbtiApplicationService(userDomainService)
+    val sut = UpdateMyMbtiApplicationService(userDomainService)
 
     describe("유저 MBTI 수정 유스케이스") {
         context("로그인 되어 있으면") {

@@ -3,7 +3,7 @@ package com.studentcenter.weave.bootstrap.user.controller
 import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
 import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
 import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
-import com.studentcenter.weave.application.user.port.inbound.ModifyMyMbti
+import com.studentcenter.weave.application.user.port.inbound.UpdateMyMbti
 import com.studentcenter.weave.application.user.port.inbound.RegisterUser
 import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
 import com.studentcenter.weave.application.user.port.inbound.SetMyAnimalType
@@ -43,7 +43,7 @@ class UserRestController(
     private val getMyProfileUseCase: GetMyProfile,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
     private val userSetMyAnimalTypeUseCase: SetMyAnimalType,
-    private val userModifyMyMbtiUseCase: ModifyMyMbti,
+    private val userUpdateMyMbtiUseCase: UpdateMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
@@ -118,7 +118,7 @@ class UserRestController(
 
     override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {
         Mbti(request.mbti)
-            .let { userModifyMyMbtiUseCase.invoke(it) }
+            .let { userUpdateMyMbtiUseCase.invoke(it) }
     }
 
     override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
