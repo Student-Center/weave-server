@@ -11,7 +11,7 @@ import com.studentcenter.weave.domain.user.vo.Nickname
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
-fun interface UserGetMyProfileUseCase {
+fun interface GetMyProfile {
 
     fun invoke(): Result
 

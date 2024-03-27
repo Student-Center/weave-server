@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
@@ -15,12 +15,12 @@ import java.util.*
 class MeetingTeamEnterApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
-    private val userQueryUseCase: UserQueryUseCase,
+    private val queryUser: QueryUser,
 ) : MeetingTeamEnterUseCase {
 
     override fun invoke(invitationCode: UUID) {
         val currentUser = getCurrentUserAuthentication().userId
-            .let { userQueryUseCase.getById(it) }
+            .let { queryUser.getById(it) }
 
         val meetingTeam =
             meetingTeamInvitationService.findByInvitationCode(invitationCode = invitationCode)

@@ -5,12 +5,11 @@ import com.studentcenter.weave.application.university.port.outbound.MajorReposit
 import com.studentcenter.weave.application.university.port.outbound.UniversityRepositorySpy
 import com.studentcenter.weave.application.university.service.domain.impl.MajorDomainServiceImpl
 import com.studentcenter.weave.application.university.service.domain.impl.UniversityDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserSilRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.MajorFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
@@ -23,7 +22,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
 @DisplayName("UserGetMyProfileApplicationService")
-class UserGetMyProfileApplicationServiceTest : DescribeSpec({
+class GetMyProfileApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userDomainService = UserDomainServiceImpl(userRepositorySpy)
@@ -37,7 +36,7 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
     val majorRepository = MajorRepositorySpy()
     val majorDomainService = MajorDomainServiceImpl(majorRepository)
 
-    val sut = UserGetMyProfileApplicationService(
+    val sut = GetMyProfileApplicationService(
         userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
         universityDomainService = universityDomainService,
@@ -68,7 +67,7 @@ class UserGetMyProfileApplicationServiceTest : DescribeSpec({
                 majorRepository.saveAll(listOf(expectedMajor))
 
                 // act
-                val result: UserGetMyProfileUseCase.Result = sut.invoke()
+                val result: GetMyProfile.Result = sut.invoke()
 
                 // assert
                 result.id shouldBe user.id

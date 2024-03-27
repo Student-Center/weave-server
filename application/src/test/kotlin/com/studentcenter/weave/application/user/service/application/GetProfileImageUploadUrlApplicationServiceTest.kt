@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
 import com.studentcenter.weave.application.user.port.outbound.UserProfileImageUrlPortStub
 import com.studentcenter.weave.domain.user.entity.UserProfileImage
 import com.studentcenter.weave.support.common.vo.Url
@@ -12,7 +12,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
 
 @DisplayName("유저 프로필 이미지 업로드 URL 생성 테스트")
-class UserGetProfileImageUploadUrlApplicationServiceTest : DescribeSpec({
+class GetProfileImageUploadUrlApplicationServiceTest : DescribeSpec({
 
     afterEach {
         SecurityContextHolder.clearContext()
@@ -34,11 +34,11 @@ class UserGetProfileImageUploadUrlApplicationServiceTest : DescribeSpec({
                     return imageUrl
                 }
             }
-            val sut = UserGetProfileImageUploadUrlApplicationService(stub)
+            val sut = GetProfileImageUploadUrlApplicationService(stub)
 
 
             // act
-            val result: UserGetProfileImageUploadUrlUseCase.Result = sut.invoke(imageFileExtension)
+            val result: GetProfileImageUploadUrl.Result = sut.invoke(imageFileExtension)
 
             // assert
             result.imageId.shouldBeInstanceOf<UUID>()

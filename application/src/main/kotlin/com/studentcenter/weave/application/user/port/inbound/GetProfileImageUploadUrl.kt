@@ -4,7 +4,7 @@ import com.studentcenter.weave.domain.user.entity.UserProfileImage
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
-fun interface UserGetProfileImageUploadUrlUseCase {
+fun interface GetProfileImageUploadUrl {
 
     fun invoke(extension: UserProfileImage.Extension): Result
 

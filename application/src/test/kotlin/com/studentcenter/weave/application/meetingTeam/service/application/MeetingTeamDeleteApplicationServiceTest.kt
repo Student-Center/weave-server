@@ -7,13 +7,12 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -28,13 +27,13 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = mockk<UserQueryUseCase>()
+    val queryUser = mockk<QueryUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository,
         meetingMemberRepository,
         meetingTeamMemberSummaryRepository,
-        userQueryUseCase,
+        queryUser,
     )
     val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
     val sut = MeetingTeamDeleteApplicationService(

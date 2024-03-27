@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUs
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -18,7 +18,7 @@ import java.util.*
 
 @Service
 class MeetingRequestApplicationService(
-    private val userQueryUseCase: UserQueryUseCase,
+    private val queryUser: QueryUser,
     private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
@@ -75,7 +75,7 @@ class MeetingRequestApplicationService(
 
     private fun validateMyUniversityEmailVerified() {
         val isUniversityEmailVerified = getCurrentUserAuthentication()
-            .let { userQueryUseCase.isUserUniversityVerified(it.userId) }
+            .let { queryUser.isUserUniversityVerified(it.userId) }
 
         if (isUniversityEmailVerified.not()){
             throw CustomException(

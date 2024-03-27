@@ -1,8 +1,8 @@
 package com.studentcenter.weave.bootstrap.user.controller
 
 import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
-import com.studentcenter.weave.application.user.port.inbound.UserGetMyProfileUseCase
-import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetMyProfile
+import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
 import com.studentcenter.weave.application.user.port.inbound.UserModifyMyMbtiUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserRegisterUseCase
 import com.studentcenter.weave.application.user.port.inbound.UserSendVerificationNumberEmailUseCase
@@ -40,14 +40,14 @@ import org.springframework.web.bind.annotation.RestController
 class UserRestController(
     private val userRegisterUseCase: UserRegisterUseCase,
     private val userUnregisterUseCase: UserUnregisterUseCase,
-    private val userGetMyProfileUseCase: UserGetMyProfileUseCase,
+    private val getMyProfileUseCase: GetMyProfile,
     private val userSetMyHeightUseCase: UserSetMyHeightUseCase,
     private val userSetMyAnimalTypeUseCase: UserSetMyAnimalTypeUseCase,
     private val userModifyMyMbtiUseCase: UserModifyMyMbtiUseCase,
     private val userSendVerificationNumberEmailUseCase: UserSendVerificationNumberEmailUseCase,
     private val userVerifyVerificationNumberUseCase: UserVerifyVerificationNumberUseCase,
     private val userSetMyKakaoIdUseCase: UserSetMyKakaoIdUseCase,
-    private val userGetProfileImageUploadUrlUseCase: UserGetProfileImageUploadUrlUseCase,
+    private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
     private val completeProfileImageUpload: CompleteProfileImageUpload,
 ) : UserApi {
 
@@ -85,7 +85,7 @@ class UserRestController(
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {
-        return userGetMyProfileUseCase
+        return getMyProfileUseCase
             .invoke()
             .let {
                 UserGetMyProfileResponse(

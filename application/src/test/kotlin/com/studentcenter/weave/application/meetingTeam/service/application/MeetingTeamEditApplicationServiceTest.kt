@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMembe
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -28,13 +28,13 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = mockk<UserQueryUseCase>()
+    val queryUser = mockk<QueryUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
         meetingTeamRepository = meetingTeamRepository,
         meetingMemberRepository = meetingMemberRepository,
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
-        userQueryUseCase = userQueryUseCase,
+        queryUser = queryUser,
     )
     val sut = MeetingTeamEditApplicationService(
         meetingTeamDomainService = meetingTeamDomainService

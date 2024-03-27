@@ -5,13 +5,12 @@ import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
 import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
-import com.studentcenter.weave.domain.university.entity.University
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
@@ -35,12 +34,12 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
         meetingRepository = meetingRepositorySpy
     )
     val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
-    val userQueryUseCase = mockk<UserQueryUseCase>()
+    val queryUser = mockk<QueryUser>()
     val universityGetByIdUseCase = mockk<UniversityGetByIdUsecase>()
     val sut = GetAllOtherTeamMemberInfoApplicationService(
         meetingDomainService = meetingDomainService,
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
-        userQueryUseCase = userQueryUseCase,
+        queryUser = queryUser,
         universityGetByIdUseCase = universityGetByIdUseCase,
     )
 
@@ -114,7 +113,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
 
                 every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns myTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
-                every { userQueryUseCase.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
+                every { queryUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
                 every { universityGetByIdUseCase.invoke(any()) } returns UniversityFixtureFactory.create()
 
 

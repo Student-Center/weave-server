@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.user.dto
 
-import com.studentcenter.weave.application.user.port.inbound.UserGetProfileImageUploadUrlUseCase
+import com.studentcenter.weave.application.user.port.inbound.GetProfileImageUploadUrl
 import com.studentcenter.weave.domain.user.entity.UserProfileImage
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
@@ -17,7 +17,7 @@ data class UserGetProfileImageUploadUrlResponse(
 
     companion object {
 
-        fun from(result: UserGetProfileImageUploadUrlUseCase.Result) =
+        fun from(result: GetProfileImageUploadUrl.Result) =
             UserGetProfileImageUploadUrlResponse(
                 uploadUrl = result.uploadUrl.value,
                 imageId = result.imageId,

@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
-import com.studentcenter.weave.application.user.port.inbound.UserQueryUseCase
+import com.studentcenter.weave.application.user.port.inbound.QueryUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
@@ -28,7 +28,7 @@ class MeetingTeamDomainServiceImpl(
     private val meetingTeamRepository: MeetingTeamRepository,
     private val meetingMemberRepository: MeetingMemberRepository,
     private val meetingTeamMemberSummaryRepository: MeetingTeamMemberSummaryRepository,
-    private val userQueryUseCase: UserQueryUseCase,
+    private val queryUser: QueryUser,
 ) : MeetingTeamDomainService {
     override fun save(meetingTeam: MeetingTeam) {
         meetingTeamRepository.save(meetingTeam)
@@ -229,7 +229,7 @@ class MeetingTeamDomainServiceImpl(
     private fun createMeetingTeamMemberSummary(meetingTeam: MeetingTeam): MeetingTeamMemberSummary {
         val meetingMemberUsers: List<User> = meetingMemberRepository
             .findAllByMeetingTeamId(meetingTeam.id)
-            .map { userQueryUseCase.getById(it.userId) }
+            .map { queryUser.getById(it.userId) }
         require(meetingMemberUsers.size == meetingTeam.memberCount) {
             "설정된 팀원의 수와 실제 팀원의 수가 일치해야 팀을 공개할 수 있어요!"
         }
