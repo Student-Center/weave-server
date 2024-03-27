@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.user.port.inbound
 
 
-fun interface UserRefreshTokenUseCase {
+fun interface RefreshToken {
 
     fun invoke(command: Command): Result
 

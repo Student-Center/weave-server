@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.exception.AuthExceptionType
-import com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase
+import com.studentcenter.weave.application.user.port.inbound.RefreshToken
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.util.UserTokenService
@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class UserRefreshTokenApplicationService(
+class RefreshTokenApplicationService(
     private val userDomainService: UserDomainService,
     private val userTokenService: UserTokenService,
     private val userRefreshTokenRepository: UserRefreshTokenRepository,
-) : UserRefreshTokenUseCase {
+) : RefreshToken {
 
     @Transactional
-    override fun invoke(command: UserRefreshTokenUseCase.Command): UserRefreshTokenUseCase.Result {
+    override fun invoke(command: RefreshToken.Command): RefreshToken.Result {
         val refreshToken: String = command.refreshToken
         val refreshTokenUserId: UUID = userTokenService
             .resolveRefreshToken(refreshToken)
@@ -32,7 +32,7 @@ class UserRefreshTokenApplicationService(
         val accessToken: String = userTokenService.generateAccessToken(user)
         val newRefreshToken: String = userTokenService.generateRefreshToken(user)
 
-        return UserRefreshTokenUseCase.Result(
+        return RefreshToken.Result(
             accessToken = accessToken,
             refreshToken = newRefreshToken,
         )

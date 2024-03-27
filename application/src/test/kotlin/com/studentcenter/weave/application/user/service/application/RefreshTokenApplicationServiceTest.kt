@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.user.service.application
 
 import com.studentcenter.weave.application.common.exception.AuthExceptionType
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
-import com.studentcenter.weave.application.user.port.inbound.UserRefreshTokenUseCase
+import com.studentcenter.weave.application.user.port.inbound.RefreshToken
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
@@ -18,8 +18,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
 
-@DisplayName("UserRefreshTokenApplicationService")
-class UserRefreshTokenApplicationServiceTest : DescribeSpec({
+@DisplayName("RefreshTokenApplicationService")
+class RefreshTokenApplicationServiceTest : DescribeSpec({
 
     val userRepositorySpy = UserRepositorySpy()
     val userRefreshTokenRepositorySpy = UserRefreshTokenRepositorySpy()
@@ -29,7 +29,7 @@ class UserRefreshTokenApplicationServiceTest : DescribeSpec({
         userRefreshTokenRepository = userRefreshTokenRepositorySpy,
         openIdTokenResolveStrategyFactory = OpenIdTokenResolveStrategyFactoryStub(),
     )
-    val sut = UserRefreshTokenApplicationService(
+    val sut = RefreshTokenApplicationService(
         userDomainService = userDomainServiceImpl,
         userTokenService = userTokenServiceImpl,
         userRefreshTokenRepository = userRefreshTokenRepositorySpy,
@@ -52,10 +52,10 @@ class UserRefreshTokenApplicationServiceTest : DescribeSpec({
                     refreshToken = refreshToken,
                     expirationSeconds = JwtTokenPropertiesFixtureFactory.create().refresh.expireSeconds
                 )
-                val command = UserRefreshTokenUseCase.Command(refreshToken)
+                val command = RefreshToken.Command(refreshToken)
 
                 // act
-                val result: UserRefreshTokenUseCase.Result = sut.invoke(command)
+                val result: RefreshToken.Result = sut.invoke(command)
 
                 // assert
                 result.refreshToken.shouldBeInstanceOf<String>()
@@ -69,7 +69,7 @@ class UserRefreshTokenApplicationServiceTest : DescribeSpec({
                 val refreshToken: String = userTokenServiceImpl.generateRefreshToken(userFixture)
                 userRepositorySpy.save(userFixture)
                 userRefreshTokenRepositorySpy.clear()
-                val command = UserRefreshTokenUseCase.Command(refreshToken)
+                val command = RefreshToken.Command(refreshToken)
 
                 // act
                 val exception: CustomException = shouldThrow { sut.invoke(command) }
