@@ -153,7 +153,6 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
         context("유저가 이메일 인증이 되지 않은 경우") {
             it("예외가 발생한다") {
                 // arrange
-                val myMeetingTeam = MeetingTeamFixtureFactory.create()
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create()
 
                 val user: User = UserFixtureFactory.create(isUnivVerified = false)

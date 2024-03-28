@@ -28,6 +28,10 @@ class MeetingMemberJpaAdapter(
             ?.toDomain()
     }
 
+    override fun findByUserId(userId: UUID): MeetingMember? {
+        return meetingMemberJpaRepository.findByUserId(userId)?.toDomain()
+    }
+
     override fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
         return meetingMemberJpaRepository
             .findAllByMeetingTeamId(meetingTeamId)

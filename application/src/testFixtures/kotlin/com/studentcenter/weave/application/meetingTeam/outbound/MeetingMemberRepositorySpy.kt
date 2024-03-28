@@ -24,6 +24,10 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         return bucket.values.find { it.meetingTeamId == meetingTeamId && it.userId == userId }
     }
 
+    override fun findByUserId(userId: UUID): MeetingMember? {
+        return bucket.values.find { it.userId == userId }
+    }
+
     override fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
         return bucket.values.filter { it.meetingTeamId == meetingTeamId }
     }

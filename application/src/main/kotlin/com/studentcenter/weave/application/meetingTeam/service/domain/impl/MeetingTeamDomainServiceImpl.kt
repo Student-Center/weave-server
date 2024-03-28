@@ -120,24 +120,26 @@ class MeetingTeamDomainServiceImpl(
         role: MeetingMemberRole,
     ): MeetingMember = distributedLock("${this::addMember.name}:${meetingTeam.id}") {
         checkMemberCount(meetingTeam)
-        val existingMember = meetingMemberRepository.findByMeetingTeamIdAndUserId(
-            meetingTeam.id,
-            user.id
-        )
 
-        return@distributedLock existingMember ?: run {
-            MeetingMember.create(
-                meetingTeamId = meetingTeam.id,
-                userId = user.id,
-                role = role,
-            ).also { newMember ->
-                meetingMemberRepository.save(newMember)
-                publishTeamIfNeeded(
-                    meetingTeam,
-                    meetingMemberRepository.countByMeetingTeamId(meetingTeam.id)
-                )
-            }
+        meetingMemberRepository.findByUserId(user.id)?.also {
+            throw CustomException(
+                type = MeetingTeamExceptionType.ALREADY_JOINED_MEMBER,
+                message = "이미 미팅 팀에 소속되어 있는 멤버에요!"
+            )
         }
+
+        return@distributedLock MeetingMember.create(
+            meetingTeamId = meetingTeam.id,
+            userId = user.id,
+            role = role,
+        ).also { newMember ->
+            meetingMemberRepository.save(newMember)
+            publishTeamIfNeeded(
+                meetingTeam,
+                meetingMemberRepository.countByMeetingTeamId(meetingTeam.id)
+            )
+        }
+
     }
 
     @Transactional
