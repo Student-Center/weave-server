@@ -58,7 +58,7 @@ class GetAllOtherTeamMemberInfoApplicationService(
 
     private fun validateMyMeetingByTeam(
         meeting: Meeting,
-        myTeam: MeetingTeam
+        myTeam: MeetingTeam,
     ) {
         require(meeting.receivingTeamId == myTeam.id || meeting.requestingTeamId == myTeam.id) {
             "해당 미팅을 찾을 수 없습니다."
