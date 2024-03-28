@@ -5,9 +5,9 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetin
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
-import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
@@ -72,7 +72,7 @@ class MeetingTeamRestController(
 
     override fun editMeetingTeam(
         id: UUID,
-        request: MeetingTeamEditRequest
+        request: MeetingTeamEditRequest,
     ) {
         EditMeetingTeam.Command(
             id = id,
@@ -89,22 +89,17 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
-        return GetListMeetingTeam.Command(
-            memberCount = request.memberCount,
-            youngestMemberBirthYear = request.youngestMemberBirthYear,
-            oldestMemberBirthYear = request.oldestMemberBirthYear,
-            preferredLocations = request.preferredLocations,
-            next = request.next,
-            limit = request.limit
-        ).let {
-            getListMeetingTeam.invoke(it)
-        }.let {
-            MeetingTeamGetListResponse(
-                items = it.items.map { item -> MeetingTeamGetListResponse.MeetingTeamDto.from(item) },
-                next = it.next,
-                total = it.total
-            )
-        }
+        return request.toCommand()
+            .let { getListMeetingTeam.invoke(it) }
+            .let {
+                MeetingTeamGetListResponse(
+                    items = it.items.map { item ->
+                        MeetingTeamGetListResponse.MeetingTeamDto.from(item)
+                    },
+                    next = it.next,
+                    total = it.total
+                )
+            }
     }
 
     override fun leaveMeetingTeam(id: UUID) {
