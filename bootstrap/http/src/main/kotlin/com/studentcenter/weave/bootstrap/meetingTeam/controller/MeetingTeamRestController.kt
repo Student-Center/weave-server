@@ -2,7 +2,7 @@ package com.studentcenter.weave.bootstrap.meetingTeam.controller
 
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvitationLink
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
@@ -29,7 +29,7 @@ import java.util.*
 class MeetingTeamRestController(
     private val meetingTeamCreateUseCase: CreateMeetingTeam,
     private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
-    private val meetingTeamDeleteUseCase: MeetingTeamDeleteUseCase,
+    private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
@@ -67,8 +67,7 @@ class MeetingTeamRestController(
     }
 
     override fun deleteMeetingTeam(id: UUID) {
-        MeetingTeamDeleteUseCase.Command(id)
-            .let { meetingTeamDeleteUseCase.invoke(it) }
+        meetingTeamDeleteUseCase.invoke(id)
     }
 
     override fun editMeetingTeam(

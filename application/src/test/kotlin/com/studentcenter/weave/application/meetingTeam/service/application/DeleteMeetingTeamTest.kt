@@ -5,7 +5,6 @@ import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeeting
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -21,8 +20,8 @@ import io.mockk.clearAllMocks
 import io.mockk.mockk
 import org.springframework.stereotype.Service
 
-@Service("meetingTeamDeleteApplicationService")
-class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
+@Service("DeleteMeetingTeamTest")
+class DeleteMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
@@ -36,7 +35,7 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
         getUser,
     )
     val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
-    val sut = MeetingTeamDeleteApplicationService(
+    val sut = DeleteMeetingTeamService(
         meetingTeamDomainService = meetingTeamDomainService,
         cancelAllMeetingUseCase = cancelMeetingTeamUseCase,
     )
@@ -75,7 +74,7 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
 
             // act, assert
             shouldThrow<RuntimeException> {
-                sut.invoke(MeetingTeamDeleteUseCase.Command(meetingTeam.id))
+                sut.invoke(meetingTeam.id)
             }
         }
 
@@ -96,7 +95,7 @@ class MeetingTeamDeleteApplicationServiceTest : DescribeSpec({
             meetingMemberRepository.save(meetingMember2)
 
             // act
-            sut.invoke(MeetingTeamDeleteUseCase.Command(meetingTeam.id))
+            sut.invoke(meetingTeam.id)
 
             // assert
             meetingTeamRepository.findById(meetingTeam.id) shouldBe null
