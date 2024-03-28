@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-interface GetMyMeetingTeam {
+fun interface GetMyMeetingTeam {
 
     fun invoke(command: Command): Result
 

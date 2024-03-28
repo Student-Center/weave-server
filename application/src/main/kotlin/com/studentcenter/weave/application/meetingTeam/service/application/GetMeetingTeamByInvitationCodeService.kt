@@ -11,8 +11,8 @@ import java.util.*
 
 @Service
 class GetMeetingTeamByInvitationCodeService(
-    val meetingTeamDomainService: MeetingTeamDomainService,
-    val meetingTeamInvitationService: MeetingTeamInvitationService,
+    private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val meetingTeamInvitationService: MeetingTeamInvitationService,
 ) : GetMeetingTeamByInvitationCode {
 
     override fun invoke(invitationCode: UUID): MeetingTeam {
