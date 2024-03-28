@@ -121,7 +121,7 @@ class MeetingTeamDomainServiceImpl(
     ): MeetingMember = distributedLock("${this::addMember.name}:${meetingTeam.id}") {
         checkMemberCount(meetingTeam)
 
-        meetingMemberRepository.findByUserId(user.id)?.let {
+        meetingMemberRepository.findByUserId(user.id)?.also {
             throw CustomException(
                 type = MeetingTeamExceptionType.ALREADY_JOINED_MEMBER,
                 message = "이미 미팅 팀에 소속되어 있는 멤버에요!"
