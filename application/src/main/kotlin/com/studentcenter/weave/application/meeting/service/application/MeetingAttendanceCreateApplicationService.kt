@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPor
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamMemberQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamMembers
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
@@ -24,7 +24,7 @@ import java.util.*
 class MeetingAttendanceCreateApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
-    private val meetingTeamMemberQueryUseCase: MeetingTeamMemberQueryUseCase,
+    private val getMeetingTeamMembers: GetMeetingTeamMembers,
     private val getMeetingTeam: GetMeetingTeam,
     private val meetingEventPort: MeetingEventPort,
 ) : MeetingAttendanceCreateUseCase {
@@ -34,7 +34,7 @@ class MeetingAttendanceCreateApplicationService(
         attendance: Boolean,
     ): Unit = distributedLock("${this.javaClass.simpleName}:$meetingId") {
         val meeting = getByIdAndValidate(meetingId)
-        val teamMembers = meetingTeamMemberQueryUseCase.findAllByTeamIds(
+        val teamMembers = getMeetingTeamMembers.findAllByTeamIds(
             teamIds = listOf(meeting.requestingTeamId, meeting.receivingTeamId),
         )
         val teamMemberMe = teamMembers.firstOrNull {
