@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfoCreator
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -33,7 +33,7 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
         meetingRepository = meetingRepositorySpy,
     )
     val getMeetingTeam = mockk<GetMeetingTeam>()
-    val meetingTeamInfoGetAllByIdsUseCase = mockk<MeetingTeamInfoGetAllByIdUseCase>()
+    val meetingTeamInfoGetAllByIdsUseCase = mockk<GetAllMeetingTeamInfo>()
 
     val sut = ScrollPreparedMeetingApplicationService(
         meetingDomainService = meetingDomainService,

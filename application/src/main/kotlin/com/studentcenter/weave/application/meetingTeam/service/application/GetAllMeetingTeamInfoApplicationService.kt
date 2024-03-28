@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class MeetingTeamInfoGetAllByIdApplicationService(
+class GetAllMeetingTeamInfoApplicationService(
     private val getUser: GetUser,
     private val getMajor: GetMajor,
     private val getUniversity: GetUniversity,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamInfoGetAllByIdUseCase {
+) : GetAllMeetingTeamInfo {
 
     @Transactional(readOnly = true)
     override fun invoke(ids: List<UUID>): List<MeetingTeamInfo> {

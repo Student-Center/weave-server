@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meeting.vo.PendingMeetingInfo
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
@@ -18,7 +18,7 @@ import java.util.*
 class ScrollPendingMeetingApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val getMeetingTeam: GetMeetingTeam,
-    private val meetingTeamInfoGetAllByIdsUseCase: MeetingTeamInfoGetAllByIdUseCase,
+    private val meetingTeamInfoGetAllByIdsUseCase: GetAllMeetingTeamInfo,
 ) : ScrollPendingMeetingUseCase {
 
     @Transactional(readOnly = true)

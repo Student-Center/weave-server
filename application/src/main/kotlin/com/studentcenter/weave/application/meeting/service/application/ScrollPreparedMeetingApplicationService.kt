@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meeting.vo.PreparedMeetingInfo
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -17,7 +17,7 @@ import java.util.*
 class ScrollPreparedMeetingApplicationService(
     private val meetingDomainService: MeetingDomainService,
     private val getMeetingTeam: GetMeetingTeam,
-    private val meetingTeamInfoGetAllByIdsUseCase: MeetingTeamInfoGetAllByIdUseCase,
+    private val meetingTeamInfoGetAllByIdsUseCase: GetAllMeetingTeamInfo,
 ) : ScrollPreparedMeetingUseCase {
 
     @Transactional(readOnly = true)
