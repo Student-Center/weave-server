@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeeting
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -23,8 +23,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 
-@DisplayName("MeetingTeamLeaveApplicationService")
-class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
+@DisplayName("LeaveMeetingTeamTest")
+class LeaveMeetingTeamTest : DescribeSpec({
 
     val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamRepository = MeetingTeamRepositorySpy()
@@ -37,7 +37,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
         getUser = getUser,
     )
     val cancelAllMeetingUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
-    val sut = MeetingTeamLeaveApplicationService(
+    val sut = LeaveMeetingTeamService(
         meetingTeamDomainService = meetingTeamDomainService,
         cancelAllMeetingUseCase = cancelAllMeetingUseCase,
     )
@@ -68,7 +68,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
                 meetingTeamRepository.save(meetingTeam)
 
                 // act
-                sut.invoke(MeetingTeamLeaveUseCase.Command(meetingTeam.id))
+                sut.invoke(LeaveMeetingTeam.Command(meetingTeam.id))
 
                 // assert
                 val member =
@@ -88,7 +88,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
 
                 // act, assert
                 val exception: CustomException = shouldThrow<CustomException> {
-                    sut.invoke(MeetingTeamLeaveUseCase.Command(meetingTeam.id))
+                    sut.invoke(LeaveMeetingTeam.Command(meetingTeam.id))
                 }
                 exception.type shouldBe MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER
             }
@@ -113,7 +113,7 @@ class MeetingTeamLeaveApplicationServiceTest : DescribeSpec({
 
                 // act, assert
                 val exception: CustomException = shouldThrow<CustomException> {
-                    sut.invoke(MeetingTeamLeaveUseCase.Command(meetingTeam.id))
+                    sut.invoke(LeaveMeetingTeam.Command(meetingTeam.id))
                 }
                 exception.type shouldBe MeetingTeamExceptionType.LEADER_CANNOT_LEAVE_TEAM
             }

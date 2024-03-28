@@ -9,7 +9,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamG
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
@@ -32,7 +32,7 @@ class MeetingTeamRestController(
     private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
     private val meetingTeamEditUseCase: EditMeetingTeam,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
-    private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
+    private val meetingTeamLeaveUseCase: LeaveMeetingTeam,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val createInvitationLink: CreateInvitationLink,
     private val meetingTeamGetByInvitationCodeUseCase: MeetingTeamGetByInvitationCodeUseCase,
@@ -108,7 +108,7 @@ class MeetingTeamRestController(
     }
 
     override fun leaveMeetingTeam(id: UUID) {
-        meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
+        meetingTeamLeaveUseCase.invoke(LeaveMeetingTeam.Command(id))
     }
 
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {

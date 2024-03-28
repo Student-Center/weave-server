@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.port.inbound
 
 import java.util.*
 
-fun interface MeetingTeamLeaveUseCase {
+fun interface LeaveMeetingTeam {
 
     fun invoke(command: Command)
 
