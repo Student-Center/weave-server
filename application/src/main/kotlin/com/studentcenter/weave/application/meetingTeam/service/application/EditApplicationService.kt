@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class MeetingTeamEditApplicationService(
+class EditApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamEditUseCase {
+) : EditMeetingTeam {
 
     @Transactional
-    override fun invoke(command: MeetingTeamEditUseCase.Command) {
+    override fun invoke(command: EditMeetingTeam.Command) {
         meetingTeamDomainService
             .getById(command.id)
             .also {
@@ -27,7 +27,7 @@ class MeetingTeamEditApplicationService(
 
     private fun updateMeetingTeam(
         meetingTeamId: UUID,
-        command: MeetingTeamEditUseCase.Command
+        command: EditMeetingTeam.Command
     ) {
         meetingTeamDomainService.updateById(
             id = meetingTeamId,

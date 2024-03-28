@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -22,8 +22,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 
-@DisplayName("MeetingTeamEditApplicationService")
-class MeetingTeamEditApplicationServiceTest : DescribeSpec({
+@DisplayName("EditMeetingTeamTest")
+class EditMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
@@ -36,7 +36,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
         getUser = getUser,
     )
-    val sut = MeetingTeamEditApplicationService(
+    val sut = EditApplicationService(
         meetingTeamDomainService = meetingTeamDomainService
     )
 
@@ -66,7 +66,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
                     sut.invoke(
-                        MeetingTeamEditUseCase.Command(
+                        EditMeetingTeam.Command(
                             id = meetingTeam.id,
                             location = Location.INCHON,
                             memberCount = 4,
@@ -98,7 +98,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
 
                 // act
                 sut.invoke(
-                    MeetingTeamEditUseCase.Command(
+                    EditMeetingTeam.Command(
                         id = meetingTeam.id,
                         location = targetLocation,
                         memberCount = targetMemberCount,
@@ -149,7 +149,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
                     sut.invoke(
-                        MeetingTeamEditUseCase.Command(
+                        EditMeetingTeam.Command(
                             id = meetingTeam.id,
                             location = Location.INCHON,
                             memberCount = 2,
@@ -181,7 +181,7 @@ class MeetingTeamEditApplicationServiceTest : DescribeSpec({
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
                     sut.invoke(
-                        MeetingTeamEditUseCase.Command(
+                        EditMeetingTeam.Command(
                             id = meetingTeam.id,
                             location = Location.INCHON,
                             memberCount = 4,

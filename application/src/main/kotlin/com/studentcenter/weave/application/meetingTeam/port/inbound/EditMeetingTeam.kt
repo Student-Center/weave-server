@@ -4,7 +4,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import java.util.*
 
-interface MeetingTeamEditUseCase {
+fun interface EditMeetingTeam {
 
     fun invoke(command: Command)
 

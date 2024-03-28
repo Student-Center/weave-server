@@ -3,7 +3,7 @@ package com.studentcenter.weave.bootstrap.meetingTeam.controller
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvitationLink
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
@@ -30,7 +30,7 @@ class MeetingTeamRestController(
     private val meetingTeamCreateUseCase: CreateMeetingTeam,
     private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
     private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
-    private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
+    private val meetingTeamEditUseCase: EditMeetingTeam,
     private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
     private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
@@ -74,7 +74,7 @@ class MeetingTeamRestController(
         id: UUID,
         request: MeetingTeamEditRequest
     ) {
-        MeetingTeamEditUseCase.Command(
+        EditMeetingTeam.Command(
             id = id,
             location = request.location,
             memberCount = request.memberCount,
