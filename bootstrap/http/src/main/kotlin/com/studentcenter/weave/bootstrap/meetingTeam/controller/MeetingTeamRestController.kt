@@ -27,16 +27,16 @@ import java.util.*
 
 @RestController
 class MeetingTeamRestController(
-    private val meetingTeamCreateUseCase: CreateMeetingTeam,
+    private val createMeetingTeam: CreateMeetingTeam,
     private val getMyMeetingTeam: GetMyMeetingTeam,
-    private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
-    private val meetingTeamEditUseCase: EditMeetingTeam,
-    private val getMeetingTeamDetailUseCase: GetMeetingTeamDetail,
-    private val meetingTeamLeaveUseCase: LeaveMeetingTeam,
+    private val deleteMeetingTeam: DeleteMeetingTeam,
+    private val editMeetingTeam: EditMeetingTeam,
+    private val getMeetingTeamDetail: GetMeetingTeamDetail,
+    private val leaveMeetingTeam: LeaveMeetingTeam,
     private val getListMeetingTeam: GetListMeetingTeam,
     private val createInvitationLink: CreateInvitationLink,
     private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
-    private val meetingTeamEnterUseCase: EnterMeetingTeam,
+    private val enterMeetingTeam: EnterMeetingTeam,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -44,7 +44,7 @@ class MeetingTeamRestController(
             teamIntroduce = TeamIntroduce(request.teamIntroduce),
             memberCount = request.memberCount,
             location = request.location,
-        ).let { meetingTeamCreateUseCase.invoke(it) }
+        ).let { createMeetingTeam.invoke(it) }
     }
 
     override fun getMyMeetingTeams(request: MeetingTeamGetMyRequest): MeetingTeamGetMyResponse {
@@ -67,7 +67,7 @@ class MeetingTeamRestController(
     }
 
     override fun deleteMeetingTeam(id: UUID) {
-        meetingTeamDeleteUseCase.invoke(id)
+        deleteMeetingTeam.invoke(id)
     }
 
     override fun editMeetingTeam(
@@ -79,12 +79,12 @@ class MeetingTeamRestController(
             location = request.location,
             memberCount = request.memberCount,
             teamIntroduce = request.teamIntroduce?.let(::TeamIntroduce),
-        ).let { meetingTeamEditUseCase.invoke(it) }
+        ).let { editMeetingTeam.invoke(it) }
     }
 
     override fun getMeetingTeamDetail(id: UUID): MeetingTeamGetDetailResponse {
         return GetMeetingTeamDetail.Command(id)
-            .let { getMeetingTeamDetailUseCase.invoke(it) }
+            .let { getMeetingTeamDetail.invoke(it) }
             .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members, it.affinityScore) }
     }
 
@@ -108,7 +108,7 @@ class MeetingTeamRestController(
     }
 
     override fun leaveMeetingTeam(id: UUID) {
-        meetingTeamLeaveUseCase.invoke(LeaveMeetingTeam.Command(id))
+        leaveMeetingTeam.invoke(LeaveMeetingTeam.Command(id))
     }
 
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
@@ -126,7 +126,7 @@ class MeetingTeamRestController(
     }
 
     override fun enterMeetingTeam(invitationCode: UUID) {
-        meetingTeamEnterUseCase.invoke(invitationCode)
+        enterMeetingTeam.invoke(invitationCode)
     }
 
 }
