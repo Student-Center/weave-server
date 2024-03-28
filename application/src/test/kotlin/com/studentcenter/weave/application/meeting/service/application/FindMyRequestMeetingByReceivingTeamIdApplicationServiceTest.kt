@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -29,10 +29,10 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy,
     )
-    val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
+    val getMeetingTeam = mockk<GetMeetingTeam>()
     val sut = FindMyRequestMeetingByReceivingTeamIdApplicationService(
         meetingDomainService = meetingDomainService,
-        meetingTeamQueryUseCase = meetingTeamQueryUseCase,
+        getMeetingTeam = getMeetingTeam,
     )
 
     val user = UserFixtureFactory.create()
@@ -52,7 +52,7 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec
         context("내가 속한 팀이 없는 경우") {
             it("예외를 던진다") {
                 // arrange
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
                 shouldThrow<CustomException> { sut.invoke(UUID.randomUUID()) }
@@ -63,7 +63,7 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec
             it("참여 정보가 조회된다") {
                 // arrange
                 val myTeam = MeetingTeamFixtureFactory.create(status = MeetingTeamStatus.PUBLISHED)
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myTeam
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeam
 
                 // act
                 val response = sut.invoke(UUID.randomUUID())
@@ -90,7 +90,7 @@ class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec
                         receivingTeamId = receivingTeam.id,
                     )
                 )
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myTeam
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeam
 
                 // act
                 val response = sut.invoke(receivingTeam.id)

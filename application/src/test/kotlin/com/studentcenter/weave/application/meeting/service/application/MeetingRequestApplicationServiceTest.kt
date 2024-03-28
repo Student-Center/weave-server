@@ -6,7 +6,7 @@ import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingAttendanceDomainServiceImpl
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
@@ -39,11 +39,11 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
     val meetingAttendanceDomainService = MeetingAttendanceDomainServiceImpl(
         meetingAttendanceRepository = meetingAttendanceRepositorySpy,
     )
-    val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
+    val getMeetingTeam = mockk<GetMeetingTeam>()
     val getUser = mockk<GetUser>()
 
     val meetingRequestApplicationService = MeetingRequestApplicationService(
-        meetingTeamQueryUseCase = meetingTeamQueryUseCase,
+        getMeetingTeam = getMeetingTeam,
         meetingDomainService = meetingDomainService,
         meetingAttendanceDomainService = meetingAttendanceDomainService,
         getUser = getUser,
@@ -65,7 +65,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -90,8 +90,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                         .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                     every { getUser.getById(user.id) } returns user
-                    every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                    every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                    every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                    every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                     // act, assert
                     shouldThrow<CustomException> {
@@ -114,8 +114,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -138,8 +138,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
                 shouldThrow<CustomException> {
@@ -188,9 +188,9 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
@@ -219,9 +219,9 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
@@ -252,9 +252,9 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myMeetingTeam
-                every { meetingTeamQueryUseCase.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
+                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act

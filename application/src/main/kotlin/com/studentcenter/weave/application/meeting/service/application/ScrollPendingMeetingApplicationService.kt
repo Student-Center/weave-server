@@ -5,8 +5,8 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meeting.vo.PendingMeetingInfo
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -17,13 +17,13 @@ import java.util.*
 @Service
 class ScrollPendingMeetingApplicationService(
     private val meetingDomainService: MeetingDomainService,
-    private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
-    private val meetingTeamInfoGetAllByIdsUseCase: MeetingTeamInfoGetAllByIdUseCase,
+    private val getMeetingTeam: GetMeetingTeam,
+    private val meetingTeamInfoGetAllByIdsUseCase: GetAllMeetingTeamInfo,
 ) : ScrollPendingMeetingUseCase {
 
     @Transactional(readOnly = true)
     override fun invoke(command: ScrollPendingMeetingUseCase.Command): ScrollPendingMeetingUseCase.Result {
-        val myTeam = meetingTeamQueryUseCase.findByMemberUserId(getCurrentUserAuthentication().userId)
+        val myTeam = getMeetingTeam.findByMemberUserId(getCurrentUserAuthentication().userId)
             ?: throw CustomException(
                 MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
                 "내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!",

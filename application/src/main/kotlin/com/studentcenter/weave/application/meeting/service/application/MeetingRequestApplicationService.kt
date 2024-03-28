@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
@@ -19,7 +19,7 @@ import java.util.*
 @Service
 class MeetingRequestApplicationService(
     private val getUser: GetUser,
-    private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
+    private val getMeetingTeam: GetMeetingTeam,
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
 ) : MeetingRequestUseCase {
@@ -36,7 +36,7 @@ class MeetingRequestApplicationService(
 
 
         val receivingMeetingTeam: MeetingTeam =
-            meetingTeamQueryUseCase.getById(command.receivingMeetingTeamId)
+            getMeetingTeam.getById(command.receivingMeetingTeamId)
 
         validateMeetingTeamConditions(myMeetingTeam, receivingMeetingTeam)
 
@@ -52,7 +52,7 @@ class MeetingRequestApplicationService(
     }
 
     private fun createMeetingAttendance(meeting: Meeting, myTeamId: UUID): MeetingAttendance {
-        val teamMember = meetingTeamQueryUseCase
+        val teamMember = getMeetingTeam
             .findAllMeetingMembersByMeetingTeamId(myTeamId)
             .first { meetingMember ->
                 meetingMember.userId == getCurrentUserAuthentication().userId
@@ -87,7 +87,7 @@ class MeetingRequestApplicationService(
 
     private fun getMyMeetingTeam(): MeetingTeam {
         return getCurrentUserAuthentication()
-            .let { meetingTeamQueryUseCase.findByMemberUserId(it.userId) }
+            .let { getMeetingTeam.findByMemberUserId(it.userId) }
             ?: throw CustomException(
                 MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
                 "내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!",

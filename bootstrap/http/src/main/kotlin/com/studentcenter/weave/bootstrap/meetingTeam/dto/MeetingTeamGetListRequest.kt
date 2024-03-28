@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.dto
 
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.media.Schema
@@ -30,8 +30,8 @@ data class MeetingTeamGetListRequest(
     limit = limit
 ) {
 
-    fun toCommand(): MeetingTeamGetListUseCase.Command {
-        return MeetingTeamGetListUseCase.Command(
+    fun toCommand(): GetListMeetingTeam.Command {
+        return GetListMeetingTeam.Command(
             memberCount = memberCount,
             youngestMemberBirthYear = youngestMemberBirthYear,
             oldestMemberBirthYear = oldestMemberBirthYear,

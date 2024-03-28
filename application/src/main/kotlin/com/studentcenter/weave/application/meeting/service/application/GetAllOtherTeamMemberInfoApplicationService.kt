@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfoUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
@@ -17,7 +17,7 @@ import java.util.*
 @Service
 class GetAllOtherTeamMemberInfoApplicationService(
     private val meetingDomainService: MeetingDomainService,
-    private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
+    private val getMeetingTeam: GetMeetingTeam,
     private val getUser: GetUser,
     private val getUniversity: GetUniversity,
 ) : GetAllOtherTeamMemberInfoUseCase {
@@ -25,14 +25,14 @@ class GetAllOtherTeamMemberInfoApplicationService(
     override fun invoke(meetingId: UUID): List<MemberInfo> {
         val meeting = meetingDomainService.getById(meetingId)
         val myTeam =
-            meetingTeamQueryUseCase.getByMemberUserId(getCurrentUserAuthentication().userId)
+            getMeetingTeam.getByMemberUserId(getCurrentUserAuthentication().userId)
         validateMyMeetingByTeam(meeting, myTeam)
         validateMeeting(meeting)
 
         val otherTeamId = if (meeting.requestingTeamId != myTeam.id) meeting.requestingTeamId
         else meeting.receivingTeamId
 
-        return meetingTeamQueryUseCase
+        return getMeetingTeam
             .findAllMeetingMembersByMeetingTeamId(otherTeamId)
             .map {
                 val user = getUser.getById(it.userId)
