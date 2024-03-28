@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
@@ -14,13 +14,13 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import org.springframework.stereotype.Service
 
 @Service
-class MeetingTeamGetListApplicationService(
+class GetListApplicationService(
     private val getUser: GetUser,
     private val getUniversity: GetUniversity,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamGetListUseCase {
+) : GetListMeetingTeam {
 
-    override fun invoke(command: MeetingTeamGetListUseCase.Command): MeetingTeamGetListUseCase.Result {
+    override fun invoke(command: GetListMeetingTeam.Command): GetListMeetingTeam.Result {
         val oppositeGender = getCurrentUserAuthentication()
             .gender
             .getOppositeGender()
@@ -55,7 +55,7 @@ class MeetingTeamGetListApplicationService(
             )
         }
 
-        return MeetingTeamGetListUseCase.Result(
+        return GetListMeetingTeam.Result(
             items = meetingTeamInfos,
             next = next,
         )

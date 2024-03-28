@@ -6,7 +6,7 @@ import com.studentcenter.weave.support.common.dto.ScrollRequest
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-fun interface MeetingTeamGetListUseCase {
+fun interface GetListMeetingTeam {
 
     fun invoke(command: Command): Result
 

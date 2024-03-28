@@ -7,7 +7,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingT
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
@@ -33,7 +33,7 @@ class MeetingTeamRestController(
     private val meetingTeamEditUseCase: EditMeetingTeam,
     private val getMeetingTeamDetailUseCase: GetMeetingTeamDetail,
     private val meetingTeamLeaveUseCase: LeaveMeetingTeam,
-    private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
+    private val getListMeetingTeam: GetListMeetingTeam,
     private val createInvitationLink: CreateInvitationLink,
     private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
     private val meetingTeamEnterUseCase: EnterMeetingTeam,
@@ -89,7 +89,7 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
-        return MeetingTeamGetListUseCase.Command(
+        return GetListMeetingTeam.Command(
             memberCount = request.memberCount,
             youngestMemberBirthYear = request.youngestMemberBirthYear,
             oldestMemberBirthYear = request.oldestMemberBirthYear,
@@ -97,7 +97,7 @@ class MeetingTeamRestController(
             next = request.next,
             limit = request.limit
         ).let {
-            meetingTeamGetListUseCase.invoke(it)
+            getListMeetingTeam.invoke(it)
         }.let {
             MeetingTeamGetListResponse(
                 items = it.items.map { item -> MeetingTeamGetListResponse.MeetingTeamDto.from(item) },
