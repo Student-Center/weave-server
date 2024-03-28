@@ -28,7 +28,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-    private val sut : MeetingAttendanceCreateApplicationService,
+    private val sut: MeetingAttendanceCreateApplicationService,
 ) : IntegrationTestDescribeSpec({
     val user = UserFixtureFactory.create()
     val userAuthentication = UserAuthenticationFixtureFactory.create(user)
@@ -52,7 +52,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         val teamMembers = List(memberCount) { idx ->
             val isLeader = idx == 0
             val memberUser =
-                if (isUserTeam && isLeader) user else UserFixtureFactory.create(gender = gender)
+                UserFixtureFactory.create(gender = gender)
             val role = if (isLeader) MeetingMemberRole.LEADER else MeetingMemberRole.MEMBER
             meetingTeamDomainService
                 .addMember(memberUser, team, role)
