@@ -45,7 +45,7 @@ class EnterMeetingTeamTest : DescribeSpec({
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = EnterMeetingTeamEnterApplicationService(
+    val sut = EnterMeetingTeamService(
         meetingTeamDomainService = meetingTeamDomainService,
         meetingTeamInvitationService = meetingTeamInvitationService,
         getUser = userQueryUseCase,

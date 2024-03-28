@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class EnterMeetingTeamEnterApplicationService(
+class EnterMeetingTeamService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
     private val getUser: GetUser,

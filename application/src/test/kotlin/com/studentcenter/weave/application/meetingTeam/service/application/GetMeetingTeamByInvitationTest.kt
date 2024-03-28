@@ -43,7 +43,7 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = GetMeetingTeamByInvitationCodeApplicationService(
+    val sut = GetMeetingTeamByInvitationCodeService(
         meetingTeamDomainService = meetingTeamDomainService,
         meetingTeamInvitationService = meetingTeamInvitationService,
     )

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class GetMeetingTeamByInvitationCodeApplicationService(
+class GetMeetingTeamByInvitationCodeService(
     val meetingTeamDomainService: MeetingTeamDomainService,
     val meetingTeamInvitationService: MeetingTeamInvitationService,
 ) : GetMeetingTeamByInvitationCode {

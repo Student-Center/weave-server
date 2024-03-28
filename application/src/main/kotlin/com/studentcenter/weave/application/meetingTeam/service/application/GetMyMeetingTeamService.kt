@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class MeetingTeamGetMyApplicationService(
+class GetMyMeetingTeamService(
     private val getUser: GetUser,
     private val getUniversity: GetUniversity,
     private val meetingDomainService: MeetingTeamDomainService,
-) : MeetingTeamGetMyUseCase {
+) : GetMyMeetingTeam {
 
-    override fun invoke(command: MeetingTeamGetMyUseCase.Command): MeetingTeamGetMyUseCase.Result {
+    override fun invoke(command: GetMyMeetingTeam.Command): GetMyMeetingTeam.Result {
         val currentUser = getCurrentUserAuthentication().let { getUser.getById(it.userId) }
 
         val meetingTeams = meetingDomainService.scrollByMemberUserId(
@@ -42,7 +42,7 @@ class MeetingTeamGetMyApplicationService(
             )
         }
 
-        return MeetingTeamGetMyUseCase.Result(
+        return GetMyMeetingTeam.Result(
             items = myMeetingTeamInfos,
             next = next
         )

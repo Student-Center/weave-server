@@ -8,7 +8,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeeting
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
@@ -28,7 +28,7 @@ import java.util.*
 @RestController
 class MeetingTeamRestController(
     private val meetingTeamCreateUseCase: CreateMeetingTeam,
-    private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
+    private val getMyMeetingTeam: GetMyMeetingTeam,
     private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
     private val meetingTeamEditUseCase: EditMeetingTeam,
     private val getMeetingTeamDetailUseCase: GetMeetingTeamDetail,
@@ -48,11 +48,11 @@ class MeetingTeamRestController(
     }
 
     override fun getMyMeetingTeams(request: MeetingTeamGetMyRequest): MeetingTeamGetMyResponse {
-        return MeetingTeamGetMyUseCase.Command(
+        return GetMyMeetingTeam.Command(
             next = request.next,
             limit = request.limit,
         ).let {
-            meetingTeamGetMyUseCase.invoke(it)
+            getMyMeetingTeam.invoke(it)
         }.let {
             MeetingTeamGetMyResponse(
                 items = it.items.map { item -> MeetingTeamGetMyResponse.MeetingTeamDto.from(item) },

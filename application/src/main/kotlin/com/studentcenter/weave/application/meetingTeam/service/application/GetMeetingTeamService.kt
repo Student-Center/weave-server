@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class GetMeetingTeamQueryApplicationService(
+class GetMeetingTeamService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
 ) : GetMeetingTeam {
 
