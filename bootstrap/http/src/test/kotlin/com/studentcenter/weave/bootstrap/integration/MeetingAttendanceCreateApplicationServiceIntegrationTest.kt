@@ -16,6 +16,7 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
+import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingMemberJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
@@ -28,6 +29,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
     private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val meetingMemberJpaRepository: MeetingMemberJpaRepository,
     private val sut: MeetingAttendanceCreateApplicationService,
 ) : IntegrationTestDescribeSpec({
     val user = UserFixtureFactory.create()
@@ -52,7 +54,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         val teamMembers = List(memberCount) { idx ->
             val isLeader = idx == 0
             val memberUser =
-                UserFixtureFactory.create(gender = gender)
+                if (isLeader && isUserTeam) user else UserFixtureFactory.create(gender = gender)
             val role = if (isLeader) MeetingMemberRole.LEADER else MeetingMemberRole.MEMBER
             meetingTeamDomainService
                 .addMember(memberUser, team, role)
@@ -69,6 +71,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     afterTest {
         userTeam = null
         userTeamMember = null
+        meetingMemberJpaRepository.deleteAllInBatch()
     }
 
     describe("미팅 참여 정보 추가 유스케이스") {
