@@ -14,7 +14,7 @@ class MajorDomainServiceImpl(
         return majorRepository.getById(id)
     }
 
-    override fun findAll(univId: UUID): List<Major> {
+    override fun findAllByUniversityId(univId: UUID): List<Major> {
         return majorRepository.findAllByUnivId(univId = univId)
     }
 

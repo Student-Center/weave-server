@@ -74,10 +74,10 @@ class MeetingRequestApplicationService(
     }
 
     private fun validateMyUniversityEmailVerified() {
-        val isUniversityEmailVerified = getCurrentUserAuthentication()
-            .let { getUser.isUserUniversityVerified(it.userId) }
+        val user = getCurrentUserAuthentication()
+            .let { getUser.getById(it.userId) }
 
-        if (isUniversityEmailVerified.not()){
+        if (user.isUnivVerified.not()){
             throw CustomException(
                 MeetingExceptionType.CAN_NOT_MEETING_REQUEST_NOT_UNIV_VERIFIED_USER,
                 "대학교 이메일 인증이 되지 않았어요! 대학교 이메일을 인증해 주세요!",

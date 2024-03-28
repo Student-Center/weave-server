@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import org.springframework.stereotype.Service
@@ -13,7 +13,7 @@ import java.util.*
 @Service
 class MeetingTeamGetMyApplicationService(
     private val getUser: GetUser,
-    private val universityGetByIdUsecase: UniversityGetByIdUsecase,
+    private val getUniversity: GetUniversity,
     private val meetingDomainService: MeetingTeamDomainService,
 ) : MeetingTeamGetMyUseCase {
 
@@ -53,7 +53,7 @@ class MeetingTeamGetMyApplicationService(
         currentUserId: UUID
     ): MyMeetingTeamInfo.MemberInfo {
         val memberUser = getUser.getById(member.userId)
-        val university = universityGetByIdUsecase.invoke(memberUser.universityId)
+        val university = getUniversity.getById(memberUser.universityId)
         return MyMeetingTeamInfo.MemberInfo(
             user = memberUser,
             university = university,

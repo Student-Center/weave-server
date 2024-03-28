@@ -7,6 +7,4 @@ interface GetUser {
 
     fun getById(id: UUID): User
 
-    fun isUserUniversityVerified(userId: UUID): Boolean
-
 }

@@ -4,8 +4,8 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamI
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
-import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetMajor
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.university.entity.Major
@@ -17,8 +17,8 @@ import java.util.*
 @Service
 class MeetingTeamInfoGetAllByIdApplicationService(
     private val getUser: GetUser,
-    private val universityGetByIdUseCase: UniversityGetByIdUsecase,
-    private val majorGetByIdUseCase: MajorGetByIdUseCase,
+    private val getMajor: GetMajor,
+    private val getUniversity: GetUniversity,
     private val meetingTeamDomainService: MeetingTeamDomainService,
 ) : MeetingTeamInfoGetAllByIdUseCase {
 
@@ -37,7 +37,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
         team: MeetingTeam,
         univCache: MutableMap<UUID, University>,
         majorCache: MutableMap<UUID, Major>,
-    ) : List<MemberInfo> {
+    ): List<MemberInfo> {
         return meetingTeamDomainService
             .findAllMeetingMembersByMeetingTeamId(team.id)
             .map {
@@ -54,17 +54,24 @@ class MeetingTeamInfoGetAllByIdApplicationService(
             }
     }
 
-    private fun getUniversityById(universityId: UUID, cache: MutableMap<UUID, University>) : University {
+    private fun getUniversityById(
+        universityId: UUID,
+        cache: MutableMap<UUID, University>,
+    ): University {
         if (cache.contains(universityId).not()) {
-            cache[universityId] = universityGetByIdUseCase.invoke(universityId)
+            cache[universityId] = getUniversity.getById(universityId)
         }
 
-        return cache[universityId] ?: throw NoSuchElementException("No university with id $universityId")
+        return cache[universityId]
+            ?: throw NoSuchElementException("No university with id $universityId")
     }
 
-    private fun getMajorById(majorId: UUID, cache: MutableMap<UUID, Major>) : Major {
+    private fun getMajorById(
+        majorId: UUID,
+        cache: MutableMap<UUID, Major>,
+    ): Major {
         if (cache.contains(majorId).not()) {
-            cache[majorId] = majorGetByIdUseCase.invoke(majorId)
+            cache[majorId] = getMajor.getById(majorId)
         }
 
         return cache[majorId] ?: throw NoSuchElementException("No major found for $majorId")

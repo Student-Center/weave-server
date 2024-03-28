@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
@@ -35,12 +35,12 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
     )
     val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
     val getUser = mockk<GetUser>()
-    val universityGetByIdUseCase = mockk<UniversityGetByIdUsecase>()
+    val getUniversity = mockk<GetUniversity>()
     val sut = GetAllOtherTeamMemberInfoApplicationService(
         meetingDomainService = meetingDomainService,
         meetingTeamQueryUseCase = meetingTeamQueryUseCase,
         getUser = getUser,
-        universityGetByIdUseCase = universityGetByIdUseCase,
+        getUniversity = getUniversity
     )
 
     afterEach {
@@ -114,7 +114,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns myTeam
                 every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
                 every { getUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
-                every { universityGetByIdUseCase.invoke(any()) } returns UniversityFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
 
 
                 // act
