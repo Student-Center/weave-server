@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.controller
 
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvitationLink
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
@@ -27,7 +27,7 @@ import java.util.*
 
 @RestController
 class MeetingTeamRestController(
-    private val meetingTeamCreateUseCase: MeetingTeamCreateUseCase,
+    private val meetingTeamCreateUseCase: CreateMeetingTeam,
     private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
     private val meetingTeamDeleteUseCase: MeetingTeamDeleteUseCase,
     private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
@@ -40,7 +40,7 @@ class MeetingTeamRestController(
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
-        MeetingTeamCreateUseCase.Command(
+        CreateMeetingTeam.Command(
             teamIntroduce = TeamIntroduce(request.teamIntroduce),
             memberCount = request.memberCount,
             location = request.location,

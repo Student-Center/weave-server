@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.GetUserStub
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -23,8 +23,8 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 
-@DisplayName("MeetingTeamCreateApplicationServiceTest")
-class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
+@DisplayName("CreateMeetingTeamTest")
+class CreateMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
@@ -36,7 +36,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
         meetingTeamMemberSummaryRepositorySpy,
         userQueryUseCaseMock,
     )
-    val sut = MeetingTeamCreateApplicationService(
+    val sut = CreateMeetingTeamService(
         meetingTeamDomainService,
         userQueryUseCaseMock,
     )
@@ -58,7 +58,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
                 val teamIntroduce = TeamIntroduce("팀 소개")
                 val memberCount = 3
                 val location = Location.BUSAN
-                val command = MeetingTeamCreateUseCase.Command(
+                val command = CreateMeetingTeam.Command(
                     teamIntroduce = teamIntroduce,
                     memberCount = memberCount,
                     location = location,
@@ -83,7 +83,7 @@ class MeetingTeamCreateApplicationServiceTest : DescribeSpec({
                 val teamIntroduce = TeamIntroduce("팀 소개")
                 val memberCount = 3
                 val location = Location.BUSAN
-                val command = MeetingTeamCreateUseCase.Command(
+                val command = CreateMeetingTeam.Command(
                     teamIntroduce = teamIntroduce,
                     memberCount = memberCount,
                     location = location
