@@ -5,7 +5,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.user.vo.MbtiAffinityScore
 import java.util.*
 
-interface MeetingTeamGetDetailUseCase {
+fun interface GetMeetingTeamDetail {
 
     fun invoke(command: Command): Result
 

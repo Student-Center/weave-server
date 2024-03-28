@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetailInfo
 import com.studentcenter.weave.application.university.port.inbound.GetMajor
@@ -13,15 +13,15 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class MeetingTeamGetDetailApplicationService(
+class GetMeetingTeamDetailService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val getUser: GetUser,
     private val getMajor: GetMajor,
     private val getUniversity: GetUniversity,
-) : MeetingTeamGetDetailUseCase {
+) : GetMeetingTeamDetail {
 
     @Transactional(readOnly = true)
-    override fun invoke(command: MeetingTeamGetDetailUseCase.Command): MeetingTeamGetDetailUseCase.Result {
+    override fun invoke(command: GetMeetingTeamDetail.Command): GetMeetingTeamDetail.Result {
         val targetMeetingTeam = meetingTeamDomainService.getById(command.meetingId)
 
         val affinityScore = findMyMeetingTeam()?.let {
@@ -29,7 +29,7 @@ class MeetingTeamGetDetailApplicationService(
         }
 
 
-        return MeetingTeamGetDetailUseCase.Result(
+        return GetMeetingTeamDetail.Result(
             meetingTeam = targetMeetingTeam,
             members = getMeetingMemberDetailInfos(targetMeetingTeam.id),
             affinityScore = affinityScore,

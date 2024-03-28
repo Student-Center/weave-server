@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.university.port.inbound.GetMajor
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
@@ -23,7 +23,7 @@ import io.mockk.clearAllMocks
 import io.mockk.mockk
 
 @DisplayName("MeetingTeamGetDetailApplicationService")
-class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
+class GetMeetingTeamDetailTest : DescribeSpec({
 
 
     val getByIdUsecase = mockk<GetMajor>()
@@ -41,7 +41,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
         getUser = getUser,
     )
 
-    val sut = MeetingTeamGetDetailApplicationService(
+    val sut = GetMeetingTeamDetailService(
         meetingTeamDomainService = meetingTeamDomainService,
         getMajor = getByIdUsecase,
         getUser = getUser,
@@ -75,7 +75,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     }
 
                 // act
-                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+                val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
 
                 // assert
                 result.meetingTeam shouldBe targetMeetingTeam
@@ -110,7 +110,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
 
 
                 // act
-                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+                val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
 
                 // assert
                 result.meetingTeam shouldBe targetMeetingTeam
@@ -141,7 +141,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     }
 
                 // act
-                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+                val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
 
                 // assert
                 result.meetingTeam shouldBe targetMeetingTeam
@@ -172,7 +172,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     }
 
                 // act
-                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+                val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
 
                 // assert
                 result.meetingTeam shouldBe targetMeetingTeam
@@ -198,7 +198,7 @@ class MeetingTeamGetDetailApplicationServiceTest : DescribeSpec({
                     }
 
                 // act
-                val result = sut.invoke(MeetingTeamGetDetailUseCase.Command(targetMeetingTeam.id))
+                val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
 
                 // assert
                 result.meetingTeam shouldBe targetMeetingTeam

@@ -5,8 +5,8 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetin
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCodeUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
@@ -31,11 +31,11 @@ class MeetingTeamRestController(
     private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
     private val meetingTeamDeleteUseCase: DeleteMeetingTeam,
     private val meetingTeamEditUseCase: EditMeetingTeam,
-    private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
+    private val getMeetingTeamDetailUseCase: GetMeetingTeamDetail,
     private val meetingTeamLeaveUseCase: LeaveMeetingTeam,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val createInvitationLink: CreateInvitationLink,
-    private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCodeUseCase,
+    private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
     private val meetingTeamEnterUseCase: EnterMeetingTeam,
 ) : MeetingTeamApi {
 
@@ -83,8 +83,8 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeamDetail(id: UUID): MeetingTeamGetDetailResponse {
-        return MeetingTeamGetDetailUseCase.Command(id)
-            .let { meetingTeamGetDetailUseCase.invoke(it) }
+        return GetMeetingTeamDetail.Command(id)
+            .let { getMeetingTeamDetailUseCase.invoke(it) }
             .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members, it.affinityScore) }
     }
 
