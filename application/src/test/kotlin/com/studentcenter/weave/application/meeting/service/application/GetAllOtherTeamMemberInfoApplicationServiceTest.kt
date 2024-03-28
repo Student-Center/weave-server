@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -33,12 +33,12 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy
     )
-    val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
+    val getMeetingTeam = mockk<GetMeetingTeam>()
     val getUser = mockk<GetUser>()
     val getUniversity = mockk<GetUniversity>()
     val sut = GetAllOtherTeamMemberInfoApplicationService(
         meetingDomainService = meetingDomainService,
-        meetingTeamQueryUseCase = meetingTeamQueryUseCase,
+        getMeetingTeam = getMeetingTeam,
         getUser = getUser,
         getUniversity = getUniversity
     )
@@ -60,7 +60,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 val meeting = MeetingFixtureFactory.create()
                 meetingRepositorySpy.save(meeting)
 
-                every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns MeetingTeamFixtureFactory.create()
+                every { getMeetingTeam.getByMemberUserId(user.id) } returns MeetingTeamFixtureFactory.create()
 
                 // act, assert
                 shouldThrow<IllegalArgumentException> { sut.invoke(meeting.id) }
@@ -81,7 +81,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 )
                 meetingRepositorySpy.save(meeting)
 
-                every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns myTeam
+                every { getMeetingTeam.getByMemberUserId(user.id) } returns myTeam
 
                 // act, assert
                 shouldThrow<CustomException> { sut.invoke(meeting.id) }
@@ -111,8 +111,8 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 )
                 meetingRepositorySpy.save(meeting)
 
-                every { meetingTeamQueryUseCase.getByMemberUserId(user.id) } returns myTeam
-                every { meetingTeamQueryUseCase.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
+                every { getMeetingTeam.getByMemberUserId(user.id) } returns myTeam
+                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
                 every { getUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
                 every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
 

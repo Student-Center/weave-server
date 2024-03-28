@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamIdUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
@@ -13,12 +13,12 @@ import java.util.*
 @Service
 class FindMyRequestMeetingByReceivingTeamIdApplicationService(
     private val meetingDomainService: MeetingDomainService,
-    private val meetingTeamQueryUseCase: MeetingTeamQueryUseCase,
+    private val getMeetingTeam: GetMeetingTeam,
 ) : FindMyRequestMeetingByReceivingTeamIdUseCase {
 
     override fun invoke(receivingTeamId: UUID): Meeting? {
         val userId = getCurrentUserAuthentication().userId
-        val myTeam = meetingTeamQueryUseCase.findByMemberUserId(userId).let {
+        val myTeam = getMeetingTeam.findByMemberUserId(userId).let {
             if (it == null || it.isPublished().not()) {
                 throw CustomException(
                     MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,

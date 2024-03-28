@@ -1,15 +1,15 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.controller
 
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateInvitationLinkUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamDeleteUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEditUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamEnterUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamLeaveUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvitationLink
+import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.bootstrap.meetingTeam.api.MeetingTeamApi
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateInvitationResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamCreateRequest
@@ -27,32 +27,32 @@ import java.util.*
 
 @RestController
 class MeetingTeamRestController(
-    private val meetingTeamCreateUseCase: MeetingTeamCreateUseCase,
-    private val meetingTeamGetMyUseCase: MeetingTeamGetMyUseCase,
-    private val meetingTeamDeleteUseCase: MeetingTeamDeleteUseCase,
-    private val meetingTeamEditUseCase: MeetingTeamEditUseCase,
-    private val meetingTeamGetDetailUseCase: MeetingTeamGetDetailUseCase,
-    private val meetingTeamLeaveUseCase: MeetingTeamLeaveUseCase,
-    private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
-    private val meetingTeamCreateInvitationLinkUseCase: MeetingTeamCreateInvitationLinkUseCase,
-    private val meetingTeamGetByInvitationCodeUseCase: MeetingTeamGetByInvitationCodeUseCase,
-    private val meetingTeamEnterUseCase: MeetingTeamEnterUseCase,
+    private val createMeetingTeam: CreateMeetingTeam,
+    private val getMyMeetingTeam: GetMyMeetingTeam,
+    private val deleteMeetingTeam: DeleteMeetingTeam,
+    private val editMeetingTeam: EditMeetingTeam,
+    private val getMeetingTeamDetail: GetMeetingTeamDetail,
+    private val leaveMeetingTeam: LeaveMeetingTeam,
+    private val getListMeetingTeam: GetListMeetingTeam,
+    private val createInvitationLink: CreateInvitationLink,
+    private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
+    private val enterMeetingTeam: EnterMeetingTeam,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
-        MeetingTeamCreateUseCase.Command(
+        CreateMeetingTeam.Command(
             teamIntroduce = TeamIntroduce(request.teamIntroduce),
             memberCount = request.memberCount,
             location = request.location,
-        ).let { meetingTeamCreateUseCase.invoke(it) }
+        ).let { createMeetingTeam.invoke(it) }
     }
 
     override fun getMyMeetingTeams(request: MeetingTeamGetMyRequest): MeetingTeamGetMyResponse {
-        return MeetingTeamGetMyUseCase.Command(
+        return GetMyMeetingTeam.Command(
             next = request.next,
             limit = request.limit,
         ).let {
-            meetingTeamGetMyUseCase.invoke(it)
+            getMyMeetingTeam.invoke(it)
         }.let {
             MeetingTeamGetMyResponse(
                 items = it.items.map { item -> MeetingTeamGetMyResponse.MeetingTeamDto.from(item) },
@@ -67,53 +67,47 @@ class MeetingTeamRestController(
     }
 
     override fun deleteMeetingTeam(id: UUID) {
-        MeetingTeamDeleteUseCase.Command(id)
-            .let { meetingTeamDeleteUseCase.invoke(it) }
+        deleteMeetingTeam.invoke(id)
     }
 
     override fun editMeetingTeam(
         id: UUID,
-        request: MeetingTeamEditRequest
+        request: MeetingTeamEditRequest,
     ) {
-        MeetingTeamEditUseCase.Command(
+        EditMeetingTeam.Command(
             id = id,
             location = request.location,
             memberCount = request.memberCount,
             teamIntroduce = request.teamIntroduce?.let(::TeamIntroduce),
-        ).let { meetingTeamEditUseCase.invoke(it) }
+        ).let { editMeetingTeam.invoke(it) }
     }
 
     override fun getMeetingTeamDetail(id: UUID): MeetingTeamGetDetailResponse {
-        return MeetingTeamGetDetailUseCase.Command(id)
-            .let { meetingTeamGetDetailUseCase.invoke(it) }
+        return GetMeetingTeamDetail.Command(id)
+            .let { getMeetingTeamDetail.invoke(it) }
             .let { MeetingTeamGetDetailResponse.of(it.meetingTeam, it.members, it.affinityScore) }
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
-        return MeetingTeamGetListUseCase.Command(
-            memberCount = request.memberCount,
-            youngestMemberBirthYear = request.youngestMemberBirthYear,
-            oldestMemberBirthYear = request.oldestMemberBirthYear,
-            preferredLocations = request.preferredLocations,
-            next = request.next,
-            limit = request.limit
-        ).let {
-            meetingTeamGetListUseCase.invoke(it)
-        }.let {
-            MeetingTeamGetListResponse(
-                items = it.items.map { item -> MeetingTeamGetListResponse.MeetingTeamDto.from(item) },
-                next = it.next,
-                total = it.total
-            )
-        }
+        return request.toCommand()
+            .let { getListMeetingTeam.invoke(it) }
+            .let {
+                MeetingTeamGetListResponse(
+                    items = it.items.map { item ->
+                        MeetingTeamGetListResponse.MeetingTeamDto.from(item)
+                    },
+                    next = it.next,
+                    total = it.total
+                )
+            }
     }
 
     override fun leaveMeetingTeam(id: UUID) {
-        meetingTeamLeaveUseCase.invoke(MeetingTeamLeaveUseCase.Command(id))
+        leaveMeetingTeam.invoke(LeaveMeetingTeam.Command(id))
     }
 
     override fun createMeetingTeamInvitation(meetingTeamId: UUID): MeetingTeamCreateInvitationResponse {
-        val result = meetingTeamCreateInvitationLinkUseCase.invoke(meetingTeamId)
+        val result = createInvitationLink.invoke(meetingTeamId)
 
         return MeetingTeamCreateInvitationResponse(
             meetingTeamInvitationLink = result.meetingTeamInvitationLink,
@@ -122,12 +116,12 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeamByInvitationCode(invitationCode: UUID): MeetingTeamGetByInvitationCodeResponse {
-        return meetingTeamGetByInvitationCodeUseCase.invoke(invitationCode)
+        return getMeetingTeamByInvitationCodeUseCase.invoke(invitationCode)
             .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
     }
 
     override fun enterMeetingTeam(invitationCode: UUID) {
-        meetingTeamEnterUseCase.invoke(invitationCode)
+        enterMeetingTeam.invoke(invitationCode)
     }
 
 }
