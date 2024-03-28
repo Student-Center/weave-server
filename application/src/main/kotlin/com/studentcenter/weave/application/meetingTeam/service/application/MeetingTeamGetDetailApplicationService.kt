@@ -4,8 +4,8 @@ import com.studentcenter.weave.application.common.security.context.getCurrentUse
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetailInfo
-import com.studentcenter.weave.application.university.port.inbound.MajorGetByIdUseCase
-import com.studentcenter.weave.application.university.port.inbound.UniversityGetByIdUsecase
+import com.studentcenter.weave.application.university.port.inbound.GetMajor
+import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import org.springframework.stereotype.Service
@@ -15,9 +15,9 @@ import java.util.*
 @Service
 class MeetingTeamGetDetailApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
-    private val majorGetByIdUsecase: MajorGetByIdUseCase,
-    private val universityGetByIdUsecase: UniversityGetByIdUsecase,
     private val getUser: GetUser,
+    private val getMajor: GetMajor,
+    private val getUniversity: GetUniversity,
 ) : MeetingTeamGetDetailUseCase {
 
     @Transactional(readOnly = true)
@@ -43,8 +43,8 @@ class MeetingTeamGetDetailApplicationService(
                 val user = getUser.getById(member.userId)
                 MeetingMemberDetailInfo.of(
                     user = user,
-                    major = majorGetByIdUsecase.invoke(user.majorId),
-                    university = universityGetByIdUsecase.invoke(user.universityId),
+                    major = getMajor.getById(user.majorId),
+                    university = getUniversity.getById(user.universityId),
                     role = member.role
                 )
             }

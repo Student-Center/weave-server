@@ -7,6 +7,6 @@ interface MajorDomainService {
 
     fun getById(id: UUID): Major
 
-    fun findAll(univId: UUID): List<Major>
+    fun findAllByUniversityId(univId: UUID): List<Major>
 
 }
