@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class MeetingTeamQueryApplicationService(
+class GetMeetingTeamQueryApplicationService(
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamQueryUseCase {
+) : GetMeetingTeam {
 
     override fun getById(meetingTeamId: UUID): MeetingTeam {
         return meetingTeamDomainService.getById(meetingTeamId)

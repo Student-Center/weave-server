@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamInfoGetAllByIdUseCase
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamQueryUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfoCreator
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
@@ -32,12 +32,12 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy,
     )
-    val meetingTeamQueryUseCase = mockk<MeetingTeamQueryUseCase>()
+    val getMeetingTeam = mockk<GetMeetingTeam>()
     val meetingTeamInfoGetAllByIdsUseCase = mockk<MeetingTeamInfoGetAllByIdUseCase>()
 
     val sut = ScrollPreparedMeetingApplicationService(
         meetingDomainService = meetingDomainService,
-        meetingTeamQueryUseCase = meetingTeamQueryUseCase,
+        getMeetingTeam = getMeetingTeam,
         meetingTeamInfoGetAllByIdsUseCase = meetingTeamInfoGetAllByIdsUseCase,
     )
 
@@ -56,7 +56,7 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
                     next = null,
                     limit = 20,
                 )
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns null
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
                 shouldThrow<CustomException> { sut.invoke(command) }
@@ -72,7 +72,7 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
                     next = null,
                     limit = limit,
                 )
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns MeetingTeamFixtureFactory.create()
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns MeetingTeamFixtureFactory.create()
                 every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns emptyList()
 
                 // act
@@ -109,7 +109,7 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
                         )
                     }
 
-                    every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myTeamInfo.team
+                    every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeamInfo.team
                     every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns teamInfos
 
                     // act
@@ -146,7 +146,7 @@ class ScrollPreparedMeetingApplicationServiceTest : DescribeSpec({
                     )
                 }
 
-                every { meetingTeamQueryUseCase.findByMemberUserId(user.id) } returns myTeamInfo.team
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeamInfo.team
                 every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns teamInfos
 
                 // act

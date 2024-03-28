@@ -6,7 +6,7 @@ import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummar
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import java.util.*
 
-interface MeetingTeamQueryUseCase {
+interface GetMeetingTeam {
 
     fun getById(meetingTeamId: UUID): MeetingTeam
 
