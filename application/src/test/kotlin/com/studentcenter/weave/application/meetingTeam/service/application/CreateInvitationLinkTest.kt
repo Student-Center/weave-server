@@ -22,8 +22,8 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("MeetingTeamCreateInvitationApplicationServiceTest")
-class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
+@DisplayName("CreateInvitationLinkTest")
+class CreateInvitationLinkTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
@@ -45,7 +45,7 @@ class MeetingTeamCreateInvitationApplicationServiceTest : DescribeSpec({
 
     val userRepository = UserRepositorySpy()
 
-    val sut = MeetingTeamCreateInvitationLinkApplicationService(
+    val sut = CreateInvitationLinkService(
         meetingTeamInvitationService = meetingTeamInvitationService,
         meetingTeamDomainService = meetingTeamDomainService,
     )

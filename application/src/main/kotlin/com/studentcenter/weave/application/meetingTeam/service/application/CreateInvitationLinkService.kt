@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamCreateInvitationLinkUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvitationLink
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -11,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class MeetingTeamCreateInvitationLinkApplicationService(
+class CreateInvitationLinkService(
     private val meetingTeamInvitationService: MeetingTeamInvitationService,
     private val meetingTeamDomainService: MeetingTeamDomainService,
-) : MeetingTeamCreateInvitationLinkUseCase {
+) : CreateInvitationLink {
 
     @Transactional
-    override fun invoke(meetingTeamId: UUID): MeetingTeamCreateInvitationLinkUseCase.Result {
+    override fun invoke(meetingTeamId: UUID): CreateInvitationLink.Result {
         val currentUserId = getCurrentUserAuthentication().userId
 
         val meetingTeam = meetingTeamDomainService.getById(meetingTeamId)
@@ -32,7 +32,7 @@ class MeetingTeamCreateInvitationLinkApplicationService(
 
         val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
 
-        return MeetingTeamCreateInvitationLinkUseCase.Result(
+        return CreateInvitationLink.Result(
             meetingTeamInvitationLink = meetingTeamInvitation.invitationLink,
             meetingTeamInvitationCode = meetingTeamInvitation.invitationCode,
         )

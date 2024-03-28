@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.port.inbound
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
-fun interface MeetingTeamCreateInvitationLinkUseCase {
+fun interface CreateInvitationLink {
 
     fun invoke(meetingTeamId: UUID): Result
 
