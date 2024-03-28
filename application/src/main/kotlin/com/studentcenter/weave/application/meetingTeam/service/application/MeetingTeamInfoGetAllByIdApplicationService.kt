@@ -56,7 +56,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
 
     private fun getUniversityById(
         universityId: UUID,
-        cache: MutableMap<UUID, University>
+        cache: MutableMap<UUID, University>,
     ): University {
         if (cache.contains(universityId).not()) {
             cache[universityId] = getUniversity.getById(universityId)
@@ -68,7 +68,7 @@ class MeetingTeamInfoGetAllByIdApplicationService(
 
     private fun getMajorById(
         majorId: UUID,
-        cache: MutableMap<UUID, Major>
+        cache: MutableMap<UUID, Major>,
     ): Major {
         if (cache.contains(majorId).not()) {
             cache[majorId] = getMajor.getById(majorId)
