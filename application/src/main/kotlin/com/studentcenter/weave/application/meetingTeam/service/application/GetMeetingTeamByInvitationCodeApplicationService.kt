@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.util.MeetingTeamInvitationService
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class MeetingTeamGetByInvitationCodeApplicationService(
+class GetMeetingTeamByInvitationCodeApplicationService(
     val meetingTeamDomainService: MeetingTeamDomainService,
     val meetingTeamInvitationService: MeetingTeamInvitationService,
-) : MeetingTeamGetByInvitationCodeUseCase {
+) : GetMeetingTeamByInvitationCode {
 
     override fun invoke(invitationCode: UUID): MeetingTeam {
 

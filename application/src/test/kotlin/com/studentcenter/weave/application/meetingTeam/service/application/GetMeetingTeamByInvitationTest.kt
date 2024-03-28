@@ -20,8 +20,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 
-@DisplayName("MeetingTeamGetByInvitationLinkApplicationServiceTest")
-class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
+@DisplayName("GetMeetingTeamByInvitationTest")
+class GetMeetingTeamByInvitationTest : DescribeSpec({
 
     val meetingTeamInvitationProperties = MeetingTeamInvitationPropertiesFixtureFactory.create()
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
@@ -43,7 +43,7 @@ class MeetingTeamGetByInvitationLinkApplicationServiceTest : DescribeSpec({
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = MeetingTeamGetByInvitationCodeApplicationService(
+    val sut = GetMeetingTeamByInvitationCodeApplicationService(
         meetingTeamDomainService = meetingTeamDomainService,
         meetingTeamInvitationService = meetingTeamInvitationService,
     )

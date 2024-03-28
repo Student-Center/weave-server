@@ -5,7 +5,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetin
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetByInvitationCodeUseCase
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCodeUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetDetailUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetListUseCase
 import com.studentcenter.weave.application.meetingTeam.port.inbound.MeetingTeamGetMyUseCase
@@ -35,7 +35,7 @@ class MeetingTeamRestController(
     private val meetingTeamLeaveUseCase: LeaveMeetingTeam,
     private val meetingTeamGetListUseCase: MeetingTeamGetListUseCase,
     private val createInvitationLink: CreateInvitationLink,
-    private val meetingTeamGetByInvitationCodeUseCase: MeetingTeamGetByInvitationCodeUseCase,
+    private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCodeUseCase,
     private val meetingTeamEnterUseCase: EnterMeetingTeam,
 ) : MeetingTeamApi {
 
@@ -121,7 +121,7 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeamByInvitationCode(invitationCode: UUID): MeetingTeamGetByInvitationCodeResponse {
-        return meetingTeamGetByInvitationCodeUseCase.invoke(invitationCode)
+        return getMeetingTeamByInvitationCodeUseCase.invoke(invitationCode)
             .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
     }
 
