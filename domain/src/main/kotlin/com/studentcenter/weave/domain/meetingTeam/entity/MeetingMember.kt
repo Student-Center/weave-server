@@ -1,6 +1,7 @@
 package com.studentcenter.weave.domain.meetingTeam.entity
 
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
+import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.util.*
 
 data class MeetingMember(
@@ -18,7 +19,7 @@ data class MeetingMember(
             role: MeetingMemberRole,
         ): MeetingMember {
             return MeetingMember(
-                id = UUID.randomUUID(),
+                id = UuidCreator.create(),
                 meetingTeamId = meetingTeamId,
                 userId = userId,
                 role = role,

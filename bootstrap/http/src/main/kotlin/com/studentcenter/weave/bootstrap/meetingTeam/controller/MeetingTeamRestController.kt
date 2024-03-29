@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateInvita
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.JoinMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
@@ -38,7 +38,7 @@ class MeetingTeamRestController(
     private val getListMeetingTeam: GetListMeetingTeam,
     private val createInvitationLink: CreateInvitationLink,
     private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
-    private val enterMeetingTeam: EnterMeetingTeam,
+    private val joinMeetingTeam: JoinMeetingTeam,
     private val getMeetingTeam: GetMeetingTeam,
 ) : MeetingTeamApi {
 
@@ -123,8 +123,8 @@ class MeetingTeamRestController(
             .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
     }
 
-    override fun enterMeetingTeam(invitationCode: UUID) {
-        enterMeetingTeam.invoke(invitationCode)
+    override fun joinMeetingTeam(invitationCode: UUID) {
+        joinMeetingTeam.invoke(invitationCode)
     }
 
     override fun getMeetingTeamMemberDetail(

@@ -23,8 +23,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import org.junit.jupiter.api.DisplayName
 
-@DisplayName("EnterMeetingTeamTest")
-class EnterMeetingTeamTest : DescribeSpec({
+@DisplayName("JoinMeetingTeam")
+class JoinMeetingTeamServiceTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingMemberRepository = MeetingMemberRepositorySpy()
@@ -45,7 +45,7 @@ class EnterMeetingTeamTest : DescribeSpec({
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = EnterMeetingTeamService(
+    val sut = JoinMeetingTeamService(
         meetingTeamDomainService = meetingTeamDomainService,
         meetingTeamInvitationService = meetingTeamInvitationService,
         getUser = userQueryUseCase,
