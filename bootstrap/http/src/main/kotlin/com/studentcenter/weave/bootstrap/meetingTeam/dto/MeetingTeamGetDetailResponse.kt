@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.meetingTeam.dto
 
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetailInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetail
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
@@ -37,17 +37,17 @@ data class MeetingTeamGetDetailResponse(
 
         companion object {
 
-            fun from(meetingMemberDetailInfo: MeetingMemberDetailInfo): MeetingMemberDto {
+            fun from(meetingMemberDetail: MeetingMemberDetail): MeetingMemberDto {
                 return MeetingMemberDto(
-                    userId = meetingMemberDetailInfo.userId,
-                    universityName = meetingMemberDetailInfo.universityName,
-                    majorName = meetingMemberDetailInfo.majorName.value,
-                    mbti = meetingMemberDetailInfo.mbti.value,
-                    birthYear = meetingMemberDetailInfo.birthYear.value,
-                    role = meetingMemberDetailInfo.role,
-                    animalType = meetingMemberDetailInfo.animalType?.description,
-                    height = meetingMemberDetailInfo.height?.value,
-                    isUnivVerified = meetingMemberDetailInfo.isUnivVerified,
+                    userId = meetingMemberDetail.userId,
+                    universityName = meetingMemberDetail.universityName,
+                    majorName = meetingMemberDetail.majorName.value,
+                    mbti = meetingMemberDetail.mbti.value,
+                    birthYear = meetingMemberDetail.birthYear.value,
+                    role = meetingMemberDetail.role,
+                    animalType = meetingMemberDetail.animalType?.description,
+                    height = meetingMemberDetail.height?.value,
+                    isUnivVerified = meetingMemberDetail.isUnivVerified,
                 )
             }
         }
@@ -57,7 +57,7 @@ data class MeetingTeamGetDetailResponse(
 
         fun of(
             team: MeetingTeam,
-            members: List<MeetingMemberDetailInfo>,
+            members: List<MeetingMemberDetail>,
             affinityScore: MbtiAffinityScore?
         ): MeetingTeamGetDetailResponse {
             return MeetingTeamGetDetailResponse(

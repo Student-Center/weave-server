@@ -6,6 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetin
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EnterMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
+import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamByInvitationCode
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
@@ -21,6 +22,7 @@ import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRespo
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamMemberDetailResponse
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
@@ -37,6 +39,7 @@ class MeetingTeamRestController(
     private val createInvitationLink: CreateInvitationLink,
     private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
     private val enterMeetingTeam: EnterMeetingTeam,
+    private val getMeetingTeam: GetMeetingTeam,
 ) : MeetingTeamApi {
 
     override fun createMeetingTeam(request: MeetingTeamCreateRequest) {
@@ -122,6 +125,16 @@ class MeetingTeamRestController(
 
     override fun enterMeetingTeam(invitationCode: UUID) {
         enterMeetingTeam.invoke(invitationCode)
+    }
+
+    override fun getMeetingTeamMemberDetail(
+        teamId: UUID,
+        memberId: UUID,
+    ): MeetingTeamMemberDetailResponse {
+        return getMeetingTeam
+            .getMemberDetail(teamId, memberId)
+            .let { MeetingTeamMemberDetailResponse.from(it) }
+
     }
 
 }

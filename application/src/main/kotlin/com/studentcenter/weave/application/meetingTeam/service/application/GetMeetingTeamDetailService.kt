@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetailInfo
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetail
 import com.studentcenter.weave.application.university.port.inbound.GetMajor
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
@@ -36,12 +36,12 @@ class GetMeetingTeamDetailService(
         )
     }
 
-    private fun getMeetingMemberDetailInfos(meetingTeamId: UUID): List<MeetingMemberDetailInfo> {
+    private fun getMeetingMemberDetailInfos(meetingTeamId: UUID): List<MeetingMemberDetail> {
         return meetingTeamDomainService
             .findAllMeetingMembersByMeetingTeamId(meetingTeamId)
             .map { member ->
                 val user = getUser.getById(member.userId)
-                MeetingMemberDetailInfo.of(
+                MeetingMemberDetail.of(
                     user = user,
                     major = getMajor.getById(user.majorId),
                     university = getUniversity.getById(user.universityId),

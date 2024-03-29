@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.port.inbound
 
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetail
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
@@ -22,5 +23,7 @@ interface GetMeetingTeam {
     fun findAllMembers(meetingTeamId: UUID): List<MeetingMember>
 
     fun getMeetingTeamMemberSummaryByMeetingTeamId(meetingTeamId: UUID): MeetingTeamMemberSummary
+
+    fun getMemberDetail(meetingTeamId: UUID, memberId: UUID): MeetingMemberDetail
 
 }

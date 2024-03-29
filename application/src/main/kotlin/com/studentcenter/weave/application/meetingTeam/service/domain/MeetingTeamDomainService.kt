@@ -77,4 +77,9 @@ interface MeetingTeamDomainService {
 
     fun getMeetingTeamMemberSummaryByMeetingTeamId(meetingTeamId: UUID): MeetingTeamMemberSummary
 
+    fun getMember(
+        meetingTeamId: UUID,
+        memberId: UUID,
+    ): MeetingMember
+
 }

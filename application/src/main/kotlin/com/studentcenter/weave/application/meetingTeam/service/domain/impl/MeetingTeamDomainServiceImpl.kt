@@ -182,6 +182,19 @@ class MeetingTeamDomainServiceImpl(
         return meetingTeamMemberSummaryRepository.getByMeetingTeamId(meetingTeamId)
     }
 
+    override fun getMember(
+        meetingTeamId: UUID,
+        memberId: UUID,
+    ): MeetingMember {
+        val teamMembers = meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
+        return teamMembers
+            .firstOrNull { it.id == memberId }
+            ?: throw CustomException(
+                type = MeetingTeamExceptionType.MEMBER_NOT_FOUND,
+                message = "팀원을 찾을 수 없어요!"
+            )
+    }
+
     private fun publishTeamIfNeeded(meetingTeam: MeetingTeam, currentMemberCount: Int) {
         if (meetingTeam.memberCount == currentMemberCount && meetingTeam.isPublished().not()) {
             createMeetingTeamMemberSummary(meetingTeam)
