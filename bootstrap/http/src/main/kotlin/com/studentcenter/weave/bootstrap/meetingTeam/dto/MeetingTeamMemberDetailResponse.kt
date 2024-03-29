@@ -7,7 +7,6 @@ import java.util.*
 
 @Schema(description = "미팅 팀 멤버 상세 응답")
 data class MeetingTeamMemberDetailResponse(
-    val id: UUID,
     val user: UserDto,
 ) {
 
@@ -25,7 +24,6 @@ data class MeetingTeamMemberDetailResponse(
 
         fun from(meetingMemberDetail: MeetingMemberDetail): MeetingTeamMemberDetailResponse {
             return MeetingTeamMemberDetailResponse(
-                id = meetingMemberDetail.userId,
                 user = UserDto(
                     id = meetingMemberDetail.userId,
                     mbti = meetingMemberDetail.mbti.value,
