@@ -33,7 +33,7 @@ class GetMeetingTeamService(
         return meetingTeamDomainService.findByMemberUserId(userId)
     }
 
-    override fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
+    override fun findAllMembers(meetingTeamId: UUID): List<MeetingMember> {
         return meetingTeamDomainService.findAllMeetingMembersByMeetingTeamId(meetingTeamId)
     }
 

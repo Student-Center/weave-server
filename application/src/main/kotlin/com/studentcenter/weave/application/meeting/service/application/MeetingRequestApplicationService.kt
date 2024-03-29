@@ -53,7 +53,7 @@ class MeetingRequestApplicationService(
 
     private fun createMeetingAttendance(meeting: Meeting, myTeamId: UUID): MeetingAttendance {
         val teamMember = getMeetingTeam
-            .findAllMeetingMembersByMeetingTeamId(myTeamId)
+            .findAllMembers(myTeamId)
             .first { meetingMember ->
                 meetingMember.userId == getCurrentUserAuthentication().userId
             }

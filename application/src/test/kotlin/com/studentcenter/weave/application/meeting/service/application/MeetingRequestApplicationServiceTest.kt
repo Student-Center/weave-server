@@ -189,7 +189,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getUser.getById(user.id) } returns user
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findAllMembers(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
@@ -220,7 +220,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getUser.getById(user.id) } returns user
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findAllMembers(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
@@ -253,7 +253,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getUser.getById(user.id) } returns user
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(any()) } returns
+                every { getMeetingTeam.findAllMembers(any()) } returns
                         listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
