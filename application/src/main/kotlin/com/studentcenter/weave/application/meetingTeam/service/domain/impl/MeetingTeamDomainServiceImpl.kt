@@ -187,7 +187,6 @@ class MeetingTeamDomainServiceImpl(
         memberId: UUID,
     ): MeetingMember {
         val teamMembers = meetingMemberRepository.findAllByMeetingTeamId(meetingTeamId)
-        println(teamMembers)
         return teamMembers
             .firstOrNull { it.id == memberId }
             ?: throw CustomException(
