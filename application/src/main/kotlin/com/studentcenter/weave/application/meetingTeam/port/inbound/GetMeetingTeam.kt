@@ -19,7 +19,7 @@ interface GetMeetingTeam {
 
     fun findByMemberUserId(userId: UUID): MeetingTeam?
 
-    fun findAllMeetingMembersByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember>
+    fun findAllMembers(meetingTeamId: UUID): List<MeetingMember>
 
     fun getMeetingTeamMemberSummaryByMeetingTeamId(meetingTeamId: UUID): MeetingTeamMemberSummary
 

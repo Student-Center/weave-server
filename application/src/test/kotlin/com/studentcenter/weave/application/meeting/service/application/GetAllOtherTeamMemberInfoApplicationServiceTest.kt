@@ -112,7 +112,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 meetingRepositorySpy.save(meeting)
 
                 every { getMeetingTeam.getByMemberUserId(user.id) } returns myTeam
-                every { getMeetingTeam.findAllMeetingMembersByMeetingTeamId(otherTeam.id) } returns otherTeamMembers
+                every { getMeetingTeam.findAllMembers(otherTeam.id) } returns otherTeamMembers
                 every { getUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
                 every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
 

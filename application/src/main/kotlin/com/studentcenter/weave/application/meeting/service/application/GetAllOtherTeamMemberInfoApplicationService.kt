@@ -33,7 +33,7 @@ class GetAllOtherTeamMemberInfoApplicationService(
         else meeting.receivingTeamId
 
         return getMeetingTeam
-            .findAllMeetingMembersByMeetingTeamId(otherTeamId)
+            .findAllMembers(otherTeamId)
             .map {
                 val user = getUser.getById(it.userId)
                 val university = getUniversity.getById(user.universityId)
