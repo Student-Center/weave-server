@@ -11,6 +11,7 @@ import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetListRespo
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetLocationsResponse
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyRequest
 import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamGetMyResponse
+import com.studentcenter.weave.bootstrap.meetingTeam.dto.MeetingTeamMemberDetailResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -122,5 +123,14 @@ interface MeetingTeamApi {
         @PathVariable
         invitationCode: UUID
     )
+
+    @Secured
+    @Operation(summary = "Get meeting team member detail")
+    @GetMapping("/{teamId}/members/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMeetingTeamMemberDetail(
+        @PathVariable teamId: UUID,
+        @PathVariable memberId: UUID,
+    ): MeetingTeamMemberDetailResponse
 
 }
