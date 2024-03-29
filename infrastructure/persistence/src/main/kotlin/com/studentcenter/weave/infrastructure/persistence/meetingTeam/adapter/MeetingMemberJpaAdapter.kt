@@ -46,10 +46,4 @@ class MeetingMemberJpaAdapter(
         meetingMemberJpaRepository.deleteById(id)
     }
 
-    override fun findAllByMeetingTeamIds(teamIds: List<UUID>): List<MeetingMember> {
-        return meetingMemberJpaRepository
-            .findAllByMeetingTeamIdIn(teamIds)
-            .map { it.toDomain() }
-    }
-
 }
