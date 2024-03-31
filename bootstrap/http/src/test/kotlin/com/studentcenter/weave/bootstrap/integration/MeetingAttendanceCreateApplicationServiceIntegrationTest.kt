@@ -29,8 +29,9 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     private val meetingTeamRepository: MeetingTeamRepository,
     private val sut: MeetingAttendanceCreateApplicationService,
 ) : IntegrationTestDescribeSpec({
-    val user = UserFixtureFactory.create()
-    val userAuthentication = UserAuthenticationFixtureFactory.create(user)
+
+    val currentUser = UserFixtureFactory.create()
+    val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
     var userTeam: MeetingTeam? = null
     var userTeamMember: MeetingMember? = null
 
@@ -40,7 +41,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         isUserTeam: Boolean = false,
     ): MeetingTeam {
         val leaderUser = UserFixtureFactory.create()
-        val memberUser = (0 until memberCount - 1).map { UserFixtureFactory.create() }
+        val memberUser = (0 until memberCount - 1).map { UserFixtureFactory.create() } + currentUser
 
         val team: MeetingTeam = MeetingTeamFixtureFactory.create(
             status = MeetingTeamStatus.PUBLISHED,
@@ -195,7 +196,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
                 meetingDomainService.save(it)
             }
             (requestingTeam.members + requestingTeam.members).forEach {
-                if (it.userId == user.id) return@forEach
+                if (it.userId == currentUser.id) return@forEach
                 MeetingAttendance(
                     meetingId = meeting.id,
                     meetingMemberId = it.id,
