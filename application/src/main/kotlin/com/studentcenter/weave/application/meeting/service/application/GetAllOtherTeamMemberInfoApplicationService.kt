@@ -35,7 +35,6 @@ class GetAllOtherTeamMemberInfoApplicationService(
             meeting.receivingTeamId
         }
 
-        println(otherTeamId)
 
         val members = getMeetingTeam.getById(otherTeamId).members
         return members
