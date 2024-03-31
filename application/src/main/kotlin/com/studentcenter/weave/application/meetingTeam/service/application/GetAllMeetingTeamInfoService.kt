@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class GetAllMeetingTeamInfoApplicationService(
+class GetAllMeetingTeamInfoService(
     private val getUser: GetUser,
     private val getMajor: GetMajor,
     private val getUniversity: GetUniversity,
