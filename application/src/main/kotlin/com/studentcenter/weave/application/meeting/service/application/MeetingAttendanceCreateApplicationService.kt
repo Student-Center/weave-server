@@ -33,8 +33,8 @@ class MeetingAttendanceCreateApplicationService(
     ): Unit = distributedLock("${this.javaClass.simpleName}:$meetingId") {
         val meeting = getByIdAndValidate(meetingId)
 
-        val requestingTeamMembers = getMeetingTeam.findAllMembers(meeting.requestingTeamId)
-        val receivingTeamMembers = getMeetingTeam.findAllMembers(meeting.receivingTeamId)
+        val requestingTeamMembers = getMeetingTeam.getById(meeting.requestingTeamId).members
+        val receivingTeamMembers = getMeetingTeam.getById(meeting.receivingTeamId).members
 
         val teamMembers = requestingTeamMembers + receivingTeamMembers
 

@@ -2,6 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingMemberDetail
 import com.studentcenter.weave.application.university.port.inbound.GetMajor
@@ -10,10 +11,10 @@ import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Service
 class GetMeetingTeamDetailService(
+    private val meetingTeamRepository: MeetingTeamRepository,
     private val meetingTeamDomainService: MeetingTeamDomainService,
     private val getUser: GetUser,
     private val getMajor: GetMajor,
@@ -22,23 +23,22 @@ class GetMeetingTeamDetailService(
 
     @Transactional(readOnly = true)
     override fun invoke(command: GetMeetingTeamDetail.Command): GetMeetingTeamDetail.Result {
-        val targetMeetingTeam = meetingTeamDomainService.getById(command.meetingId)
+        val targetMeetingTeam = meetingTeamRepository.getById(command.meetingId)
 
         val affinityScore = findMyMeetingTeam()?.let {
             meetingTeamDomainService.calculateTeamMbtiAffinityScore(it, targetMeetingTeam)
         }
 
-
         return GetMeetingTeamDetail.Result(
             meetingTeam = targetMeetingTeam,
-            members = getMeetingMemberDetailInfos(targetMeetingTeam.id),
+            members = getMeetingMemberDetailInfos(targetMeetingTeam),
             affinityScore = affinityScore,
         )
     }
 
-    private fun getMeetingMemberDetailInfos(meetingTeamId: UUID): List<MeetingMemberDetail> {
-        return meetingTeamDomainService
-            .findAllMeetingMembersByMeetingTeamId(meetingTeamId)
+    private fun getMeetingMemberDetailInfos(meetingTeam: MeetingTeam): List<MeetingMemberDetail> {
+        return meetingTeam
+            .members
             .map { member ->
                 val user = getUser.getById(member.userId)
                 MeetingMemberDetail.of(
@@ -52,7 +52,6 @@ class GetMeetingTeamDetailService(
 
     private fun findMyMeetingTeam(): MeetingTeam? {
         return getCurrentUserAuthentication()
-            .let { meetingTeamDomainService.findByMemberUserId(it.userId) }
-
+            .let { meetingTeamRepository.findByMemberUserId(it.userId) }
     }
 }

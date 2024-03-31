@@ -6,7 +6,6 @@ import java.util.*
 
 data class MeetingMember(
     val id: UUID,
-    val meetingTeamId: UUID,
     val userId: UUID,
     val role: MeetingMemberRole,
 ) {
@@ -14,13 +13,11 @@ data class MeetingMember(
     companion object {
 
         fun create(
-            meetingTeamId: UUID,
             userId: UUID,
             role: MeetingMemberRole,
         ): MeetingMember {
             return MeetingMember(
                 id = UuidCreator.create(),
-                meetingTeamId = meetingTeamId,
                 userId = userId,
                 role = role,
             )

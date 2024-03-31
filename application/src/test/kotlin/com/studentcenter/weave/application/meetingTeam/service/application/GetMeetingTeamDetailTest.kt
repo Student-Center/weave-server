@@ -13,6 +13,8 @@ import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFact
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummaryFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.domain.user.entity.MajorFixtureFactory
+import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.core.annotation.DisplayName
@@ -20,13 +22,13 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.mockk
 
-@DisplayName("MeetingTeamGetDetailApplicationService")
+@DisplayName("GetMeetingTeamDetailTest")
 class GetMeetingTeamDetailTest : DescribeSpec({
 
-
-    val getByIdUsecase = mockk<GetMajor>()
+    val getMajor = mockk<GetMajor>()
     val getUniversity = mockk<GetUniversity>()
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
@@ -35,15 +37,13 @@ class GetMeetingTeamDetailTest : DescribeSpec({
     val getUser = mockk<GetUser>()
 
     val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
-        meetingTeamRepository = meetingTeamRepositorySpy,
-        meetingMemberRepository = meetingMemberRepositorySpy,
-        meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        getUser = getUser,
+        meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy
     )
 
     val sut = GetMeetingTeamDetailService(
         meetingTeamDomainService = meetingTeamDomainService,
-        getMajor = getByIdUsecase,
+        meetingTeamRepository = meetingTeamRepositorySpy,
+        getMajor = getMajor,
         getUser = getUser,
         getUniversity = getUniversity
     )
@@ -60,19 +60,17 @@ class GetMeetingTeamDetailTest : DescribeSpec({
         context("내 미팅팀일 경우") {
             it("미팅팀 정보를 조회한다 - 케미 점수(X)") {
                 // arrange
+                val me = UserFixtureFactory.create()
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
                 val targetMeetingTeam = MeetingTeamFixtureFactory
-                    .create()
+                    .create(leader = me)
                     .also { meetingTeamRepositorySpy.save(it) }
-                UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also {
-                        SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.putUserToTeamMember(
-                            it.userId,
-                            targetMeetingTeam.id
-                        )
-                    }
+
+                every { getUser.getById(any()) } returns UserFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
+                every { getMajor.getById(any()) } returns MajorFixtureFactory.create()
 
                 // act
                 val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
@@ -83,11 +81,15 @@ class GetMeetingTeamDetailTest : DescribeSpec({
             }
         }
 
-        context("내 미팅팀이 아니고, 내팀(PUBLISHED), 상대팀(PUBLISHED) 상태인 경우") {
+        context("조회하려는 팀이 내 미팅팀이 아니고, 내팀(PUBLISHED), 상대팀(PUBLISHED) 상태인 경우") {
             it("미팅팀 정보를 조회한다 - 케미 점수(O)") {
                 // arrange
+                val me = UserFixtureFactory.create()
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
                 val myMeetingTeam = MeetingTeamFixtureFactory
-                    .create(status = MeetingTeamStatus.PUBLISHED)
+                    .create(status = MeetingTeamStatus.PUBLISHED, leader = me)
                     .also { meetingTeamRepositorySpy.save(it) }
                 val targetMeetingTeam = MeetingTeamFixtureFactory
                     .create(status = MeetingTeamStatus.PUBLISHED)
@@ -100,14 +102,9 @@ class GetMeetingTeamDetailTest : DescribeSpec({
                     .create(meetingTeamId = targetMeetingTeam.id)
                     .also { meetingTeamMemberSummaryRepositorySpy.save(it) }
 
-                UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also {
-                        SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
-                    }
-
+                every { getUser.getById(any()) } returns UserFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
+                every { getMajor.getById(any()) } returns MajorFixtureFactory.create()
 
                 // act
                 val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
@@ -121,8 +118,12 @@ class GetMeetingTeamDetailTest : DescribeSpec({
         context("내 미팅팀이 아니고, 내팀(WAITING), 상대팀(PUBLISH) 상태인 경우") {
             it("미팅팀 정보를 조회한다 - 케미 점수(O)") {
                 // arrange
+                val me = UserFixtureFactory.create()
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
                 val myMeetingTeam = MeetingTeamFixtureFactory
-                    .create(status = MeetingTeamStatus.WAITING)
+                    .create(status = MeetingTeamStatus.WAITING, leader = me)
                     .also { meetingTeamRepositorySpy.save(it) }
                 val targetMeetingTeam = MeetingTeamFixtureFactory
                     .create(status = MeetingTeamStatus.PUBLISHED)
@@ -132,13 +133,9 @@ class GetMeetingTeamDetailTest : DescribeSpec({
                     .create(meetingTeamId = targetMeetingTeam.id)
                     .also { meetingTeamMemberSummaryRepositorySpy.save(it) }
 
-                UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also {
-                        SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
-                    }
+                every { getUser.getById(any()) } returns UserFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
+                every { getMajor.getById(any()) } returns MajorFixtureFactory.create()
 
                 // act
                 val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
@@ -152,8 +149,12 @@ class GetMeetingTeamDetailTest : DescribeSpec({
         context("내 미팅팀이 아니고, 내팀(PUBLISH), 상대팀(WAITING) 상태인 경우") {
             it("미팅팀 정보를 조회한다 - 케미 점수(O)") {
                 // arrange
+                val me = UserFixtureFactory.create()
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
                 val myMeetingTeam = MeetingTeamFixtureFactory
-                    .create(status = MeetingTeamStatus.WAITING)
+                    .create(status = MeetingTeamStatus.WAITING, leader = me)
                     .also { meetingTeamRepositorySpy.save(it) }
                 val targetMeetingTeam = MeetingTeamFixtureFactory
                     .create(status = MeetingTeamStatus.PUBLISHED)
@@ -163,13 +164,9 @@ class GetMeetingTeamDetailTest : DescribeSpec({
                     .create(meetingTeamId = myMeetingTeam.id)
                     .also { meetingTeamMemberSummaryRepositorySpy.save(it) }
 
-                UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
-                    .also {
-                        SecurityContextHolder.setContext(UserSecurityContext(it))
-                        meetingTeamRepositorySpy.putUserToTeamMember(it.userId, myMeetingTeam.id)
-                    }
+                every { getUser.getById(any()) } returns UserFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
+                every { getMajor.getById(any()) } returns MajorFixtureFactory.create()
 
                 // act
                 val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))
@@ -196,6 +193,10 @@ class GetMeetingTeamDetailTest : DescribeSpec({
                             )
                         )
                     }
+
+                every { getUser.getById(any()) } returns UserFixtureFactory.create()
+                every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
+                every { getMajor.getById(any()) } returns MajorFixtureFactory.create()
 
                 // act
                 val result = sut.invoke(GetMeetingTeamDetail.Command(targetMeetingTeam.id))

@@ -8,13 +8,11 @@ object MeetingMemberFixtureFactory {
 
     fun create(
         id: UUID = UuidCreator.create(),
-        meetingTeamId: UUID = UuidCreator.create(),
         userId: UUID = UuidCreator.create(),
         role: MeetingMemberRole = MeetingMemberRole.MEMBER,
     ): MeetingMember {
         return MeetingMember(
             id = id,
-            meetingTeamId = meetingTeamId,
             userId = userId,
             role = role,
         )

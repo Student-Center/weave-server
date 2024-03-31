@@ -9,7 +9,6 @@ import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -91,18 +90,23 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
         context("정상 조회라면") {
             it("카카오톡 아이디가 조회된다.") {
                 // arrange
-                val user = UserFixtureFactory.create().also {
-                    val userAuthentication = UserAuthenticationFixtureFactory.create(user = it)
-                    SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
-                }
+                val currentUser = UserFixtureFactory.create()
+                UserAuthenticationFixtureFactory.create(user = currentUser)
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
                 val memberCount = 2
                 val myTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
-                val otherTeam = MeetingTeamFixtureFactory.create(memberCount = memberCount)
-                val otherTeamMembers = IntStream.of(memberCount).mapToObj {
-                    MeetingMemberFixtureFactory.create(
-                        meetingTeamId = otherTeam.id
-                    )
-                }.toList()
+
+                val otherTeamMembers = IntStream
+                    .of(memberCount)
+                    .mapToObj { UserFixtureFactory.create() }
+                    .toList()
+
+                val otherTeam = MeetingTeamFixtureFactory.create(
+                    memberCount = memberCount,
+                    members = otherTeamMembers
+                )
+
                 val meeting = MeetingFixtureFactory.create(
                     requestingTeamId = myTeam.id,
                     receivingTeamId = otherTeam.id,
@@ -111,11 +115,13 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 )
                 meetingRepositorySpy.save(meeting)
 
-                every { getMeetingTeam.getByMemberUserId(user.id) } returns myTeam
-                every { getMeetingTeam.findAllMembers(otherTeam.id) } returns otherTeamMembers
+                println(otherTeam.id)
+                println(otherTeam.members)
+
+                every { getMeetingTeam.getById(otherTeam.id) } returns otherTeam
+                every { getMeetingTeam.getByMemberUserId(currentUser.id) } returns myTeam
                 every { getUser.getById(any()) } returns UserFixtureFactory.create(gender = Gender.WOMAN)
                 every { getUniversity.getById(any()) } returns UniversityFixtureFactory.create()
-
 
                 // act
                 val result = sut.invoke(meeting.id)

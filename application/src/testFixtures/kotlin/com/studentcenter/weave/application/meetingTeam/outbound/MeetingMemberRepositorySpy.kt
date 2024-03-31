@@ -14,14 +14,14 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
     }
 
     override fun countByMeetingTeamId(meetingTeamId: UUID): Int {
-        return bucket.values.count { it.meetingTeamId == meetingTeamId }
+        TODO()
     }
 
     override fun findByMeetingTeamIdAndUserId(
         meetingTeamId: UUID,
-        userId: UUID
+        userId: UUID,
     ): MeetingMember? {
-        return bucket.values.find { it.meetingTeamId == meetingTeamId && it.userId == userId }
+        TODO()
     }
 
     override fun findByUserId(userId: UUID): MeetingMember? {
@@ -29,11 +29,11 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
     }
 
     override fun findAllByMeetingTeamId(meetingTeamId: UUID): List<MeetingMember> {
-        return bucket.values.filter { it.meetingTeamId == meetingTeamId }
+        TODO()
     }
 
     override fun deleteAllByMeetingTeamId(meetingTeamId: UUID) {
-        bucket.values.removeIf { it.meetingTeamId == meetingTeamId }
+        TODO()
     }
 
     override fun deleteById(id: UUID) {
@@ -42,7 +42,7 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
 
     fun getByMeetingTeamIdAndUserId(
         meetingTeamId: UUID,
-        userId: UUID
+        userId: UUID,
     ): MeetingMember {
         return findByMeetingTeamIdAndUserId(meetingTeamId, userId)
             ?: throw NoSuchElementException("MeetingMember not found")

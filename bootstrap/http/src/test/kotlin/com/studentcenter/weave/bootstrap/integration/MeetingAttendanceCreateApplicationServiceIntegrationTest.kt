@@ -4,7 +4,7 @@ import com.studentcenter.weave.application.common.security.context.UserSecurityC
 import com.studentcenter.weave.application.meeting.service.application.MeetingAttendanceCreateApplicationService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
@@ -12,11 +12,9 @@ import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingMemberJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
@@ -28,8 +26,7 @@ import io.kotest.matchers.shouldBe
 class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
-    private val meetingTeamDomainService: MeetingTeamDomainService,
-    private val meetingMemberJpaRepository: MeetingMemberJpaRepository,
+    private val meetingTeamRepository: MeetingTeamRepository,
     private val sut: MeetingAttendanceCreateApplicationService,
 ) : IntegrationTestDescribeSpec({
     val user = UserFixtureFactory.create()
@@ -37,31 +34,26 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     var userTeam: MeetingTeam? = null
     var userTeamMember: MeetingMember? = null
 
-    fun createMeetingTeamAndMembers(
+    fun createMeetingTeamFixture(
         memberCount: Int,
         gender: Gender,
-        isUserTeam: Boolean = false
-    ): Pair<MeetingTeam, List<MeetingMember>> {
+        isUserTeam: Boolean = false,
+    ): MeetingTeam {
+        val leaderUser = UserFixtureFactory.create()
+        val memberUser = (0 until memberCount - 1).map { UserFixtureFactory.create() }
+
         val team: MeetingTeam = MeetingTeamFixtureFactory.create(
             status = MeetingTeamStatus.PUBLISHED,
             memberCount = memberCount,
-            gender = gender
+            gender = gender,
+            leader = leaderUser,
+            members = memberUser,
         ).also {
-            meetingTeamDomainService.save(it)
+            meetingTeamRepository.save(it)
             if (isUserTeam && userTeam == null) userTeam = it
         }
 
-        val teamMembers = List(memberCount) { idx ->
-            val isLeader = idx == 0
-            val memberUser =
-                if (isLeader && isUserTeam) user else UserFixtureFactory.create(gender = gender)
-            val role = if (isLeader) MeetingMemberRole.LEADER else MeetingMemberRole.MEMBER
-            meetingTeamDomainService
-                .addMember(memberUser, team, role)
-                .also { member -> if (member.userId == user.id) userTeamMember = member }
-        }
-
-        return team to teamMembers
+        return team
     }
 
     beforeTest {
@@ -71,12 +63,11 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     afterTest {
         userTeam = null
         userTeamMember = null
-        meetingMemberJpaRepository.deleteAllInBatch()
     }
 
     describe("미팅 참여 정보 추가 유스케이스") {
         context("해당 미팅이 완료(혹은 취소된 경우)") {
-            listOf(MeetingStatus.CANCELED, MeetingStatus.COMPLETED).forEach{ meetingStatus ->
+            listOf(MeetingStatus.CANCELED, MeetingStatus.COMPLETED).forEach { meetingStatus ->
                 it("예외를 던진다: 미팅 상태($meetingStatus)") {
                     // arrange
                     val attendance = true
@@ -123,12 +114,12 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             // arrange
             val attendance = true
             val memberCount = 2
-            val (requestingTeam, _) = createMeetingTeamAndMembers(
+            val requestingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.MAN,
                 isUserTeam = true
             )
-            val (receivingTeam, _) = createMeetingTeamAndMembers(
+            val receivingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.WOMAN,
             )
@@ -156,12 +147,12 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             // arrange
             val attendance = true
             val memberCount = 2
-            val (requestingTeam, _) = createMeetingTeamAndMembers(
+            val requestingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.MAN,
                 isUserTeam = true
             )
-            val (receivingTeam, _) = createMeetingTeamAndMembers(
+            val receivingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.WOMAN,
             )
@@ -169,9 +160,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
                 requestingTeamId = requestingTeam.id,
                 receivingTeamId = receivingTeam.id,
                 status = MeetingStatus.PENDING
-            ).also {
-                meetingDomainService.save(it)
-            }
+            ).also { meetingDomainService.save(it) }
 
             // act
             sut.invoke(meeting.id, attendance)
@@ -189,12 +178,12 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             // arrange
             val attendance = true
             val memberCount = 2
-            val (requestingTeam, requestingMembers) = createMeetingTeamAndMembers(
+            val requestingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.MAN,
                 isUserTeam = true
             )
-            val (receivingTeam, receivingMembers) = createMeetingTeamAndMembers(
+            val receivingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.WOMAN,
             )
@@ -205,7 +194,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             ).also {
                 meetingDomainService.save(it)
             }
-            (requestingMembers + receivingMembers).forEach {
+            (requestingTeam.members + requestingTeam.members).forEach {
                 if (it.userId == user.id) return@forEach
                 MeetingAttendance(
                     meetingId = meeting.id,
@@ -227,12 +216,12 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             // arrange
             val attendance = false
             val memberCount = 2
-            val (requestingTeam, _) = createMeetingTeamAndMembers(
+            val requestingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.MAN,
                 isUserTeam = true
             )
-            val (receivingTeam, _) = createMeetingTeamAndMembers(
+            val receivingTeam = createMeetingTeamFixture(
                 memberCount = memberCount,
                 gender = Gender.WOMAN,
             )

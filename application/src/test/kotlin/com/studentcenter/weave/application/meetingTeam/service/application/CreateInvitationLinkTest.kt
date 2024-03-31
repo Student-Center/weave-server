@@ -2,19 +2,12 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.properties.MeetingTeamInvitationPropertiesFixtureFactory
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvitationRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvitationServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.GetUserStub
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
-import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -26,16 +19,6 @@ import io.kotest.matchers.shouldBe
 class CreateInvitationLinkTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
-    val meetingMemberRepository = MeetingMemberRepositorySpy()
-    val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = GetUserStub()
-
-    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
-        meetingTeamRepository = meetingTeamRepository,
-        meetingMemberRepository = meetingMemberRepository,
-        meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepository,
-        getUser = userQueryUseCase
-    )
 
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(
@@ -47,7 +30,7 @@ class CreateInvitationLinkTest : DescribeSpec({
 
     val sut = CreateInvitationLinkService(
         meetingTeamInvitationService = meetingTeamInvitationService,
-        meetingTeamDomainService = meetingTeamDomainService,
+        meetingTeamRepository = meetingTeamRepository,
     )
 
     afterTest {
@@ -61,16 +44,10 @@ class CreateInvitationLinkTest : DescribeSpec({
         context("현재 유저가 팀장인 경우") {
             it("초대 링크를 정상적으로 발급한다.") {
                 // arrange
-                val meetingTeam = MeetingTeamFixtureFactory.create()
                 val currentUser = UserFixtureFactory.create()
+                val meetingTeam = MeetingTeamFixtureFactory.create(leader = currentUser)
 
-                val member = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = currentUser.id,
-                    role = MeetingMemberRole.LEADER,
-                )
 
-                meetingMemberRepository.save(member)
                 meetingTeamRepository.save(meetingTeam)
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
@@ -91,17 +68,11 @@ class CreateInvitationLinkTest : DescribeSpec({
         context("현재 유저가 팀장이 아닌 경우") {
             it("에러가 발생한다.") {
                 // arrange
-                val meetingTeam = MeetingTeamFixtureFactory.create()
                 val currentUser = UserFixtureFactory.create()
                 val leaderUser = UserFixtureFactory.create()
 
-                val member = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = leaderUser.id,
-                    role = MeetingMemberRole.LEADER,
-                )
+                val meetingTeam = MeetingTeamFixtureFactory.create(leader = leaderUser)
 
-                meetingMemberRepository.save(member)
                 meetingTeamRepository.save(meetingTeam)
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(currentUser)
@@ -117,32 +88,15 @@ class CreateInvitationLinkTest : DescribeSpec({
         context("팀의 정원이 가득 찼을 때, 새로운 초대 링크를 발급하려는 경우") {
             it("에러가 발생한다.") {
                 // arrange
-                val meetingTeam = MeetingTeamFixtureFactory.create()
                 val leaderUser = UserFixtureFactory.create()
-                val user1 = UserFixtureFactory.create()
-                val user2 = UserFixtureFactory.create()
-                val user3 = UserFixtureFactory.create()
-                val users: List<User> = listOf(user1, user2, user3)
+                val memberUser1 = UserFixtureFactory.create()
+                val memberUser2 = UserFixtureFactory.create()
 
-                val leader = MeetingMember.create(
-                    meetingTeamId = meetingTeam.id,
-                    userId = leaderUser.id,
-                    role = MeetingMemberRole.LEADER,
-                )
-
-                meetingMemberRepository.save(leader)
-
-                for (user in users) {
-                    val member = MeetingMember.create(
-                        meetingTeamId = meetingTeam.id,
-                        userId = user.id,
-                        role = MeetingMemberRole.MEMBER,
-                    )
-
-                    meetingMemberRepository.save(member)
-                }
-
-                meetingTeamRepository.save(meetingTeam)
+                val meetingTeam = MeetingTeamFixtureFactory.create(
+                    memberCount = 3,
+                    leader = leaderUser,
+                    members = listOf(memberUser1, memberUser2)
+                ).also { meetingTeamRepository.save(it) }
 
                 val userAuthentication = UserAuthenticationFixtureFactory.create(leaderUser)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))

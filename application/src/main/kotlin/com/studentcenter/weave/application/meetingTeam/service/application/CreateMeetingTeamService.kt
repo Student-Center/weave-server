@@ -2,18 +2,17 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.user.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CreateMeetingTeamService(
-    private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val meetingTeamRepository: MeetingTeamRepository,
     private val getUser: GetUser,
 ) : CreateMeetingTeam {
 
@@ -28,18 +27,13 @@ class CreateMeetingTeamService(
             teamIntroduce = command.teamIntroduce,
             memberCount = command.memberCount,
             location = command.location,
-            gender = user.gender,
+            leader = user,
         )
-        meetingTeamDomainService.save(meetingTeam)
-        meetingTeamDomainService.addMember(
-            meetingTeam = meetingTeam,
-            user = user,
-            role = MeetingMemberRole.LEADER,
-        )
+        meetingTeamRepository.save(meetingTeam)
     }
 
     private fun checkUserRegisterKakaoId(user: User) {
-        require (user.kakaoId != null) {
+        require(user.kakaoId != null) {
             "카카오 ID가 등록된 유저만 팀을 생성할 수 있어요. 카카오 ID를 등록해주세요!"
         }
     }

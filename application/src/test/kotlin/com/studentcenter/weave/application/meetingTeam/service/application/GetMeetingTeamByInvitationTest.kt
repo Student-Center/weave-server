@@ -6,9 +6,7 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRep
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvitationRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvitationServiceImpl
-import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -18,7 +16,6 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
-import io.mockk.mockk
 
 @DisplayName("GetMeetingTeamByInvitationTest")
 class GetMeetingTeamByInvitationTest : DescribeSpec({
@@ -29,14 +26,6 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
     val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-    val getUser = mockk<GetUser>()
-
-    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
-        meetingTeamRepository = meetingTeamRepositorySpy,
-        meetingMemberRepository = meetingMemberRepositorySpy,
-        meetingTeamMemberSummaryRepository = meetingTeamMemberSummaryRepositorySpy,
-        getUser = getUser,
-    )
 
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(
         meetingTeamInvitationProperties = meetingTeamInvitationProperties,
@@ -44,7 +33,7 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
     )
 
     val sut = GetMeetingTeamByInvitationCodeService(
-        meetingTeamDomainService = meetingTeamDomainService,
+        meetingTeamRepository = meetingTeamRepositorySpy,
         meetingTeamInvitationService = meetingTeamInvitationService,
     )
 

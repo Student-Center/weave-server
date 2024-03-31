@@ -9,7 +9,6 @@ import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMemberFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -173,24 +172,27 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
         context("이미 신청한 경우") {
             it("예외를 던진다") {
+                val me: User = UserFixtureFactory.create(isUnivVerified = true)
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
+                val otherMemberUser = UserFixtureFactory.create()
+
                 // arrange
                 val myMeetingTeam = MeetingTeamFixtureFactory.create(
-                    status = MeetingTeamStatus.PUBLISHED
+                    status = MeetingTeamStatus.PUBLISHED,
+                    leader = me,
+                    members = listOf(otherMemberUser)
                 )
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create(
                     gender = Gender.WOMAN,
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val user: User = UserFixtureFactory.create(isUnivVerified = true)
-                user.let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                every { getUser.getById(user.id) } returns user
-                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getUser.getById(me.id) } returns me
+                every { getMeetingTeam.findByMemberUserId(me.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMembers(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
                 meetingRequestApplicationService.invoke(command)
@@ -205,23 +207,26 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
         context("요청이 유효할 경우") {
             it("미팅이 생성된다") {
                 // arrange
+                val me: User = UserFixtureFactory.create(isUnivVerified = true)
+                me.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
+                val otherMemberUser = UserFixtureFactory.create()
+
                 val myMeetingTeam = MeetingTeamFixtureFactory.create(
-                    status = MeetingTeamStatus.PUBLISHED
+                    status = MeetingTeamStatus.PUBLISHED,
+                    leader = me,
+                    members = listOf(otherMemberUser)
                 )
+
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create(
                     gender = Gender.WOMAN,
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val user: User = UserFixtureFactory.create(isUnivVerified = true)
-                user.let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
-
-                every { getUser.getById(user.id) } returns user
-                every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
+                every { getUser.getById(me.id) } returns me
+                every { getMeetingTeam.findByMemberUserId(me.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMembers(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
                 MeetingRequestUseCase.Command(receivingMeetingTeam.id)
@@ -238,23 +243,26 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
             it("요청자는 미팅 참여도 생성된다") {
                 // arrange
+                val user: User = UserFixtureFactory.create(isUnivVerified = true)
+                user.let { UserAuthenticationFixtureFactory.create(it) }
+                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
+
+                val otherMemberUser = UserFixtureFactory.create()
+
                 val myMeetingTeam = MeetingTeamFixtureFactory.create(
-                    status = MeetingTeamStatus.PUBLISHED
+                    status = MeetingTeamStatus.PUBLISHED,
+                    leader = user,
+                    members = listOf(otherMemberUser),
                 )
+
                 val receivingMeetingTeam = MeetingTeamFixtureFactory.create(
                     gender = Gender.WOMAN,
                     status = MeetingTeamStatus.PUBLISHED
                 )
 
-                val user: User = UserFixtureFactory.create(isUnivVerified = true)
-                user.let { UserAuthenticationFixtureFactory.create(it) }
-                    .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
-
                 every { getUser.getById(user.id) } returns user
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
-                every { getMeetingTeam.findAllMembers(any()) } returns
-                        listOf(MeetingMemberFixtureFactory.create(userId = user.id))
 
                 // act
                 MeetingRequestUseCase.Command(receivingMeetingTeam.id)
