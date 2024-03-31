@@ -58,7 +58,7 @@ class MeetingAttendanceCreateApplicationService(
             meetingAttendanceDomainService.save(it)
         }
 
-        updateMeetingIfNeeded(
+        updateMeetingIfLastAttendanceOrCancel(
             meeting = meeting,
             memberCount = teamMembers.size,
             isAttendance = attendance,
@@ -66,7 +66,7 @@ class MeetingAttendanceCreateApplicationService(
 
     }
 
-    private fun updateMeetingIfNeeded(
+    private fun updateMeetingIfLastAttendanceOrCancel(
         meeting: Meeting,
         memberCount: Int,
         isAttendance: Boolean,
