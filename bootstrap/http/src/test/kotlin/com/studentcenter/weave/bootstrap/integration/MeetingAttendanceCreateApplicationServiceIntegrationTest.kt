@@ -142,7 +142,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         }
     }
 
-    context("미팅 참여하는 경우") {
+    context("미팅에 참여하는 경우") {
         it("참여 정보가 생성된다.") {
             // arrange
             val attendance = true
