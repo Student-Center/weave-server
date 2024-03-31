@@ -122,7 +122,7 @@ class GetMeetingTeamDetailTest : DescribeSpec({
                 me.let { UserAuthenticationFixtureFactory.create(it) }
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                val myMeetingTeam = MeetingTeamFixtureFactory
+                MeetingTeamFixtureFactory
                     .create(status = MeetingTeamStatus.WAITING, leader = me)
                     .also { meetingTeamRepositorySpy.save(it) }
                 val targetMeetingTeam = MeetingTeamFixtureFactory

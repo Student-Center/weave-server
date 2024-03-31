@@ -67,10 +67,6 @@ class MeetingTeamRepositorySpy : MeetingTeamRepository {
         return bucket[id]
     }
 
-    fun getLast(): MeetingTeam {
-        return bucket.values.last()
-    }
-
     fun clear() {
         bucket.clear()
     }

@@ -107,17 +107,17 @@ data class MeetingTeam(
 
         return copy(
             teamIntroduce = teamIntroduce ?: this.teamIntroduce,
-            memberCount = memberCount ?: this.memberCount,
+            memberCount = memberCount,
             location = location ?: this.location,
         )
     }
 
-    fun publish(): MeetingTeam {
-        return copy(status = MeetingTeamStatus.PUBLISHED)
-    }
-
     fun isPublished(): Boolean {
         return status == MeetingTeamStatus.PUBLISHED
+    }
+
+    private fun publish(): MeetingTeam {
+        return copy(status = MeetingTeamStatus.PUBLISHED)
     }
 
     companion object {

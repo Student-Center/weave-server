@@ -40,14 +40,6 @@ class MeetingMemberRepositorySpy : MeetingMemberRepository {
         bucket.remove(id)
     }
 
-    fun getByMeetingTeamIdAndUserId(
-        meetingTeamId: UUID,
-        userId: UUID,
-    ): MeetingMember {
-        return findByMeetingTeamIdAndUserId(meetingTeamId, userId)
-            ?: throw NoSuchElementException("MeetingMember not found")
-    }
-
     fun clear() {
         bucket.clear()
     }
