@@ -41,7 +41,9 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         isUserTeam: Boolean = false,
     ): MeetingTeam {
         val leaderUser = UserFixtureFactory.create()
-        val memberUser = (0 until memberCount - 1).map { UserFixtureFactory.create() } + currentUser
+        val memberUser = (0 until memberCount - 1).map {
+            if (it == 0 && isUserTeam) currentUser else UserFixtureFactory.create()
+        }
 
         val team: MeetingTeam = MeetingTeamFixtureFactory.create(
             status = MeetingTeamStatus.PUBLISHED,
@@ -52,6 +54,10 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
         ).also {
             meetingTeamRepository.save(it)
             if (isUserTeam && userTeam == null) userTeam = it
+        }
+
+        team.members.find { it.userId == currentUser.id }?.let {
+            userTeamMember = it
         }
 
         return team
@@ -102,6 +108,8 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
                 receivingTeamId = receivingTeam.id,
                 status = MeetingStatus.PENDING
             ).also {
+                meetingTeamRepository.save(requestingTeam)
+                meetingTeamRepository.save(receivingTeam)
                 meetingDomainService.save(it)
             }
 
@@ -161,7 +169,9 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
                 requestingTeamId = requestingTeam.id,
                 receivingTeamId = receivingTeam.id,
                 status = MeetingStatus.PENDING
-            ).also { meetingDomainService.save(it) }
+            ).also {
+                meetingDomainService.save(it)
+            }
 
             // act
             sut.invoke(meeting.id, attendance)
@@ -195,7 +205,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
             ).also {
                 meetingDomainService.save(it)
             }
-            (requestingTeam.members + requestingTeam.members).forEach {
+            (requestingTeam.members + receivingTeam.members).forEach {
                 if (it.userId == currentUser.id) return@forEach
                 MeetingAttendance(
                     meetingId = meeting.id,
