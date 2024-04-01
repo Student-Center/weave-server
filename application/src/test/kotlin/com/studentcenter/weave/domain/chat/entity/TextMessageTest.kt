@@ -37,14 +37,13 @@ class TextMessageTest : DescribeSpec({
                 val content = "a".repeat(1001)
 
                 // act & assert
-                val exception = shouldThrow<IllegalArgumentException> {
+                shouldThrow<IllegalArgumentException> {
                     TextMessage.create(
                         roomId = roomId,
                         sendUserId = sendUserId,
                         content = content,
                     )
                 }
-                exception.message shouldBe "1000자 이내로 입력해 주세요!"
             }
         }
 

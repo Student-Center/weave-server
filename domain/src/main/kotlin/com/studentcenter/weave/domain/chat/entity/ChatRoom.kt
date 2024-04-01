@@ -7,6 +7,7 @@ import java.util.*
 
 data class ChatRoom(
     val id: UUID = UuidCreator.create(),
+    val meetingId: UUID,
     val receivingTeamId: UUID,
     val requestingTeamId: UUID,
     val createdAt: LocalDateTime = LocalDateTime.now(),
@@ -29,6 +30,7 @@ data class ChatRoom(
             require(meeting.isCompleted()) { "미팅이 매칭되지 않았습니다."}
 
             return ChatRoom(
+                meetingId = meeting.id,
                 receivingTeamId = meeting.receivingTeamId,
                 requestingTeamId = meeting.requestingTeamId
             )
