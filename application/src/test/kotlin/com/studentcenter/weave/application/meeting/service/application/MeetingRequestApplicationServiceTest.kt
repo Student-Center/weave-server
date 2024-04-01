@@ -159,6 +159,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
                 every { getUser.getById(user.id) } returns user
+                every { getMeetingTeam.findByMemberUserId(user.id) } returns
+                        MeetingTeamFixtureFactory.create(status = MeetingTeamStatus.PUBLISHED)
 
                 // act, assert
                 shouldThrow<CustomException> {
