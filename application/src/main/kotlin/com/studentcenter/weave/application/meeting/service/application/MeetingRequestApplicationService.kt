@@ -10,6 +10,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTe
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -45,17 +46,15 @@ class MeetingRequestApplicationService(
             receivingTeamId = receivingMeetingTeam.id,
         ).also {
             meetingDomainService.save(it)
-            meetingAttendanceDomainService.save(createMeetingAttendance(it, myMeetingTeam))
+            meetingAttendanceDomainService.save(createMeetingAttendance(it, myMeetingTeam.members))
         }
     }
 
     private fun createMeetingAttendance(
         meeting: Meeting,
-        meetingTeam: MeetingTeam,
+        members: List<MeetingMember>,
     ): MeetingAttendance {
-        val teamMember = meetingTeam
-            .members
-            .firstOrNull { it.userId == getCurrentUserAuthentication().userId }
+        val teamMember = members.firstOrNull { it.userId == getCurrentUserAuthentication().userId }
 
         if (teamMember == null) {
             throw CustomException(
