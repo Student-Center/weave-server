@@ -2,7 +2,6 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.properties.MeetingTeamInvitationPropertiesFixtureFactory
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvitationRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.DisplayName
 class JoinMeetingTeamServiceTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
-    val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
     val userQueryUseCase = GetUserStub()
 
@@ -47,7 +45,6 @@ class JoinMeetingTeamServiceTest : DescribeSpec({
 
     afterTest {
         meetingTeamRepository.clear()
-        meetingMemberRepository.clear()
         meetingTeamMemberSummaryRepository.clear()
         meetingTeamInvitationRepositorySpy.clear()
         SecurityContextHolder.clearContext()

@@ -1,7 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeamDetail
@@ -32,7 +31,6 @@ class GetMeetingTeamDetailTest : DescribeSpec({
     val getUniversity = mockk<GetUniversity>()
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
     val getUser = mockk<GetUser>()
 
@@ -50,7 +48,6 @@ class GetMeetingTeamDetailTest : DescribeSpec({
 
     afterEach {
         meetingTeamRepositorySpy.clear()
-        meetingMemberRepositorySpy.clear()
         meetingTeamMemberSummaryRepositorySpy.clear()
         SecurityContextHolder.clearContext()
         clearAllMocks()

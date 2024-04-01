@@ -2,7 +2,6 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service
 class DeleteMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
-    val meetingMemberRepository = MeetingMemberRepositorySpy()
 
     val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
     val sut = DeleteMeetingTeamService(
@@ -36,7 +34,6 @@ class DeleteMeetingTeamTest : DescribeSpec({
 
     afterEach {
         meetingTeamRepository.clear()
-        meetingMemberRepository.clear()
         SecurityContextHolder.clearContext()
         clearAllMocks()
     }

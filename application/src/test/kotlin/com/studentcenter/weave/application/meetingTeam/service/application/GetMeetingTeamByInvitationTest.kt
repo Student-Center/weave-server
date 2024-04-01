@@ -2,7 +2,6 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.properties.MeetingTeamInvitationPropertiesFixtureFactory
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvitationRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
@@ -24,7 +23,6 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
 
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(
@@ -39,7 +37,6 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
 
     afterEach {
         meetingTeamRepositorySpy.clear()
-        meetingMemberRepositorySpy.clear()
         meetingTeamMemberSummaryRepositorySpy.clear()
         meetingTeamInvitationRepositorySpy.clear()
         SecurityContextHolder.clearContext()

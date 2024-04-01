@@ -1,7 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.EditMeetingTeam
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -20,14 +19,12 @@ import io.kotest.matchers.shouldBe
 class EditMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
-    val meetingMemberRepository = MeetingMemberRepositorySpy()
     val sut = EditMeetingTeamService(
         meetingTeamRepository = meetingTeamRepository,
     )
 
     afterEach {
         meetingTeamRepository.clear()
-        meetingMemberRepository.clear()
         SecurityContextHolder.clearContext()
     }
 

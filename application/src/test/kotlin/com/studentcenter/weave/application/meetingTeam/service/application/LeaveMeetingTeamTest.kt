@@ -2,7 +2,6 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
@@ -20,7 +19,6 @@ import io.mockk.mockk
 @DisplayName("LeaveMeetingTeamTest")
 class LeaveMeetingTeamTest : DescribeSpec({
 
-    val meetingMemberRepository = MeetingMemberRepositorySpy()
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val getUser = mockk<GetUser>()
     val cancelAllMeetingUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
@@ -31,7 +29,6 @@ class LeaveMeetingTeamTest : DescribeSpec({
     )
 
     afterEach {
-        meetingMemberRepository.clear()
         meetingTeamRepository.clear()
         SecurityContextHolder.clearContext()
         clearAllMocks()

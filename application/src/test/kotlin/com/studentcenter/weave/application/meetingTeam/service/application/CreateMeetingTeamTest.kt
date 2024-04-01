@@ -1,7 +1,6 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
 import com.studentcenter.weave.application.user.port.inbound.GetUserStub
@@ -25,7 +24,6 @@ import io.mockk.mockk
 class CreateMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
     val userQueryUseCaseMock = mockk<GetUserStub>()
 
     val sut = CreateMeetingTeamService(
@@ -40,7 +38,6 @@ class CreateMeetingTeamTest : DescribeSpec({
     afterTest {
         SecurityContextHolder.clearContext()
         meetingTeamRepositorySpy.clear()
-        meetingMemberRepositorySpy.clear()
     }
 
     describe("미팅 팀 생성 유스케이스") {
