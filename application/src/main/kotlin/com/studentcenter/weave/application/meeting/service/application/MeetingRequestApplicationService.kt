@@ -26,14 +26,13 @@ class MeetingRequestApplicationService(
 
     @Transactional
     override fun invoke(command: MeetingRequestUseCase.Command) {
-        validateMyUniversityEmailVerified()
-
         val myMeetingTeam: MeetingTeam = getMyMeetingTeam()
             .also {
                 validateMyMeetingTeamStatus(it)
                 validateDuplicatedRequest(it, command.receivingMeetingTeamId)
             }
 
+        validateMyUniversityEmailVerified()
 
         val receivingMeetingTeam: MeetingTeam =
             getMeetingTeam.getById(command.receivingMeetingTeamId)
