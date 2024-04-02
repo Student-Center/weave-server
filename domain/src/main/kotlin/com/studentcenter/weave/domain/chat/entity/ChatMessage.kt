@@ -7,5 +7,10 @@ import java.util.*
 abstract class ChatMessage(
     open val id: UUID = UuidCreator.create(),
     open val roomId: UUID,
+    open val sender: Sender,
     open val createdAt: LocalDateTime = LocalDateTime.now(),
-)
+) {
+
+    interface Sender
+
+}

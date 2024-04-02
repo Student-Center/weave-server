@@ -6,10 +6,10 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("TextMessageTest")
-class TextMessageTest : DescribeSpec({
+@DisplayName("UserTextMessageTest")
+class UserTextMessageTest : DescribeSpec({
 
-    describe("채팅 텍스트 메시지 생성") {
+    describe("유저 채팅 텍스트 메시지 생성") {
         context("내용이 빈 문자열일 경우") {
             it("예외를 발생시킨다") {
                 // arrange
@@ -19,7 +19,7 @@ class TextMessageTest : DescribeSpec({
 
                 // act & assert
                 val exception = shouldThrow<IllegalArgumentException> {
-                    TextMessage.create(
+                    UserTextMessage.create(
                         roomId = roomId,
                         sendUserId = sendUserId,
                         content = content,
@@ -38,7 +38,7 @@ class TextMessageTest : DescribeSpec({
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
-                    TextMessage.create(
+                    UserTextMessage.create(
                         roomId = roomId,
                         sendUserId = sendUserId,
                         content = content,
@@ -55,16 +55,16 @@ class TextMessageTest : DescribeSpec({
                 val content = "안녕하세요!"
 
                 // act
-                val textMessage = TextMessage.create(
+                val userTextMessage = UserTextMessage.create(
                     roomId = roomId,
                     sendUserId = sendUserId,
                     content = content,
                 )
 
                 // assert
-                textMessage.roomId shouldBe roomId
-                textMessage.sendUserId shouldBe sendUserId
-                textMessage.content shouldBe content
+                userTextMessage.roomId shouldBe roomId
+                userTextMessage.sender.userId shouldBe sendUserId
+                userTextMessage.content shouldBe content
             }
         }
     }

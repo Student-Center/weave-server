@@ -13,11 +13,11 @@ data class ChatRoom(
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
-    fun sendTextMessage(
+    fun sendUserTextMessage(
         sendUserId: UUID,
         content: String,
-    ): TextMessage {
-        return TextMessage.create(
+    ): UserTextMessage {
+        return UserTextMessage.create(
             roomId = id,
             sendUserId = sendUserId,
             content = content,

@@ -2,11 +2,16 @@ package com.studentcenter.weave.domain.chat.entity
 
 import java.util.*
 
-data class TextMessage(
+data class UserTextMessage(
     override val roomId: UUID,
-    val sendUserId: UUID,
+    override val sender: SendUser,
     val content: String,
-) : ChatMessage(roomId = roomId) {
+) : ChatMessage(
+    sender = sender,
+    roomId = roomId,
+) {
+
+    data class SendUser(val userId: UUID) : Sender
 
     init {
         require(content.isNotBlank()) { "내용을 입력해 주세요!" }
@@ -14,14 +19,15 @@ data class TextMessage(
     }
 
     companion object {
+
         fun create(
             roomId: UUID,
             sendUserId: UUID,
             content: String,
-        ): TextMessage {
-            return TextMessage(
+        ): UserTextMessage {
+            return UserTextMessage(
                 roomId = roomId,
-                sendUserId = sendUserId,
+                sender = SendUser(userId = sendUserId),
                 content = content,
             )
         }
