@@ -29,11 +29,14 @@ class GetAllOtherTeamMemberInfoApplicationService(
         validateMyMeetingByTeam(meeting, myTeam)
         validateMeeting(meeting)
 
-        val otherTeamId = if (meeting.requestingTeamId != myTeam.id) meeting.requestingTeamId
-        else meeting.receivingTeamId
+        val otherTeamId = if (meeting.requestingTeamId != myTeam.id) {
+            meeting.requestingTeamId
+        } else {
+            meeting.receivingTeamId
+        }
 
-        return getMeetingTeam
-            .findAllMembers(otherTeamId)
+
+        return getMeetingTeam.getById(otherTeamId).members
             .map {
                 val user = getUser.getById(it.userId)
                 val university = getUniversity.getById(user.universityId)

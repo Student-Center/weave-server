@@ -1,11 +1,8 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingMemberRepositorySpy
-import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.service.domain.impl.MeetingTeamDomainServiceImpl
 import com.studentcenter.weave.application.user.port.inbound.GetUserStub
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
@@ -27,17 +24,10 @@ import io.mockk.mockk
 class CreateMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingMemberRepositorySpy = MeetingMemberRepositorySpy()
-    val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
     val userQueryUseCaseMock = mockk<GetUserStub>()
-    val meetingTeamDomainService = MeetingTeamDomainServiceImpl(
-        meetingTeamRepositorySpy,
-        meetingMemberRepositorySpy,
-        meetingTeamMemberSummaryRepositorySpy,
-        userQueryUseCaseMock,
-    )
+
     val sut = CreateMeetingTeamService(
-        meetingTeamDomainService,
+        meetingTeamRepositorySpy,
         userQueryUseCaseMock,
     )
 
@@ -48,7 +38,6 @@ class CreateMeetingTeamTest : DescribeSpec({
     afterTest {
         SecurityContextHolder.clearContext()
         meetingTeamRepositorySpy.clear()
-        meetingMemberRepositorySpy.clear()
     }
 
     describe("미팅 팀 생성 유스케이스") {
@@ -77,7 +66,7 @@ class CreateMeetingTeamTest : DescribeSpec({
             }
         }
 
-        context("사용자가 로그인 한 상태이면") {
+        context("사용자가 로그인 한 상태이고, 카카오 아이디를 등록했으면") {
             it("해당 사용자가 팀장인 미팅 팀을 생성한다") {
                 // arrange
                 val teamIntroduce = TeamIntroduce("팀 소개")
@@ -89,7 +78,8 @@ class CreateMeetingTeamTest : DescribeSpec({
                     location = location
                 )
 
-                val leaderUserFixture: User = UserFixtureFactory.create(kakaoId = KakaoId(("test")))
+                val leaderUserFixture: User =
+                    UserFixtureFactory.create(kakaoId = KakaoId("kakaoId"))
                 UserAuthenticationFixtureFactory
                     .create(leaderUserFixture)
                     .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
@@ -99,13 +89,9 @@ class CreateMeetingTeamTest : DescribeSpec({
                 sut.invoke(command)
 
                 // assert
-                val meetingTeam = meetingTeamRepositorySpy.getLast() shouldNotBe null
-                val member = meetingMemberRepositorySpy.getByMeetingTeamIdAndUserId(
-                    meetingTeam.id,
-                    leaderUserFixture.id
-                )
-                member.meetingTeamId shouldBe meetingTeam.id
-                member.userId shouldBe leaderUserFixture.id
+                val meetingTeam = meetingTeamRepositorySpy.findByMemberUserId(leaderUserFixture.id)
+                meetingTeam shouldNotBe null
+                meetingTeam!!.leader.userId shouldBe leaderUserFixture.id
             }
         }
     }

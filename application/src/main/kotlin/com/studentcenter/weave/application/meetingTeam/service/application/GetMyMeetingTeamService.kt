@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMyMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MyMeetingTeamInfo
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
@@ -14,13 +14,13 @@ import java.util.*
 class GetMyMeetingTeamService(
     private val getUser: GetUser,
     private val getUniversity: GetUniversity,
-    private val meetingDomainService: MeetingTeamDomainService,
+    private val meetingTeamRepository: MeetingTeamRepository,
 ) : GetMyMeetingTeam {
 
     override fun invoke(command: GetMyMeetingTeam.Command): GetMyMeetingTeam.Result {
         val currentUser = getCurrentUserAuthentication().let { getUser.getById(it.userId) }
 
-        val meetingTeams = meetingDomainService.scrollByMemberUserId(
+        val meetingTeams = meetingTeamRepository.scrollByMemberUserId(
             userId = currentUser.id,
             next = command.next,
             limit = command.limit + 1
@@ -31,10 +31,7 @@ class GetMyMeetingTeamService(
         val items = if (hasNext) meetingTeams.take(command.limit) else meetingTeams
 
         val myMeetingTeamInfos = items.map { team ->
-            val memberInfos = meetingDomainService
-                .findAllMeetingMembersByMeetingTeamId(team.id)
-                .sortedBy { it.id }
-                .map { createMemberInfo(it, currentUser.id) }
+            val memberInfos = team.members.map { createMemberInfo(it, currentUser.id) }
 
             MyMeetingTeamInfo(
                 team = team,
@@ -50,7 +47,7 @@ class GetMyMeetingTeamService(
 
     private fun createMemberInfo(
         member: MeetingMember,
-        currentUserId: UUID
+        currentUserId: UUID,
     ): MyMeetingTeamInfo.MemberInfo {
         val memberUser = getUser.getById(member.userId)
         val university = getUniversity.getById(memberUser.universityId)

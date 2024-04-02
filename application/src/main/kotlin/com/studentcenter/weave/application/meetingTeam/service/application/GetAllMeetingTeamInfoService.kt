@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
-import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.GetMajor
@@ -15,16 +15,20 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class GetAllMeetingTeamInfoApplicationService(
+class GetAllMeetingTeamInfoService(
     private val getUser: GetUser,
     private val getMajor: GetMajor,
     private val getUniversity: GetUniversity,
-    private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val meetingTeamRepository: MeetingTeamRepository,
 ) : GetAllMeetingTeamInfo {
 
     @Transactional(readOnly = true)
     override fun invoke(ids: List<UUID>): List<MeetingTeamInfo> {
-        val meetingTeams = meetingTeamDomainService.getAllByIds(ids)
+        val meetingTeams = meetingTeamRepository.findAllById(ids)
+        require(meetingTeams.size == ids.size) {
+            "일부 미팅팀 정보를 찾을 수 없습니다. 요청한 미팅팀 ID: $ids, 찾은 미팅팀 ID: ${meetingTeams.map { it.id }}"
+        }
+
         // TODO(cache): cache layer 도입 시 수정 필요
         val univCache: MutableMap<UUID, University> = HashMap()
         val majorCache: MutableMap<UUID, Major> = HashMap()
@@ -38,8 +42,8 @@ class GetAllMeetingTeamInfoApplicationService(
         univCache: MutableMap<UUID, University>,
         majorCache: MutableMap<UUID, Major>,
     ): List<MemberInfo> {
-        return meetingTeamDomainService
-            .findAllMeetingMembersByMeetingTeamId(team.id)
+        return team
+            .members
             .map {
                 val memberUser = getUser.getById(it.userId)
                 val university = getUniversityById(memberUser.universityId, univCache)

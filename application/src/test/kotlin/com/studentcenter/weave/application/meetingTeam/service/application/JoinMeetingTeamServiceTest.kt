@@ -6,45 +6,53 @@ import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamInvit
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamMemberSummaryRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.util.impl.MeetingTeamInvitationServiceImpl
+import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInvitationFixtureFactory
+import com.studentcenter.weave.application.user.port.inbound.GetUserStub
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
+import com.studentcetner.weave.support.lock.DistributedLockTestInitializer
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
+import org.junit.jupiter.api.DisplayName
 
-@DisplayName("GetMeetingTeamByInvitationTest")
-class GetMeetingTeamByInvitationTest : DescribeSpec({
+@DisplayName("JoinMeetingTeam")
+class JoinMeetingTeamServiceTest : DescribeSpec({
 
-    val meetingTeamInvitationProperties = MeetingTeamInvitationPropertiesFixtureFactory.create()
+    val meetingTeamRepository = MeetingTeamRepositorySpy()
+    val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
+    val userQueryUseCase = GetUserStub()
+
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
 
-    val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val meetingTeamMemberSummaryRepositorySpy = MeetingTeamMemberSummaryRepositorySpy()
-
     val meetingTeamInvitationService = MeetingTeamInvitationServiceImpl(
-        meetingTeamInvitationProperties = meetingTeamInvitationProperties,
+        meetingTeamInvitationProperties = MeetingTeamInvitationPropertiesFixtureFactory.create(),
         meetingTeamInvitationRepository = meetingTeamInvitationRepositorySpy,
     )
 
-    val sut = GetMeetingTeamByInvitationCodeService(
-        meetingTeamRepository = meetingTeamRepositorySpy,
+    val sut = JoinMeetingTeamService(
+        meetingTeamRepository = meetingTeamRepository,
         meetingTeamInvitationService = meetingTeamInvitationService,
+        getUser = userQueryUseCase,
     )
 
-    afterEach {
-        meetingTeamRepositorySpy.clear()
-        meetingTeamMemberSummaryRepositorySpy.clear()
+    beforeTest {
+        DistributedLockTestInitializer.mockExecutionByStatic()
+    }
+
+    afterTest {
+        meetingTeamRepository.clear()
+        meetingTeamMemberSummaryRepository.clear()
         meetingTeamInvitationRepositorySpy.clear()
         SecurityContextHolder.clearContext()
         clearAllMocks()
     }
 
-    describe("초대 링크를 이용한 미팅팀 상세 조회") {
-        context("초대 링크가 유효하지 않은 경우") {
+    describe("미팅 팀 입장 요청") {
+        context("유효하지 않은 코드를 통해 입장을 시도하는 경우") {
             it("에러가 발생한다.") {
                 // arrange
                 val meetingTeam = MeetingTeamFixtureFactory.create()
@@ -59,27 +67,31 @@ class GetMeetingTeamByInvitationTest : DescribeSpec({
                 shouldThrow<NoSuchElementException> {
                     sut.invoke(meetingTeamInvitation.invitationCode)
                 }
-
             }
         }
 
-        context("초대 링크가 유효한 경우") {
-            it("미팅팀 상세 조회가 정상적으로 이루어진다.") {
+        context("유효한 코드를 통해 입장을 시도하는 경우") {
+            it("정상적으로 팀에 초대되어 합류한다.") {
                 // arrange
-                val meetingTeam = MeetingTeamFixtureFactory.create()
-                    .also { meetingTeamRepositorySpy.save(it) }
+                val currentUser = UserFixtureFactory.create()
+                val meetingTeam = MeetingTeamFixtureFactory
+                    .create()
+                    .also { meetingTeamRepository.save(it) }
 
-                UserFixtureFactory.create()
-                    .let { UserAuthenticationFixtureFactory.create(it) }
+                UserAuthenticationFixtureFactory
+                    .create(currentUser)
                     .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                val meetingTeamInvitation = meetingTeamInvitationService.create(meetingTeam.id)
+                val meetingTeamInvitation = MeetingTeamInvitationFixtureFactory
+                    .create(teamId = meetingTeam.id)
+                    .also { meetingTeamInvitationRepositorySpy.save(it) }
 
                 // act
-                val result = sut.invoke(meetingTeamInvitation.invitationCode)
+                sut.invoke(meetingTeamInvitation.invitationCode)
 
                 // assert
-                result shouldBe meetingTeam
+                val savedMeetingTeam = meetingTeamRepository.getById(meetingTeam.id)
+                savedMeetingTeam.members.find { it.userId == currentUser.id } shouldNotBe null
             }
         }
     }

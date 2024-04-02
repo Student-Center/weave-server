@@ -119,7 +119,7 @@ interface MeetingTeamApi {
     @Operation(summary = "Enter meeting team")
     @PostMapping("/invitation/{invitationCode}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun enterMeetingTeam(
+    fun joinMeetingTeam(
         @PathVariable
         invitationCode: UUID
     )

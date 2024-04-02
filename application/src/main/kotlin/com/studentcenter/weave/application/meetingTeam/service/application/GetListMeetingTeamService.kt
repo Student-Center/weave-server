@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetListMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.service.domain.MeetingTeamDomainService
+import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamListFilter
 import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
@@ -14,10 +14,10 @@ import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import org.springframework.stereotype.Service
 
 @Service
-class GetListApplicationService(
+class GetListMeetingTeamService(
     private val getUser: GetUser,
     private val getUniversity: GetUniversity,
-    private val meetingTeamDomainService: MeetingTeamDomainService,
+    private val meetingTeamRepository: MeetingTeamRepository,
 ) : GetListMeetingTeam {
 
     override fun invoke(command: GetListMeetingTeam.Command): GetListMeetingTeam.Result {
@@ -33,7 +33,7 @@ class GetListApplicationService(
             gender = oppositeGender,
             status = MeetingTeamStatus.PUBLISHED,
         ).let {
-            meetingTeamDomainService.scrollByFilter(
+            meetingTeamRepository.scrollByFilter(
                 filter = it,
                 next = command.next,
                 limit = command.limit + 1
@@ -45,8 +45,8 @@ class GetListApplicationService(
         val items = if (hasNext) meetingTeams.take(command.limit) else meetingTeams
 
         val meetingTeamInfos = items.map { team ->
-            val memberInfos = meetingTeamDomainService
-                .findAllMeetingMembersByMeetingTeamId(team.id)
+            val memberInfos = team
+                .members
                 .map { createMemberInfo(it) }
 
             MeetingTeamInfo(
@@ -62,7 +62,7 @@ class GetListApplicationService(
     }
 
     private fun createMemberInfo(
-        member: MeetingMember
+        member: MeetingMember,
     ): MemberInfo {
         val memberUser = getUser.getById(member.userId)
         val university = getUniversity.getById(memberUser.universityId)

@@ -33,17 +33,17 @@ class MeetingAttendanceCreateApplicationService(
     ): Unit = distributedLock("${this.javaClass.simpleName}:$meetingId") {
         val meeting = getByIdAndValidate(meetingId)
 
-        val requestingTeamMembers = getMeetingTeam.findAllMembers(meeting.requestingTeamId)
-        val receivingTeamMembers = getMeetingTeam.findAllMembers(meeting.receivingTeamId)
+        val requestingTeam = getMeetingTeam.getById(meeting.requestingTeamId)
+        val receivingTeam = getMeetingTeam.getById(meeting.receivingTeamId)
 
-        val teamMembers = requestingTeamMembers + receivingTeamMembers
+        val teamMembers = requestingTeam.members + receivingTeam.members
 
-        val teamMemberMe = teamMembers.firstOrNull {
-            it.userId == getCurrentUserAuthentication().userId
-        } ?: throw CustomException(
-            MeetingExceptionType.MEETING_NOT_JOINED_USER,
-            "미팅에 참여하지 않는 유저입니다",
-        )
+        val teamMemberMe = teamMembers
+            .firstOrNull { it.userId == getCurrentUserAuthentication().userId }
+            ?: throw CustomException(
+                MeetingExceptionType.MEETING_NOT_JOINED_USER,
+                "미팅에 참여하지 않는 유저입니다",
+            )
 
         validateAlreadyCreatedAttendance(
             meetingId = meeting.id,
@@ -58,7 +58,7 @@ class MeetingAttendanceCreateApplicationService(
             meetingAttendanceDomainService.save(it)
         }
 
-        updateMeetingIfNeeded(
+        updateMeetingIfLastAttendanceOrCancel(
             meeting = meeting,
             memberCount = teamMembers.size,
             isAttendance = attendance,
@@ -66,7 +66,7 @@ class MeetingAttendanceCreateApplicationService(
 
     }
 
-    private fun updateMeetingIfNeeded(
+    private fun updateMeetingIfLastAttendanceOrCancel(
         meeting: Meeting,
         memberCount: Int,
         isAttendance: Boolean,

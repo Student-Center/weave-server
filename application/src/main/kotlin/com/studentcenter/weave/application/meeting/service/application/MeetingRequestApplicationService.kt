@@ -1,6 +1,7 @@
 package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
+import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
@@ -9,6 +10,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTe
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
+import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -44,18 +46,23 @@ class MeetingRequestApplicationService(
             receivingTeamId = receivingMeetingTeam.id,
         ).also {
             meetingDomainService.save(it)
-            meetingAttendanceDomainService.save(createMeetingAttendance(it, myMeetingTeam.id))
+            meetingAttendanceDomainService.save(createMeetingAttendance(it, myMeetingTeam.members))
         }
-
-
     }
 
-    private fun createMeetingAttendance(meeting: Meeting, myTeamId: UUID): MeetingAttendance {
-        val teamMember = getMeetingTeam
-            .findAllMembers(myTeamId)
-            .first { meetingMember ->
-                meetingMember.userId == getCurrentUserAuthentication().userId
-            }
+    private fun createMeetingAttendance(
+        meeting: Meeting,
+        members: List<MeetingMember>,
+    ): MeetingAttendance {
+        val teamMember = members.firstOrNull { it.userId == getCurrentUserAuthentication().userId }
+
+        if (teamMember == null) {
+            throw CustomException(
+                type = MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER,
+                message = "미팅팀에 속해있지 않아요! 미팅팀에 참여해 주세요!",
+            )
+        }
+
         return MeetingAttendance.create(
             meetingId = meeting.id,
             meetingMemberId = teamMember.id,
@@ -63,8 +70,11 @@ class MeetingRequestApplicationService(
         )
     }
 
-    private fun validateDuplicatedRequest(myTeam: MeetingTeam, receivingTeamId: UUID) {
-        if(meetingDomainService.existsMeetingRequest(myTeam.id, receivingTeamId)) {
+    private fun validateDuplicatedRequest(
+        myTeam: MeetingTeam,
+        receivingTeamId: UUID,
+    ) {
+        if (meetingDomainService.existsMeetingRequest(myTeam.id, receivingTeamId)) {
             throw CustomException(
                 MeetingExceptionType.ALREADY_REQUEST_MEETING,
                 "이미 상대팀에게 미팅을 신청했어요!",
@@ -76,7 +86,7 @@ class MeetingRequestApplicationService(
         val user = getCurrentUserAuthentication()
             .let { getUser.getById(it.userId) }
 
-        if (user.isUnivVerified.not()){
+        if (user.isUnivVerified.not()) {
             throw CustomException(
                 MeetingExceptionType.CAN_NOT_MEETING_REQUEST_NOT_UNIV_VERIFIED_USER,
                 "대학교 이메일 인증이 되지 않았어요! 대학교 이메일을 인증해 주세요!",
