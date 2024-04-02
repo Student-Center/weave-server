@@ -11,6 +11,7 @@ abstract class ChatMessage(
     open val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
-    interface Sender
+    sealed class Sender(val senderId: UUID)
+    class SendUser(val userId: UUID) : Sender(senderId = userId)
 
 }

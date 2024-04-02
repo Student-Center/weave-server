@@ -16,8 +16,8 @@ data class ChatRoom(
     fun sendUserTextMessage(
         sendUserId: UUID,
         content: String,
-    ): UserTextMessage {
-        return UserTextMessage.create(
+    ): TextMessage {
+        return TextMessage.create(
             roomId = id,
             sendUserId = sendUserId,
             content = content,
