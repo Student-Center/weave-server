@@ -8,12 +8,14 @@ object ChatRoomFixtureFactory {
 
     fun create(
         id: UUID = UuidCreator.create(),
+        meetingId: UUID = UuidCreator.create(),
         requestingTeamId: UUID = UuidCreator.create(),
         receivingTeamId: UUID = UuidCreator.create(),
         createdAt: LocalDateTime = LocalDateTime.now(),
     ): ChatRoom {
         return ChatRoom(
             id = id,
+            meetingId = meetingId,
             requestingTeamId = requestingTeamId,
             receivingTeamId = receivingTeamId,
             createdAt = createdAt,
