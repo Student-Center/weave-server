@@ -7,4 +7,6 @@ interface GetUser {
 
     fun getById(id: UUID): User
 
+    fun getAllByIds(ids: List<UUID>): List<User>
+
 }

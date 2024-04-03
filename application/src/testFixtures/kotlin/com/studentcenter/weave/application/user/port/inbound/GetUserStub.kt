@@ -10,4 +10,8 @@ class GetUserStub : GetUser {
         return UserFixtureFactory.create(id = id)
     }
 
+    override fun getAllByIds(ids: List<UUID>): List<User> {
+        return ids.map { UserFixtureFactory.create(id = it) }
+    }
+
 }
