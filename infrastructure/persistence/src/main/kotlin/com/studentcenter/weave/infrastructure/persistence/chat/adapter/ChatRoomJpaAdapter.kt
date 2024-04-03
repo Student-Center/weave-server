@@ -12,5 +12,4 @@ class ChatRoomJpaAdapter: ChatRoomRepository {
         TODO("Not yet implemented")
     }
 
-
 }
