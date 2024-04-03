@@ -1,5 +1,7 @@
 package com.studentcenter.weave.domain.chat.entity
 
+import com.studentcenter.weave.domain.chat.entity.ChatRoomFixtureFactory
+import com.studentcenter.weave.domain.chat.entity.TextMessage
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
