@@ -18,7 +18,7 @@ data class ChatRoomDetail(
 ) {
 
     data class Team(
-        val id: UUID,
+        val userId: UUID,
         val name: String,
         val members: List<Member>,
     ) {
@@ -66,7 +66,7 @@ data class ChatRoomDetail(
             getUser: GetUser,
         ): Team {
             return Team(
-                id = team.id,
+                userId = team.id,
                 name = team.teamIntroduce.value,
                 members = team.members.map { mapMemberToDetailMember(it.userId, getUser) }
             )
