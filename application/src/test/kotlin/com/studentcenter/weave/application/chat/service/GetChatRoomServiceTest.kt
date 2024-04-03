@@ -79,10 +79,10 @@ class GetChatRoomServiceTest : DescribeSpec({
 
                 // assert
                 result.id shouldBe chatRoom.id
-                result.myTeam.id shouldBe myTeam.id
+                result.myTeam.meetingTeamId shouldBe myTeam.id
                 result.myTeam.members.size shouldBe 2
 
-                result.otherTeam.id shouldBe otherTeam.id
+                result.otherTeam.meetingTeamId shouldBe otherTeam.id
                 result.otherTeam.members.size shouldBe 2
             }
         }
