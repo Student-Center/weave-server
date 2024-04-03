@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.meetingTeam.port.inbound.CreateMeetingTeam
-import com.studentcenter.weave.application.user.port.inbound.GetUserStub
+import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.vo.TeamIntroduce
@@ -24,7 +24,7 @@ import io.mockk.mockk
 class CreateMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val userQueryUseCaseMock = mockk<GetUserStub>()
+    val userQueryUseCaseMock = mockk<GetUser>()
 
     val sut = CreateMeetingTeamService(
         meetingTeamRepositorySpy,

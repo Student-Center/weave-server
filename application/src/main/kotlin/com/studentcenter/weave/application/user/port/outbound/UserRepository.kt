@@ -10,6 +10,8 @@ interface UserRepository {
 
     fun getById(id: UUID): User
 
+    fun findAllByIds(ids: List<UUID>): List<User>
+
     fun findByKakaoId(kakaoId: KakaoId): User?
 
     fun deleteById(id: UUID)

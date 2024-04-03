@@ -41,7 +41,7 @@ object MeetingTeamFixtureFactory {
             location = location,
             status = status,
             gender = gender,
-            members = memberMeetingMembers + leaderMeetingMember,
+            members = listOf(leaderMeetingMember) + memberMeetingMembers,
         )
     }
 }

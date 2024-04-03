@@ -68,20 +68,27 @@ data class ChatRoomDetail(
             return Team(
                 meetingTeamId = team.id,
                 name = team.teamIntroduce.value,
-                members = team.members.map { mapMemberToDetailMember(it.userId, getUser) }
+                members = team
+                    .members
+                    .map { it.userId }
+                    .let { mapMembersToDetailMembers(it, getUser) }
             )
         }
 
-        private fun mapMemberToDetailMember(
-            userId: UUID,
+        private fun mapMembersToDetailMembers(
+            userIds: List<UUID>,
             getUser: GetUser,
-        ): Team.Member {
-            val user = getUser.getById(userId)
-            return Team.Member(
-                userId = user.id,
-                name = user.nickname.value,
-                avatar = user.avatar
-            )
+        ): List<Team.Member> {
+            return getUser
+                .findAllByIds(userIds)
+                .map { user ->
+                    Team.Member(
+                        userId = user.id,
+                        name = user.nickname.value,
+                        avatar = user.avatar
+                    )
+                }
+
         }
     }
 

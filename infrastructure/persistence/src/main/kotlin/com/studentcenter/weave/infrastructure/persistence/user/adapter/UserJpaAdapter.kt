@@ -33,6 +33,10 @@ class UserJpaAdapter(
             .toDomain()
     }
 
+    override fun findAllByIds(ids: List<UUID>): List<User> {
+        return userJpaRepository.findAllByIds(ids).map { it.toDomain() }
+    }
+
     override fun findByKakaoId(kakaoId: KakaoId): User? {
         return userJpaRepository.findByKakaoId(kakaoId.value)?.toDomain()
     }

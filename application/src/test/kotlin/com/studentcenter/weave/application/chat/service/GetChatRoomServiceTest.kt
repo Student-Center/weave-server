@@ -30,41 +30,43 @@ class GetChatRoomServiceTest : DescribeSpec({
         chatRoomRepository = chatRoomRepository,
     )
 
+    afterEach { chatRoomRepository.clear() }
+
     describe("채팅방 상세 정보 조회") {
         context("채팅방에 소속된 사용자면") {
             it("채팅방과 관련된 정보를 조회한다") {
                 // arrange
-                val meAsTeamLeaderUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val meAsTeamLeaderUser = UserFixtureFactory.create()
+                val myTeamMemberUser = UserFixtureFactory.create()
 
                 UserAuthenticationFixtureFactory
                     .create(user = meAsTeamLeaderUser)
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                val myTeamMemberUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val myTeam = MeetingTeamFixtureFactory.create(
+                    leader = meAsTeamLeaderUser,
+                    members = listOf(myTeamMemberUser),
+                ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
-                val otherTeamLeaderUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val myTeamIds = listOf(meAsTeamLeaderUser.id, myTeamMemberUser.id)
+                every { getUser.findAllByIds(myTeamIds) } returns listOf(
+                    meAsTeamLeaderUser,
+                    myTeamMemberUser
+                )
 
-                val otherTeamMemberUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val otherTeamLeaderUser = UserFixtureFactory.create()
+                val otherTeamMemberUser = UserFixtureFactory.create()
 
-                val myTeam = MeetingTeamFixtureFactory
-                    .create(
-                        leader = meAsTeamLeaderUser,
-                        members = listOf(myTeamMemberUser),
-                    ).also { every { getMeetingTeam.getById(it.id) } returns it }
+                val otherTeam = MeetingTeamFixtureFactory.create(
+                    leader = otherTeamLeaderUser,
+                    members = listOf(otherTeamMemberUser),
+                ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
-                val otherTeam = MeetingTeamFixtureFactory
-                    .create(
-                        leader = otherTeamLeaderUser,
-                        members = listOf(otherTeamMemberUser),
-                    ).also { every { getMeetingTeam.getById(it.id) } returns it }
+                val otherTeamIds = listOf(otherTeamLeaderUser.id, otherTeamMemberUser.id)
+                every { getUser.findAllByIds(otherTeamIds) } returns listOf(
+                    otherTeamLeaderUser,
+                    otherTeamMemberUser
+                )
 
                 val chatRoom = ChatRoomFixtureFactory
                     .create(
@@ -90,45 +92,45 @@ class GetChatRoomServiceTest : DescribeSpec({
         context("채팅방에 소속된 사용자가 아닐경우") {
             it("예외를 발생시킨다") {
                 // arrange
-                UserFixtureFactory
-                    .create()
-                    .let { UserAuthenticationFixtureFactory.create(user = it) }
+                val me = UserFixtureFactory.create()
+                UserAuthenticationFixtureFactory
+                    .create(user = me)
                     .also { SecurityContextHolder.setContext(UserSecurityContext(it)) }
 
-                val otherTeam1LeaderUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
 
-                val otherTeam1MemberUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val otherTeamLeaderUser = UserFixtureFactory.create()
+                val otherTeamMemberUser = UserFixtureFactory.create()
 
-                val otherTeam1 = MeetingTeamFixtureFactory
-                    .create(
-                        leader = otherTeam1LeaderUser,
-                        members = listOf(otherTeam1MemberUser),
-                    ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
-                val otherTeam2LeaderUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val otherTeam = MeetingTeamFixtureFactory.create(
+                    leader = otherTeamLeaderUser,
+                    members = listOf(otherTeamMemberUser),
+                ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
-                val otherTeam2MemberUser = UserFixtureFactory
-                    .create()
-                    .also { every { getUser.getById(it.id) } returns it }
+                val myTeamIds = listOf(otherTeamLeaderUser.id, otherTeamMemberUser.id)
+                every { getUser.findAllByIds(myTeamIds) } returns listOf(
+                    otherTeamLeaderUser,
+                    otherTeamMemberUser
+                )
 
-                val otherTeam2 = MeetingTeamFixtureFactory
-                    .create(
-                        leader = otherTeam2LeaderUser,
-                        members = listOf(otherTeam2MemberUser),
-                    ).also { every { getMeetingTeam.getById(it.id) } returns it }
+                val otherTeam2LeaderUser = UserFixtureFactory.create()
+                val otherTeam2MemberUser = UserFixtureFactory.create()
 
-                val chatRoom = ChatRoomFixtureFactory
-                    .create(
-                        requestingTeamId = otherTeam1.id,
-                        receivingTeamId = otherTeam2.id,
-                    )
-                    .also { chatRoomRepository.save(it) }
+                val otherTeam2 = MeetingTeamFixtureFactory.create(
+                    leader = otherTeam2LeaderUser,
+                    members = listOf(otherTeam2MemberUser),
+                ).also { every { getMeetingTeam.getById(it.id) } returns it }
+
+                val otherTeamIds = listOf(otherTeam2LeaderUser.id, otherTeam2MemberUser.id)
+                every { getUser.findAllByIds(otherTeamIds) } returns listOf(
+                    otherTeam2LeaderUser,
+                    otherTeam2MemberUser
+                )
+
+                val chatRoom = ChatRoomFixtureFactory.create(
+                    requestingTeamId = otherTeam.id,
+                    receivingTeamId = otherTeam2.id,
+                ).also { chatRoomRepository.save(it) }
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
