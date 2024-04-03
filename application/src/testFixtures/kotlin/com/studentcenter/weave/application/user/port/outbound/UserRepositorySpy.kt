@@ -21,7 +21,7 @@ class UserRepositorySpy : UserRepository {
         return bucket[id] ?: throw NoSuchElementException()
     }
 
-    override fun findAllByIds(ids: List<UUID>): List<User> {
+    override fun getAllByIds(ids: List<UUID>): List<User> {
         return bucket.filterKeys { ids.contains(it) }.values.toList()
     }
 

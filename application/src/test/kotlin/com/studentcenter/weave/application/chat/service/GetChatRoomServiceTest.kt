@@ -49,7 +49,7 @@ class GetChatRoomServiceTest : DescribeSpec({
                 ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
                 val myTeamIds = listOf(meAsTeamLeaderUser.id, myTeamMemberUser.id)
-                every { getUser.findAllByIds(myTeamIds) } returns listOf(
+                every { getUser.getAllByIds(myTeamIds) } returns listOf(
                     meAsTeamLeaderUser,
                     myTeamMemberUser
                 )
@@ -63,7 +63,7 @@ class GetChatRoomServiceTest : DescribeSpec({
                 ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
                 val otherTeamIds = listOf(otherTeamLeaderUser.id, otherTeamMemberUser.id)
-                every { getUser.findAllByIds(otherTeamIds) } returns listOf(
+                every { getUser.getAllByIds(otherTeamIds) } returns listOf(
                     otherTeamLeaderUser,
                     otherTeamMemberUser
                 )
@@ -108,7 +108,7 @@ class GetChatRoomServiceTest : DescribeSpec({
                 ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
                 val myTeamIds = listOf(otherTeamLeaderUser.id, otherTeamMemberUser.id)
-                every { getUser.findAllByIds(myTeamIds) } returns listOf(
+                every { getUser.getAllByIds(myTeamIds) } returns listOf(
                     otherTeamLeaderUser,
                     otherTeamMemberUser
                 )
@@ -122,7 +122,7 @@ class GetChatRoomServiceTest : DescribeSpec({
                 ).also { every { getMeetingTeam.getById(it.id) } returns it }
 
                 val otherTeamIds = listOf(otherTeam2LeaderUser.id, otherTeam2MemberUser.id)
-                every { getUser.findAllByIds(otherTeamIds) } returns listOf(
+                every { getUser.getAllByIds(otherTeamIds) } returns listOf(
                     otherTeam2LeaderUser,
                     otherTeam2MemberUser
                 )

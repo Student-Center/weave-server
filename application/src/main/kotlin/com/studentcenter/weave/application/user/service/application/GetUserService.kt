@@ -15,8 +15,8 @@ class GetUserService(
         return userRepository.getById(id)
     }
 
-    override fun findAllByIds(ids: List<UUID>): List<User> {
-        return userRepository.findAllByIds(ids)
+    override fun getAllByIds(ids: List<UUID>): List<User> {
+        return userRepository.getAllByIds(ids)
     }
 
 }

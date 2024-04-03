@@ -80,7 +80,7 @@ data class ChatRoomDetail(
             getUser: GetUser,
         ): List<Team.Member> {
             return getUser
-                .findAllByIds(userIds)
+                .getAllByIds(userIds)
                 .map { user ->
                     Team.Member(
                         userId = user.id,

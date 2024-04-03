@@ -33,8 +33,15 @@ class UserJpaAdapter(
             .toDomain()
     }
 
-    override fun findAllByIds(ids: List<UUID>): List<User> {
-        return userJpaRepository.findAllByIds(ids).map { it.toDomain() }
+    override fun getAllByIds(ids: List<UUID>): List<User> {
+        val results = userJpaRepository.findAllByIds(ids).map { it.toDomain() }
+        if (results.size != ids.size) {
+            throw CustomException(
+                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
+                message = "유저를 찾을 수 없습니다."
+            )
+        }
+        return results
     }
 
     override fun findByKakaoId(kakaoId: KakaoId): User? {
