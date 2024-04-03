@@ -28,6 +28,10 @@ data class MeetingTeam(
         }
     }
 
+    fun isMyTeam(userId: UUID): Boolean {
+        return members.any { it.userId == userId }
+    }
+
     fun joinMember(user: User): MeetingTeam {
         require(status != MeetingTeamStatus.PUBLISHED) {
             "팀이 공개된 상태에서는 팀에 가입할 수 없어요."
