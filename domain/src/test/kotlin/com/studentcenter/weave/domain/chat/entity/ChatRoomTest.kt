@@ -1,6 +1,5 @@
 package com.studentcenter.weave.domain.chat.entity
 
-import com.studentcenter.weave.domain.chat.entity.ChatRoom
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import io.kotest.assertions.throwables.shouldThrow
