@@ -57,6 +57,7 @@ spring-tx = { group = "org.springframework", name = "spring-tx", version.ref = "
 spring-boot-core = { group = "org.springframework.boot", name = "spring-boot", version.ref = "spring-boot" }
 
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-websocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket", version.ref = "spring-boot" }
 springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools", version.ref = "spring-boot" }
