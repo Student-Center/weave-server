@@ -18,7 +18,7 @@ class ChatMessageHandler(
             "/topic/chat-rooms/${chatMessage.roomId}",
             chatMessage
         )
-        saveChatMessage.handleChatMessage(chatMessage)
+        saveChatMessage.invoke(chatMessage)
     }
 
 }

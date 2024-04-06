@@ -4,6 +4,6 @@ import com.studentcenter.weave.domain.chat.entity.ChatMessage
 
 interface SaveChatMessage {
 
-    fun handleChatMessage(chatMessage: ChatMessage)
+    fun invoke(chatMessage: ChatMessage)
 
 }

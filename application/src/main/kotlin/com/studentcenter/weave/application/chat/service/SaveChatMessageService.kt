@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class SaveChatMessageService: SaveChatMessage {
 
-    override fun handleChatMessage(chatMessage: ChatMessage) {
+    override fun invoke(chatMessage: ChatMessage) {
         // TODO : Save chat message to database
     }
 
