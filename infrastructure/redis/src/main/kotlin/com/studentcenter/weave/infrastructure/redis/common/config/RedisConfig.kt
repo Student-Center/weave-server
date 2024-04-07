@@ -2,6 +2,7 @@ package com.studentcenter.weave.infrastructure.redis.common.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.studentcenter.weave.infrastructure.redis.common.properties.RedisProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean
@@ -40,6 +41,7 @@ class RedisConfig(
     }
 
     private val objectMapper = ObjectMapper().apply {
+        registerModule(KotlinModule.Builder().build())
         registerModule(JavaTimeModule())
     }
 
