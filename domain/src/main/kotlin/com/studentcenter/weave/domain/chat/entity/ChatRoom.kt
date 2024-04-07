@@ -13,21 +13,10 @@ data class ChatRoom(
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
-    fun sendUserTextMessage(
-        sendUserId: UUID,
-        content: String,
-    ): TextMessage {
-        return TextMessage.create(
-            roomId = id,
-            sendUserId = sendUserId,
-            content = content,
-        )
-    }
-
     companion object {
 
         fun create(meeting: Meeting): ChatRoom {
-            require(meeting.isCompleted()) { "미팅이 매칭되지 않았습니다."}
+            require(meeting.isCompleted()) { "미팅이 매칭되지 않았습니다." }
 
             return ChatRoom(
                 meetingId = meeting.id,
