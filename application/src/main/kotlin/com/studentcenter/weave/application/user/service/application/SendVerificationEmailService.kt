@@ -29,9 +29,9 @@ class SendVerificationEmailService(
 
         val verificationNumber = userVerificationNumberRepository.findByUserId(getCurrentUserAuthentication().userId)?.let {
             if (universityEmail == it.first) {
-                return@let it.second
+                it.second
             } else {
-                return@let null
+                null
             }
         } ?: UserUniversityVerificationNumber.generate().also {
             userVerificationNumberRepository.save(
