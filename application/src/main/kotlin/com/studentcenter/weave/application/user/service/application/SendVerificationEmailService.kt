@@ -27,15 +27,22 @@ class SendVerificationEmailService(
             )
         }
 
-        UserUniversityVerificationNumber.generate().run {
+        val verificationNumber = userVerificationNumberRepository.findByUserId(getCurrentUserAuthentication().userId)?.let {
+            if (universityEmail == it.first) {
+                return@let it.second
+            } else {
+                return@let null
+            }
+        } ?: UserUniversityVerificationNumber.generate().also {
             userVerificationNumberRepository.save(
                 getCurrentUserAuthentication().userId,
                 universityEmail,
-                this,
+                it,
                 DEFAULT_DURATION_MINUTE.minutes.inWholeSeconds
             )
-            verificationNumberMailer.send(universityEmail, this, DEFAULT_DURATION_MINUTE.minutes)
         }
+
+        verificationNumberMailer.send(universityEmail, verificationNumber, DEFAULT_DURATION_MINUTE.minutes)
     }
 
     companion object {
