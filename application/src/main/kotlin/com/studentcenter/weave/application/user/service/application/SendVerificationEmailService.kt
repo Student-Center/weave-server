@@ -10,7 +10,7 @@ import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNum
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 
 @Service
