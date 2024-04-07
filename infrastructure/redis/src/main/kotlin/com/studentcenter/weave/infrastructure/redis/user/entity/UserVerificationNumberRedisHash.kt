@@ -5,7 +5,7 @@ import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
 import java.util.*
 
-@RedisHash("user_refresh_token")
+@RedisHash("user_univ_mail_verification_number")
 class UserVerificationNumberRedisHash(
     id: UUID,
     verifiedEmail: String,
