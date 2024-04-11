@@ -1,3 +1,5 @@
 package com.studentcenter.weave.support.security.authority
 
-interface Authentication
+import java.security.Principal
+
+interface Authentication : Principal

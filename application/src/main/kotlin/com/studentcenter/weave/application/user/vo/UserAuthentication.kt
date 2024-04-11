@@ -27,4 +27,8 @@ data class UserAuthentication(
         }
     }
 
+    override fun getName(): String {
+        return userId.toString()
+    }
+
 }

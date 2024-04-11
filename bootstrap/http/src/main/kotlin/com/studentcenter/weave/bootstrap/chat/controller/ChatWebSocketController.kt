@@ -1,12 +1,12 @@
 package com.studentcenter.weave.bootstrap.chat.controller
 
 import com.studentcenter.weave.application.chat.port.inbound.SendChatMessage
+import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.bootstrap.chat.dto.SendChatMessageRequest
-import com.studentcenter.weave.support.common.uuid.UuidCreator
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 
 @Controller
@@ -15,14 +15,14 @@ class ChatWebSocketController(
 ) {
 
     @MessageMapping("/chat-rooms/{roomId}")
-    @SendTo("/topic/chat-rooms/{roomId}")
-    fun sendTextMessage(
+    fun sendChatMessage(
         @DestinationVariable roomId: UUID,
-        request: SendChatMessageRequest,
+        @RequestBody request: SendChatMessageRequest,
+        userAuthentication: UserAuthentication,
     ) {
         sendChatMessage.invoke(
             roomId = roomId,
-            senderId = UuidCreator.create(), // TODO: 토큰 인증 구현
+            userId = userAuthentication.userId,
             contents = request.contents,
         )
     }

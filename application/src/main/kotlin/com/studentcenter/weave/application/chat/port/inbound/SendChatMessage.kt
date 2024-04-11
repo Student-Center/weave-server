@@ -7,7 +7,7 @@ fun interface SendChatMessage {
 
     fun invoke(
         roomId: UUID,
-        senderId: UUID,
+        userId: UUID,
         contents: List<ChatMessage.Content>,
     )
 
