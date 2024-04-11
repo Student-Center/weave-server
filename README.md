@@ -21,3 +21,9 @@ ex) [WEAV-15] github 설정 수정
 ```bash
 sh ./.githooks/install.sh
 ```
+
+## Architecture
+
+### Infrastructure - AWS
+
+![weave-infra.jpg](./docs/weave-infra.jpg)
