@@ -12,7 +12,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor
 import org.springframework.stereotype.Component
 
 @Component
-class WebSocketAuthInterceptor(
+class StompAuthInterceptor(
     private val userTokenService: UserTokenService,
 ) : ChannelInterceptor {
 

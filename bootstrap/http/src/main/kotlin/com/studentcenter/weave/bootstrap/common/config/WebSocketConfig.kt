@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.common.config
 
 import com.studentcenter.weave.bootstrap.common.security.interceptor.StompExceptionHandler
-import com.studentcenter.weave.bootstrap.common.security.interceptor.WebSocketAuthInterceptor
+import com.studentcenter.weave.bootstrap.common.security.interceptor.StompAuthInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfig(
-    private val webSocketAuthInterceptor: WebSocketAuthInterceptor,
+    private val stompAuthInterceptor: StompAuthInterceptor,
     private val stompExceptionHandler: StompExceptionHandler,
 ) : WebSocketMessageBrokerConfigurer {
 
@@ -30,7 +30,7 @@ class WebSocketConfig(
     }
 
     override fun configureClientInboundChannel(registration: ChannelRegistration) {
-        registration.interceptors(webSocketAuthInterceptor)
+        registration.interceptors(stompAuthInterceptor)
     }
 
 }
