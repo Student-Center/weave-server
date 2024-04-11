@@ -13,12 +13,12 @@ class SendChatMessageService(
 
     override fun invoke(
         roomId: UUID,
-        senderId: UUID,
+        userId: UUID,
         contents: List<ChatMessage.Content>,
     ) {
         ChatMessage.createByUser(
             roomId = roomId,
-            userId = senderId,
+            userId = userId,
             contents = contents,
         ).also {
             chatMessagePublisher.publish(it)

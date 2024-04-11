@@ -1,6 +1,9 @@
-package com.studentcenter.weave.bootstrap.chat.config
+package com.studentcenter.weave.bootstrap.common.config
 
+import com.studentcenter.weave.bootstrap.common.security.interceptor.StompExceptionHandler
+import com.studentcenter.weave.bootstrap.common.security.interceptor.StompAuthInterceptor
 import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
@@ -8,7 +11,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-class WebSocketConfig : WebSocketMessageBrokerConfigurer {
+class WebSocketConfig(
+    private val stompAuthInterceptor: StompAuthInterceptor,
+    private val stompExceptionHandler: StompExceptionHandler,
+) : WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
         registry.enableSimpleBroker("/topic")
@@ -17,9 +23,14 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry
+            .setErrorHandler(stompExceptionHandler)
             .addEndpoint("/ws")
             .setAllowedOriginPatterns("*")
             .withSockJS()
+    }
+
+    override fun configureClientInboundChannel(registration: ChannelRegistration) {
+        registration.interceptors(stompAuthInterceptor)
     }
 
 }
