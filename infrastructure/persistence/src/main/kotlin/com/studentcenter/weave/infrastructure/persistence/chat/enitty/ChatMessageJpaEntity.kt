@@ -1,18 +1,14 @@
 package com.studentcenter.weave.infrastructure.persistence.chat.enitty
 
 import com.studentcenter.weave.domain.chat.entity.ChatMessage
-import com.studentcenter.weave.infrastructure.persistence.chat.enitty.ChatMessageJpaEntity.ContentJpaEntity.Companion.toJpaEntity
-import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.Embeddable
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
 import java.util.*
 
@@ -23,7 +19,7 @@ class ChatMessageJpaEntity(
     roomId: UUID,
     senderId: UUID,
     senderType: ChatMessage.SenderType,
-    contents: List<ContentJpaEntity>,
+    contents: List<ChatMessage.Content>,
     createdAt: LocalDateTime,
 ) {
 
@@ -49,64 +45,14 @@ class ChatMessageJpaEntity(
     var senderType: ChatMessage.SenderType = senderType
         private set
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-        name = "chat_message_content",
-        joinColumns = [JoinColumn(name = "chat_message_id")]
-    )
-    var contents: List<ContentJpaEntity> = contents
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "contents", updatable = false, nullable = false, columnDefinition = "json")
+    var contents: List<ChatMessage.Content> = contents
         private set
 
     @Column(name = "created_at", updatable = false, nullable = false)
     var createdAt: LocalDateTime = createdAt
         private set
-
-    @Embeddable
-    @Table(name = "chat_message_content")
-    class ContentJpaEntity(
-        id: UUID,
-        type: ChatMessage.Content.ContentType,
-        value: String,
-    ) {
-
-        @Column(name = "id", updatable = false, nullable = false)
-        var id: UUID = id
-            private set
-
-        @Column(
-            name = "type",
-            updatable = false,
-            nullable = false,
-            columnDefinition = "varchar(255)"
-        )
-        @Enumerated(EnumType.STRING)
-        var type: ChatMessage.Content.ContentType = type
-            private set
-
-        @Column(name = "value", updatable = false, nullable = false)
-        var value: String = value
-            private set
-
-        fun toDomain(): ChatMessage.Content {
-            return ChatMessage.Content(
-                id = id,
-                type = type,
-                value = value
-            )
-        }
-
-        companion object {
-
-            fun ChatMessage.Content.toJpaEntity(): ContentJpaEntity {
-                return ContentJpaEntity(
-                    id = id,
-                    type = type,
-                    value = value
-                )
-            }
-        }
-
-    }
 
     fun toDomain(): ChatMessage {
         return ChatMessage(
@@ -114,7 +60,7 @@ class ChatMessageJpaEntity(
             roomId = roomId,
             senderId = senderId,
             senderType = senderType,
-            contents = contents.map { it.toDomain() },
+            contents = contents,
             createdAt = createdAt
         )
     }
@@ -127,7 +73,7 @@ class ChatMessageJpaEntity(
                 roomId = roomId,
                 senderId = senderId,
                 senderType = senderType,
-                contents = contents.map { it.toJpaEntity() },
+                contents = contents,
                 createdAt = createdAt
             )
         }
