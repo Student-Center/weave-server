@@ -10,15 +10,14 @@ data class SendChatMessageRequest(
         val type: ChatMessage.Content.ContentType?,
         val value: String?,
     ) {
-        init {
-            require(type != null) { "메시지 타입을 입력해 주세요" }
-            require(value != null) { "메시지를 입력해 주세요" }
-        }
 
         fun toDomainContent(): ChatMessage.Content {
+            requireNotNull(type) { "메시지 타입을 입력해 주세요" }
+            requireNotNull(value) { "메시지를 입력해 주세요" }
+
             return ChatMessage.Content(
-                type = type!!,
-                value = value!!
+                type = type,
+                value = value
             )
         }
     }
