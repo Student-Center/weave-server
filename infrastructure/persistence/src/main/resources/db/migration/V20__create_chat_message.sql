@@ -6,7 +6,8 @@ CREATE TABLE chat_message
     sender_type VARCHAR(255) NOT NULL,
     created_at  DATETIME     NOT NULL,
     PRIMARY KEY (id),
-    INDEX (room_id, sender_id),
+    INDEX (room_id),
+    INDEX (sender_id),
     INDEX (created_at)
 );
 
