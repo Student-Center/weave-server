@@ -22,6 +22,7 @@ data class ChatMessage(
     }
 
     data class Content(
+        val id: UUID = UuidCreator.create(),
         val type: ContentType,
         val value: String,
     ) {
