@@ -23,7 +23,7 @@ class ChatWebSocketController(
         sendChatMessage.invoke(
             roomId = roomId,
             userId = userAuthentication.userId,
-            contents = request.contents,
+            contents = request.contents.map { it.toDomainContent() }
         )
     }
 
