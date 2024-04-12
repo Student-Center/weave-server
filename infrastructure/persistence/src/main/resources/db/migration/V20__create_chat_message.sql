@@ -10,4 +10,6 @@ CREATE TABLE chat_message
     INDEX (room_id),
     INDEX (sender_id),
     INDEX (created_at)
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
