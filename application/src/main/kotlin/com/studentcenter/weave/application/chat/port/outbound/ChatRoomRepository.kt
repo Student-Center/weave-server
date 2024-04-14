@@ -5,6 +5,8 @@ import java.util.UUID
 
 interface ChatRoomRepository {
 
+    fun save(chatRoom: ChatRoom)
+
     fun getById(id: UUID): ChatRoom
 
 }

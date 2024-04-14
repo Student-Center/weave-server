@@ -3,17 +3,22 @@ package com.studentcenter.weave.application.chat.outbound
 import com.studentcenter.weave.application.chat.port.outbound.ChatRoomRepository
 import com.studentcenter.weave.domain.chat.entity.ChatRoom
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 class ChatRoomRepositorySpy: ChatRoomRepository {
 
-    val bucket = mutableListOf<ChatRoom>()
+    private val bucket = ConcurrentHashMap<UUID, ChatRoom>()
 
     override fun getById(id: UUID): ChatRoom {
-        return bucket.find { it.id == id }!!
+        return bucket[id]!!
     }
 
-    fun save(chatRoom: ChatRoom) {
-        bucket.add(chatRoom)
+    override fun save(chatRoom: ChatRoom) {
+        bucket[chatRoom.id] = chatRoom
+    }
+
+    fun findAll(): List<ChatRoom> {
+        return bucket.values.toList()
     }
 
     fun clear() {

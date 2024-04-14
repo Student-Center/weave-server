@@ -49,11 +49,7 @@ class ChatRoomJpaEntity(
     }
 
     companion object {
-        fun ChatRoom.toJpaEntity(
-            meetingId: UUID,
-            receivingTeamId: UUID,
-            requestingTeamId: UUID,
-        ): ChatRoomJpaEntity {
+        fun ChatRoom.toJpaEntity(): ChatRoomJpaEntity {
             return ChatRoomJpaEntity(
                 id = UUID.randomUUID(),
                 meetingId = meetingId,
