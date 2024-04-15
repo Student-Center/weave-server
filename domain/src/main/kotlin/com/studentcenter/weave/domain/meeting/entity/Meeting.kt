@@ -1,18 +1,20 @@
 package com.studentcenter.weave.domain.meeting.entity
 
+import com.studentcenter.weave.domain.common.DomainEntity
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
 import java.util.*
 
 data class Meeting(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val requestingTeamId: UUID,
     val receivingTeamId: UUID,
     val status: MeetingStatus = MeetingStatus.PENDING,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val finishedAt: LocalDateTime? = null,
-) {
+) : DomainEntity {
+
     val pendingEndAt: LocalDateTime = createdAt.plusDays(PENDING_DAYS)
 
     init {
@@ -56,6 +58,7 @@ data class Meeting(
     }
 
     companion object {
+
         const val PENDING_DAYS = 3L
 
         fun create(

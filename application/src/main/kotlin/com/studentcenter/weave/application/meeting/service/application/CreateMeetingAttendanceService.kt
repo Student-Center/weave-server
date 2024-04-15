@@ -2,14 +2,16 @@ package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanceCreateUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.CreateMeetingAttendance
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
+import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPublisher
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
+import com.studentcenter.weave.domain.meeting.event.MeetingCompletedEvent.Companion.createCompletedEvent
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.lock.distributedLock
 import kotlinx.coroutines.CoroutineScope
@@ -20,12 +22,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class MeetingAttendanceCreateApplicationService(
+class CreateMeetingAttendanceService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
     private val getMeetingTeam: GetMeetingTeam,
     private val meetingEventPort: MeetingEventPort,
-) : MeetingAttendanceCreateUseCase {
+    private val meetingEventPublisher: MeetingEventPublisher,
+) : CreateMeetingAttendance {
 
     override fun invoke(
         meetingId: UUID,
@@ -94,7 +97,11 @@ class MeetingAttendanceCreateApplicationService(
         meeting: Meeting,
         memberCount: Int,
     ) {
-        meetingDomainService.save(meeting.complete())
+        meeting
+            .complete()
+            .also { meetingDomainService.save(it) }
+            .createCompletedEvent()
+            .also { meetingEventPublisher.publish(it) }
 
         val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
 
