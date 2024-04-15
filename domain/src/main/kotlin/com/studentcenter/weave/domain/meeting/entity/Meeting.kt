@@ -1,6 +1,6 @@
 package com.studentcenter.weave.domain.meeting.entity
 
-import com.studentcenter.weave.domain.common.DomainEntity
+import com.studentcenter.weave.domain.common.AggregateRoot
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
@@ -13,7 +13,7 @@ data class Meeting(
     val status: MeetingStatus = MeetingStatus.PENDING,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val finishedAt: LocalDateTime? = null,
-) : DomainEntity {
+) : AggregateRoot {
 
     val pendingEndAt: LocalDateTime = createdAt.plusDays(PENDING_DAYS)
 
