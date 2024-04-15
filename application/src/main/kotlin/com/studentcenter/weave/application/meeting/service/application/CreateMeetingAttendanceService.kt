@@ -99,9 +99,10 @@ class CreateMeetingAttendanceService(
     ) {
         meeting
             .complete()
-            .also { meetingDomainService.save(it) }
-            .createCompletedEvent()
-            .also { meetingEventPublisher.publish(it) }
+            .also {
+                meetingDomainService.save(it)
+                meetingEventPublisher.publish(it.createCompletedEvent())
+            }
 
         val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
 
