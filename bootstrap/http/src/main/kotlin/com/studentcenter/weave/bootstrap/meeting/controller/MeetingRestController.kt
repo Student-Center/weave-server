@@ -3,7 +3,7 @@ package com.studentcenter.weave.bootstrap.meeting.controller
 import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamIdUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfoUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttendancesUseCase
-import com.studentcenter.weave.application.meeting.port.inbound.MeetingAttendanceCreateUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.CreateMeetingAttendance
 import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
@@ -25,7 +25,7 @@ class MeetingRestController(
     private val scrollPendingMeetingUseCase: ScrollPendingMeetingUseCase,
     private val scrollPreparedMeetingUseCase: ScrollPreparedMeetingUseCase,
     private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
-    private val meetingAttendanceCreateUseCase: MeetingAttendanceCreateUseCase,
+    private val createMeetingAttendance: CreateMeetingAttendance,
     private val findMyRequestMeetingByReceivingTeamIdUseCase: FindMyRequestMeetingByReceivingTeamIdUseCase,
     private val getAllOtherTeamMemberInfoUseCase: GetAllOtherTeamMemberInfoUseCase,
 ) : MeetingApi {
@@ -58,14 +58,14 @@ class MeetingRestController(
     }
 
     override fun createAttendanceForAttend(meetingId: UUID) {
-        meetingAttendanceCreateUseCase.invoke(
+        createMeetingAttendance.invoke(
             meetingId = meetingId,
             attendance = true,
         )
     }
 
     override fun createAttendanceForPass(meetingId: UUID) {
-        meetingAttendanceCreateUseCase.invoke(
+        createMeetingAttendance.invoke(
             meetingId = meetingId,
             attendance = false,
         )

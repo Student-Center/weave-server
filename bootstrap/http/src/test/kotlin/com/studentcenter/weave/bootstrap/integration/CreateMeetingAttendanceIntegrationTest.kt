@@ -1,7 +1,7 @@
 package com.studentcenter.weave.bootstrap.integration
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meeting.service.application.MeetingAttendanceCreateApplicationService
+import com.studentcenter.weave.application.meeting.service.application.CreateMeetingAttendanceService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
@@ -22,12 +22,12 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
 
-@DisplayName("MeetingAttendanceCreateApplicationService Integration Test")
-class MeetingAttendanceCreateApplicationServiceIntegrationTest(
+@DisplayName("CreateMeetingAttendance Integration Test")
+class CreateMeetingAttendanceIntegrationTest(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
     private val meetingTeamRepository: MeetingTeamRepository,
-    private val sut: MeetingAttendanceCreateApplicationService,
+    private val sut: CreateMeetingAttendanceService,
 ) : IntegrationTestDescribeSpec({
 
     val currentUser = UserFixtureFactory.create()
@@ -185,7 +185,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
     }
 
     context("미팅 참여하는 경우, 마지막 참여라면") {
-        it("미팅이 완료 상태로 변경된다.") {
+        it("미팅이 완료 상태로 변경하고, 미팅 완료 이벤트를 발행한다") {
             // arrange
             val attendance = true
             val memberCount = 2
@@ -219,6 +219,7 @@ class MeetingAttendanceCreateApplicationServiceIntegrationTest(
 
             // assert
             meetingDomainService.getById(meeting.id).status shouldBe MeetingStatus.COMPLETED
+
         }
     }
 
