@@ -1,17 +1,18 @@
 package com.studentcenter.weave.domain.chat.entity
 
+import com.studentcenter.weave.domain.common.DomainEntity
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
 import java.util.*
 
 data class ChatMessage(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val roomId: UUID,
     val senderId: UUID,
     val senderType: SenderType,
     val contents: List<Content>,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : DomainEntity {
 
     init {
         require(contents.isNotEmpty()) { "메시지를 입력해 주세요" }

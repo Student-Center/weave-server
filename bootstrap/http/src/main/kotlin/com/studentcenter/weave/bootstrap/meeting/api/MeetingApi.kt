@@ -7,7 +7,6 @@ import com.studentcenter.weave.bootstrap.meeting.dto.MeetingRequestRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.PendingMeetingScrollResponse
-import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollRequest
 import com.studentcenter.weave.bootstrap.meeting.dto.PreparedMeetingScrollResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -33,7 +32,7 @@ interface MeetingApi {
     @ResponseStatus(HttpStatus.CREATED)
     fun requestMeeting(
         @RequestBody
-        request: MeetingRequestRequest
+        request: MeetingRequestRequest,
     )
 
     @Secured
@@ -42,7 +41,7 @@ interface MeetingApi {
     @ResponseStatus(HttpStatus.OK)
     fun scrollPendingMeetings(
         request: PendingMeetingScrollRequest,
-    ) : PendingMeetingScrollResponse
+    ): PendingMeetingScrollResponse
 
     @Secured
     @Operation(summary = "Get all meeting attendances by meeting id")
@@ -50,7 +49,7 @@ interface MeetingApi {
     @ResponseStatus(HttpStatus.OK)
     fun getMeetingAttendances(
         @PathVariable("id") meetingId: UUID,
-    ) : MeetingAttendancesResponse
+    ): MeetingAttendancesResponse
 
     @Secured
     @Operation(summary = "Create meeting attendance for attend")
@@ -75,7 +74,7 @@ interface MeetingApi {
     fun findMyRequestMeetingByReceivingTeamId(
         @Parameter(description = "receiving team id", required = true, `in` = ParameterIn.QUERY)
         receivingTeamId: UUID,
-    ) : MeetingResponse
+    ): MeetingResponse
 
     @Secured
     @Operation(summary = "Scroll prepared meetings")
@@ -83,12 +82,12 @@ interface MeetingApi {
     @ResponseStatus(HttpStatus.OK)
     fun scrollPreparedMeetings(
         request: PreparedMeetingScrollRequest,
-    ) : PreparedMeetingScrollResponse
+    ): PreparedMeetingScrollResponse
 
     @Secured
     @Operation(summary = "Get other team member's kakao id by meeting id")
     @GetMapping("{id}/other-team/kakao-id")
     @ResponseStatus(HttpStatus.OK)
-    fun getOtherTeamKakaoIds(@PathVariable("id") meetingId: UUID) : KakaoIdResponse
+    fun getOtherTeamKakaoIds(@PathVariable("id") meetingId: UUID): KakaoIdResponse
 
 }

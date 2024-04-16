@@ -1,15 +1,16 @@
 package com.studentcenter.weave.domain.user.entity
 
+import com.studentcenter.weave.domain.common.DomainEntity
 import com.studentcenter.weave.domain.user.exception.UserExceptionType
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Url
 import java.util.*
 
 data class UserProfileImage(
-    val id: UUID,
+    override val id: UUID,
     val extension: Extension,
     val imageUrl: Url,
-) {
+) : DomainEntity {
 
     enum class Extension(val value: String) {
         JPG("jpg"),

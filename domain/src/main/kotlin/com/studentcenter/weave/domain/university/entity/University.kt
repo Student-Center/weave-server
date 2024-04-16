@@ -1,19 +1,20 @@
 package com.studentcenter.weave.domain.university.entity
 
+import com.studentcenter.weave.domain.common.AggregateRoot
 import com.studentcenter.weave.domain.university.vo.UniversityName
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
 import java.util.*
 
 data class University(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val name: UniversityName,
     val displayName: String,
     val domainAddress: String,
     val logoAddress: String?,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : AggregateRoot {
 
 
     companion object {
