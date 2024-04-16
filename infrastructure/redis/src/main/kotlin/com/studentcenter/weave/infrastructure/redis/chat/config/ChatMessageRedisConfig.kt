@@ -1,7 +1,5 @@
 package com.studentcenter.weave.infrastructure.redis.chat.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.studentcenter.weave.infrastructure.redis.chat.adapter.ChatMessageRedisConsumer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
