@@ -1,5 +1,6 @@
 package com.studentcenter.weave.domain.meetingTeam.entity
 
+import com.studentcenter.weave.domain.common.AggregateRoot
 import com.studentcenter.weave.domain.meetingTeam.enums.Location
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
@@ -10,14 +11,14 @@ import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.util.*
 
 data class MeetingTeam(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val teamIntroduce: TeamIntroduce,
     val memberCount: Int,
     val members: List<MeetingMember>,
     val location: Location,
     val status: MeetingTeamStatus,
     val gender: Gender,
-) {
+) : AggregateRoot {
 
     val leader: MeetingMember
         get() = members.first { it.role == MeetingMemberRole.LEADER }

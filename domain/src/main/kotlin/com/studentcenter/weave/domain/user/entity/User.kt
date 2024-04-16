@@ -1,5 +1,6 @@
 package com.studentcenter.weave.domain.user.entity
 
+import com.studentcenter.weave.domain.common.AggregateRoot
 import com.studentcenter.weave.domain.user.enums.AnimalType
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.domain.user.vo.BirthYear
@@ -16,7 +17,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class User(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val nickname: Nickname,
     val email: Email,
     val gender: Gender,
@@ -31,7 +32,7 @@ data class User(
     val isUnivVerified: Boolean = false,
     val registeredAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : AggregateRoot {
 
     val avatar: Url?
         get() = profileImages.firstOrNull()?.imageUrl

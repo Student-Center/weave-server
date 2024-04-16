@@ -1,5 +1,6 @@
 package com.studentcenter.weave.domain.meetingTeam.entity
 
+import com.studentcenter.weave.domain.common.DomainEntity
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.vo.BirthYear
 import com.studentcenter.weave.domain.user.vo.Mbti
@@ -8,13 +9,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class MeetingTeamMemberSummary(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val meetingTeamId: UUID,
     val teamMbti: Mbti,
     val youngestMemberBirthYear: BirthYear,
     val oldestMemberBirthYear: BirthYear,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : DomainEntity {
 
     init {
         require(youngestMemberBirthYear.value >= oldestMemberBirthYear.value) {
@@ -26,7 +27,7 @@ data class MeetingTeamMemberSummary(
 
         fun create(
             meetingTeamId: UUID,
-            members: List<User>
+            members: List<User>,
         ): MeetingTeamMemberSummary {
             require(members.isNotEmpty()) {
                 "팀에 속한 멤버가 존재해야 합니다."

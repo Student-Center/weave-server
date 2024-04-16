@@ -1,17 +1,18 @@
 package com.studentcenter.weave.domain.meeting.entity
 
+import com.studentcenter.weave.domain.common.DomainEntity
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import java.time.LocalDateTime
 import java.util.*
 
 data class MeetingAttendance(
-    val id: UUID = UuidCreator.create(),
+    override val id: UUID = UuidCreator.create(),
     val meetingId: UUID,
     val meetingMemberId: UUID,
     val isAttend: Boolean,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = createdAt,
-) {
+) : DomainEntity {
 
     companion object {
 
