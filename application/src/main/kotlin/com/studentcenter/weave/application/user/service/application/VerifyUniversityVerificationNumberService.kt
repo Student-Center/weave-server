@@ -3,8 +3,8 @@ package com.studentcenter.weave.application.user.service.application
 import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
+import com.studentcenter.weave.application.user.port.outbound.UserRepository
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
-import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.application.user.service.domain.UserUniversityVerificationInfoDomainService
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfo
@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class VerifyUniversityVerificationNumberService(
-    private val userDomainService: UserDomainService,
     private val userSilDomainService: UserSilDomainService,
     private val userVerificationInfoDomainService: UserUniversityVerificationInfoDomainService,
     private val verificationNumberRepository: UserVerificationNumberRepository,
-): VerifyUniversityVerificationNumber {
+    private val userRepository: UserRepository,
+) : VerifyUniversityVerificationNumber {
 
     @Transactional
     override fun invoke(command: VerifyUniversityVerificationNumber.Command) {
@@ -42,21 +42,24 @@ class VerifyUniversityVerificationNumberService(
             "유저의 인증 요청을 찾을 수 없습니다.",
         )
 
-        val user = userDomainService.getById(currentUserId)
-        val verifiedUser = user.verifyUniversity().also { userDomainService.save(it) }
+        val user = userRepository.getById(currentUserId)
+        val verifiedUser = user.verifyUniversity().also { userRepository.save(it) }
         UserUniversityVerificationInfo.create(verifiedUser, command.universityEmail).let {
             userVerificationInfoDomainService.save(it)
         }
-        userSilDomainService.getByUserId(user.id).let {
-            userSilDomainService.save(it.increment(getRewardAmount(command.universityEmail)))
-        }
+
+        userSilDomainService
+            .getByUserId(user.id)
+            .increment(getRewardAmount(command.universityEmail))
+            .let { userSilDomainService.save(it) }
+
         verificationNumberRepository.deleteByUserId(user.id)
     }
 
     private fun getRewardAmount(verifiedEmail: Email): Long {
         var rewardAmount = DEFAULT_VERIFICATION_REWARD_AMOUNT
 
-        if (EVENT_TARGET_EMAIL.contains(verifiedEmail.value)) {
+        if (userRepository.isPreRegisteredEmail(verifiedEmail)) {
             rewardAmount *= 2
         }
 
@@ -64,10 +67,8 @@ class VerifyUniversityVerificationNumberService(
     }
 
     companion object {
+
         const val DEFAULT_VERIFICATION_REWARD_AMOUNT = 30L
-        val EVENT_TARGET_EMAIL = setOf(
-            "60191667@mju.ac.kr"
-        )
     }
 
 }

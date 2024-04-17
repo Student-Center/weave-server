@@ -7,10 +7,8 @@ import com.studentcenter.weave.application.user.port.outbound.UserSilRepositoryS
 import com.studentcenter.weave.application.user.port.outbound.UserUniversityVerificationInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
-import com.studentcenter.weave.application.user.service.domain.impl.UserDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserSilDomainServiceImpl
 import com.studentcenter.weave.application.user.service.domain.impl.UserUniversityVerificationInfoDomainServiceImpl
-import com.studentcenter.weave.application.user.vo.UserAuthentication
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
@@ -22,7 +20,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.equals.shouldBeEqual
-import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import java.util.*
@@ -35,7 +32,6 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
     val userUniversityVerificationInfoRepository = UserUniversityVerificationInfoRepositorySpy()
     val userVerificationNumberRepository = UserVerificationNumberRepositorySpy()
 
-    val userDomainService = UserDomainServiceImpl(userRepository)
     val userSilDomainService = UserSilDomainServiceImpl(userSilRepository)
     val userVerificationInfoDomainService = UserUniversityVerificationInfoDomainServiceImpl(
         userUniversityVerificationInfoRepository
@@ -48,10 +44,10 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
             userVerificationNumberRepository = userVerificationNumberRepository,
         )
     val sut = VerifyUniversityVerificationNumberService(
-        userDomainService = userDomainService,
         userSilDomainService = userSilDomainService,
         userVerificationInfoDomainService = userVerificationInfoDomainService,
         verificationNumberRepository = userVerificationNumberRepository,
+        userRepository = userRepository,
     )
 
     afterEach {
@@ -70,7 +66,8 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 userSendVerificationNumberEmailApplicationService.invoke(Email("weave@studentcenter.com"))
-                val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val email = Email("invalid@studentcenter.com")
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
 
@@ -87,14 +84,16 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
-                val verificationNumber = userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val invalidVerificationNumber = UserUniversityVerificationNumber(
                     verificationNumber.value.replace(
                         verificationNumber.value[0],
                         if (verificationNumber.value[0] == '9') '8' else verificationNumber.value[0] + 1
                     )
                 )
-                val command = VerifyUniversityVerificationNumber.Command(email, invalidVerificationNumber)
+                val command =
+                    VerifyUniversityVerificationNumber.Command(email, invalidVerificationNumber)
 
                 // act, assert
                 shouldThrow<CustomException> { sut.invoke(command) }
@@ -135,31 +134,21 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
             }
         }
 
-        context("인증 번호와 이메일이 모두 일치하는 경우") {
-            it("인증 처리를 한다.") {
+        context("인증 번호와 이메일이 모두 일치하고, 사전등록되지 않은 유저면") {
+            it("유저의 이메일 인증 여부를 true로 변경하고, 30실을 지급한다.") {
                 // arrange
-                val userFixture = UserFixtureFactory.create()
-                val user = userDomainService.create(
-                    nickname = userFixture.nickname,
-                    email = userFixture.email,
-                    gender = userFixture.gender,
-                    mbti = userFixture.mbti,
-                    birthYear = userFixture.birthYear,
-                    universityId = userFixture.universityId,
-                    majorId = userFixture.majorId,
-                )
+                val user = UserFixtureFactory
+                    .create()
+                    .also { userRepository.save(it) }
+
                 userSilDomainService.create(user.id)
-                val userAuthentication = UserAuthentication(
-                    userId = user.id,
-                    nickname = user.nickname,
-                    email = user.email,
-                    avatar = user.avatar,
-                    gender = user.gender
-                )
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
+
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
                 userSendVerificationNumberEmailApplicationService.invoke(email)
-                val verificationNumber = userVerificationNumberRepository.findByUserId(user.id)!!.second
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(user.id)!!.second
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
 
                 // act
@@ -168,7 +157,37 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 // assert
                 userRepository.getById(user.id).isUnivVerified shouldBeEqual true
                 userVerificationNumberRepository.findByUserId(user.id) shouldBe null
-                userSilRepository.getByUserId(user.id).amount shouldBeGreaterThan 0
+                userSilRepository.getByUserId(user.id).amount shouldBe 30
+            }
+        }
+
+        context("인증 번호와 이메일이 모두 일치하고, 사전등록된 유저면") {
+            it("유저의 이메일 인증 여부를 true로 변경하고, 60실을 지급한다.") {
+                // arrange
+                val user = UserFixtureFactory
+                    .create()
+                    .also { userRepository.save(it) }
+
+                userSilDomainService.create(user.id)
+                val userAuthentication = UserAuthenticationFixtureFactory.create(user)
+
+                SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+                val email = Email("weave@studentcenter.com")
+
+                userRepository.addPreRegisterEmail(email)
+
+                userSendVerificationNumberEmailApplicationService.invoke(email)
+                val verificationNumber =
+                    userVerificationNumberRepository.findByUserId(user.id)!!.second
+                val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
+
+                // act
+                sut.invoke(command)
+
+                // assert
+                userRepository.getById(user.id).isUnivVerified shouldBeEqual true
+                userVerificationNumberRepository.findByUserId(user.id) shouldBe null
+                userSilRepository.getByUserId(user.id).amount shouldBe 60
             }
         }
     }

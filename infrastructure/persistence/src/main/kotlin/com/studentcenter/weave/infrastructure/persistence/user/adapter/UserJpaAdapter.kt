@@ -6,14 +6,17 @@ import com.studentcenter.weave.domain.user.vo.KakaoId
 import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
 import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.user.entity.UserJpaEntity.Companion.toJpaEntity
+import com.studentcenter.weave.infrastructure.persistence.user.repository.PreRegisteredEmailRepository
 import com.studentcenter.weave.infrastructure.persistence.user.repository.UserJpaRepository
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
 class UserJpaAdapter(
-    private val userJpaRepository: UserJpaRepository
+    private val userJpaRepository: UserJpaRepository,
+    private val preRegisteredEmailRepository: PreRegisteredEmailRepository,
 ) : UserRepository {
 
     override fun save(user: User) {
@@ -54,5 +57,9 @@ class UserJpaAdapter(
 
     override fun countAll(): Int {
         return userJpaRepository.count().toInt()
+    }
+
+    override fun isPreRegisteredEmail(email: Email): Boolean {
+        return preRegisteredEmailRepository.existsById(email.value)
     }
 }
