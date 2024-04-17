@@ -1,19 +1,22 @@
 package com.studentcenter.weave.infrastructure.client.discord.meeting.adaptor
 
-import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
+import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventMessagePort
 import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 import com.studentcenter.weave.infrastructure.client.common.event.EventType
 import com.studentcenter.weave.infrastructure.client.common.properties.ClientProperties
 import com.studentcenter.weave.infrastructure.client.discord.common.vo.DiscordMessage
 import com.studentcenter.weave.infrastructure.client.discord.util.DiscordClient
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import java.net.URI
 
 @Component
-class MeetingEventDiscordAdaptor(
+class MeetingEventMessageDiscordAdaptor(
     val discordClient: DiscordClient,
     val clientProperties: ClientProperties,
-) : MeetingEventPort {
+) : MeetingEventMessagePort {
+
+    private val logger = KotlinLogging.logger {}
 
     override fun sendMeetingIsMatchedMessage(meetingMatchingEvent: MeetingMatchingEvent) {
         if (this.clientProperties.events.getValue(EventType.MEETING_MATCHING).active) {
@@ -32,7 +35,7 @@ class MeetingEventDiscordAdaptor(
                     message = DiscordMessage(message),
                 )
             }.onFailure {
-                // TODO: 로깅 시스템 도입 시 로그 추가.
+                logger.error(it) { "Failed to send discord message" }
             }
         }
     }

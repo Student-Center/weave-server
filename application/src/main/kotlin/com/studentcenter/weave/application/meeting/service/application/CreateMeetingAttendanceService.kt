@@ -3,20 +3,15 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.CreateMeetingAttendance
-import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPort
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPublisher
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
-import com.studentcenter.weave.application.meeting.vo.MeetingMatchingEvent
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meeting.event.MeetingCompletedEvent.Companion.createCompletedEvent
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.lock.distributedLock
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
@@ -26,14 +21,13 @@ class CreateMeetingAttendanceService(
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
     private val getMeetingTeam: GetMeetingTeam,
-    private val meetingEventPort: MeetingEventPort,
     private val meetingEventPublisher: MeetingEventPublisher,
 ) : CreateMeetingAttendance {
 
     override fun invoke(
         meetingId: UUID,
         attendance: Boolean,
-    ): Unit = distributedLock("${this.javaClass.simpleName}:$meetingId") {
+    ) = distributedLock("${this.javaClass.simpleName}:$meetingId") {
         val meeting = getByIdAndValidate(meetingId)
 
         val requestingTeam = getMeetingTeam.getById(meeting.requestingTeamId)
@@ -82,10 +76,7 @@ class CreateMeetingAttendanceService(
         val countAttend = meetingAttendanceDomainService.countByMeetingIdAndIsAttend(meeting.id)
 
         if (countAttend == memberCount) {
-            updateMeetingStateToComplete(
-                meeting = meeting,
-                memberCount = memberCount,
-            )
+            updateMeetingStateToComplete(meeting)
         }
     }
 
@@ -93,35 +84,13 @@ class CreateMeetingAttendanceService(
         meetingDomainService.save(meeting.cancel())
     }
 
-    private fun updateMeetingStateToComplete(
-        meeting: Meeting,
-        memberCount: Int,
-    ) {
+    private fun updateMeetingStateToComplete(meeting: Meeting) {
         meeting
             .complete()
             .also {
                 meetingDomainService.save(it)
                 meetingEventPublisher.publish(it.createCompletedEvent())
             }
-
-        val matchedMeetingCount = meetingDomainService.countByStatusIsCompleted()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val requestingMeetingTeamMemberSummary =
-                getMeetingTeam.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.requestingTeamId)
-            val receivingMeetingTeamMemberSummary =
-                getMeetingTeam.getMeetingTeamMemberSummaryByMeetingTeamId(meeting.receivingTeamId)
-
-            meetingEventPort.sendMeetingIsMatchedMessage(
-                MeetingMatchingEvent(
-                    meeting = meeting,
-                    memberCount = memberCount,
-                    matchedMeetingCount = matchedMeetingCount,
-                    requestingMeetingTeamMbti = requestingMeetingTeamMemberSummary.teamMbti,
-                    receivingMeetingTeamMbti = receivingMeetingTeamMemberSummary.teamMbti,
-                )
-            )
-        }
     }
 
     private fun getByIdAndValidate(meetingId: UUID): Meeting {

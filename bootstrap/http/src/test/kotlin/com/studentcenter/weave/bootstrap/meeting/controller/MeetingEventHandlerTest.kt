@@ -26,13 +26,13 @@ class MeetingEventHandlerTest(
             val meetingFixture = MeetingFixtureFactory.create(status = MeetingStatus.COMPLETED)
             val meetingCompletedEvent = meetingFixture.createCompletedEvent()
 
-            every { createChatRoom.invoke(meetingCompletedEvent.entity) } just runs
+            every { createChatRoom.invoke(meetingCompletedEvent) } just runs
 
             // act
             applicationEventPublisher.publishEvent(meetingCompletedEvent)
 
             // assert
-            verify { createChatRoom.invoke(meetingCompletedEvent.entity) }
+            verify { createChatRoom.invoke(meetingCompletedEvent) }
         }
     }
 
