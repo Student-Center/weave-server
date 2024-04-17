@@ -18,7 +18,7 @@ class MeetingEventHandler(
     @EventListener
     fun handleMeetingEvent(meetingCompletedEvent: MeetingCompletedEvent) {
         CoroutineScope(Dispatchers.Default).launch {
-            launch { createChatRoom.invoke(meetingCompletedEvent.entity) }
+            launch { createChatRoom.invoke(meetingCompletedEvent) }
             launch { notifyMeetingEvent.notifyMeetingCompleted(meetingCompletedEvent) }
         }
     }
