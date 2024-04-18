@@ -19,6 +19,11 @@ class SendChatMessageServiceTest : DescribeSpec({
         chatMessageRepository = chatMessageRepository,
     )
 
+    afterEach {
+        chatMessagePublisher.clear()
+        chatMessageRepository.clear()
+    }
+
     describe("채팅 메시지 전송") {
         it("채팅 메시지를 큐에 전달하고, DB에 저장한다.") {
             // arrange

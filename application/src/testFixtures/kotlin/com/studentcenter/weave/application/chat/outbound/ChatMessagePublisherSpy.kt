@@ -13,4 +13,6 @@ class ChatMessagePublisherSpy: ChatMessagePublisher {
 
     fun count(): Int = bucket.size
 
+    fun clear() = bucket.clear()
+
 }
