@@ -25,10 +25,10 @@ class ChatMessageRepositorySpy: ChatMessageRepository {
             .take(limit)
     }
 
-    fun assertSaved(chatMessage: ChatMessage) {
-        val saved = bucket[chatMessage.id]
-        requireNotNull(saved) { "ChatMessage not saved" }
-        require(saved == chatMessage) { "ChatMessage not saved" }
+    fun findAllByUserIdAndRoomId(userId: UUID, roomId: UUID): List<ChatMessage> {
+        return bucket.values
+            .filter { it.senderId == userId }
+            .filter { it.roomId == roomId }
     }
 
     fun clear() {
