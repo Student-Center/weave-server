@@ -24,34 +24,29 @@ class ChatMessageEventHandler(
     @EventListener
     fun handleChatMessageConsumeEvent(event: ChatMessageConsumeEvent) {
         val chatMessage: ChatMessage = event.entity
-
         CoroutineScope(Dispatchers.IO).launch {
             val broadCastJob: Deferred<Unit> = async { broadCastChatMessage(chatMessage) }
-            val saveJob = async { saveChatMessage.invoke(chatMessage) }
+            val saveJob: Deferred<Unit> = async { saveChatMessage.invoke(chatMessage) }
 
-            handleBroadCastJob(broadCastJob)
-            handleSaveJob(saveJob)
+            handleJobWithErrorLogging(broadCastJob) { "Failed to broadcast chat message" }
+            handleJobWithErrorLogging(saveJob) { "Failed to save chat message" }
         }
     }
 
-    private suspend fun handleBroadCastJob(broadCastJob: Deferred<Unit>) {
-        broadCastJob
+    private suspend fun handleJobWithErrorLogging(
+        job: Deferred<Unit>,
+        errorMessage: () -> String,
+    ) {
+        job
             .runCatching { await() }
-            .onFailure { logger.error { "Failed to broadcast chat message" } }
-    }
-
-    private suspend fun handleSaveJob(saveJob: Deferred<Unit>) {
-        saveJob
-            .runCatching { await() }
-            .onFailure { logger.error { "Failed to save chat message" } }
+            .onFailure { logger.error { errorMessage } }
     }
 
     private fun broadCastChatMessage(chatMessage: ChatMessage) {
         simpMessageSendingOperations.convertAndSend(
             /* destination = */ "/topic/chat-rooms/${chatMessage.roomId}",
-            /* payload = */ chatMessage
+            /* payload = */ chatMessage,
         )
     }
-
 
 }
