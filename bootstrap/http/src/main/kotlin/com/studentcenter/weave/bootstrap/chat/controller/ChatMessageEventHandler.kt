@@ -25,21 +25,17 @@ class ChatMessageEventHandler(
     fun handleChatMessageConsumeEvent(event: ChatMessageConsumeEvent) {
         val chatMessage: ChatMessage = event.entity
         CoroutineScope(Dispatchers.IO).launch {
-            val broadCastJob: Deferred<Unit> = async { broadCastChatMessage(chatMessage) }
-            val saveJob: Deferred<Unit> = async { saveChatMessage.invoke(chatMessage) }
+            val broadCastJob: Deferred<Unit> = async {
+                broadCastChatMessage(chatMessage)
+            }.onFailure { logger.error(it) { "Failed to broadcast chat message" } }
 
-            handleJobWithErrorLogging(broadCastJob) { "Failed to broadcast chat message" }
-            handleJobWithErrorLogging(saveJob) { "Failed to save chat message" }
+            val saveJob: Deferred<Unit> = async {
+                saveChatMessage.invoke(chatMessage)
+            }.onFailure { logger.error(it) { "Failed to save chat message" } }
+
+            broadCastJob.await()
+            saveJob.await()
         }
-    }
-
-    private suspend fun handleJobWithErrorLogging(
-        job: Deferred<Unit>,
-        errorMessage: () -> String,
-    ) {
-        job
-            .runCatching { await() }
-            .onFailure { logger.error { errorMessage } }
     }
 
     private fun broadCastChatMessage(chatMessage: ChatMessage) {
@@ -47,6 +43,14 @@ class ChatMessageEventHandler(
             /* destination = */ "/topic/chat-rooms/${chatMessage.roomId}",
             /* payload = */ chatMessage,
         )
+    }
+
+    private fun Deferred<Unit>.onFailure(callBack: (cause: Throwable) -> Unit): Deferred<Unit> = this.also {
+        it.invokeOnCompletion { cause ->
+            if (cause != null) {
+                callBack(cause)
+            }
+        }
     }
 
 }
