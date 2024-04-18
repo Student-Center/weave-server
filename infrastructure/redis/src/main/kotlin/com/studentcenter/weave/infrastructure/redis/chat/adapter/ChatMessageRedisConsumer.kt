@@ -3,6 +3,7 @@ package com.studentcenter.weave.infrastructure.redis.chat.adapter
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.studentcenter.weave.domain.chat.entity.ChatMessage
+import com.studentcenter.weave.domain.chat.event.ChatMessageConsumeEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.redis.connection.Message
@@ -25,6 +26,7 @@ class ChatMessageRedisConsumer(
 
         objectMapper
             .readValue<ChatMessage>(message.body)
+            .let { ChatMessageConsumeEvent.from(it) }
             .also { applicationEventPublisher.publishEvent(it) }
     }
 
