@@ -3,6 +3,7 @@ package com.studentcenter.weave.bootstrap.chat.controller
 import com.studentcenter.weave.application.chat.port.inbound.SaveChatMessage
 import com.studentcenter.weave.domain.chat.entity.ChatMessage
 import com.studentcenter.weave.domain.chat.event.ChatMessageConsumeEvent
+import com.studentcenter.weave.support.common.functions.invokeOnFailure
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,10 +26,10 @@ class ChatMessageEventHandler(
         val chatMessage: ChatMessage = event.entity
         CoroutineScope(Dispatchers.IO).launch {
             async { broadCastChatMessage(chatMessage) }
-                .invokeOnCompletion { logger.error(it) { "Failed to broadcast chat message" } }
+                .invokeOnFailure { logger.error(it) { "Failed to broadcast chat message" } }
 
             async { saveChatMessage.invoke(chatMessage) }
-                .invokeOnCompletion { logger.error(it) { "Failed to save chat message" } }
+                .invokeOnFailure { logger.error(it) { "Failed to save chat message" } }
         }
     }
 
