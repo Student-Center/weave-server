@@ -5,7 +5,6 @@ import com.studentcenter.weave.domain.chat.entity.ChatMessage
 import com.studentcenter.weave.domain.chat.event.ChatMessageConsumeEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -26,10 +25,10 @@ class ChatMessageEventHandler(
         val chatMessage: ChatMessage = event.entity
         CoroutineScope(Dispatchers.IO).launch {
             async { broadCastChatMessage(chatMessage) }
-                .onFailure { logger.error(it) { "Failed to broadcast chat message" } }
+                .invokeOnCompletion { logger.error(it) { "Failed to broadcast chat message" } }
 
             async { saveChatMessage.invoke(chatMessage) }
-                .onFailure { logger.error(it) { "Failed to save chat message" } }
+                .invokeOnCompletion { logger.error(it) { "Failed to save chat message" } }
         }
     }
 
@@ -38,14 +37,6 @@ class ChatMessageEventHandler(
             /* destination = */ "/topic/chat-rooms/${chatMessage.roomId}",
             /* payload = */ chatMessage,
         )
-    }
-
-    private fun Deferred<Unit>.onFailure(callBack: (cause: Throwable) -> Unit) {
-        this.invokeOnCompletion { cause ->
-            if (cause != null) {
-                callBack(cause)
-            }
-        }
     }
 
 }
