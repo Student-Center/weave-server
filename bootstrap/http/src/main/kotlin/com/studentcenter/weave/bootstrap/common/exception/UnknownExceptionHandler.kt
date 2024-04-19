@@ -27,9 +27,10 @@ class UnknownExceptionHandler {
     ): ErrorResponse {
         val requestMethod: String = request.method
         val requestUrl: String = request.requestURI
+        val queryString = if (request.queryString.isNotBlank()) "?${request.queryString}" else ""
         val clientIp: String = request.getHeader("X-Forwarded-For") ?: request.remoteAddr
 
-        logger.warn { "NoResourceFoundException: $requestMethod $requestUrl from $clientIp" }
+        logger.warn { "NoResourceFoundException: $requestMethod $requestUrl${queryString} from $clientIp" }
 
         return ErrorResponse(
             exceptionCode = SystemExceptionType.NOT_FOUND.code,
