@@ -5,9 +5,9 @@ import com.studentcenter.weave.application.chat.port.outbound.ChatMessagePublish
 import com.studentcenter.weave.application.chat.port.outbound.ChatMessageRepository
 import com.studentcenter.weave.domain.chat.entity.ChatMessage
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 import java.util.*
@@ -25,24 +25,16 @@ class SendChatMessageService(
         userId: UUID,
         contents: List<ChatMessage.Content>,
     ) {
-        val chatMessage: ChatMessage = ChatMessage.createByUser(
-            roomId = roomId,
-            userId = userId,
-            contents = contents,
-        )
+        val chatMessage = ChatMessage.createByUser(roomId, userId, contents)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            publishMessageAsync(chatMessage)
-            saveMessageAsync(chatMessage)
+        CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            launch { chatMessagePublisher.publish(chatMessage) }
+            launch { chatMessageRepository.save(chatMessage) }
         }
     }
 
-    private fun CoroutineScope.publishMessageAsync(chatMessage: ChatMessage) =
-        async { chatMessagePublisher.publish(chatMessage) }
-            .invokeOnCompletion { if (it != null) logger.error(it) { "Failed to publish chat message" } }
-
-    private fun CoroutineScope.saveMessageAsync(chatMessage: ChatMessage) =
-        async { chatMessageRepository.save(chatMessage) }
-            .invokeOnCompletion { if (it != null) logger.error(it) { "Failed to save chat message" } }
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        logger.error(exception) { "Failed to process chat message" }
+    }
 
 }
