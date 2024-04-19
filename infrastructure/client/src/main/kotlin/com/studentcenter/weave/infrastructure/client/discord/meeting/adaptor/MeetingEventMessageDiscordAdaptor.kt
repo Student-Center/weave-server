@@ -23,7 +23,7 @@ class MeetingEventMessageDiscordAdaptor(
             val meetingTeamMemberCount: Int = meetingMatchingEvent.memberCount / 2
             val discordUri =
                 URI(this.clientProperties.events.getValue(EventType.MEETING_MATCHING).url)
-            val prefix = if (meetingMatchingEvent.matchedMeetingCount % 10 == 0) "@everyone " else ""
+            val prefix = if (meetingMatchingEvent.matchedMeetingCount % 10 == 0) "@everyone\n" else ""
             val message =
                 "$prefix${meetingMatchingEvent.matchedMeetingCount}번째 미팅 " +
                         "${meetingMatchingEvent.meeting.requestingTeamId}(${meetingMatchingEvent.requestingMeetingTeamMbti.value})와 " +
