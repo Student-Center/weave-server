@@ -22,7 +22,8 @@ class UserEventDiscordAdaptor(
         if (this.clientProperties.events.getValue(EventType.USER_REGISTRATION).active) {
             val discordUri =
                 URI(this.clientProperties.events.getValue(EventType.USER_REGISTRATION).url)
-            val message = "${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
+            val prefix = if (userCount % 10 == 0) "@everyone " else ""
+            val message = "$prefix${userCount}번째 유저 ${user.nickname.value}(${user.gender})님이 가입했어요!🎉"
 
             runCatching {
                 discordClient.send(
