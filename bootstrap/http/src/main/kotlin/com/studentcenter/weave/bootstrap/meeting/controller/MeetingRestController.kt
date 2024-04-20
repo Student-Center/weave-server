@@ -41,7 +41,7 @@ class MeetingRestController(
     override fun scrollPendingMeetings(
         request: PendingMeetingScrollRequest,
     ): PendingMeetingScrollResponse {
-        return scrollPendingMeeting.invoke(request.toCommand()).let {
+        return scrollPendingMeeting.invoke(request.toQuery()).let {
             PendingMeetingScrollResponse(
                 items = it.items.map(PendingMeetingScrollResponse.MeetingDto::from),
                 next = it.next,
@@ -78,7 +78,7 @@ class MeetingRestController(
     }
 
     override fun scrollPreparedMeetings(request: PreparedMeetingScrollRequest): PreparedMeetingScrollResponse {
-        return scrollPreparedMeeting.invoke(request.toCommand()).let {
+        return scrollPreparedMeeting.invoke(request.toQuery()).let {
             PreparedMeetingScrollResponse(
                 items = it.items.map(PreparedMeetingScrollResponse.MeetingDto::from),
                 next = it.next,

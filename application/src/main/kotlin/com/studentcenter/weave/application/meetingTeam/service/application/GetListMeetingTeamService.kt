@@ -20,29 +20,29 @@ class GetListMeetingTeamService(
     private val meetingTeamRepository: MeetingTeamRepository,
 ) : GetListMeetingTeam {
 
-    override fun invoke(command: GetListMeetingTeam.Command): GetListMeetingTeam.Result {
+    override fun invoke(query: GetListMeetingTeam.Query): GetListMeetingTeam.Result {
         val oppositeGender = getCurrentUserAuthentication()
             .gender
             .getOppositeGender()
 
         val meetingTeams: List<MeetingTeam> = MeetingTeamListFilter(
-            memberCount = command.memberCount,
-            youngestMemberBirthYear = command.youngestMemberBirthYear,
-            oldestMemberBirthYear = command.oldestMemberBirthYear,
-            preferredLocations = command.preferredLocations,
+            memberCount = query.memberCount,
+            youngestMemberBirthYear = query.youngestMemberBirthYear,
+            oldestMemberBirthYear = query.oldestMemberBirthYear,
+            preferredLocations = query.preferredLocations,
             gender = oppositeGender,
             status = MeetingTeamStatus.PUBLISHED,
         ).let {
             meetingTeamRepository.scrollByFilter(
                 filter = it,
-                next = command.next,
-                limit = command.limit + 1
+                next = query.next,
+                limit = query.limit + 1
             )
         }
 
-        val hasNext = meetingTeams.size > command.limit
+        val hasNext = meetingTeams.size > query.limit
         val next = if (hasNext) meetingTeams.last().id else null
-        val items = if (hasNext) meetingTeams.take(command.limit) else meetingTeams
+        val items = if (hasNext) meetingTeams.take(query.limit) else meetingTeams
 
         val meetingTeamInfos = items.map { team ->
             val memberInfos = team

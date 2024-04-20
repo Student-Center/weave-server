@@ -17,7 +17,7 @@ data class PreparedMeetingScrollRequest(
     limit = limit,
 ) {
 
-    fun toCommand(): ScrollPreparedMeeting.Query {
+    fun toQuery(): ScrollPreparedMeeting.Query {
         return ScrollPreparedMeeting.Query(
             next = this.next,
             limit = this.limit,
