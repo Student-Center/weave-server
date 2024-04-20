@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeeting
 import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.Parameter
 import org.springdoc.core.annotations.ParameterObject
@@ -17,12 +17,11 @@ data class PreparedMeetingScrollRequest(
     limit = limit,
 ) {
 
-    fun toCommand(): ScrollPreparedMeetingUseCase.Command {
-        return ScrollPreparedMeetingUseCase.Command(
+    fun toQuery(): ScrollPreparedMeeting.Query {
+        return ScrollPreparedMeeting.Query(
             next = this.next,
             limit = this.limit,
         )
     }
 
 }
-

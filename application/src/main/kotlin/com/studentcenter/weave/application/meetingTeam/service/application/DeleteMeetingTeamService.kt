@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeeting
 import com.studentcenter.weave.application.meetingTeam.port.inbound.DeleteMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.support.common.exception.CustomException
@@ -12,7 +12,7 @@ import java.util.*
 
 @Service
 class DeleteMeetingTeamService(
-    private val cancelAllMeetingUseCase: CancelAllMeetingUseCase,
+    private val cancelAllMeeting: CancelAllMeeting,
     private val meetingTeamRepository: MeetingTeamRepository,
 ) : DeleteMeetingTeam {
 
@@ -26,7 +26,7 @@ class DeleteMeetingTeamService(
         }
 
         myTeam.delete(currentUserId, meetingTeamRepository::deleteById)
-        cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(myTeam.id))
+        cancelAllMeeting.invoke(CancelAllMeeting.Command(myTeam.id))
     }
 
 }

@@ -5,18 +5,18 @@ import com.studentcenter.weave.support.common.dto.ScrollRequest
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-fun interface ScrollPreparedMeetingUseCase {
+fun interface ScrollPreparedMeeting {
 
-    fun invoke(command: Command) :Result
+    fun invoke(query: Query): Result
 
-    data class Command(
+    data class Query(
         override val next: UUID?,
         override val limit: Int,
     ) : ScrollRequest<UUID?>(next, limit)
 
     data class Result(
         override val items: List<PreparedMeetingInfo>,
-        override val next: UUID?
+        override val next: UUID?,
     ) : ScrollResponse<PreparedMeetingInfo, UUID?>(
         items = items,
         next = next,

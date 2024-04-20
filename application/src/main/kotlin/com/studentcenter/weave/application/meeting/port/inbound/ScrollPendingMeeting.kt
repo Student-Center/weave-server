@@ -5,11 +5,11 @@ import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollResponse
 import java.util.*
 
-fun interface ScrollPendingMeetingUseCase {
+fun interface ScrollPendingMeeting {
 
-    fun invoke(command: Command) :Result
+    fun invoke(query: Query): Result
 
-    data class Command(
+    data class Query(
         val teamType: TeamType,
         val next: UUID?,
         val limit: Int,
@@ -17,7 +17,7 @@ fun interface ScrollPendingMeetingUseCase {
 
     data class Result(
         override val items: List<PendingMeetingInfo>,
-        override val next: UUID?
+        override val next: UUID?,
     ) : ScrollResponse<PendingMeetingInfo, UUID?>(
         items = items,
         next = next,

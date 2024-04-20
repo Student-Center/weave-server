@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.RequestMeeting
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
@@ -19,15 +19,15 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class MeetingRequestApplicationService(
+class RequestMeetingService(
     private val getUser: GetUser,
     private val getMeetingTeam: GetMeetingTeam,
     private val meetingDomainService: MeetingDomainService,
     private val meetingAttendanceDomainService: MeetingAttendanceDomainService,
-) : MeetingRequestUseCase {
+) : RequestMeeting {
 
     @Transactional
-    override fun invoke(command: MeetingRequestUseCase.Command) {
+    override fun invoke(command: RequestMeeting.Command) {
         val myMeetingTeam: MeetingTeam = getMyMeetingTeam()
             .also {
                 validateMyMeetingTeamStatus(it)

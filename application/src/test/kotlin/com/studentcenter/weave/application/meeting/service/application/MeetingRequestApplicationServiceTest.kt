@@ -3,7 +3,7 @@ package com.studentcenter.weave.application.meeting.service.application
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.outbound.MeetingAttendanceRepositorySpy
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
-import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.RequestMeeting
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingAttendanceDomainServiceImpl
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
@@ -41,7 +41,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
     val getMeetingTeam = mockk<GetMeetingTeam>()
     val getUser = mockk<GetUser>()
 
-    val meetingRequestApplicationService = MeetingRequestApplicationService(
+    val meetingRequestApplicationService = RequestMeetingService(
         getMeetingTeam = getMeetingTeam,
         meetingDomainService = meetingDomainService,
         meetingAttendanceDomainService = meetingAttendanceDomainService,
@@ -69,7 +69,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 // act, assert
                 shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
-                        MeetingRequestUseCase.Command(receivingMeetingTeamId)
+                        RequestMeeting.Command(receivingMeetingTeamId)
                     )
                 }
             }
@@ -95,7 +95,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     // act, assert
                     shouldThrow<CustomException> {
                         meetingRequestApplicationService.invoke(
-                            MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                            RequestMeeting.Command(receivingMeetingTeam.id)
                         )
                     }
                 }
@@ -119,7 +119,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 // act, assert
                 shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
-                        MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                        RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
             }
@@ -143,7 +143,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 // act, assert
                 shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
-                        MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                        RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
             }
@@ -165,7 +165,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 // act, assert
                 shouldThrow<CustomException> {
                     meetingRequestApplicationService.invoke(
-                        MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                        RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
             }
@@ -196,7 +196,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.findByMemberUserId(me.id) } returns myMeetingTeam
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
-                val command = MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                val command = RequestMeeting.Command(receivingMeetingTeam.id)
                 meetingRequestApplicationService.invoke(command)
 
                 // act, assert
@@ -231,7 +231,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act
-                MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                RequestMeeting.Command(receivingMeetingTeam.id)
                     .let { meetingRequestApplicationService.invoke(it) }
 
                 // assert
@@ -267,7 +267,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act
-                MeetingRequestUseCase.Command(receivingMeetingTeam.id)
+                RequestMeeting.Command(receivingMeetingTeam.id)
                     .let { meetingRequestApplicationService.invoke(it) }
 
                 // assert

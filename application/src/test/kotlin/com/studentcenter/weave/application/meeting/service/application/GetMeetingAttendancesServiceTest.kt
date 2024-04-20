@@ -9,14 +9,14 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-@DisplayName("GetMeetingAttendancesApplicationServiceTest")
-class GetMeetingAttendancesApplicationServiceTest : DescribeSpec({
+@DisplayName("GetMeetingAttendancesServiceTest")
+class GetMeetingAttendancesServiceTest : DescribeSpec({
 
     val meetingAttendanceRepositorySpy = MeetingAttendanceRepositorySpy()
     val meetingAttendanceDomainService = MeetingAttendanceDomainServiceImpl(
         meetingAttendanceRepository = meetingAttendanceRepositorySpy,
     )
-    val sut = GetMeetingAttendancesApplicationService(
+    val sut = GetMeetingAttendancesService(
         meetingAttendanceDomainService = meetingAttendanceDomainService,
     )
 

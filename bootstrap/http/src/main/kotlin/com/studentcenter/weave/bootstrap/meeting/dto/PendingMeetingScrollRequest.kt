@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.meeting.dto
 
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeeting
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.support.common.dto.ScrollRequest
 import io.swagger.v3.oas.annotations.Parameter
@@ -20,8 +20,8 @@ data class PendingMeetingScrollRequest(
     limit = limit,
 ) {
 
-    fun toCommand(): ScrollPendingMeetingUseCase.Command {
-        return ScrollPendingMeetingUseCase.Command(
+    fun toQuery(): ScrollPendingMeeting.Query {
+        return ScrollPendingMeeting.Query(
             teamType = this.teamType,
             next = this.next,
             limit = this.limit,
@@ -29,4 +29,3 @@ data class PendingMeetingScrollRequest(
     }
 
 }
-

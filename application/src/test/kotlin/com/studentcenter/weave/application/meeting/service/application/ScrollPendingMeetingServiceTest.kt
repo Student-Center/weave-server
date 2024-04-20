@@ -2,27 +2,19 @@ package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.meeting.outbound.MeetingRepositorySpy
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeeting
 import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDomainServiceImpl
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetAllMeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
-import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfo
 import com.studentcenter.weave.application.meetingTeam.vo.MeetingTeamInfoCreator
-import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole.LEADER
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingMemberRole.MEMBER
-import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.domain.university.vo.UniversityName
-import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
 import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -32,23 +24,21 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.random.Random
-import kotlin.random.nextUInt
 
-@DisplayName("ScrollPendingMeetingApplicationServiceTest")
-class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
+@DisplayName("ScrollPendingMeetingServiceTest")
+class ScrollPendingMeetingServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy,
     )
     val getMeetingTeam = mockk<GetMeetingTeam>()
-    val meetingTeamInfoGetAllByIdsUseCase = mockk<GetAllMeetingTeamInfo>()
+    val meetingTeamInfoGetAllByIds = mockk<GetAllMeetingTeamInfo>()
 
-    val sut = ScrollPendingMeetingApplicationService(
+    val sut = ScrollPendingMeetingService(
         meetingDomainService = meetingDomainService,
         getMeetingTeam = getMeetingTeam,
-        meetingTeamInfoGetAllByIdsUseCase = meetingTeamInfoGetAllByIdsUseCase,
+        meetingTeamInfoGetAllByIds = meetingTeamInfoGetAllByIds,
     )
 
     afterEach {
@@ -62,7 +52,7 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
             it("예외가 발생한다") {
                 // arrange
                 val user = createUser()
-                val command = ScrollPendingMeetingUseCase.Command(
+                val query = ScrollPendingMeeting.Query(
                     teamType = TeamType.REQUESTING,
                     next = null,
                     limit = 20,
@@ -70,7 +60,7 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(query) }
             }
         }
 
@@ -79,16 +69,16 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                 it("TeamType(${teamType}): 빈 리스트를 반환한다.") {
                     // arrange
                     val user = createUser()
-                    val command = ScrollPendingMeetingUseCase.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = TeamType.REQUESTING,
                         next = null,
                         limit = 20,
                     )
                     every { getMeetingTeam.findByMemberUserId(user.id) } returns MeetingTeamFixtureFactory.create()
-                    every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns emptyList()
+                    every { meetingTeamInfoGetAllByIds.invoke(any()) } returns emptyList()
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     result.items.isEmpty() shouldBe true
@@ -104,13 +94,14 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                     // arrange
                     val user = createUser()
                     val limit = 2
-                    val command = ScrollPendingMeetingUseCase.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = teamType,
                         next = null,
                         limit = limit,
                     )
 
-                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
+                    val myTeamInfo =
+                        MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(limit + 1) {
                         val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
@@ -131,10 +122,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                     }
 
                     every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeamInfo.team
-                    every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns teamInfos
+                    every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     val uniqueTeamTypeTeamIds = result
@@ -158,13 +149,14 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                     val user = createUser()
                     val count = 10
                     val limit = count * 2
-                    val command = ScrollPendingMeetingUseCase.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = teamType,
                         next = null,
                         limit = limit,
                     )
 
-                    val myTeamInfo = MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
+                    val myTeamInfo =
+                        MeetingTeamInfoCreator.create(users = listOf(user), memberCount = 2)
                     val teamInfos = MutableList(1) { myTeamInfo }
                     repeat(count) {
                         val teamInfo = MeetingTeamInfoCreator.create(gender = Gender.WOMAN)
@@ -185,10 +177,10 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
                     }
 
                     every { getMeetingTeam.findByMemberUserId(user.id) } returns myTeamInfo.team
-                    every { meetingTeamInfoGetAllByIdsUseCase.invoke(any()) } returns teamInfos
+                    every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     val uniqueTeamTypeTeamIds = result
@@ -207,54 +199,6 @@ class ScrollPendingMeetingApplicationServiceTest : DescribeSpec({
     }
 
 })
-
-private fun createMeetingTeamInfo(
-    users: List<User> = emptyList(),
-    memberCount: Int = 2,
-    gender: Gender = Gender.MAN,
-): MeetingTeamInfo {
-    val g = users.distinctBy { it.gender }
-    require(g.size <= 1) { "성별이 다른 멤버로 팀을 만들 수 없어요" }
-    require(users.isEmpty() || users[0].gender == gender ) { "멤버와 성별이 다를 수 없어요" }
-    val team = MeetingTeamFixtureFactory.create(
-        memberCount = memberCount,
-        status = MeetingTeamStatus.PUBLISHED,
-        gender = gender
-    )
-    val members = MutableList(users.size) { i ->
-        MemberInfo(
-            id = UuidCreator.create(),
-            user = users[i],
-            university = UniversityFixtureFactory.create(
-                id = users[i].universityId,
-                name = UniversityName(value = "${Random.nextUInt()}대학교"),
-            ),
-            role = if (i == 0) LEADER else MEMBER
-        )
-    }
-
-    if (users.size < memberCount) {
-        repeat(memberCount - users.size) { i ->
-            val user = UserFixtureFactory.create(gender = gender)
-            members.add(
-                MemberInfo(
-                    id = UuidCreator.create(),
-                    user = user,
-                    university = UniversityFixtureFactory.create(
-                        id = user.universityId,
-                        name = UniversityName(value = "${Random.nextUInt()}대학교"),
-                    ),
-                    role = if (users.isEmpty() && i == 0) LEADER else MEMBER
-                )
-            )
-        }
-    }
-
-    return MeetingTeamInfo(
-        team = team,
-        memberInfos = members
-    )
-}
 
 private fun createUser(): User {
     val user = UserFixtureFactory.create()

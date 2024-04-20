@@ -1,12 +1,12 @@
 package com.studentcenter.weave.bootstrap.meeting.controller
 
-import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamIdUseCase
-import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfoUseCase
-import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttendancesUseCase
 import com.studentcenter.weave.application.meeting.port.inbound.CreateMeetingAttendance
-import com.studentcenter.weave.application.meeting.port.inbound.MeetingRequestUseCase
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeetingUseCase
-import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamId
+import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfo
+import com.studentcenter.weave.application.meeting.port.inbound.GetMeetingAttendances
+import com.studentcenter.weave.application.meeting.port.inbound.RequestMeeting
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPendingMeeting
+import com.studentcenter.weave.application.meeting.port.inbound.ScrollPreparedMeeting
 import com.studentcenter.weave.bootstrap.meeting.api.MeetingApi
 import com.studentcenter.weave.bootstrap.meeting.dto.KakaoIdResponse
 import com.studentcenter.weave.bootstrap.meeting.dto.MeetingAttendancesResponse
@@ -21,27 +21,27 @@ import java.util.*
 
 @RestController
 class MeetingRestController(
-    private val meetingRequestUseCase: MeetingRequestUseCase,
-    private val scrollPendingMeetingUseCase: ScrollPendingMeetingUseCase,
-    private val scrollPreparedMeetingUseCase: ScrollPreparedMeetingUseCase,
-    private val getMeetingAttendancesUseCase: GetMeetingAttendancesUseCase,
+    private val meetingRequest: RequestMeeting,
+    private val scrollPendingMeeting: ScrollPendingMeeting,
+    private val scrollPreparedMeeting: ScrollPreparedMeeting,
+    private val getMeetingAttendances: GetMeetingAttendances,
     private val createMeetingAttendance: CreateMeetingAttendance,
-    private val findMyRequestMeetingByReceivingTeamIdUseCase: FindMyRequestMeetingByReceivingTeamIdUseCase,
-    private val getAllOtherTeamMemberInfoUseCase: GetAllOtherTeamMemberInfoUseCase,
+    private val findMyRequestMeetingByReceivingTeamId: FindMyRequestMeetingByReceivingTeamId,
+    private val getAllOtherTeamMemberInfo: GetAllOtherTeamMemberInfo,
 ) : MeetingApi {
 
     override fun requestMeeting(request: MeetingRequestRequest) {
-        MeetingRequestUseCase.Command(
+        RequestMeeting.Command(
             receivingMeetingTeamId = request.receivingMeetingTeamId,
         ).also {
-            meetingRequestUseCase.invoke(it)
+            meetingRequest.invoke(it)
         }
     }
 
     override fun scrollPendingMeetings(
         request: PendingMeetingScrollRequest,
-    ) : PendingMeetingScrollResponse {
-        return scrollPendingMeetingUseCase.invoke(request.toCommand()).let {
+    ): PendingMeetingScrollResponse {
+        return scrollPendingMeeting.invoke(request.toQuery()).let {
             PendingMeetingScrollResponse(
                 items = it.items.map(PendingMeetingScrollResponse.MeetingDto::from),
                 next = it.next,
@@ -52,7 +52,7 @@ class MeetingRestController(
     }
 
     override fun getMeetingAttendances(meetingId: UUID): MeetingAttendancesResponse {
-        return getMeetingAttendancesUseCase.invoke(meetingId).let {
+        return getMeetingAttendances.invoke(meetingId).let {
             MeetingAttendancesResponse.from(meetingAttendances = it)
         }
     }
@@ -71,14 +71,14 @@ class MeetingRestController(
         )
     }
 
-    override fun findMyRequestMeetingByReceivingTeamId(receivingTeamId: UUID) : MeetingResponse {
-        return findMyRequestMeetingByReceivingTeamIdUseCase.invoke(receivingTeamId).let {
+    override fun findMyRequestMeetingByReceivingTeamId(receivingTeamId: UUID): MeetingResponse {
+        return findMyRequestMeetingByReceivingTeamId.invoke(receivingTeamId).let {
             MeetingResponse.from(it)
         }
     }
 
     override fun scrollPreparedMeetings(request: PreparedMeetingScrollRequest): PreparedMeetingScrollResponse {
-        return scrollPreparedMeetingUseCase.invoke(request.toCommand()).let {
+        return scrollPreparedMeeting.invoke(request.toQuery()).let {
             PreparedMeetingScrollResponse(
                 items = it.items.map(PreparedMeetingScrollResponse.MeetingDto::from),
                 next = it.next,
@@ -88,7 +88,7 @@ class MeetingRestController(
     }
 
     override fun getOtherTeamKakaoIds(meetingId: UUID): KakaoIdResponse {
-        return getAllOtherTeamMemberInfoUseCase.invoke(meetingId).let {
+        return getAllOtherTeamMemberInfo.invoke(meetingId).let {
             KakaoIdResponse.from(it)
         }
     }

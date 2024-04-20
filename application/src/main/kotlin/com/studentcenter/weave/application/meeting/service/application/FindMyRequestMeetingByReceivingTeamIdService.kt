@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meeting.service.application
 
 import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamIdUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.FindMyRequestMeetingByReceivingTeamId
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.domain.meeting.entity.Meeting
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class FindMyRequestMeetingByReceivingTeamIdApplicationService(
+class FindMyRequestMeetingByReceivingTeamIdService(
     private val meetingDomainService: MeetingDomainService,
     private val getMeetingTeam: GetMeetingTeam,
-) : FindMyRequestMeetingByReceivingTeamIdUseCase {
+) : FindMyRequestMeetingByReceivingTeamId {
 
     override fun invoke(receivingTeamId: UUID): Meeting? {
         val userId = getCurrentUserAuthentication().userId

@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.meeting.port.inbound
 
-fun interface CancelEndedPendingMeetingUseCase {
+fun interface CancelEndedPendingMeeting {
+
     fun invoke()
 }

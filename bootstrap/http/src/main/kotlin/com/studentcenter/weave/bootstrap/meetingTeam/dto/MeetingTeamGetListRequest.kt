@@ -30,8 +30,8 @@ data class MeetingTeamGetListRequest(
     limit = limit
 ) {
 
-    fun toCommand(): GetListMeetingTeam.Command {
-        return GetListMeetingTeam.Command(
+    fun toQuery(): GetListMeetingTeam.Query {
+        return GetListMeetingTeam.Query(
             memberCount = memberCount,
             youngestMemberBirthYear = youngestMemberBirthYear,
             oldestMemberBirthYear = oldestMemberBirthYear,

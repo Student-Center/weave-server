@@ -92,7 +92,7 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeams(request: MeetingTeamGetListRequest): MeetingTeamGetListResponse {
-        return request.toCommand()
+        return request.toQuery()
             .let { getListMeetingTeam.invoke(it) }
             .let {
                 MeetingTeamGetListResponse(

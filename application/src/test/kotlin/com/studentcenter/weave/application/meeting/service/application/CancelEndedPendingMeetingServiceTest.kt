@@ -10,11 +10,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import java.time.LocalDateTime
 
-@DisplayName("CancelEndedPendingMeetingApplicationServiceTest")
-class CancelEndedPendingMeetingApplicationServiceTest : DescribeSpec({
+@DisplayName("CancelEndedPendingMeetingServiceTest")
+class CancelEndedPendingMeetingServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
-    val sut = CancelEndedPendingMeetingApplicationService(
+    val sut = CancelEndedPendingMeetingService(
         meetingRepository = meetingRepositorySpy,
     )
 
