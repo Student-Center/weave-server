@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
-import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeeting
 import com.studentcenter.weave.application.meetingTeam.port.inbound.LeaveMeetingTeam
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamRepository
 import com.studentcenter.weave.application.user.port.inbound.GetUser
@@ -13,7 +13,7 @@ import java.util.*
 @Service
 class LeaveMeetingTeamService(
     private val meetingTeamRepository: MeetingTeamRepository,
-    private val cancelAllMeetingUseCase: CancelAllMeetingUseCase,
+    private val cancelAllMeeting: CancelAllMeeting,
     private val getUser: GetUser,
 ) : LeaveMeetingTeam {
 
@@ -26,7 +26,7 @@ class LeaveMeetingTeamService(
         val meetingTeam = meetingTeamRepository.getById(id)
 
         if (meetingTeam.isPublished()) {
-            cancelAllMeetingUseCase.invoke(CancelAllMeetingUseCase.Command(meetingTeam.id))
+            cancelAllMeeting.invoke(CancelAllMeeting.Command(meetingTeam.id))
             meetingTeamRepository.deleteById(id)
         } else {
             meetingTeam

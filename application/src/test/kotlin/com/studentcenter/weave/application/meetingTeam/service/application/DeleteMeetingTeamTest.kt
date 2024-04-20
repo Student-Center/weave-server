@@ -1,7 +1,7 @@
 package com.studentcenter.weave.application.meetingTeam.service.application
 
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
-import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeetingUseCase
+import com.studentcenter.weave.application.meeting.port.inbound.CancelAllMeeting
 import com.studentcenter.weave.application.meetingTeam.outbound.MeetingTeamRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
@@ -19,10 +19,10 @@ class DeleteMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
 
-    val cancelMeetingTeamUseCase = mockk<CancelAllMeetingUseCase>(relaxed = true)
+    val cancelMeetingTeam = mockk<CancelAllMeeting>(relaxed = true)
     val sut = DeleteMeetingTeamService(
         meetingTeamRepository = meetingTeamRepository,
-        cancelAllMeetingUseCase = cancelMeetingTeamUseCase,
+        cancelAllMeeting = cancelMeetingTeam,
     )
 
     val user = UserFixtureFactory.create()

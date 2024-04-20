@@ -2,7 +2,7 @@ package com.studentcenter.weave.application.meeting.port.inbound
 
 import java.util.*
 
-fun interface MeetingRequestUseCase {
+fun interface RequestMeeting {
 
     fun invoke(command: Command)
 

@@ -35,7 +35,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
     val getMeetingTeam = mockk<GetMeetingTeam>()
     val getUser = mockk<GetUser>()
     val getUniversity = mockk<GetUniversity>()
-    val sut = GetAllOtherTeamMemberInfoApplicationService(
+    val sut = GetAllOtherTeamMemberInfoService(
         meetingDomainService = meetingDomainService,
         getMeetingTeam = getMeetingTeam,
         getUser = getUser,

@@ -22,15 +22,15 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.*
 
-@DisplayName("GetMeetingAttendancesApplicationServiceTest")
-class FindMyRequestMeetingByReceivingTeamIdApplicationServiceTest : DescribeSpec({
+@DisplayName("GetMeetingAttendancesServiceTest")
+class FindMyRequestMeetingByReceivingTeamIdServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
         meetingRepository = meetingRepositorySpy,
     )
     val getMeetingTeam = mockk<GetMeetingTeam>()
-    val sut = FindMyRequestMeetingByReceivingTeamIdApplicationService(
+    val sut = FindMyRequestMeetingByReceivingTeamIdService(
         meetingDomainService = meetingDomainService,
         getMeetingTeam = getMeetingTeam,
     )
