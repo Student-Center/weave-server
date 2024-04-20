@@ -22,7 +22,7 @@ class ScrollPendingMeetingService(
 ) : ScrollPendingMeeting {
 
     @Transactional(readOnly = true)
-    override fun invoke(command: ScrollPendingMeeting.Command): ScrollPendingMeeting.Result {
+    override fun invoke(query: ScrollPendingMeeting.Query): ScrollPendingMeeting.Result {
         val myTeam = getMeetingTeam.findByMemberUserId(getCurrentUserAuthentication().userId)
             ?: throw CustomException(
                 MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
@@ -31,13 +31,13 @@ class ScrollPendingMeetingService(
 
         val (items, next) = scrollByPendingMeetingByTeamId(
             teamId = myTeam.id,
-            teamType = command.teamType,
-            next = command.next,
-            limit = command.limit,
+            teamType = query.teamType,
+            next = query.next,
+            limit = query.limit,
         )
 
         return ScrollPendingMeeting.Result(
-            items = createPendingMeetingInfos(items, command.teamType),
+            items = createPendingMeetingInfos(items, query.teamType),
             next = next,
         )
     }

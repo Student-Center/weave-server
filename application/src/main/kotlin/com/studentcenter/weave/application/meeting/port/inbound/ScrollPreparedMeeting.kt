@@ -7,9 +7,9 @@ import java.util.*
 
 fun interface ScrollPreparedMeeting {
 
-    fun invoke(command: Command): Result
+    fun invoke(query: Query): Result
 
-    data class Command(
+    data class Query(
         override val next: UUID?,
         override val limit: Int,
     ) : ScrollRequest<UUID?>(next, limit)

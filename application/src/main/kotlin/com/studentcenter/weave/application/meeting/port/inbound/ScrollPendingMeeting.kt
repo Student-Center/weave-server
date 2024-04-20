@@ -7,9 +7,9 @@ import java.util.*
 
 fun interface ScrollPendingMeeting {
 
-    fun invoke(command: Command): Result
+    fun invoke(query: Query): Result
 
-    data class Command(
+    data class Query(
         val teamType: TeamType,
         val next: UUID?,
         val limit: Int,

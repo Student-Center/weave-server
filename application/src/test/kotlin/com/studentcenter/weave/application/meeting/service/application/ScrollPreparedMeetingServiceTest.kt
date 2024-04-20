@@ -52,14 +52,14 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
             it("예외가 발생한다") {
                 // arrange
                 val user = createUserAndSetAuthentication()
-                val command = ScrollPreparedMeeting.Command(
+                val query = ScrollPreparedMeeting.Query(
                     next = null,
                     limit = 20,
                 )
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(query) }
             }
         }
 
@@ -68,7 +68,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
                 // arrange
                 val user = createUserAndSetAuthentication()
                 val limit = 2
-                val command = ScrollPreparedMeeting.Command(
+                val query = ScrollPreparedMeeting.Query(
                     next = null,
                     limit = limit,
                 )
@@ -76,7 +76,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
                 every { meetingTeamInfoGetAllByIds.invoke(any()) } returns emptyList()
 
                 // act
-                val result = sut.invoke(command)
+                val result = sut.invoke(query)
 
                 // assert
                 result.items.isEmpty() shouldBe true
@@ -90,7 +90,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
                 // arrange
                 val user = createUserAndSetAuthentication()
                 val limit = 2
-                val command = ScrollPreparedMeeting.Command(
+                val query = ScrollPreparedMeeting.Query(
                     next = null,
                     limit = limit,
                 )
@@ -114,7 +114,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
                 every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
                 // act
-                val result = sut.invoke(command)
+                val result = sut.invoke(query)
 
                 // assert
                 result.next shouldNotBe null
@@ -128,7 +128,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
             // arrange
             val user = createUserAndSetAuthentication()
             val limit = 3
-            val command = ScrollPreparedMeeting.Command(
+            val query = ScrollPreparedMeeting.Query(
                 next = null,
                 limit = limit,
             )
@@ -151,7 +151,7 @@ class ScrollPreparedMeetingServiceTest : DescribeSpec({
             every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
             // act
-            val result = sut.invoke(command)
+            val result = sut.invoke(query)
 
             // assert
             result.next shouldBe null

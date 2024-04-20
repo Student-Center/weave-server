@@ -20,8 +20,8 @@ data class PendingMeetingScrollRequest(
     limit = limit,
 ) {
 
-    fun toCommand(): ScrollPendingMeeting.Command {
-        return ScrollPendingMeeting.Command(
+    fun toCommand(): ScrollPendingMeeting.Query {
+        return ScrollPendingMeeting.Query(
             teamType = this.teamType,
             next = this.next,
             limit = this.limit,

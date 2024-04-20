@@ -21,7 +21,7 @@ class ScrollPreparedMeetingService(
 ) : ScrollPreparedMeeting {
 
     @Transactional(readOnly = true)
-    override fun invoke(command: ScrollPreparedMeeting.Command): ScrollPreparedMeeting.Result {
+    override fun invoke(query: ScrollPreparedMeeting.Query): ScrollPreparedMeeting.Result {
         val myTeam = getMeetingTeam.findByMemberUserId(getCurrentUserAuthentication().userId)
             ?: throw CustomException(
                 MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
@@ -30,8 +30,8 @@ class ScrollPreparedMeetingService(
 
         val (items, next) = scrollByPreparedMeetingByTeamId(
             teamId = myTeam.id,
-            next = command.next,
-            limit = command.limit,
+            next = query.next,
+            limit = query.limit,
         )
 
         return ScrollPreparedMeeting.Result(

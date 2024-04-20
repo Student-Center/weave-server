@@ -52,7 +52,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
             it("예외가 발생한다") {
                 // arrange
                 val user = createUser()
-                val command = ScrollPendingMeeting.Command(
+                val query = ScrollPendingMeeting.Query(
                     teamType = TeamType.REQUESTING,
                     next = null,
                     limit = 20,
@@ -60,7 +60,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<CustomException> { sut.invoke(query) }
             }
         }
 
@@ -69,7 +69,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                 it("TeamType(${teamType}): 빈 리스트를 반환한다.") {
                     // arrange
                     val user = createUser()
-                    val command = ScrollPendingMeeting.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = TeamType.REQUESTING,
                         next = null,
                         limit = 20,
@@ -78,7 +78,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                     every { meetingTeamInfoGetAllByIds.invoke(any()) } returns emptyList()
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     result.items.isEmpty() shouldBe true
@@ -94,7 +94,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                     // arrange
                     val user = createUser()
                     val limit = 2
-                    val command = ScrollPendingMeeting.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = teamType,
                         next = null,
                         limit = limit,
@@ -125,7 +125,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                     every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     val uniqueTeamTypeTeamIds = result
@@ -149,7 +149,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                     val user = createUser()
                     val count = 10
                     val limit = count * 2
-                    val command = ScrollPendingMeeting.Command(
+                    val query = ScrollPendingMeeting.Query(
                         teamType = teamType,
                         next = null,
                         limit = limit,
@@ -180,7 +180,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                     every { meetingTeamInfoGetAllByIds.invoke(any()) } returns teamInfos
 
                     // act
-                    val result = sut.invoke(command)
+                    val result = sut.invoke(query)
 
                     // assert
                     val uniqueTeamTypeTeamIds = result
