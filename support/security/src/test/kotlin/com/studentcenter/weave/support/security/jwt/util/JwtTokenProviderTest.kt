@@ -1,9 +1,9 @@
 package com.studentcenter.weave.support.security.jwt.util
 
 import com.auth0.jwt.JWT
-import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
+import com.studentcenter.weave.support.security.jwt.exception.JwtException
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -87,7 +87,7 @@ class JwtTokenProviderTest : DescribeSpec({
             val secret = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc"
             val anotherKey = "testtestetesttestetesttestetesttestetesttestetesttestetestteste"
 
-            it("JWT_VERIFICATION_EXCEPTION 을 발생시킨다.") {
+            it("JwtException.VerificationException 을 발생시킨다.") {
                 // arrange
                 val token: String = JwtTokenProvider.createToken(
                     jwtClaims = JwtClaims {
@@ -102,14 +102,10 @@ class JwtTokenProviderTest : DescribeSpec({
                     secret = secret,
                 )
 
-                // act
-                val result = runCatching {
+                // act, assert
+                shouldThrow<JwtException.VerificationException> {
                     JwtTokenProvider.verifyToken(token, anotherKey)
-                }.exceptionOrNull()
-
-                // assert
-                result.shouldBeInstanceOf<CustomException>()
-                result.type shouldBe JwtExceptionType.JWT_VERIFICATION_EXCEPTION
+                }
             }
         }
 
@@ -117,7 +113,7 @@ class JwtTokenProviderTest : DescribeSpec({
 
             val secret = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc"
 
-            it("CustomException 예외를 발생시킨다") {
+            it("JwtException.Expired 예외를 발생시킨다") {
                 // arrange
                 val token: String = JwtTokenProvider.createToken(
                     jwtClaims = JwtClaims {
@@ -139,8 +135,7 @@ class JwtTokenProviderTest : DescribeSpec({
                 }.exceptionOrNull()
 
                 // assert
-                result.shouldBeInstanceOf<CustomException>()
-                result.type shouldBe JwtExceptionType.JWT_EXPIRED_EXCEPTION
+                result.shouldBeInstanceOf<JwtException.Expired>()
             }
         }
     }

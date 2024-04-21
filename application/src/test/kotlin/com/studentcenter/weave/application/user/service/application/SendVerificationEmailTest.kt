@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
+import com.studentcenter.weave.application.common.exception.UniversityVerificationException
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.outbound.UserUniversityVerificationInfoRepositorySpy
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepositorySpy
@@ -8,7 +9,6 @@ import com.studentcenter.weave.application.user.service.domain.impl.UserUniversi
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -100,7 +100,7 @@ class SendVerificationEmailTest : DescribeSpec({
                 userVerificationInfoDomainService.save(verificationInfo)
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(email) }
+                shouldThrow<UniversityVerificationException.AlreadyVerifiedEmail> { sut.invoke(email) }
             }
         }
     }

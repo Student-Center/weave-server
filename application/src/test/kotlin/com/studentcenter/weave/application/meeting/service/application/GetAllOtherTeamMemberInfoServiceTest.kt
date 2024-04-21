@@ -9,11 +9,11 @@ import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UniversityFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -25,8 +25,8 @@ import io.mockk.mockk
 import java.time.LocalDateTime
 import java.util.stream.IntStream
 
-@DisplayName("GetMeetingAttendancesApplicationServiceTest")
-class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
+@DisplayName("GetAllOtherTeamMemberInfoServiceTest")
+class GetAllOtherTeamMemberInfoServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
@@ -48,14 +48,16 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
         clearAllMocks()
     }
 
-    describe("미팅 상대 카카오 아이디 조회 유스케이스") {
+    describe("미팅 상대팀 멤버 정보 조회") {
         context("내가 속한 미팅이 아니라면") {
             it("예외를 던진다.") {
                 // arrange
-                val user = UserFixtureFactory.create().also {
-                    val userAuthentication = UserAuthenticationFixtureFactory.create(user = it)
-                    SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
-                }
+                val user = UserFixtureFactory
+                    .create()
+                    .also {
+                        val userAuthentication = UserAuthenticationFixtureFactory.create(user = it)
+                        SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
+                    }
                 val meeting = MeetingFixtureFactory.create()
                 meetingRepositorySpy.save(meeting)
 
@@ -83,7 +85,7 @@ class GetAllOtherTeamMemberInfoApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getByMemberUserId(user.id) } returns myTeam
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(meeting.id) }
+                shouldThrow<MeetingException.IsNotCompletedMeeting> { sut.invoke(meeting.id) }
             }
         }
 

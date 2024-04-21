@@ -1,7 +1,5 @@
 package com.studentcenter.weave.application.meeting.service.application
 
-import com.studentcenter.weave.application.common.exception.MeetingExceptionType
-import com.studentcenter.weave.application.common.exception.MeetingTeamExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.RequestMeeting
 import com.studentcenter.weave.application.meeting.service.domain.MeetingAttendanceDomainService
@@ -10,10 +8,11 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTe
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
-import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.domain.meetingTeam.exception.MeetingTeamException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -57,10 +56,7 @@ class RequestMeetingService(
         val teamMember = members.firstOrNull { it.userId == getCurrentUserAuthentication().userId }
 
         if (teamMember == null) {
-            throw CustomException(
-                type = MeetingTeamExceptionType.IS_NOT_TEAM_MEMBER,
-                message = "미팅팀에 속해있지 않아요! 미팅팀에 참여해 주세요!",
-            )
+            throw MeetingTeamException.IsNotTeamMember()
         }
 
         return MeetingAttendance.create(
@@ -75,10 +71,7 @@ class RequestMeetingService(
         receivingTeamId: UUID,
     ) {
         if (meetingDomainService.existsMeetingRequest(myTeam.id, receivingTeamId)) {
-            throw CustomException(
-                MeetingExceptionType.ALREADY_REQUEST_MEETING,
-                "이미 상대팀에게 미팅을 신청했어요!",
-            )
+            throw MeetingException.AlreadyRequestMeeting()
         }
     }
 
@@ -87,28 +80,19 @@ class RequestMeetingService(
             .let { getUser.getById(it.userId) }
 
         if (user.isUnivVerified.not()) {
-            throw CustomException(
-                MeetingExceptionType.CAN_NOT_MEETING_REQUEST_NOT_UNIV_VERIFIED_USER,
-                "대학교 이메일 인증이 되지 않았어요! 대학교 이메일을 인증해 주세요!",
-            )
+            throw MeetingException.UniversityMailUnverifiedUser()
         }
     }
 
     private fun getMyMeetingTeam(): MeetingTeam {
         return getCurrentUserAuthentication()
             .let { getMeetingTeam.findByMemberUserId(it.userId) }
-            ?: throw CustomException(
-                MeetingExceptionType.NOT_FOUND_MY_MEETING_TEAM,
-                "내 미팅팀이 존재하지 않아요! 미팅팀에 참여해 주세요!",
-            )
+            ?: throw MeetingTeamException.CanNotFindMyMeetingTeam()
     }
 
     private fun validateMyMeetingTeamStatus(myMeetingTeam: MeetingTeam) {
         if (myMeetingTeam.status != MeetingTeamStatus.PUBLISHED) {
-            throw CustomException(
-                MeetingExceptionType.CAN_NOT_PUBLISHED_TEAM,
-                "나의 미팅팀이 공개되지 않았어요! 미팅팀을 공개해 주세요!",
-            )
+            throw MeetingTeamException.IsNotPublishedTeam()
         }
     }
 
@@ -117,17 +101,11 @@ class RequestMeetingService(
         receivingMeetingTeam: MeetingTeam,
     ) {
         if (myMeetingTeam.gender == receivingMeetingTeam.gender) {
-            throw CustomException(
-                MeetingExceptionType.CAN_NOT_MEETING_REQUEST_SAME_GENDER,
-                "다른 성별의 미팅팀에만 미팅을 요청할 수 있어요!",
-            )
+            throw MeetingException.CanNotRequestToSameGender()
         }
 
         if (myMeetingTeam.memberCount != receivingMeetingTeam.memberCount) {
-            throw CustomException(
-                MeetingExceptionType.CAN_NOT_MEETING_REQUEST_NOT_SAME_MEMBERS,
-                "동일한 인원수의 미팅팀에만 미팅을 요청할 수 있어요!"
-            )
+            throw MeetingException.CanNotRequestToDifferentMemberCount()
         }
     }
 

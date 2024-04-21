@@ -1,6 +1,7 @@
 package com.studentcenter.weave.bootstrap.common.exception
 
 import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.support.common.exception.SystemException
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.web.bind.annotation.ControllerAdvice
 
@@ -10,7 +11,7 @@ class WebSocketExceptionHandler {
     @MessageExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            exceptionCode = ApiException.InvalidParameter().code,
             message = exception.message ?: "Bad request"
         )
     }
@@ -18,7 +19,7 @@ class WebSocketExceptionHandler {
     @MessageExceptionHandler(CustomException::class)
     fun handleCustomException(exception: CustomException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = exception.type.code,
+            exceptionCode = exception.code,
             message = exception.message
         )
     }
@@ -26,7 +27,7 @@ class WebSocketExceptionHandler {
     @MessageExceptionHandler(Exception::class)
     fun handleException(exception: Exception): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = "INTERNAL_SERVER_ERROR",
+            exceptionCode = SystemException.InternalServerError().code,
             message = exception.message ?: "Internal server error"
         )
     }

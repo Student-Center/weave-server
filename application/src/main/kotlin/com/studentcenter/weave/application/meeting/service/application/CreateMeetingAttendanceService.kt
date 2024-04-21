@@ -1,6 +1,5 @@
 package com.studentcenter.weave.application.meeting.service.application
 
-import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.CreateMeetingAttendance
 import com.studentcenter.weave.application.meeting.port.outbound.MeetingEventPublisher
@@ -10,7 +9,7 @@ import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTe
 import com.studentcenter.weave.domain.meeting.entity.Meeting
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meeting.event.MeetingCompletedEvent.Companion.createCompletedEvent
-import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.support.lock.distributedLock
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -37,10 +36,7 @@ class CreateMeetingAttendanceService(
 
         val teamMemberMe = teamMembers
             .firstOrNull { it.userId == getCurrentUserAuthentication().userId }
-            ?: throw CustomException(
-                MeetingExceptionType.MEETING_NOT_JOINED_USER,
-                "미팅에 참여하지 않는 유저입니다",
-            )
+            ?: throw MeetingException.NotJoinedUser()
 
         validateAlreadyCreatedAttendance(
             meetingId = meeting.id,
@@ -96,10 +92,7 @@ class CreateMeetingAttendanceService(
     private fun getByIdAndValidate(meetingId: UUID): Meeting {
         val meeting = meetingDomainService.getById(meetingId)
         if (meeting.isFinished() || meeting.isEndPending(LocalDateTime.now())) {
-            throw CustomException(
-                MeetingExceptionType.FINISHED_MEETING,
-                "이미 완료(혹은 종료)된 미팅입니다.",
-            )
+            throw MeetingException.AlreadyFinished()
         }
         return meeting
     }
@@ -113,10 +106,7 @@ class CreateMeetingAttendanceService(
                 meetingMemberId = meetingMemberId,
             )
         ) {
-            throw CustomException(
-                MeetingExceptionType.ALREADY_ATTENDANCE_CREATED,
-                "이미 미팅 참여 의사를 결정했습니다.",
-            )
+            throw MeetingException.AlreadyAttended()
         }
     }
 

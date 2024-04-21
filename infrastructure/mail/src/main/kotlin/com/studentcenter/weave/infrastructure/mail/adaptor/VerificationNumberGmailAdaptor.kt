@@ -2,8 +2,6 @@ package com.studentcenter.weave.infrastructure.mail.adaptor
 
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
-import com.studentcenter.weave.infrastructure.mail.common.exception.MailExceptionType
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
@@ -12,12 +10,14 @@ import org.springframework.stereotype.Component
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring6.SpringTemplateEngine
 import kotlin.time.Duration
+import com.studentcenter.weave.infrastructure.mail.common.exception.MailException as MailCustomException
 
 @Component
 class VerificationNumberGmailAdaptor(
     private val javaMailSender: JavaMailSender,
     private val templateEngine: SpringTemplateEngine,
-): VerificationNumberMailer {
+) : VerificationNumberMailer {
+
     override fun send(
         to: Email,
         verificationNumber: UserUniversityVerificationNumber,
@@ -33,12 +33,14 @@ class VerificationNumberGmailAdaptor(
         try {
             javaMailSender.send(mimeMessage)
         } catch (e: MailException) {
-            println(e.message)
-            throw CustomException(MailExceptionType.MAIL_CLIENT_EXCEPTION, "Mail Client 이슈가 발생했습니다.")
+            throw MailCustomException.ClientException("메일 전송에 실패했습니다.")
         }
     }
 
-    private fun createText(verificationNumber: UserUniversityVerificationNumber, expirationDuration: Duration): String {
+    private fun createText(
+        verificationNumber: UserUniversityVerificationNumber,
+        expirationDuration: Duration,
+    ): String {
         return templateEngine.process(TEMPLATE_FILE_NAME, Context().also {
             it.setVariable("expirationMinute", expirationDuration.inWholeMinutes)
             it.setVariable("verificationNumber", verificationNumber.value)
@@ -46,6 +48,7 @@ class VerificationNumberGmailAdaptor(
     }
 
     companion object {
+
         const val TEMPLATE_FILE_NAME = "email-verification-number"
     }
 

@@ -40,14 +40,14 @@ import org.springframework.web.bind.annotation.RestController
 class UserRestController(
     private val registerUser: RegisterUser,
     private val unregisterUser: UnregisterUser,
-    private val getMyProfileUseCase: GetMyProfile,
+    private val getMyProfile: GetMyProfile,
     private val updateMyHeight: UpdateMyHeight,
-    private val userUpdateMyAnimalTypeUseCase: UpdateMyAnimalType,
-    private val userUpdateMyMbtiUseCase: UpdateMyMbti,
+    private val userUpdateMyAnimalType: UpdateMyAnimalType,
+    private val userUpdateMyMbti: UpdateMyMbti,
     private val sendVerificationEmail: SendVerificationEmail,
     private val verifyUniversityVerificationNumber: VerifyUniversityVerificationNumber,
     private val updateMyKakaoId: UpdateMyKakaoId,
-    private val userGetProfileImageUploadUrlUseCase: GetProfileImageUploadUrl,
+    private val userGetProfileImageUploadUrl: GetProfileImageUploadUrl,
     private val completeProfileImageUpload: CompleteProfileImageUpload,
 ) : UserApi {
 
@@ -85,7 +85,7 @@ class UserRestController(
     }
 
     override fun getMyProfile(): UserGetMyProfileResponse {
-        return getMyProfileUseCase
+        return getMyProfile
             .invoke()
             .let {
                 UserGetMyProfileResponse(
@@ -113,12 +113,12 @@ class UserRestController(
 
     override fun setMyAnimalType(request: UserSetMyAnimalTypeRequest) {
         request.animalType
-            .let { userUpdateMyAnimalTypeUseCase.invoke(it) }
+            .let { userUpdateMyAnimalType.invoke(it) }
     }
 
     override fun modifyMyMbti(request: UserModifyMyMbtiRequest) {
         Mbti(request.mbti)
-            .let { userUpdateMyMbtiUseCase.invoke(it) }
+            .let { userUpdateMyMbti.invoke(it) }
     }
 
     override fun setMyKakaoId(request: UserSetMyKakaoIdRequest) {
@@ -139,7 +139,7 @@ class UserRestController(
     }
 
     override fun getProfileImageUploadUrl(extension: UserProfileImage.Extension): UserGetProfileImageUploadUrlResponse {
-        return userGetProfileImageUploadUrlUseCase.invoke(extension)
+        return userGetProfileImageUploadUrl.invoke(extension)
             .let { UserGetProfileImageUploadUrlResponse.from(it) }
     }
 

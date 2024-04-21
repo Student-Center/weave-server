@@ -21,7 +21,7 @@ class LogoutTest : DescribeSpec({
         SecurityContextHolder.clearContext()
     }
 
-    describe("UserLogoutApplicationService") {
+    describe("UserLogoutService") {
         it("저장된 갱신 토큰을 삭제한다") {
             // arrange
             val user: User = UserFixtureFactory.create()

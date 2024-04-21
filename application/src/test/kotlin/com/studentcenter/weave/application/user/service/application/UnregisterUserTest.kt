@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.common.exception.AuthExceptionType
+import com.studentcenter.weave.application.common.exception.AuthException
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.inbound.UnregisterUser
 import com.studentcenter.weave.application.user.port.outbound.DeletedUserInfoRepositorySpy
@@ -14,7 +14,6 @@ import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserAuthInfo
 import com.studentcenter.weave.domain.user.entity.UserAuthInfoFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -46,7 +45,7 @@ class UnregisterUserTest : DescribeSpec({
         SecurityContextHolder.clearContext()
     }
 
-    describe("UserUnregisterApplicationService") {
+    describe("UserUnregisterService") {
         context("사용자가 로그인 되어있으면") {
             it("현재 로그인한 사용자의 사용자 정보와 인증정보를 삭제하고, 탈퇴 사용자 정보를 저장한다.") {
                 // arrange
@@ -79,10 +78,9 @@ class UnregisterUserTest : DescribeSpec({
                 val command = UnregisterUser.Command()
 
                 // act & assert
-                val exception = shouldThrow<CustomException> {
+                shouldThrow<AuthException.UserNotAuthenticated> {
                     sut.invoke(command)
                 }
-                exception.type shouldBe AuthExceptionType.USER_NOT_AUTHENTICATED
             }
         }
     }

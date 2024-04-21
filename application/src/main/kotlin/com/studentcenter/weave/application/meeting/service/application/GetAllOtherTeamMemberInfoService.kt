@@ -1,6 +1,5 @@
 package com.studentcenter.weave.application.meeting.service.application
 
-import com.studentcenter.weave.application.common.exception.MeetingExceptionType
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.meeting.port.inbound.GetAllOtherTeamMemberInfo
 import com.studentcenter.weave.application.meeting.service.domain.MeetingDomainService
@@ -9,8 +8,8 @@ import com.studentcenter.weave.application.meetingTeam.vo.MemberInfo
 import com.studentcenter.weave.application.university.port.inbound.GetUniversity
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.domain.meeting.entity.Meeting
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
-import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -52,10 +51,7 @@ class GetAllOtherTeamMemberInfoService(
     private fun validateMeeting(meeting: Meeting) {
         // FIXME(prepared): 추후에 상태가 추가되면 Completed -> Prepared
         if (meeting.isCompleted().not()) {
-            throw CustomException(
-                MeetingExceptionType.IS_NOT_COMPLETED_MEETING,
-                "완료된 미팅이 아닙니다.",
-            )
+            throw MeetingException.IsNotCompletedMeeting()
         }
     }
 

@@ -2,8 +2,7 @@ package com.studentcenter.weave.bootstrap.common.security.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
-import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
+import com.studentcenter.weave.support.security.jwt.exception.JwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -17,31 +16,32 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class ExceptionHandlingFilter(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         try {
             filterChain.doFilter(request, response)
-        } catch (e: CustomException) {
-            when(e.type) {
-                JwtExceptionType.JWT_EXPIRED_EXCEPTION -> handleJwtExpiredException(response)
-                else -> throw e
-            }
+        } catch (exception: JwtException.Expired) {
+            handleJwtExpiredException(response, exception)
         }
     }
 
-    private fun handleJwtExpiredException(response: HttpServletResponse) {
+    private fun handleJwtExpiredException(
+        response: HttpServletResponse,
+        exception: JwtException.Expired,
+    ) {
         val errorResponse = ErrorResponse(
-            exceptionCode = JwtExceptionType.JWT_EXPIRED_EXCEPTION.code,
+            exceptionCode = exception.code,
             message = "토큰이 만료되었습니다.",
         )
         response.status = HttpStatus.BAD_REQUEST.value()
-        response.contentType = "${MediaType.APPLICATION_JSON_VALUE};charset=${Charsets.UTF_8.name()}"
+        response.contentType =
+            "${MediaType.APPLICATION_JSON_VALUE};charset=${Charsets.UTF_8.name()}"
         response.writer.write(objectMapper.writeValueAsString(errorResponse))
     }
 

@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.common.exception.AuthExceptionType
+import com.studentcenter.weave.application.common.exception.AuthException
 import com.studentcenter.weave.application.common.properties.JwtTokenPropertiesFixtureFactory
 import com.studentcenter.weave.application.user.port.inbound.RefreshToken
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepositorySpy
@@ -10,11 +10,9 @@ import com.studentcenter.weave.application.user.service.util.impl.UserTokenServi
 import com.studentcenter.weave.application.user.service.util.impl.strategy.OpenIdTokenResolveStrategyFactoryStub
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
 
@@ -71,11 +69,10 @@ class RefreshTokenTest : DescribeSpec({
                 userRefreshTokenRepositorySpy.clear()
                 val command = RefreshToken.Command(refreshToken)
 
-                // act
-                val exception: CustomException = shouldThrow { sut.invoke(command) }
-
-                // assert
-                exception.type shouldBe AuthExceptionType.REFRESH_TOKEN_NOT_FOUND
+                // act, assert
+                shouldThrow<AuthException.RefreshTokenNotFound> {
+                    sut.invoke(command)
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
+import com.studentcenter.weave.application.common.exception.AuthException
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.inbound.CompleteProfileImageUpload
 import com.studentcenter.weave.application.user.port.outbound.UserProfileImageUrlPortStub
@@ -7,7 +8,6 @@ import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserProfileImage
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Url
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -41,7 +41,7 @@ class CompleteProfileImageUploadTest : DescribeSpec({
                 val userProfileImageUrlPortStub = object : UserProfileImageUrlPortStub() {
                     override fun findByIdAndExtension(
                         imageId: UUID,
-                        extension: UserProfileImage.Extension
+                        extension: UserProfileImage.Extension,
                     ): Url {
                         return profileImageUrl
                     }
@@ -67,7 +67,7 @@ class CompleteProfileImageUploadTest : DescribeSpec({
         }
 
         context("[실패] 로그인 한 상태가 아닌 경우") {
-            it("CustomException(type=AUTH-002)이 발생한다") {
+            it("인증되지 않은 사용자 예외를 던진다") {
                 // arrange
                 val sut = CompleteProfileImageUploadService(
                     UserProfileImageUrlPortStub(),
@@ -75,7 +75,7 @@ class CompleteProfileImageUploadTest : DescribeSpec({
                 )
 
                 // act & assert
-                val exception = shouldThrow<CustomException> {
+                shouldThrow<AuthException.UserNotAuthenticated> {
                     sut.invoke(
                         CompleteProfileImageUpload.Command(
                             imageId = UUID.randomUUID(),
@@ -83,7 +83,6 @@ class CompleteProfileImageUploadTest : DescribeSpec({
                         )
                     )
                 }
-                exception.type.code shouldBe "AUTH-002"
             }
 
         }

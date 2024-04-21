@@ -37,7 +37,7 @@ class MeetingTeamRestController(
     private val leaveMeetingTeam: LeaveMeetingTeam,
     private val getListMeetingTeam: GetListMeetingTeam,
     private val createInvitationLink: CreateInvitationLink,
-    private val getMeetingTeamByInvitationCodeUseCase: GetMeetingTeamByInvitationCode,
+    private val getMeetingTeamByInvitationCode: GetMeetingTeamByInvitationCode,
     private val joinMeetingTeam: JoinMeetingTeam,
     private val getMeetingTeam: GetMeetingTeam,
 ) : MeetingTeamApi {
@@ -119,7 +119,7 @@ class MeetingTeamRestController(
     }
 
     override fun getMeetingTeamByInvitationCode(invitationCode: UUID): MeetingTeamGetByInvitationCodeResponse {
-        return getMeetingTeamByInvitationCodeUseCase.invoke(invitationCode)
+        return getMeetingTeamByInvitationCode.invoke(invitationCode)
             .let { MeetingTeamGetByInvitationCodeResponse.of(it) }
     }
 

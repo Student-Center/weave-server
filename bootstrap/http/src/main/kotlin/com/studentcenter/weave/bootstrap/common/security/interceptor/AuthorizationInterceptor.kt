@@ -1,8 +1,7 @@
 package com.studentcenter.weave.bootstrap.common.security.interceptor
 
 import com.studentcenter.weave.application.user.vo.UserAuthentication
-import com.studentcenter.weave.bootstrap.common.exception.ApiExceptionType
-import com.studentcenter.weave.support.common.exception.CustomException
+import com.studentcenter.weave.bootstrap.common.exception.ApiException
 import com.studentcenter.weave.bootstrap.common.security.annotation.Secured
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import jakarta.servlet.http.HttpServletRequest
@@ -17,14 +16,14 @@ class AuthorizationInterceptor : HandlerInterceptor {
     override fun preHandle(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        handler: Any
+        handler: Any,
     ): Boolean {
         if (handler !is HandlerMethod) {
             return super.preHandle(request, response, handler)
         }
 
         if (hasSecuredAnnotation(handler) && isNotAuthenticated()) {
-            throw CustomException(ApiExceptionType.UNAUTHORIZED_REQUEST, UNAUTHORIZED_REQUEST_MESSAGE)
+            throw ApiException.UnauthorizedRequest(UNAUTHORIZED_REQUEST_MESSAGE)
         }
 
         return super.preHandle(request, response, handler)
@@ -43,6 +42,7 @@ class AuthorizationInterceptor : HandlerInterceptor {
     }
 
     companion object {
+
         const val UNAUTHORIZED_REQUEST_MESSAGE = "인증되지 않은 사용자 입니다."
     }
 

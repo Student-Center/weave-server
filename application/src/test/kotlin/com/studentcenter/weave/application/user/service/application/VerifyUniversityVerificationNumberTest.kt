@@ -1,5 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
+import com.studentcenter.weave.application.common.exception.UniversityVerificationException
 import com.studentcenter.weave.application.common.security.context.UserSecurityContext
 import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.port.outbound.UserRepositorySpy
@@ -13,7 +14,6 @@ import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFact
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfoFixtureFactory
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -37,7 +37,7 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
         userUniversityVerificationInfoRepository
     )
     val verificationNumberMailer = mockk<VerificationNumberMailer>(relaxed = true)
-    val userSendVerificationNumberEmailApplicationService =
+    val sendVerificationNumberEmailService =
         SendVerificationEmailService(
             verificationNumberMailer = verificationNumberMailer,
             verificationInfoDomainService = userVerificationInfoDomainService,
@@ -65,14 +65,18 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 val userFixture = UserFixtureFactory.create()
                 val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
-                userSendVerificationNumberEmailApplicationService.invoke(Email("weave@studentcenter.com"))
+                sendVerificationNumberEmailService.invoke(Email("weave@studentcenter.com"))
                 val verificationNumber =
                     userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val email = Email("invalid@studentcenter.com")
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
 
                 // act, assert
-                shouldThrow<RuntimeException> { sut.invoke(command) }
+                shouldThrow<UniversityVerificationException.InvalidVerificationInformation> {
+                    sut.invoke(
+                        command
+                    )
+                }
             }
         }
 
@@ -83,7 +87,7 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 val userAuthentication = UserAuthenticationFixtureFactory.create(userFixture)
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
-                userSendVerificationNumberEmailApplicationService.invoke(email)
+                sendVerificationNumberEmailService.invoke(email)
                 val verificationNumber =
                     userVerificationNumberRepository.findByUserId(userFixture.id)!!.second
                 val invalidVerificationNumber = UserUniversityVerificationNumber(
@@ -96,7 +100,11 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                     VerifyUniversityVerificationNumber.Command(email, invalidVerificationNumber)
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<UniversityVerificationException.InvalidVerificationInformation> {
+                    sut.invoke(
+                        command
+                    )
+                }
             }
         }
 
@@ -111,7 +119,11 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<UniversityVerificationException.VerificationInformationNotFound> {
+                    sut.invoke(
+                        command
+                    )
+                }
             }
         }
 
@@ -130,7 +142,11 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(command) }
+                shouldThrow<UniversityVerificationException.AlreadyVerifiedUser> {
+                    sut.invoke(
+                        command
+                    )
+                }
             }
         }
 
@@ -146,7 +162,7 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
 
                 SecurityContextHolder.setContext(UserSecurityContext(userAuthentication))
                 val email = Email("weave@studentcenter.com")
-                userSendVerificationNumberEmailApplicationService.invoke(email)
+                sendVerificationNumberEmailService.invoke(email)
                 val verificationNumber =
                     userVerificationNumberRepository.findByUserId(user.id)!!.second
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
@@ -176,7 +192,7 @@ class VerifyUniversityVerificationNumberTest : DescribeSpec({
 
                 userRepository.addPreRegisterEmail(email)
 
-                userSendVerificationNumberEmailApplicationService.invoke(email)
+                sendVerificationNumberEmailService.invoke(email)
                 val verificationNumber =
                     userVerificationNumberRepository.findByUserId(user.id)!!.second
                 val command = VerifyUniversityVerificationNumber.Command(email, verificationNumber)
