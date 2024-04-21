@@ -1,13 +1,12 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
+import com.studentcenter.weave.application.common.exception.UniversityVerificationException
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.user.port.inbound.SendVerificationEmail
 import com.studentcenter.weave.application.user.port.outbound.UserVerificationNumberRepository
 import com.studentcenter.weave.application.user.port.outbound.VerificationNumberMailer
 import com.studentcenter.weave.application.user.service.domain.UserUniversityVerificationInfoDomainService
 import com.studentcenter.weave.application.user.vo.UserUniversityVerificationNumber
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -32,10 +31,7 @@ class SendVerificationEmailService(
 
     private fun checkAlreadyVerifiedUniversityEmail(universityEmail: Email) {
         if (verificationInfoDomainService.existsByEmail(universityEmail)) {
-            throw CustomException(
-                type = UniversityVerificationExceptionType.VERIFICATED_EMAIL,
-                message = "이미 인증된 이메일입니다."
-            )
+            throw UniversityVerificationException.AlreadyVerifiedEmail()
         }
     }
 

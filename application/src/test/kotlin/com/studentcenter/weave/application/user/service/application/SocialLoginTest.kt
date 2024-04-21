@@ -38,7 +38,7 @@ class SocialLoginTest : DescribeSpec({
         userAuthInfoRepositorySpy.clear()
     }
 
-    describe("UserSocialLoginApplicationService") {
+    describe("UserSocialLoginService") {
         enumValues<SocialLoginProvider>().forEach { socialLoginProvider ->
             context("idToken-${socialLoginProvider} 에 해당하는 회원이 존재하는 경우") {
                 it("로그인 토큰을 응답한다 : ${socialLoginProvider.name}") {

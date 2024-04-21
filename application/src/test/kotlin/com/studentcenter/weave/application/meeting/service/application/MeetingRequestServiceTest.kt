@@ -9,13 +9,14 @@ import com.studentcenter.weave.application.meeting.service.domain.impl.MeetingDo
 import com.studentcenter.weave.application.meetingTeam.port.inbound.GetMeetingTeam
 import com.studentcenter.weave.application.user.port.inbound.GetUser
 import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFactory
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
+import com.studentcenter.weave.domain.meetingTeam.exception.MeetingTeamException
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -27,8 +28,8 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.*
 
-@DisplayName("MeetingRequestApplicationService")
-class MeetingRequestApplicationServiceTest : DescribeSpec({
+@DisplayName("MeetingRequestService")
+class MeetingRequestServiceTest : DescribeSpec({
 
     val meetingRepositorySpy = MeetingRepositorySpy()
     val meetingDomainService = MeetingDomainServiceImpl(
@@ -41,7 +42,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
     val getMeetingTeam = mockk<GetMeetingTeam>()
     val getUser = mockk<GetUser>()
 
-    val meetingRequestApplicationService = RequestMeetingService(
+    val meetingRequestService = RequestMeetingService(
         getMeetingTeam = getMeetingTeam,
         meetingDomainService = meetingDomainService,
         meetingAttendanceDomainService = meetingAttendanceDomainService,
@@ -67,8 +68,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<CustomException> {
-                    meetingRequestApplicationService.invoke(
+                shouldThrow<MeetingTeamException.CanNotFindMyMeetingTeam> {
+                    meetingRequestService.invoke(
                         RequestMeeting.Command(receivingMeetingTeamId)
                     )
                 }
@@ -80,9 +81,15 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 it("예외가 발생한다.") {
                     // arrange
                     val myMeetingTeam: MeetingTeam =
-                        MeetingTeamFixtureFactory.create(gender = gender)
+                        MeetingTeamFixtureFactory.create(
+                            gender = gender,
+                            status = MeetingTeamStatus.PUBLISHED
+                        )
                     val receivingMeetingTeam: MeetingTeam =
-                        MeetingTeamFixtureFactory.create(gender = gender)
+                        MeetingTeamFixtureFactory.create(
+                            gender = gender,
+                            status = MeetingTeamStatus.PUBLISHED
+                        )
 
                     val user: User = UserFixtureFactory.create(isUnivVerified = true)
                     user.let { UserAuthenticationFixtureFactory.create(it) }
@@ -93,8 +100,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                     every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                     // act, assert
-                    shouldThrow<CustomException> {
-                        meetingRequestApplicationService.invoke(
+                    shouldThrow<MeetingException.CanNotRequestToSameGender> {
+                        meetingRequestService.invoke(
                             RequestMeeting.Command(receivingMeetingTeam.id)
                         )
                     }
@@ -105,8 +112,16 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
         context("상대팀과 팀원 수가 맞지 않을 경우") {
             it("예외가 발생한다.") {
                 // arrange
-                val myMeetingTeam = MeetingTeamFixtureFactory.create(memberCount = 2)
-                val receivingMeetingTeam = MeetingTeamFixtureFactory.create(memberCount = 3)
+                val myMeetingTeam = MeetingTeamFixtureFactory.create(
+                    memberCount = 2,
+                    status = MeetingTeamStatus.PUBLISHED,
+                    gender = Gender.MAN,
+                )
+                val receivingMeetingTeam = MeetingTeamFixtureFactory.create(
+                    memberCount = 3,
+                    status = MeetingTeamStatus.PUBLISHED,
+                    gender = Gender.WOMAN,
+                )
 
                 val user: User = UserFixtureFactory.create(isUnivVerified = true)
                 user.let { UserAuthenticationFixtureFactory.create(it) }
@@ -117,8 +132,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
-                shouldThrow<CustomException> {
-                    meetingRequestApplicationService.invoke(
+                shouldThrow<MeetingException.CanNotRequestToDifferentMemberCount> {
+                    meetingRequestService.invoke(
                         RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
@@ -141,8 +156,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 // act, assert
-                shouldThrow<CustomException> {
-                    meetingRequestApplicationService.invoke(
+                shouldThrow<MeetingTeamException.IsNotPublishedTeam> {
+                    meetingRequestService.invoke(
                         RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
@@ -163,8 +178,8 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                         MeetingTeamFixtureFactory.create(status = MeetingTeamStatus.PUBLISHED)
 
                 // act, assert
-                shouldThrow<CustomException> {
-                    meetingRequestApplicationService.invoke(
+                shouldThrow<MeetingException.UniversityMailUnverifiedUser> {
+                    meetingRequestService.invoke(
                         RequestMeeting.Command(receivingMeetingTeam.id)
                     )
                 }
@@ -197,11 +212,11 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
                 every { getMeetingTeam.getById(receivingMeetingTeam.id) } returns receivingMeetingTeam
 
                 val command = RequestMeeting.Command(receivingMeetingTeam.id)
-                meetingRequestApplicationService.invoke(command)
+                meetingRequestService.invoke(command)
 
                 // act, assert
-                shouldThrow<CustomException> {
-                    meetingRequestApplicationService.invoke(command)
+                shouldThrow<MeetingException.AlreadyRequestMeeting> {
+                    meetingRequestService.invoke(command)
                 }
             }
         }
@@ -232,7 +247,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
                 // act
                 RequestMeeting.Command(receivingMeetingTeam.id)
-                    .let { meetingRequestApplicationService.invoke(it) }
+                    .let { meetingRequestService.invoke(it) }
 
                 // assert
                 val meeting = meetingRepositorySpy
@@ -268,7 +283,7 @@ class MeetingRequestApplicationServiceTest : DescribeSpec({
 
                 // act
                 RequestMeeting.Command(receivingMeetingTeam.id)
-                    .let { meetingRequestApplicationService.invoke(it) }
+                    .let { meetingRequestService.invoke(it) }
 
                 // assert
                 val meeting = meetingRepositorySpy.findByRequestingTeamIdAndReceivingTeamId(

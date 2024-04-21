@@ -24,7 +24,7 @@ class JoinMeetingTeamServiceTest : DescribeSpec({
 
     val meetingTeamRepository = MeetingTeamRepositorySpy()
     val meetingTeamMemberSummaryRepository = MeetingTeamMemberSummaryRepositorySpy()
-    val userQueryUseCase = GetUserStub()
+    val getUser = GetUserStub()
 
     val meetingTeamInvitationRepositorySpy = MeetingTeamInvitationRepositorySpy()
 
@@ -36,7 +36,7 @@ class JoinMeetingTeamServiceTest : DescribeSpec({
     val sut = JoinMeetingTeamService(
         meetingTeamRepository = meetingTeamRepository,
         meetingTeamInvitationService = meetingTeamInvitationService,
-        getUser = userQueryUseCase,
+        getUser = getUser,
     )
 
     beforeTest {

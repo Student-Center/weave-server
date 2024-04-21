@@ -1,6 +1,6 @@
 package com.studentcenter.weave.bootstrap.common.exception
 
-import com.studentcenter.weave.support.common.exception.SystemExceptionType
+import com.studentcenter.weave.support.common.exception.SystemException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.servlet.http.HttpServletRequest
@@ -23,17 +23,17 @@ class UnknownExceptionHandler {
     @ExceptionHandler(NoResourceFoundException::class)
     fun handleNoHandlerFoundException(
         e: NoResourceFoundException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): ErrorResponse {
         val requestMethod: String = request.method
         val requestUrl: String = request.requestURI
-        val queryString = if (request.queryString.isNotBlank()) "?${request.queryString}" else ""
+        val queryString: String = request.queryString?.let { "?$it" } ?: ""
         val clientIp: String = request.getHeader("X-Forwarded-For") ?: request.remoteAddr
 
         logger.warn { "NoResourceFoundException: $requestMethod $requestUrl${queryString} from $clientIp" }
 
         return ErrorResponse(
-            exceptionCode = SystemExceptionType.NOT_FOUND.code,
+            exceptionCode = SystemException.NotFound().code,
             message = "Not Found"
         )
     }
@@ -42,12 +42,12 @@ class UnknownExceptionHandler {
     @ExceptionHandler(Throwable::class)
     fun handleApiException(
         e: Throwable,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): ErrorResponse {
         logger.error { e.stackTraceToString() }
 
         return ErrorResponse(
-            exceptionCode = SystemExceptionType.INTERNAL_SERVER_ERROR.code,
+            exceptionCode = SystemException.InternalServerError().code,
             message = "Internal Server Error"
         )
     }

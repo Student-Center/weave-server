@@ -24,11 +24,11 @@ import io.mockk.mockk
 class CreateMeetingTeamTest : DescribeSpec({
 
     val meetingTeamRepositorySpy = MeetingTeamRepositorySpy()
-    val userQueryUseCaseMock = mockk<GetUser>()
+    val getUserMock = mockk<GetUser>()
 
     val sut = CreateMeetingTeamService(
         meetingTeamRepositorySpy,
-        userQueryUseCaseMock,
+        getUserMock,
     )
 
     beforeTest {
@@ -57,7 +57,7 @@ class CreateMeetingTeamTest : DescribeSpec({
                 UserAuthenticationFixtureFactory
                     .create(userFixture)
                     .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
-                every { userQueryUseCaseMock.getById(userFixture.id) } returns userFixture
+                every { getUserMock.getById(userFixture.id) } returns userFixture
 
                 // act & assert
                 shouldThrow<IllegalArgumentException> {
@@ -83,7 +83,7 @@ class CreateMeetingTeamTest : DescribeSpec({
                 UserAuthenticationFixtureFactory
                     .create(leaderUserFixture)
                     .let { SecurityContextHolder.setContext(UserSecurityContext(it)) }
-                every { userQueryUseCaseMock.getById(leaderUserFixture.id) } returns leaderUserFixture
+                every { getUserMock.getById(leaderUserFixture.id) } returns leaderUserFixture
 
                 // act
                 sut.invoke(command)

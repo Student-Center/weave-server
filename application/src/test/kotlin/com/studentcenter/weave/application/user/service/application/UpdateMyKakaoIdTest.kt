@@ -43,7 +43,7 @@ class UpdateMyKakaoIdTest : DescribeSpec({
         clearStaticMockk()
     }
 
-    describe("UserSetMyKakaoIdApplicationService") {
+    describe("UserSetMyKakaoIdService") {
         context("이미 등록된 카카오 아이디가 있는 경우") {
             it("예외를 발생시킨다.") {
                 // arrange

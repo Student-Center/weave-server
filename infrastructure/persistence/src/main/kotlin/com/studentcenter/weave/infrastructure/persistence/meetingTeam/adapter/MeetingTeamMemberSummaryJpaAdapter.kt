@@ -2,16 +2,15 @@ package com.studentcenter.weave.infrastructure.persistence.meetingTeam.adapter
 
 import com.studentcenter.weave.application.meetingTeam.port.outbound.MeetingTeamMemberSummaryRepository
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamMemberSummary
-import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceExceptionType
+import com.studentcenter.weave.infrastructure.persistence.common.exception.PersistenceException
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.entity.MeetingTeamMemberSummaryJpaEntity.Companion.toJpaEntity
 import com.studentcenter.weave.infrastructure.persistence.meetingTeam.repository.MeetingTeamMemberSummaryJpaRepository
-import com.studentcenter.weave.support.common.exception.CustomException
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
 class MeetingTeamMemberSummaryJpaAdapter(
-    private val meetingTeamMemberSummaryJpaRepository: MeetingTeamMemberSummaryJpaRepository
+    private val meetingTeamMemberSummaryJpaRepository: MeetingTeamMemberSummaryJpaRepository,
 ) : MeetingTeamMemberSummaryRepository {
 
     override fun save(meetingTeamMemberSummary: MeetingTeamMemberSummary) {
@@ -25,12 +24,7 @@ class MeetingTeamMemberSummaryJpaAdapter(
     override fun getById(id: UUID): MeetingTeamMemberSummary {
         return meetingTeamMemberSummaryJpaRepository
             .findById(id)
-            .orElseThrow {
-                CustomException(
-                    type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
-                    message = "MeetingTeamMemberSummary(id=$id)를 찾을 수 없습니다."
-                )
-            }
+            .orElseThrow { PersistenceException.ResourceNotFound("MeetingTeamMemberSummary(id=$id)를 찾을 수 없습니다.") }
             .toDomain()
     }
 
@@ -38,10 +32,7 @@ class MeetingTeamMemberSummaryJpaAdapter(
         return meetingTeamMemberSummaryJpaRepository
             .findByMeetingTeamId(meetingTeamId)
             ?.toDomain()
-            ?: throw CustomException(
-                type = PersistenceExceptionType.RESOURCE_NOT_FOUND,
-                message = "MeetingTeamMemberSummary(meetingTeamId=$meetingTeamId)를 찾을 수 없습니다."
-            )
+            ?: throw PersistenceException.ResourceNotFound("MeetingTeamMemberSummary(meetingTeamId=$meetingTeamId)를 찾을 수 없습니다.")
     }
 
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class AuthRestController(
-    private val socialLoginUseCase: SocialLogin,
+    private val socialLogin: SocialLogin,
     private val refreshToken: RefreshToken,
     private val logoutUser: Logout,
 ) : AuthApi {
@@ -29,7 +29,7 @@ class AuthRestController(
             idToken = request.idToken,
         )
         return when (
-            val result: SocialLogin.Result = socialLoginUseCase.invoke(command)
+            val result: SocialLogin.Result = socialLogin.invoke(command)
         ) {
             is SocialLogin.Result.Success -> {
                 val body = SocialLoginResponse.Success(

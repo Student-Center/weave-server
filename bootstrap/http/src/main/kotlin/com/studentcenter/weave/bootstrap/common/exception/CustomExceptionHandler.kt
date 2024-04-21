@@ -25,7 +25,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(CustomException::class)
     fun handleApiException(exception: CustomException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = exception.type.code,
+            exceptionCode = exception.code,
             message = exception.message,
         )
     }
@@ -34,7 +34,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            exceptionCode = ApiException.InvalidDateException().code,
             message = exception.message!!,
         )
     }
@@ -43,7 +43,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(DateTimeException::class)
     fun handleDateTimeException(exception: DateTimeException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_DATE_EXCEPTION.code,
+            exceptionCode = ApiException.InvalidDateException().code,
             message = exception.message!!,
         )
     }
@@ -52,7 +52,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun handleHttpMethodNotSupportedException(exception: HttpRequestMethodNotSupportedException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            exceptionCode = ApiException.InvalidParameter().code,
             message = "지원하지 않는 Http Method 입니다.",
         )
     }
@@ -61,7 +61,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMethodNotReadableException(exception: HttpMessageNotReadableException): ErrorResponse {
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            exceptionCode = ApiException.InvalidParameter().code,
             message = "잘못된 HttpBody 형식입니다.",
         )
     }
@@ -81,7 +81,7 @@ class CustomExceptionHandler {
         }
         val message = builder.toString()
         return ErrorResponse(
-            exceptionCode = ApiExceptionType.INVALID_PARAMETER.code,
+            exceptionCode = ApiException.InvalidParameter().code,
             message = message.substring(0, message.lastIndexOf("|")),
         )
     }

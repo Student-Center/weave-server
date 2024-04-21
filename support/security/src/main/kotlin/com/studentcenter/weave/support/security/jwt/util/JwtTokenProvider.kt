@@ -7,8 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.security.jwt.exception.JwtExceptionType
+import com.studentcenter.weave.support.security.jwt.exception.JwtException
 import com.studentcenter.weave.support.security.jwt.vo.JwtClaims
 import java.net.URL
 import java.security.interfaces.ECPublicKey
@@ -85,21 +84,9 @@ object JwtTokenProvider {
     }
 
     private val exceptionHandlerList = listOf<Pair<Class<out Throwable>, (Throwable) -> Nothing>>(
-        JWTDecodeException::class.java to {
-            throw CustomException(
-                JwtExceptionType.JWT_DECODE_EXCEPTION, "잘못된 토큰 형식입니다."
-            )
-        },
-        TokenExpiredException::class.java to {
-            throw CustomException(
-                JwtExceptionType.JWT_EXPIRED_EXCEPTION, "만료된 토큰입니다."
-            )
-        },
-        Throwable::class.java to { e ->
-            throw CustomException(
-                JwtExceptionType.JWT_VERIFICATION_EXCEPTION, e.message ?: "토큰 검증에 실패했습니다."
-            )
-        },
+        JWTDecodeException::class.java to { throw JwtException.DecodeException() },
+        TokenExpiredException::class.java to { throw JwtException.Expired() },
+        Throwable::class.java to { throw JwtException.VerificationException() },
     )
 
 }

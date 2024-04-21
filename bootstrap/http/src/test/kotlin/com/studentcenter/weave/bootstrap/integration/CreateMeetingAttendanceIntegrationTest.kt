@@ -9,13 +9,13 @@ import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFact
 import com.studentcenter.weave.domain.meeting.entity.MeetingAttendance
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.MeetingStatus
+import com.studentcenter.weave.domain.meeting.exception.MeetingException
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingMember
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeam
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
 import com.studentcenter.weave.domain.meetingTeam.enums.MeetingTeamStatus
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.uuid.UuidCreator
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
@@ -83,7 +83,7 @@ class CreateMeetingAttendanceIntegrationTest(
                     }
 
                     // act, assert
-                    shouldThrow<CustomException> { sut.invoke(meeting.id, attendance) }
+                    shouldThrow<MeetingException.AlreadyFinished> { sut.invoke(meeting.id, attendance) }
                 }
             }
         }
@@ -114,7 +114,7 @@ class CreateMeetingAttendanceIntegrationTest(
             }
 
             // act, assert
-            shouldThrow<CustomException> { sut.invoke(meeting.id, attendance) }
+            shouldThrow<MeetingException.NotJoinedUser> { sut.invoke(meeting.id, attendance) }
         }
     }
 
@@ -147,7 +147,7 @@ class CreateMeetingAttendanceIntegrationTest(
             meetingAttendanceDomainService.save(meetingAttendance)
 
             // act, assert
-            shouldThrow<CustomException> { sut.invoke(meeting.id, attendance) }
+            shouldThrow<MeetingException.AlreadyAttended> { sut.invoke(meeting.id, attendance) }
         }
     }
 

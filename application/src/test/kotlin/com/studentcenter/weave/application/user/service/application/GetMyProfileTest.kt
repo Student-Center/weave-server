@@ -51,7 +51,7 @@ class GetMyProfileTest : DescribeSpec({
         majorRepository.clear()
     }
 
-    describe("UserGetMyProfileApplicationService") {
+    describe("UserGetMyProfileService") {
         context("사용자가 로그인상태일때") {
             it("사용자의 프로필 정보를 응답한다.") {
                 // arrange

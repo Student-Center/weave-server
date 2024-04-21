@@ -3,7 +3,7 @@ package com.studentcenter.weave.bootstrap.common.security.interceptor
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.studentcenter.weave.bootstrap.common.exception.ErrorResponse
 import com.studentcenter.weave.support.common.exception.CustomException
-import com.studentcenter.weave.support.common.exception.SystemExceptionType
+import com.studentcenter.weave.support.common.exception.SystemException
 import org.springframework.messaging.Message
 import org.springframework.messaging.simp.stomp.StompCommand
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor
@@ -28,7 +28,7 @@ class StompExceptionHandler(
 
     private fun handleCustomException(customException: CustomException): Message<ByteArray> {
         val response = ErrorResponse(
-            customException.type.code,
+            customException.code,
             customException.message
         )
         val accessor = StompHeaderAccessor.create(StompCommand.ERROR)
@@ -41,7 +41,7 @@ class StompExceptionHandler(
 
     private fun handleException(ex: Throwable): Message<ByteArray> {
         val response = ErrorResponse(
-            SystemExceptionType.INTERNAL_SERVER_ERROR.code,
+            SystemException.InternalServerError().code,
             ex.message.toString(),
         )
         val accessor = StompHeaderAccessor.create(StompCommand.ERROR)

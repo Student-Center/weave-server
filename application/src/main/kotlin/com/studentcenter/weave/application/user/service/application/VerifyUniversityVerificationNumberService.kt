@@ -1,6 +1,6 @@
 package com.studentcenter.weave.application.user.service.application
 
-import com.studentcenter.weave.application.common.exception.UniversityVerificationExceptionType
+import com.studentcenter.weave.application.common.exception.UniversityVerificationException
 import com.studentcenter.weave.application.common.security.context.getCurrentUserAuthentication
 import com.studentcenter.weave.application.user.port.inbound.VerifyUniversityVerificationNumber
 import com.studentcenter.weave.application.user.port.outbound.UserRepository
@@ -8,7 +8,6 @@ import com.studentcenter.weave.application.user.port.outbound.UserVerificationNu
 import com.studentcenter.weave.application.user.service.domain.UserSilDomainService
 import com.studentcenter.weave.application.user.service.domain.UserUniversityVerificationInfoDomainService
 import com.studentcenter.weave.domain.user.entity.UserUniversityVerificationInfo
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.vo.Email
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,22 +24,13 @@ class VerifyUniversityVerificationNumberService(
     override fun invoke(command: VerifyUniversityVerificationNumber.Command) {
         val currentUserId = getCurrentUserAuthentication().userId
         if (userVerificationInfoDomainService.existsByUserId(currentUserId)) {
-            throw CustomException(
-                UniversityVerificationExceptionType.VERIFICATED_USER,
-                "이미 인증된 유저입니다.",
-            )
+            throw UniversityVerificationException.AlreadyVerifiedUser()
         }
         verificationNumberRepository.findByUserId(currentUserId)?.let {
             if (it.first != command.universityEmail || it.second != command.verificationNumber) {
-                throw CustomException(
-                    UniversityVerificationExceptionType.INVALID_VERIFICATION_INFORMATION,
-                    "인증 정보가 일치하지 않습니다.",
-                )
+                throw UniversityVerificationException.InvalidVerificationInformation()
             }
-        } ?: throw CustomException(
-            UniversityVerificationExceptionType.VERIFICATION_INFORMATION_NOT_FOUND,
-            "유저의 인증 요청을 찾을 수 없습니다.",
-        )
+        } ?: throw UniversityVerificationException.VerificationInformationNotFound()
 
         val user = userRepository.getById(currentUserId)
         val verifiedUser = user.verifyUniversity().also { userRepository.save(it) }

@@ -11,10 +11,10 @@ import com.studentcenter.weave.application.user.vo.UserAuthenticationFixtureFact
 import com.studentcenter.weave.domain.meeting.entity.MeetingFixtureFactory
 import com.studentcenter.weave.domain.meeting.enums.TeamType
 import com.studentcenter.weave.domain.meetingTeam.entity.MeetingTeamFixtureFactory
+import com.studentcenter.weave.domain.meetingTeam.exception.MeetingTeamException
 import com.studentcenter.weave.domain.user.entity.User
 import com.studentcenter.weave.domain.user.entity.UserFixtureFactory
 import com.studentcenter.weave.domain.user.enums.Gender
-import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.security.context.SecurityContextHolder
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -60,7 +60,7 @@ class ScrollPendingMeetingServiceTest : DescribeSpec({
                 every { getMeetingTeam.findByMemberUserId(user.id) } returns null
 
                 // act, assert
-                shouldThrow<CustomException> { sut.invoke(query) }
+                shouldThrow<MeetingTeamException.CanNotFindMyMeetingTeam> { sut.invoke(query) }
             }
         }
 
