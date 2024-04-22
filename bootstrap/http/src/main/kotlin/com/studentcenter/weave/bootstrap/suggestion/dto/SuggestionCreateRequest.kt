@@ -13,7 +13,7 @@ data class SuggestionCreateRequest(
         }
 
         return CreateSuggestion.Command(
-            userAuthentication = userAuth,
+            userId = userAuth.userId,
             contents = contents
         )
     }

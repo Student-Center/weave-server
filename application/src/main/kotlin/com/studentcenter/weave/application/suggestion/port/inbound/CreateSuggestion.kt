@@ -1,13 +1,13 @@
 package com.studentcenter.weave.application.suggestion.port.inbound
 
-import com.studentcenter.weave.application.user.vo.UserAuthentication
+import java.util.*
 
 interface CreateSuggestion {
 
     fun invoke(command: Command)
 
     data class Command(
-        val userAuthentication: UserAuthentication,
+        val userId: UUID,
         val contents: String,
     )
 }

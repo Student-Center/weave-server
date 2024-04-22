@@ -12,7 +12,7 @@ class CreateSuggestionService(
 
     override fun invoke(command: CreateSuggestion.Command) {
         Suggestion.create(
-            userId = command.userAuthentication.userId,
+            userId = command.userId,
             contents = command.contents
         ).also {
             suggestionRepository.save(it)
