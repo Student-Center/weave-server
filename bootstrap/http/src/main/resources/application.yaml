@@ -39,6 +39,9 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
+sentry:
+  dsn: TODO(정현) 센트리 프로젝트 구성 후 적용
+  environment: dev
 ---
 spring:
   config:
@@ -58,3 +61,6 @@ spring:
   docker:
     compose:
       enabled: false
+sentry:
+  dsn: TODO(정현) 센트리 프로젝트 구성 후 적용)
+  environment: prod

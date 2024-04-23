@@ -16,6 +16,9 @@ dependencies {
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
 
+    implementation(libs.sentry.spring.boot.starter.jarkarta)
+    implementation(libs.sentry.logback)
+
     developmentOnly(libs.spring.boot.devtools)
     developmentOnly(libs.spring.boot.docker.compose)
 
