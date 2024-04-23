@@ -2,6 +2,7 @@ package com.studentcenter.weave.bootstrap.common.exception
 
 import com.studentcenter.weave.support.common.exception.CustomException
 import com.studentcenter.weave.support.common.exception.SystemException
+import io.sentry.Sentry
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.web.bind.annotation.ControllerAdvice
 
@@ -26,6 +27,7 @@ class WebSocketExceptionHandler {
 
     @MessageExceptionHandler(Exception::class)
     fun handleException(exception: Exception): ErrorResponse {
+        Sentry.captureException(exception)
         return ErrorResponse(
             exceptionCode = SystemException.InternalServerError().code,
             message = exception.message ?: "Internal server error"

@@ -2,6 +2,7 @@ package com.studentcenter.weave.bootstrap.common.exception
 
 import com.studentcenter.weave.support.common.exception.SystemException
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.sentry.Sentry
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.Ordered
@@ -46,6 +47,12 @@ class UnknownExceptionHandler {
     ): ErrorResponse {
         logger.error { e.stackTraceToString() }
 
+        Sentry.captureException(e) { scope ->
+            scope.setExtra("method", request.method)
+            scope.setExtra("requestURI", request.requestURI)
+            scope.setExtra("queryString", request.queryString?.let { "?$it" } ?: "")
+            scope.setExtra("clientIp", request.getHeader("X-Forwarded-For") ?: request.remoteAddr)
+        }
         return ErrorResponse(
             exceptionCode = SystemException.InternalServerError().code,
             message = "Internal Server Error"
