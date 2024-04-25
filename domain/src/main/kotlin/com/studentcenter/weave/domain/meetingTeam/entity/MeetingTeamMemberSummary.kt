@@ -25,18 +25,16 @@ data class MeetingTeamMemberSummary(
 
     companion object {
 
-        fun create(
-            meetingTeamId: UUID,
-            members: List<User>,
+        fun MeetingTeam.createSummary(
+            getUsersByMeetingMembers: (List<MeetingMember>) -> List<User>
         ): MeetingTeamMemberSummary {
-            require(members.isNotEmpty()) {
-                "팀에 속한 멤버가 존재해야 합니다."
-            }
+            val users: List<User> = getUsersByMeetingMembers(members)
+
             return MeetingTeamMemberSummary(
-                meetingTeamId = meetingTeamId,
-                teamMbti = getTeamMbti(members),
-                youngestMemberBirthYear = getYoungestMemberBirthYear(members),
-                oldestMemberBirthYear = getOldestMemberBirthYear(members)
+                meetingTeamId = this.id,
+                teamMbti = getTeamMbti(users),
+                youngestMemberBirthYear = getYoungestMemberBirthYear(users),
+                oldestMemberBirthYear = getOldestMemberBirthYear(users)
             )
         }
 
