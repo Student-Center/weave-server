@@ -9,14 +9,12 @@ object ChatMemberFixtureFactory {
     fun create(
         id: UUID = UuidCreator.create(),
         userId: UUID = UuidCreator.create(),
-        meetingTeamId: UUID = UuidCreator.create(),
         lastReadMessageId: UUID? = null,
         lastReadAt: LocalDateTime? = null,
     ): ChatMember {
         return ChatMember(
             id = id,
             userId = userId,
-            meetingTeamId = meetingTeamId,
             lastReadMessageId = lastReadMessageId,
             lastReadAt = lastReadAt
         )
