@@ -12,7 +12,18 @@ data class ChatRoom(
     val receivingTeamId: UUID,
     val requestingTeamId: UUID,
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    val members: List<ChatMember> = emptyList(),
 ) : AggregateRoot {
+
+    fun addMember(userId: UUID): ChatRoom {
+        val existingMember: ChatMember? = members.find { it.userId == userId }
+        return if (existingMember != null) {
+            this
+        } else {
+            val newMember: ChatMember = ChatMember.create(this.id, userId)
+            this.copy(members = members + newMember)
+        }
+    }
 
     companion object {
 
