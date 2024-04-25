@@ -67,7 +67,7 @@ class ChatRoomTest : DescribeSpec({
         }
 
         context("멤버가 이미 존재하는 경우") {
-            it("멤버를 추가하지 않는다") {
+            it("예외를 발생시킨다.") {
                 // arrange
                 val userId: UUID = UuidCreator.create()
 
@@ -76,11 +76,10 @@ class ChatRoomTest : DescribeSpec({
                     members = listOf(chatMember)
                 )
 
-                // act
-                val newMember: ChatRoom = chatRoom.addMember(userId)
-
-                // assert
-                newMember.members.size shouldBe 1
+                // act, assert
+                shouldThrow<IllegalArgumentException> {
+                    chatRoom.addMember(userId)
+                }
             }
         }
     }

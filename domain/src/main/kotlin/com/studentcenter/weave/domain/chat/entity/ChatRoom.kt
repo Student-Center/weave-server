@@ -16,13 +16,12 @@ data class ChatRoom(
 ) : AggregateRoot {
 
     fun addMember(userId: UUID): ChatRoom {
-        val existingMember: ChatMember? = members.find { it.userId == userId }
-        return if (existingMember != null) {
-            this
-        } else {
-            val newMember: ChatMember = ChatMember.create(userId)
-            this.copy(members = members + newMember)
+        require(members.none { it.userId == userId }) {
+            "이미 채팅방에 참여하고 있는 사용자입니다."
         }
+
+        val newMember: ChatMember = ChatMember.create(userId)
+        return copy(members = members + newMember)
     }
 
     companion object {
