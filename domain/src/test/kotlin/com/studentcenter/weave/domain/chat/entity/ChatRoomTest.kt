@@ -57,9 +57,10 @@ class ChatRoomTest : DescribeSpec({
                 // arrange
                 val chatRoom: ChatRoom = ChatRoomFixtureFactory.create()
                 val userId: UUID = UuidCreator.create()
+                val meetingTeamId: UUID = UuidCreator.create()
 
                 // act
-                val newMember: ChatRoom = chatRoom.addMember(userId)
+                val newMember: ChatRoom = chatRoom.addMember(userId, meetingTeamId)
 
                 // assert
                 newMember.members.size shouldBe 1
@@ -69,19 +70,19 @@ class ChatRoomTest : DescribeSpec({
         context("멤버가 이미 존재하는 경우") {
             it("멤버를 추가하지 않는다") {
                 // arrange
-                val chatRoomId: UUID = UuidCreator.create()
                 val userId: UUID = UuidCreator.create()
+                val meetingTeamId: UUID = UuidCreator.create()
 
                 val chatMember: ChatMember = ChatMemberFixtureFactory.create(
-                    chatRoomId = chatRoomId,
                     userId = userId,
+                    meetingTeamId = meetingTeamId
                 )
                 val chatRoom: ChatRoom = ChatRoomFixtureFactory.create(
                     members = listOf(chatMember)
                 )
 
                 // act
-                val newMember: ChatRoom = chatRoom.addMember(userId)
+                val newMember: ChatRoom = chatRoom.addMember(userId, meetingTeamId)
 
                 // assert
                 newMember.members.size shouldBe 1

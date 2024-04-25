@@ -7,8 +7,8 @@ import java.util.*
 
 data class ChatMember(
     override val id: UUID = UuidCreator.create(),
-    val chatRoomId: UUID,
     val userId: UUID,
+    val meetingTeamId: UUID,
     val lastReadMessageId: UUID? = null,
     val lastReadAt: LocalDateTime? = null,
 ) : DomainEntity {
@@ -16,12 +16,12 @@ data class ChatMember(
     companion object {
 
         fun create(
-            chatRoomId: UUID,
             userId: UUID,
+            meetingTeamId: UUID,
         ): ChatMember {
             return ChatMember(
-                chatRoomId = chatRoomId,
-                userId = userId
+                userId = userId,
+                meetingTeamId = meetingTeamId,
             )
         }
 
