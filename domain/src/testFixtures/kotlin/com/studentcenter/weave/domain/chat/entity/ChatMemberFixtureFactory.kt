@@ -10,13 +10,11 @@ object ChatMemberFixtureFactory {
         id: UUID = UuidCreator.create(),
         userId: UUID = UuidCreator.create(),
         lastReadMessageId: UUID? = null,
-        lastReadAt: LocalDateTime? = null,
     ): ChatMember {
         return ChatMember(
             id = id,
             userId = userId,
             lastReadMessageId = lastReadMessageId,
-            lastReadAt = lastReadAt
         )
     }
 
