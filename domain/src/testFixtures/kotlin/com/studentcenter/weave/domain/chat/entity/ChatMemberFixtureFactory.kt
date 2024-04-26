@@ -1,7 +1,6 @@
 package com.studentcenter.weave.domain.chat.entity
 
 import com.studentcenter.weave.support.common.uuid.UuidCreator
-import java.time.LocalDateTime
 import java.util.*
 
 object ChatMemberFixtureFactory {
