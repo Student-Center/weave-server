@@ -73,7 +73,7 @@ class ChatRoomTest : DescribeSpec({
 
                 val chatMember: ChatMember = ChatMemberFixtureFactory.create(userId = userId)
                 val chatRoom: ChatRoom = ChatRoomFixtureFactory.create(
-                    members = listOf(chatMember)
+                    members = setOf(chatMember)
                 )
 
                 // act, assert

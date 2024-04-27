@@ -12,7 +12,7 @@ data class ChatRoom(
     val receivingTeamId: UUID,
     val requestingTeamId: UUID,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    val members: List<ChatMember> = emptyList(),
+    val members: Set<ChatMember> = emptySet(),
 ) : AggregateRoot {
 
     fun addMember(userId: UUID): ChatRoom {
