@@ -12,7 +12,17 @@ data class ChatRoom(
     val receivingTeamId: UUID,
     val requestingTeamId: UUID,
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    val members: Set<ChatMember> = emptySet(),
 ) : AggregateRoot {
+
+    fun addMember(userId: UUID): ChatRoom {
+        require(members.none { it.userId == userId }) {
+            "이미 채팅방에 참여하고 있는 사용자입니다."
+        }
+
+        val newMember: ChatMember = ChatMember.create(userId)
+        return copy(members = members + newMember)
+    }
 
     companion object {
 

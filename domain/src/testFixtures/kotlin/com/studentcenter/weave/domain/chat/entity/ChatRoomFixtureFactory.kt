@@ -12,6 +12,7 @@ object ChatRoomFixtureFactory {
         requestingTeamId: UUID = UuidCreator.create(),
         receivingTeamId: UUID = UuidCreator.create(),
         createdAt: LocalDateTime = LocalDateTime.now(),
+        members: Set<ChatMember> = emptySet(),
     ): ChatRoom {
         return ChatRoom(
             id = id,
@@ -19,7 +20,8 @@ object ChatRoomFixtureFactory {
             requestingTeamId = requestingTeamId,
             receivingTeamId = receivingTeamId,
             createdAt = createdAt,
+            members = members
         )
-
     }
+
 }
