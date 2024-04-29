@@ -40,7 +40,7 @@ springdoc:
   swagger-ui:
     enabled: true
 sentry:
-  dsn: TODO(정현) 센트리 프로젝트 구성 후 적용
+  dsn: ${SENTRY_DSN}
   environment: dev
 ---
 spring:
@@ -62,5 +62,5 @@ spring:
     compose:
       enabled: false
 sentry:
-  dsn: TODO(정현) 센트리 프로젝트 구성 후 적용)
+  dsn: ${SENTRY_DSN}
   environment: prod
