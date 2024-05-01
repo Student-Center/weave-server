@@ -5,10 +5,11 @@ import com.studentcenter.weave.application.user.port.inbound.RefreshToken
 import com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository
 import com.studentcenter.weave.application.user.service.domain.UserDomainService
 import com.studentcenter.weave.application.user.service.util.UserTokenService
+import com.studentcenter.weave.application.user.vo.UserTokenClaims
 import com.studentcenter.weave.domain.user.entity.User
+import com.studentcenter.weave.support.security.jwt.exception.JwtException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Service
 class RefreshTokenService(
@@ -19,15 +20,16 @@ class RefreshTokenService(
 
     @Transactional
     override fun invoke(command: RefreshToken.Command): RefreshToken.Result {
-        val refreshToken: String = command.refreshToken
-        val refreshTokenUserId: UUID = userTokenService
-            .resolveRefreshToken(refreshToken)
-            .userId
+        // TODO(dojin): Result<T> 형태로 resolve쪽을 리팩토링하면서 try-catch 없애기
+        lateinit var refreshToken: UserTokenClaims.RefreshToken
+        try {
+            refreshToken = userTokenService.resolveRefreshToken(command.refreshToken)
+        } catch (e: JwtException.Expired) {
+            throw AuthException.RefreshTokenNotFound()
+        }
+        validateRefreshToken(refreshToken)
 
-        val s = userRefreshTokenRepository.findByUserId(refreshTokenUserId)
-        validateRefreshTokenExists(s)
-
-        val user: User = userDomainService.getById(refreshTokenUserId)
+        val user: User = userDomainService.getById(refreshToken.userId)
         val accessToken: String = userTokenService.generateAccessToken(user)
         val newRefreshToken: String = userTokenService.generateRefreshToken(user)
 
@@ -37,8 +39,10 @@ class RefreshTokenService(
         )
     }
 
-    private fun validateRefreshTokenExists(refreshToken: String?): String {
-        return refreshToken ?: throw AuthException.RefreshTokenNotFound()
+    private fun validateRefreshToken(refreshToken: UserTokenClaims.RefreshToken) {
+        if (userRefreshTokenRepository.existsByUserId(refreshToken.userId).not()) {
+            throw AuthException.RefreshTokenNotFound()
+        }
     }
 
 }

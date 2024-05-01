@@ -24,11 +24,8 @@ class UserRefreshTokenRedisAdapter(
         userRefreshTokenRedisRepository.save(userRefreshTokenRedisHash)
     }
 
-    override fun findByUserId(userId: UUID): String? {
-        return userRefreshTokenRedisRepository
-            .findById(userId)
-            .map { it.refreshToken }
-            .orElse(null)
+    override fun existsByUserId(userId: UUID): Boolean {
+        return userRefreshTokenRedisRepository.existsById(userId)
     }
 
     override fun deleteByUserId(userId: UUID) {
