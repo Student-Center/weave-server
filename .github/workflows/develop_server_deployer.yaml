@@ -1,11 +1,6 @@
 name: Develop Server Deployer (CD)
 
 on:
-  workflow_run:
-    workflows: ["Develop Server Integrator (CI)"]
-    branches: [main]
-    types:
-      - completed
   workflow_dispatch:
     inputs:
       version:
@@ -15,53 +10,12 @@ on:
 
 jobs:
   deploy:
+    needs: validate_version
     runs-on: ubuntu-latest
     environment: DEV
     steps:
-      - name: Validate version format
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          if [[ "${{ github.event.inputs.version }}" =~ ^(latest|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-            echo "Version format is valid"
-          else
-            echo "Invalid version format. Use 'latest' or semver format (e.g., 0.2411.135)"
-            exit 1
-          fi
-
-      - name: Check CI success
-        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'success'
-        run: |
-          echo "CI failed"
-          exit 1
-
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Get triggered workflow run
-        uses: actions/github-script@v6
-        id: triggered_workflow_run
-        with:
-          script: |
-            const eventPayload = require(process.env.GITHUB_EVENT_PATH);
-            const workflowRun = eventPayload.workflow_run;
-            return {
-              head_branch: workflowRun.head_branch,
-              head_sha: workflowRun.head_sha,
-              version: `${workflowRun.head_branch}.${workflowRun.id}`
-            };
-
-      - name: Set version from triggered workflow
-        if: github.event_name == 'workflow_run'
-        run: echo "version=${{ steps.triggered_workflow_run.outputs.version }}" >> $GITHUB_OUTPUT
-
-      - name: Set deployed image version
-        id: set_version
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
-            echo "version=${{ steps.triggered_workflow_run.outputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          fi
 
       - name: Send discord notification (develop server deploy start)
         uses: appleboy/discord-action@master
@@ -73,7 +27,7 @@ jobs:
             > 
             > 🛢️ Repository  : ${{ github.repository }}
             > 🎋 Branch      : ${{ github.ref }}
-            > 📐 Version     : ${{ steps.set_version.outputs.version }}
+            > 📐 Version     : ${{ github.event.inputs.version }}
             > 🔁 Run Attempt : ${{ github.run_attempt }}
             > 🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -125,6 +79,10 @@ jobs:
             jq -s '.[0] * .[1]' <(echo "$VARS_CONTEXT") <(echo "$SECRETS_CONTEXT") \
               | jq -r 'to_entries | map("\(.key)=\(.value)") | .[]' > .env
 
+      - name: Set deployed image version
+        id: set_version
+        run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+
       - name: Run Docker Compose up
         id: deploy
         uses: appleboy/ssh-action@master
@@ -135,7 +93,7 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker-compose -f ~/app/bootstrap/http/compose-dev.yaml pull
-            sudo VERSION=${{ steps.set_version.outputs.version }} docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
+            sudo VERSION=${{ github.event.inputs.version }} docker-compose -f ~/app/bootstrap/http/compose-dev.yaml up -d --force-recreate
 
       - name: Send discord notification (develop server deploy failed)
         if: failure() && steps.deploy.outcome == 'failure'
@@ -148,7 +106,7 @@ jobs:
             > 
             > 🛢️ Repository  : ${{ github.repository }}
             > 🎋 Branch      : ${{ github.ref }}
-            > 📐 Version     : ${{ steps.set_version.outputs.version }}
+            > 📐 Version     : ${{ github.event.inputs.version }}
             > 🔁 Run Attempt : ${{ github.run_attempt }}
             > 🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -185,6 +143,18 @@ jobs:
             > 
             > 🛢️ Repository  : ${{ github.repository }} 
             > 🎋 Branch      : ${{ github.ref }}
-            > 📐 Version     : ${{ steps.set_version.outputs.version }}
+            > 📐 Version     : ${{ github.event.inputs.version }}
             > 🔁 Run Attempt : ${{ github.run_attempt }}
             > 🤗 Actor       : ${{ github.triggering_actor }}
+
+  validate_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate version format
+        run: |
+          if [[ "${{ github.event.inputs.version }}" =~ ^(latest|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "Version format is valid"
+          else
+            echo "Invalid version format. Use 'latest' or semver format (e.g., 0.2411.135)"
+            exit 1
+          fi
