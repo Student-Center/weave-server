@@ -53,6 +53,9 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
+sentry:
+  dsn: ${SENTRY_DSN}
+  environment: prod
 ---
 spring:
   config:
@@ -61,6 +64,3 @@ spring:
   docker:
     compose:
       enabled: false
-sentry:
-  dsn: ${SENTRY_DSN}
-  environment: prod
