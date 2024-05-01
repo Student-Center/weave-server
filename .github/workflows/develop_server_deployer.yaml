@@ -12,10 +12,6 @@ on:
         description: 'Image version tag (e.g., 0.2411.135 or latest)'
         required: true
         default: 'latest'
-  workflow_run:
-    workflows: ["Develop Server Integrator (CI)"]
-    types:
-      - completed
 
 jobs:
   deploy:
@@ -25,23 +21,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Get triggered workflow run
-        uses: actions/github-script@v6
-        id: triggered_workflow_run
-        with:
-          script: |
-            const eventPayload = require(process.env.GITHUB_EVENT_PATH);
-            const workflowRun = eventPayload.workflow_run;
-            return {
-              head_branch: workflowRun.head_branch,
-              head_sha: workflowRun.head_sha,
-              version: `${workflowRun.head_branch}.${workflowRun.id}`
-            };
-
-      - name: Set version from triggered workflow
-        if: github.event_name == 'workflow_run'
-        run: echo "version=${{ steps.triggered_workflow_run.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Send discord notification (develop server deploy start)
         uses: appleboy/discord-action@master
@@ -53,7 +32,7 @@ jobs:
             > 
             > 🛢️ Repository  : ${{ github.repository }}
             > 🎋 Branch      : ${{ github.ref }}
-            > 📐 Version     : ${{ steps.triggered_workflow_run.outputs.version || github.event.inputs.version }}
+            > 📐 Version     : ${{ github.event.inputs.version }}
             > 🔁 Run Attempt : ${{ github.run_attempt }}
             > 🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -175,7 +154,6 @@ jobs:
 
   validate_version:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Validate version format
         run: |
