@@ -37,7 +37,7 @@ class LogoutTest : DescribeSpec({
             sut.invoke()
 
             // assert
-            userRefreshTokenRepositorySpy.findByUserId(user.id) shouldBe null
+            userRefreshTokenRepositorySpy.existsByUserId(user.id) shouldBe false
         }
     }
 

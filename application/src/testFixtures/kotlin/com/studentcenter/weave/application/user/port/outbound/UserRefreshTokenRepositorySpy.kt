@@ -3,8 +3,7 @@ package com.studentcenter.weave.application.user.port.outbound
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class UserRefreshTokenRepositorySpy :
-    com.studentcenter.weave.application.user.port.outbound.UserRefreshTokenRepository {
+class UserRefreshTokenRepositorySpy : UserRefreshTokenRepository {
 
     private val bucket = ConcurrentHashMap<UUID, String>()
 
@@ -16,8 +15,8 @@ class UserRefreshTokenRepositorySpy :
         bucket[userId] = refreshToken
     }
 
-    override fun findByUserId(userId: UUID): String? {
-        return bucket[userId]
+    override fun existsByUserId(userId: UUID): Boolean {
+        return bucket[userId] != null
     }
 
     override fun deleteByUserId(userId: UUID) {

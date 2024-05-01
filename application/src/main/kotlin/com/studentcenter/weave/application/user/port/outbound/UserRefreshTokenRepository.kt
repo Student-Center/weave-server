@@ -10,7 +10,7 @@ interface UserRefreshTokenRepository {
         expirationSeconds: Long
     )
 
-    fun findByUserId(userId: UUID): String?
+    fun existsByUserId(userId: UUID): Boolean
 
     fun deleteByUserId(userId: UUID)
 
