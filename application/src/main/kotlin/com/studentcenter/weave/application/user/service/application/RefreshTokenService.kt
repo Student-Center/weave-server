@@ -20,6 +20,7 @@ class RefreshTokenService(
 
     @Transactional
     override fun invoke(command: RefreshToken.Command): RefreshToken.Result {
+        // TODO(dojin): Result<T> 형태로 resolve쪽을 리팩토링하면서 try-catch 없애기
         lateinit var refreshToken: UserTokenClaims.RefreshToken
         try {
             refreshToken = userTokenService.resolveRefreshToken(command.refreshToken)
