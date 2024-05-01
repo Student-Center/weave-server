@@ -38,6 +38,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get triggered workflow run
+        if: github.event_name == 'workflow_run'
         uses: actions/github-script@v6
         id: triggered_workflow_run
         with:
