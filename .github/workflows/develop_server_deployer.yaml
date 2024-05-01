@@ -54,15 +54,6 @@ jobs:
         if: github.event_name == 'workflow_run'
         run: echo "version=${{ steps.triggered_workflow_run.outputs.version }}" >> $GITHUB_OUTPUT
 
-      - name: Set deployed image version
-        id: set_version
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
-            echo "version=${{ steps.triggered_workflow_run.outputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Send discord notification (develop server deploy start)
         uses: appleboy/discord-action@master
         with:
@@ -73,7 +64,7 @@ jobs:
             > 
             > 🛢️ Repository  : ${{ github.repository }}
             > 🎋 Branch      : ${{ github.ref }}
-            > 📐 Version     : ${{ steps.set_version.outputs.version }}
+            > 📐 Version     : ${{ steps.triggered_workflow_run.outputs.version || github.event.inputs.version }}
             > 🔁 Run Attempt : ${{ github.run_attempt }}
             > 🤗 Actor       : ${{ github.triggering_actor }}
 
@@ -124,6 +115,10 @@ jobs:
             cd ~/app/bootstrap/http
             jq -s '.[0] * .[1]' <(echo "$VARS_CONTEXT") <(echo "$SECRETS_CONTEXT") \
               | jq -r 'to_entries | map("\(.key)=\(.value)") | .[]' > .env
+
+      - name: Set deployed image version
+        id: set_version
+        run: echo "version=${{ steps.triggered_workflow_run.outputs.version || github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Run Docker Compose up
         id: deploy
