@@ -1,6 +1,11 @@
 name: Develop Server Deployer (CD)
 
 on:
+  workflow_run:
+    workflows: ["Develop Server Integrator (CI)"]
+    branches: [main]
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       version:
@@ -10,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    needs: validate_version
+    needs: [validate_version, check_ci_success]
     runs-on: ubuntu-latest
     environment: DEV
     steps:
@@ -158,3 +163,13 @@ jobs:
             echo "Invalid version format. Use 'latest' or semver format (e.g., 0.2411.135)"
             exit 1
           fi
+
+  check_ci_success:
+    needs: validate_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check CI
+        if: ${{ github.event.workflow_run != null && github.event.workflow_run.conclusion != 'success' }}
+        run: |
+          echo "CI failed"
+          exit 1
