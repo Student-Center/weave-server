@@ -84,6 +84,9 @@ redisson-spring-boot-starter = { group = "org.redisson", name = "redisson-spring
 java-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "auth0-java-jwt" }
 jwks-rsa = { group = "com.auth0", name = "jwks-rsa", version.ref = "auth0-jwks-rsa" }
 
+sentry-spring-boot-starter-jarkarta = { group = "io.sentry", name = "sentry-spring-boot-starter-jakarta", version = "7.8.0" }
+sentry-logback = { group = "io.sentry", name = "sentry-logback", version = "7.8.0" }
+
 [plugins]
 
 sonarqube = { id = "org.sonarqube", version.ref = "sonar-cloud" }

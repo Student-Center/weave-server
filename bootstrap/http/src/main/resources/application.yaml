@@ -39,6 +39,9 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
+sentry:
+  dsn: ${SENTRY_DSN}
+  environment: dev
 ---
 spring:
   config:
@@ -50,6 +53,9 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
+sentry:
+  dsn: ${SENTRY_DSN}
+  environment: prod
 ---
 spring:
   config:
